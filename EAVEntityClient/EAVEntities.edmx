@@ -1,0 +1,667 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="EAV.Entities.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Attribute">
+          <Key>
+            <PropertyRef Name="Attribute_ID" />
+          </Key>
+          <Property Name="Attribute_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Container_ID" Type="int" Nullable="false" />
+          <Property Name="Data_Type_ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Data_Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="Display_Text" Type="nvarchar" MaxLength="1024" />
+          <Property Name="Is_Key" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Container">
+          <Key>
+            <PropertyRef Name="Container_ID" />
+          </Key>
+          <Property Name="Container_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Parent_Container_ID" Type="int" />
+          <Property Name="Context_ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Data_Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="Display_Text" Type="nvarchar" MaxLength="1024" />
+          <Property Name="Is_Repeating" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Context">
+          <Key>
+            <PropertyRef Name="Context_ID" />
+          </Key>
+          <Property Name="Context_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Data_Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="Display_Text" Type="nvarchar" MaxLength="1024" />
+        </EntityType>
+        <EntityType Name="Data_Type">
+          <Key>
+            <PropertyRef Name="Data_Type_ID" />
+          </Key>
+          <Property Name="Data_Type_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Entity">
+          <Key>
+            <PropertyRef Name="Entity_ID" />
+          </Key>
+          <Property Name="Entity_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descriptor" Type="nvarchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Instance">
+          <Key>
+            <PropertyRef Name="Instance_ID" />
+          </Key>
+          <Property Name="Instance_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Parent_Instance_ID" Type="int" />
+          <Property Name="Container_ID" Type="int" Nullable="false" />
+          <Property Name="Subject_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="Subject_ID" />
+          </Key>
+          <Property Name="Subject_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Entity_ID" Type="int" Nullable="false" />
+          <Property Name="Context_ID" Type="int" Nullable="false" />
+          <Property Name="Identifier" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Value">
+          <Key>
+            <PropertyRef Name="Attribute_ID" />
+            <PropertyRef Name="Instance_ID" />
+          </Key>
+          <Property Name="Attribute_ID" Type="int" Nullable="false" />
+          <Property Name="Instance_ID" Type="int" Nullable="false" />
+          <Property Name="Raw_Value" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Units" Type="nvarchar" MaxLength="32" />
+        </EntityType>
+        <Association Name="FK_Attribute_Container">
+          <End Role="Container" Type="Self.Container" Multiplicity="1" />
+          <End Role="Attribute" Type="Self.Attribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="Container_ID" />
+            </Principal>
+            <Dependent Role="Attribute">
+              <PropertyRef Name="Container_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Attribute_Data_Type">
+          <End Role="Data_Type" Type="Self.Data_Type" Multiplicity="1" />
+          <End Role="Attribute" Type="Self.Attribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Data_Type">
+              <PropertyRef Name="Data_Type_ID" />
+            </Principal>
+            <Dependent Role="Attribute">
+              <PropertyRef Name="Data_Type_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Container_Context">
+          <End Role="Context" Type="Self.Context" Multiplicity="1" />
+          <End Role="Container" Type="Self.Container" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Context">
+              <PropertyRef Name="Context_ID" />
+            </Principal>
+            <Dependent Role="Container">
+              <PropertyRef Name="Context_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Container_ParentContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Container1" Type="Self.Container" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="Container_ID" />
+            </Principal>
+            <Dependent Role="Container1">
+              <PropertyRef Name="Parent_Container_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Instance_Container">
+          <End Role="Container" Type="Self.Container" Multiplicity="1" />
+          <End Role="Instance" Type="Self.Instance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="Container_ID" />
+            </Principal>
+            <Dependent Role="Instance">
+              <PropertyRef Name="Container_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Instance_ParentInstance">
+          <End Role="Instance" Type="Self.Instance" Multiplicity="0..1" />
+          <End Role="Instance1" Type="Self.Instance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instance">
+              <PropertyRef Name="Instance_ID" />
+            </Principal>
+            <Dependent Role="Instance1">
+              <PropertyRef Name="Parent_Instance_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Instance_Subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Instance" Type="Self.Instance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="Subject_ID" />
+            </Principal>
+            <Dependent Role="Instance">
+              <PropertyRef Name="Subject_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subject_Context">
+          <End Role="Context" Type="Self.Context" Multiplicity="1" />
+          <End Role="Subject" Type="Self.Subject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Context">
+              <PropertyRef Name="Context_ID" />
+            </Principal>
+            <Dependent Role="Subject">
+              <PropertyRef Name="Context_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subject_Entity">
+          <End Role="Entity" Type="Self.Entity" Multiplicity="1" />
+          <End Role="Subject" Type="Self.Subject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entity">
+              <PropertyRef Name="Entity_ID" />
+            </Principal>
+            <Dependent Role="Subject">
+              <PropertyRef Name="Entity_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Value_Attribute">
+          <End Role="Attribute" Type="Self.Attribute" Multiplicity="1" />
+          <End Role="Value" Type="Self.Value" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attribute">
+              <PropertyRef Name="Attribute_ID" />
+            </Principal>
+            <Dependent Role="Value">
+              <PropertyRef Name="Attribute_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Value_Instance">
+          <End Role="Instance" Type="Self.Instance" Multiplicity="1" />
+          <End Role="Value" Type="Self.Value" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instance">
+              <PropertyRef Name="Instance_ID" />
+            </Principal>
+            <Dependent Role="Value">
+              <PropertyRef Name="Instance_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EAVEntitiesStoreContainer">
+          <EntitySet Name="Attribute" EntityType="Self.Attribute" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Container" EntityType="Self.Container" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Context" EntityType="Self.Context" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Data_Type" EntityType="Self.Data_Type" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Entity" EntityType="Self.Entity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Instance" EntityType="Self.Instance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Value" EntityType="Self.Value" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Attribute_Container" Association="Self.FK_Attribute_Container">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="Attribute" EntitySet="Attribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attribute_Data_Type" Association="Self.FK_Attribute_Data_Type">
+            <End Role="Data_Type" EntitySet="Data_Type" />
+            <End Role="Attribute" EntitySet="Attribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Container_Context" Association="Self.FK_Container_Context">
+            <End Role="Context" EntitySet="Context" />
+            <End Role="Container" EntitySet="Container" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Container_ParentContainer" Association="Self.FK_Container_ParentContainer">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="Container1" EntitySet="Container" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Instance_Container" Association="Self.FK_Instance_Container">
+            <End Role="Container" EntitySet="Container" />
+            <End Role="Instance" EntitySet="Instance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Instance_ParentInstance" Association="Self.FK_Instance_ParentInstance">
+            <End Role="Instance" EntitySet="Instance" />
+            <End Role="Instance1" EntitySet="Instance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Instance_Subject" Association="Self.FK_Instance_Subject">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="Instance" EntitySet="Instance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subject_Context" Association="Self.FK_Subject_Context">
+            <End Role="Context" EntitySet="Context" />
+            <End Role="Subject" EntitySet="Subject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subject_Entity" Association="Self.FK_Subject_Entity">
+            <End Role="Entity" EntitySet="Entity" />
+            <End Role="Subject" EntitySet="Subject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Value_Attribute" Association="Self.FK_Value_Attribute">
+            <End Role="Attribute" EntitySet="Attribute" />
+            <End Role="Value" EntitySet="Value" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Value_Instance" Association="Self.FK_Value_Instance">
+            <End Role="Instance" EntitySet="Instance" />
+            <End Role="Value" EntitySet="Value" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EAV.Entities" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Attribute">
+          <Key>
+            <PropertyRef Name="Attribute_ID" />
+          </Key>
+          <Property Name="Attribute_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Container_ID" Type="Int32" Nullable="false" />
+          <Property Name="Data_Type_ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Data_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Display_Text" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="Is_Key" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Container" Relationship="Self.FK_Attribute_Container" FromRole="Attribute" ToRole="Container" />
+          <NavigationProperty Name="Value" Relationship="Self.FK_Value_Attribute" FromRole="Attribute" ToRole="Value" />
+          <NavigationProperty Name="Data_Type" Relationship="EAV.Entities.FK_Attribute_Data_Type" FromRole="Attribute" ToRole="Data_Type" />
+        </EntityType>
+        <EntityType Name="Container">
+          <Key>
+            <PropertyRef Name="Container_ID" />
+          </Key>
+          <Property Name="Container_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Parent_Container_ID" Type="Int32" />
+          <Property Name="Context_ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Data_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Display_Text" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <Property Name="Is_Repeating" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Attributes" Relationship="Self.FK_Attribute_Container" FromRole="Container" ToRole="Attribute" />
+          <NavigationProperty Name="Context" Relationship="Self.FK_Container_Context" FromRole="Container" ToRole="Context" />
+          <NavigationProperty Name="ChildContainers" Relationship="Self.FK_Container_ParentContainer" FromRole="Container" ToRole="Container1" />
+          <NavigationProperty Name="ParentContainer" Relationship="Self.FK_Container_ParentContainer" FromRole="Container1" ToRole="Container" />
+          <NavigationProperty Name="Instances" Relationship="Self.FK_Instance_Container" FromRole="Container" ToRole="Instance" />
+        </EntityType>
+        <EntityType Name="Context">
+          <Key>
+            <PropertyRef Name="Context_ID" />
+          </Key>
+          <Property Name="Context_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Data_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Display_Text" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Containers" Relationship="Self.FK_Container_Context" FromRole="Context" ToRole="Container" />
+          <NavigationProperty Name="Subjects" Relationship="Self.FK_Subject_Context" FromRole="Context" ToRole="Subject" />
+        </EntityType>
+        <EntityType Name="Data_Type">
+          <Key>
+            <PropertyRef Name="Data_Type_ID" />
+          </Key>
+          <Property Name="Data_Type_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Attributes" Relationship="EAV.Entities.FK_Attribute_Data_Type" FromRole="Data_Type" ToRole="Attribute" />
+        </EntityType>
+        <EntityType Name="Entity">
+          <Key>
+            <PropertyRef Name="Entity_ID" />
+          </Key>
+          <Property Name="Entity_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Subjects" Relationship="EAV.Entities.FK_Subject_Entity" FromRole="Entity" ToRole="Subject" />
+          <Property Name="Descriptor" Type="String" Nullable="false" MaxLength="1024" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Instance">
+          <Key>
+            <PropertyRef Name="Instance_ID" />
+          </Key>
+          <Property Name="Instance_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Parent_Instance_ID" Type="Int32" />
+          <Property Name="Container_ID" Type="Int32" Nullable="false" />
+          <Property Name="Subject_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Container" Relationship="Self.FK_Instance_Container" FromRole="Instance" ToRole="Container" />
+          <NavigationProperty Name="ChildInstances" Relationship="Self.FK_Instance_ParentInstance" FromRole="Instance" ToRole="Instance1" />
+          <NavigationProperty Name="ParentInstance" Relationship="Self.FK_Instance_ParentInstance" FromRole="Instance1" ToRole="Instance" />
+          <NavigationProperty Name="Subject" Relationship="Self.FK_Instance_Subject" FromRole="Instance" ToRole="Subject" />
+          <NavigationProperty Name="Values" Relationship="Self.FK_Value_Instance" FromRole="Instance" ToRole="Value" />
+        </EntityType>
+        <EntityType Name="Subject">
+          <Key>
+            <PropertyRef Name="Subject_ID" />
+          </Key>
+          <Property Name="Subject_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Entity_ID" Type="Int32" Nullable="false" />
+          <Property Name="Context_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Context" Relationship="Self.FK_Subject_Context" FromRole="Subject" ToRole="Context" />
+          <NavigationProperty Name="Instances" Relationship="Self.FK_Instance_Subject" FromRole="Subject" ToRole="Instance" />
+          <NavigationProperty Name="Entity" Relationship="EAV.Entities.FK_Subject_Entity" FromRole="Subject" ToRole="Entity" />
+          <Property Name="Identifier" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Value">
+          <Key>
+            <PropertyRef Name="Attribute_ID" />
+            <PropertyRef Name="Instance_ID" />
+          </Key>
+          <Property Name="Attribute_ID" Type="Int32" Nullable="false" />
+          <Property Name="Instance_ID" Type="Int32" Nullable="false" />
+          <Property Name="Raw_Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Units" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Attribute" Relationship="Self.FK_Value_Attribute" FromRole="Value" ToRole="Attribute" />
+          <NavigationProperty Name="Instance" Relationship="Self.FK_Value_Instance" FromRole="Value" ToRole="Instance" />
+        </EntityType>
+        <Association Name="FK_Attribute_Container">
+          <End Role="Container" Type="Self.Container" Multiplicity="1" />
+          <End Role="Attribute" Type="Self.Attribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="Container_ID" />
+            </Principal>
+            <Dependent Role="Attribute">
+              <PropertyRef Name="Container_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Value_Attribute">
+          <End Role="Attribute" Type="Self.Attribute" Multiplicity="1" />
+          <End Role="Value" Type="Self.Value" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attribute">
+              <PropertyRef Name="Attribute_ID" />
+            </Principal>
+            <Dependent Role="Value">
+              <PropertyRef Name="Attribute_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Container_Context">
+          <End Role="Context" Type="Self.Context" Multiplicity="1" />
+          <End Role="Container" Type="Self.Container" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Context">
+              <PropertyRef Name="Context_ID" />
+            </Principal>
+            <Dependent Role="Container">
+              <PropertyRef Name="Context_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Container_ParentContainer">
+          <End Role="Container" Type="Self.Container" Multiplicity="0..1" />
+          <End Role="Container1" Type="Self.Container" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="Container_ID" />
+            </Principal>
+            <Dependent Role="Container1">
+              <PropertyRef Name="Parent_Container_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Instance_Container">
+          <End Role="Container" Type="Self.Container" Multiplicity="1" />
+          <End Role="Instance" Type="Self.Instance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Container">
+              <PropertyRef Name="Container_ID" />
+            </Principal>
+            <Dependent Role="Instance">
+              <PropertyRef Name="Container_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subject_Context">
+          <End Role="Context" Type="Self.Context" Multiplicity="1" />
+          <End Role="Subject" Type="Self.Subject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Context">
+              <PropertyRef Name="Context_ID" />
+            </Principal>
+            <Dependent Role="Subject">
+              <PropertyRef Name="Context_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Instance_ParentInstance">
+          <End Role="Instance" Type="Self.Instance" Multiplicity="0..1" />
+          <End Role="Instance1" Type="Self.Instance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instance">
+              <PropertyRef Name="Instance_ID" />
+            </Principal>
+            <Dependent Role="Instance1">
+              <PropertyRef Name="Parent_Instance_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Instance_Subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Instance" Type="Self.Instance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="Subject_ID" />
+            </Principal>
+            <Dependent Role="Instance">
+              <PropertyRef Name="Subject_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Value_Instance">
+          <End Role="Instance" Type="Self.Instance" Multiplicity="1" />
+          <End Role="Value" Type="Self.Value" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instance">
+              <PropertyRef Name="Instance_ID" />
+            </Principal>
+            <Dependent Role="Value">
+              <PropertyRef Name="Instance_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MicroEAVContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Attributes" EntityType="Self.Attribute" />
+          <EntitySet Name="Containers" EntityType="Self.Container" />
+          <EntitySet Name="Contexts" EntityType="Self.Context" />
+          <EntitySet Name="Data_Type" EntityType="Self.Data_Type" />
+          <EntitySet Name="Entities" EntityType="Self.Entity" />
+          <EntitySet Name="Instances" EntityType="Self.Instance" />
+          <EntitySet Name="Subjects" EntityType="Self.Subject" />
+          <EntitySet Name="Values" EntityType="Self.Value" />
+          <AssociationSet Name="FK_Attribute_Container" Association="Self.FK_Attribute_Container">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Attribute" EntitySet="Attributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Value_Attribute" Association="Self.FK_Value_Attribute">
+            <End Role="Attribute" EntitySet="Attributes" />
+            <End Role="Value" EntitySet="Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Container_Context" Association="Self.FK_Container_Context">
+            <End Role="Context" EntitySet="Contexts" />
+            <End Role="Container" EntitySet="Containers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Container_ParentContainer" Association="Self.FK_Container_ParentContainer">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Container1" EntitySet="Containers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Instance_Container" Association="Self.FK_Instance_Container">
+            <End Role="Container" EntitySet="Containers" />
+            <End Role="Instance" EntitySet="Instances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subject_Context" Association="Self.FK_Subject_Context">
+            <End Role="Context" EntitySet="Contexts" />
+            <End Role="Subject" EntitySet="Subjects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Instance_ParentInstance" Association="Self.FK_Instance_ParentInstance">
+            <End Role="Instance" EntitySet="Instances" />
+            <End Role="Instance1" EntitySet="Instances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Instance_Subject" Association="Self.FK_Instance_Subject">
+            <End Role="Subject" EntitySet="Subjects" />
+            <End Role="Instance" EntitySet="Instances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Value_Instance" Association="Self.FK_Value_Instance">
+            <End Role="Instance" EntitySet="Instances" />
+            <End Role="Value" EntitySet="Values" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attribute_Data_Type" Association="EAV.Entities.FK_Attribute_Data_Type">
+            <End Role="Data_Type" EntitySet="Data_Type" />
+            <End Role="Attribute" EntitySet="Attributes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Subject_Entity" Association="EAV.Entities.FK_Subject_Entity">
+            <End Role="Entity" EntitySet="Entities" />
+            <End Role="Subject" EntitySet="Subjects" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_Attribute_Data_Type">
+          <End Type="EAV.Entities.Data_Type" Role="Data_Type" Multiplicity="1" />
+          <End Type="EAV.Entities.Attribute" Role="Attribute" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Data_Type">
+              <PropertyRef Name="Data_Type_ID" />
+            </Principal>
+            <Dependent Role="Attribute">
+              <PropertyRef Name="Data_Type_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Subject_Entity">
+          <End Type="EAV.Entities.Entity" Role="Entity" Multiplicity="1" />
+          <End Type="EAV.Entities.Subject" Role="Subject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entity">
+              <PropertyRef Name="Entity_ID" />
+            </Principal>
+            <Dependent Role="Subject">
+              <PropertyRef Name="Entity_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EAVEntitiesStoreContainer" CdmEntityContainer="MicroEAVContext">
+          <EntitySetMapping Name="Attributes">
+            <EntityTypeMapping TypeName="EAV.Entities.Attribute">
+              <MappingFragment StoreEntitySet="Attribute">
+                <ScalarProperty Name="Attribute_ID" ColumnName="Attribute_ID" />
+                <ScalarProperty Name="Container_ID" ColumnName="Container_ID" />
+                <ScalarProperty Name="Data_Type_ID" ColumnName="Data_Type_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Data_Name" ColumnName="Data_Name" />
+                <ScalarProperty Name="Display_Text" ColumnName="Display_Text" />
+                <ScalarProperty Name="Is_Key" ColumnName="Is_Key" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Containers">
+            <EntityTypeMapping TypeName="EAV.Entities.Container">
+              <MappingFragment StoreEntitySet="Container">
+                <ScalarProperty Name="Container_ID" ColumnName="Container_ID" />
+                <ScalarProperty Name="Parent_Container_ID" ColumnName="Parent_Container_ID" />
+                <ScalarProperty Name="Context_ID" ColumnName="Context_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Data_Name" ColumnName="Data_Name" />
+                <ScalarProperty Name="Display_Text" ColumnName="Display_Text" />
+                <ScalarProperty Name="Is_Repeating" ColumnName="Is_Repeating" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contexts">
+            <EntityTypeMapping TypeName="EAV.Entities.Context">
+              <MappingFragment StoreEntitySet="Context">
+                <ScalarProperty Name="Context_ID" ColumnName="Context_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Data_Name" ColumnName="Data_Name" />
+                <ScalarProperty Name="Display_Text" ColumnName="Display_Text" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Data_Type">
+            <EntityTypeMapping TypeName="EAV.Entities.Data_Type">
+              <MappingFragment StoreEntitySet="Data_Type">
+                <ScalarProperty Name="Data_Type_ID" ColumnName="Data_Type_ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Entities">
+            <EntityTypeMapping TypeName="EAV.Entities.Entity">
+              <MappingFragment StoreEntitySet="Entity">
+                <ScalarProperty Name="Descriptor" ColumnName="Descriptor" />
+                <ScalarProperty Name="Entity_ID" ColumnName="Entity_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Instances">
+            <EntityTypeMapping TypeName="EAV.Entities.Instance">
+              <MappingFragment StoreEntitySet="Instance">
+                <ScalarProperty Name="Instance_ID" ColumnName="Instance_ID" />
+                <ScalarProperty Name="Parent_Instance_ID" ColumnName="Parent_Instance_ID" />
+                <ScalarProperty Name="Container_ID" ColumnName="Container_ID" />
+                <ScalarProperty Name="Subject_ID" ColumnName="Subject_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subjects">
+            <EntityTypeMapping TypeName="EAV.Entities.Subject">
+              <MappingFragment StoreEntitySet="Subject">
+                <ScalarProperty Name="Identifier" ColumnName="Identifier" />
+                <ScalarProperty Name="Subject_ID" ColumnName="Subject_ID" />
+                <ScalarProperty Name="Entity_ID" ColumnName="Entity_ID" />
+                <ScalarProperty Name="Context_ID" ColumnName="Context_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Values">
+            <EntityTypeMapping TypeName="EAV.Entities.Value">
+              <MappingFragment StoreEntitySet="Value">
+                <ScalarProperty Name="Attribute_ID" ColumnName="Attribute_ID" />
+                <ScalarProperty Name="Instance_ID" ColumnName="Instance_ID" />
+                <ScalarProperty Name="Raw_Value" ColumnName="Raw_Value" />
+                <ScalarProperty Name="Units" ColumnName="Units" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

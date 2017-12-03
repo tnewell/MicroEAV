@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EAV.Model", "EAV.Model\EAV.Model.csproj", "{DE98CD45-4020-44ED-A4A8-98D0BE529C4F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAVService", "EAVService\EAVService.csproj", "{3D9F9D32-8746-48CA-BF55-247C0C37F1A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAVSandbox", "EAVSandbox\EAVSandbox.csproj", "{16C5E808-F627-4CC0-885F-94B5B0456948}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAVStoreClient", "EAVEntityClient\EAVStoreClient.csproj", "{A02D3434-1EF6-4EF5-91AD-52708127A3AC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EAV.Store", "EAV.Store\EAV.Store.csproj", "{A626330A-E997-4A38-8DCE-E68A0CDEC2C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAVStoreClientTest", "EAVStoreClientTest\EAVStoreClientTest.csproj", "{82E345EA-964B-419D-BF90-25FCF0C62C42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAVServiceTest", "EAVServiceTest\EAVServiceTest.csproj", "{09855A5B-32EF-47FC-B635-EAD76E6D477C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE98CD45-4020-44ED-A4A8-98D0BE529C4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE98CD45-4020-44ED-A4A8-98D0BE529C4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE98CD45-4020-44ED-A4A8-98D0BE529C4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE98CD45-4020-44ED-A4A8-98D0BE529C4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D9F9D32-8746-48CA-BF55-247C0C37F1A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D9F9D32-8746-48CA-BF55-247C0C37F1A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D9F9D32-8746-48CA-BF55-247C0C37F1A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D9F9D32-8746-48CA-BF55-247C0C37F1A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16C5E808-F627-4CC0-885F-94B5B0456948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16C5E808-F627-4CC0-885F-94B5B0456948}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16C5E808-F627-4CC0-885F-94B5B0456948}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16C5E808-F627-4CC0-885F-94B5B0456948}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A02D3434-1EF6-4EF5-91AD-52708127A3AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A02D3434-1EF6-4EF5-91AD-52708127A3AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A02D3434-1EF6-4EF5-91AD-52708127A3AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A02D3434-1EF6-4EF5-91AD-52708127A3AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A626330A-E997-4A38-8DCE-E68A0CDEC2C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A626330A-E997-4A38-8DCE-E68A0CDEC2C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A626330A-E997-4A38-8DCE-E68A0CDEC2C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A626330A-E997-4A38-8DCE-E68A0CDEC2C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82E345EA-964B-419D-BF90-25FCF0C62C42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82E345EA-964B-419D-BF90-25FCF0C62C42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82E345EA-964B-419D-BF90-25FCF0C62C42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82E345EA-964B-419D-BF90-25FCF0C62C42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09855A5B-32EF-47FC-B635-EAD76E6D477C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09855A5B-32EF-47FC-B635-EAD76E6D477C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09855A5B-32EF-47FC-B635-EAD76E6D477C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09855A5B-32EF-47FC-B635-EAD76E6D477C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9ABB6AD0-E542-404B-9EE7-E929B05DE135}
+	EndGlobalSection
+EndGlobal
