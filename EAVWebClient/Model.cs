@@ -458,7 +458,7 @@ namespace EAVWebClient.Model
         [DataMember(Name = "Instances")]
         private ObservableCollection<EAVInstance> instances;
         [IgnoreDataMember]
-        public ICollection<EAVInstance> Instance
+        public ICollection<EAVInstance> Instances
         {
             get { if (ObjectState != ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAVInstance>(instances)); }
         }
@@ -1080,7 +1080,7 @@ namespace EAVWebClient.Model
         [DataMember(Name = "Instances")]
         private ObservableCollection<EAVInstance> instances;
         [IgnoreDataMember]
-        public ICollection<EAVInstance> Instance
+        public ICollection<EAVInstance> Instances
         {
             get { if (ObjectState != ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAVInstance>(instances)); }
         }
@@ -1201,8 +1201,33 @@ namespace EAVWebClient.Model
         [IgnoreDataMember]
         public EAVInstance ParentInstance
         {
-            get;
-            set;
+            get
+            {
+                if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
+                {
+                    parentInstance = null;
+                }
+
+                return (parentInstance);
+            }
+            set
+            {
+                if (parentInstance != value && ObjectState != ObjectState.Deleted)
+                {
+                    if (parentInstance != null && parentInstance.ChildInstances.Contains(this))
+                    {
+                        parentInstance.ChildInstances.Remove(this);
+                    }
+
+                    parentInstance = value;
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
+                    {
+                        parentInstance.ChildInstances.Add(this);
+                    }
+                }
+            }
         }
 
         [DataMember(Name = "Subject")]
@@ -1210,8 +1235,33 @@ namespace EAVWebClient.Model
         [IgnoreDataMember]
         public EAVSubject Subject
         {
-            get;
-            set;
+            get
+            {
+                if (subject != null && !subject.Instances.Contains(this))
+                {
+                    subject = null;
+                }
+
+                return (subject);
+            }
+            set
+            {
+                if (subject != value && ObjectState != ObjectState.Deleted)
+                {
+                    if (subject != null && subject.Instances.Contains(this))
+                    {
+                        subject.Instances.Remove(this);
+                    }
+
+                    subject = value;
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (subject != null && !subject.Instances.Contains(this))
+                    {
+                        subject.Instances.Add(this);
+                    }
+                }
+            }
         }
 
         [DataMember(Name = "Container")]
@@ -1219,8 +1269,33 @@ namespace EAVWebClient.Model
         [IgnoreDataMember]
         public EAVContainer Container
         {
-            get;
-            set;
+            get
+            {
+                if (container != null && !container.Instances.Contains(this))
+                {
+                    container = null;
+                }
+
+                return (container);
+            }
+            set
+            {
+                if (container != value && ObjectState != ObjectState.Deleted)
+                {
+                    if (container != null && container.Instances.Contains(this))
+                    {
+                        container.Instances.Remove(this);
+                    }
+
+                    container = value;
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (container != null && !container.Instances.Contains(this))
+                    {
+                        container.Instances.Add(this);
+                    }
+                }
+            }
         }
 
         [DataMember(Name = "ChildInstances")]
@@ -1241,12 +1316,47 @@ namespace EAVWebClient.Model
 
         public override void MarkCreated(EAVObject obj)
         {
-            throw new NotImplementedException();
+            if (ObjectState == ObjectState.Deleted)
+                throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            EAV.Model.IEAVInstance instance = obj as EAV.Model.IEAVInstance;
+
+            if (instance == null)
+                throw (new ArgumentException("Parameter 'obj' must implement the EAV.Model.IEAVInstance interface.", "obj"));
+
+            if (instance.InstanceID == null)
+                throw (new InvalidOperationException("Property 'InstanceID' of parameter 'obj' may not not be null."));
+
+            if (this.instanceID == null)
+            {
+                instanceID = instance.InstanceID;
+                ObjectState = ObjectState.Unmodified;
+            }
+            else if (this.instanceID == instance.InstanceID)
+            {
+                ObjectState = ObjectState.Unmodified;
+            }
+            else
+            {
+                throw (new InvalidOperationException("Operation failed. Object has already been marked created."));
+            }
         }
 
         public override void MarkDeleted()
         {
-            throw new NotImplementedException();
+            if (ObjectState == ObjectState.New)
+                throw (new InvalidOperationException("Operation failed. Object in 'New' state may not be marked deleted."));
+
+            if (ObjectState != ObjectState.Deleted)
+            {
+                ObjectState = ObjectState.Deleted;
+
+                foreach (EAVValue value in values)
+                    value.MarkDeleted();
+
+                foreach (EAVInstance childInstance in childInstances)
+                    childInstance.MarkDeleted();
+            }
         }
     }
 
@@ -1365,12 +1475,26 @@ namespace EAVWebClient.Model
 
         public override void MarkCreated(EAVObject obj)
         {
-            throw new NotImplementedException();
+            if (ObjectState == ObjectState.Deleted)
+                throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            EAV.Model.IEAVValue value = obj as EAV.Model.IEAVValue;
+
+            if (value == null)
+                throw (new ArgumentException("Parameter 'obj' must implement the EAV.Model.IEAVValue interface.", "obj"));
+
+            ObjectState = ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
         {
-            throw new NotImplementedException();
+            if (ObjectState == ObjectState.New)
+                throw (new InvalidOperationException("Operation failed. Object in 'New' state may not be marked deleted."));
+
+            if (ObjectState != ObjectState.Deleted)
+            {
+                ObjectState = ObjectState.Deleted;
+            }
         }
     }
     #endregion
