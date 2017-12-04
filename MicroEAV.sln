@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAVStoreClientTest", "EAVSt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAVServiceTest", "EAVServiceTest\EAVServiceTest.csproj", "{09855A5B-32EF-47FC-B635-EAD76E6D477C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAVWebApplication", "EAVWebApplication\EAVWebApplication.csproj", "{9AA037A7-64C0-4DB9-AAE4-A342EC17D049}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EAVWebClient", "EAVWebClient\EAVWebClient.csproj", "{E14A47C9-DEF4-4A96-9922-481939F880F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,14 @@ Global
 		{09855A5B-32EF-47FC-B635-EAD76E6D477C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09855A5B-32EF-47FC-B635-EAD76E6D477C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09855A5B-32EF-47FC-B635-EAD76E6D477C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AA037A7-64C0-4DB9-AAE4-A342EC17D049}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA037A7-64C0-4DB9-AAE4-A342EC17D049}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA037A7-64C0-4DB9-AAE4-A342EC17D049}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA037A7-64C0-4DB9-AAE4-A342EC17D049}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E14A47C9-DEF4-4A96-9922-481939F880F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E14A47C9-DEF4-4A96-9922-481939F880F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E14A47C9-DEF4-4A96-9922-481939F880F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E14A47C9-DEF4-4A96-9922-481939F880F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

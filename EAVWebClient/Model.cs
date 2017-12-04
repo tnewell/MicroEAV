@@ -1,33 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Net.Http;
-using System.Net.Http.Formatting;
 using System.Runtime.Serialization;
-using System.Threading.Tasks;
 
-namespace EAVSandbox
-{
-    public static class ModelExtensions
-    {
-        public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, string requestUri, T value, MediaTypeFormatter formatter)
-        {
-            return (await client.SendAsync(new HttpRequestMessage(new HttpMethod("PATCH"), requestUri) { Content = new ObjectContent<T>(value, formatter) }));
-        }
 
-        public static async Task<HttpResponseMessage> PatchAsJsonAsync<T>(this HttpClient client, string requestUri, T value)
-        {
-            return (await PatchAsync<T>(client, requestUri, value, new JsonMediaTypeFormatter()));
-        }
-
-        public static async Task<HttpResponseMessage> PatchAsXmlAsync<T>(this HttpClient client, string requestUri, T value)
-        {
-            return (await PatchAsync<T>(client, requestUri, value, new XmlMediaTypeFormatter()));
-        }
-    }
-}
-
-namespace EAVSandbox.Model
+namespace EAVWebClient.Model
 {
     public enum ObjectState { New, Unmodified, Modified, Deleted }
 
@@ -291,6 +268,9 @@ namespace EAVSandbox.Model
 
             attributes = new ObservableCollection<EAVAttribute>();
             attributes.CollectionChanged += Attributes_CollectionChanged;
+
+            instances = new ObservableCollection<EAVInstance>();
+            instances.CollectionChanged += Instances_CollectionChanged;
         }
 
         private void ChildContainers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -369,6 +349,44 @@ namespace EAVSandbox.Model
             }
         }
 
+        private void Instances_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (e.OldItems != null)
+                    {
+                        foreach (EAVInstance instance in e.OldItems)
+                        {
+                            if (instance.Container == this)
+                            {
+                                instance.Container = null;
+                            }
+                        }
+                    }
+
+                    if (e.NewItems != null)
+                    {
+                        foreach (EAVInstance instance in e.NewItems)
+                        {
+                            if (instance.Container != this)
+                            {
+                                instance.Container = this;
+                            }
+                        }
+                    }
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                    break;
+            }
+        }
+
         [DataMember(Name = "ContainerID")]
         protected int? containerID;
         [IgnoreDataMember]
@@ -435,6 +453,14 @@ namespace EAVSandbox.Model
         public ICollection<EAVAttribute> Attributes
         {
             get { if (ObjectState != ObjectState.Deleted) return (attributes); else return (new ReadOnlyObservableCollection<EAVAttribute>(attributes)); }
+        }
+
+        [DataMember(Name = "Instances")]
+        private ObservableCollection<EAVInstance> instances;
+        [IgnoreDataMember]
+        public ICollection<EAVInstance> Instance
+        {
+            get { if (ObjectState != ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAVInstance>(instances)); }
         }
 
         protected void SetStateRecursive(ObjectState state)
@@ -599,6 +625,46 @@ namespace EAVSandbox.Model
     {
         public EAVAttribute()
         {
+            values = new ObservableCollection<EAVValue>();
+            values.CollectionChanged += Values_CollectionChanged;
+        }
+
+        private void Values_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (e.OldItems != null)
+                    {
+                        foreach (EAVValue value in e.OldItems)
+                        {
+                            if (value.Attribute == this)
+                            {
+                                value.Attribute = null;
+                            }
+                        }
+                    }
+
+                    if (e.NewItems != null)
+                    {
+                        foreach (EAVValue value in e.NewItems)
+                        {
+                            if (value.Attribute != this)
+                            {
+                                value.Attribute = this;
+                            }
+                        }
+                    }
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                    break;
+            }
         }
 
         [DataMember(Name = "AttributeID")]
@@ -684,6 +750,14 @@ namespace EAVSandbox.Model
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
+        }
+
+        [DataMember(Name = "Values")]
+        private ObservableCollection<EAVValue> values;
+        [IgnoreDataMember]
+        public ICollection<EAVValue> Values
+        {
+            get { if (ObjectState != ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<EAVValue>(values)); }
         }
 
         public override void MarkCreated(EAVObject obj)
@@ -859,7 +933,49 @@ namespace EAVSandbox.Model
     [DataContract(IsReference = true)]
     public class EAVSubject : EAVDataObject, EAV.Model.IEAVSubject
     {
-        public EAVSubject() { }
+        public EAVSubject()
+        {
+            instances = new ObservableCollection<EAVInstance>();
+            instances.CollectionChanged += Instances_CollectionChanged;
+        }
+
+        private void Instances_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (e.OldItems != null)
+                    {
+                        foreach (EAVInstance instance in e.OldItems)
+                        {
+                            if (instance.Subject == this)
+                            {
+                                instance.Subject = null;
+                            }
+                        }
+                    }
+
+                    if (e.NewItems != null)
+                    {
+                        foreach (EAVInstance instance in e.NewItems)
+                        {
+                            if (instance.Subject != this)
+                            {
+                                instance.Subject = this;
+                            }
+                        }
+                    }
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                    break;
+            }
+        }
 
         [DataMember(Name = "SubjectID")]
         protected int? subjectID;
@@ -961,6 +1077,14 @@ namespace EAVSandbox.Model
             }
         }
 
+        [DataMember(Name = "Instances")]
+        private ObservableCollection<EAVInstance> instances;
+        [IgnoreDataMember]
+        public ICollection<EAVInstance> Instance
+        {
+            get { if (ObjectState != ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAVInstance>(instances)); }
+        }
+
         public override void MarkCreated(EAVObject obj)
         {
             if (ObjectState == ObjectState.Deleted)
@@ -1004,13 +1128,116 @@ namespace EAVSandbox.Model
     [DataContract(IsReference = true)]
     public class EAVInstance : EAVDataObject, EAV.Model.IEAVInstance
     {
-        public int? InstanceID => throw new NotImplementedException();
+        public EAVInstance()
+        {
+            childInstances = new ObservableCollection<EAVInstance>();
+            childInstances.CollectionChanged += ChildInstances_CollectionChanged;
 
-        public int? ParentInstanceID => throw new NotImplementedException();
+            values = new ObservableCollection<EAVValue>();
+            values.CollectionChanged += Values_CollectionChanged;
+        }
 
-        public int? SubjectID => throw new NotImplementedException();
+        private void ChildInstances_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
 
-        public int? ContainerID => throw new NotImplementedException();
+                    if (e.OldItems != null)
+                    {
+                        foreach (EAVInstance instance in e.OldItems)
+                        {
+                            if (instance.ParentInstance == this)
+                            {
+                                instance.ParentInstance = null;
+                            }
+                        }
+                    }
+
+                    if (e.NewItems != null)
+                    {
+                        foreach (EAVInstance instance in e.NewItems)
+                        {
+                            if (instance.ParentInstance != this)
+                            {
+                                instance.ParentInstance = this;
+                            }
+                        }
+                    }
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                    break;
+            }
+        }
+
+        private void Values_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+        }
+
+        [DataMember(Name = "InstanceID")]
+        protected int? instanceID;
+        [IgnoreDataMember]
+        public int? InstanceID
+        {
+            get
+            {
+                return (instanceID);
+            }
+        }
+
+        public int? ParentInstanceID { get { return (ParentInstance != null ? ParentInstance.ParentInstanceID : null); } }
+
+        public int? SubjectID { get { return (Subject != null ? Subject.SubjectID : null); } }
+
+        public int? ContainerID { get { return (Container != null ? Container.ContainerID : null); } }
+
+        [DataMember(Name = "ParentInstance")]
+        protected EAVInstance parentInstance;
+        [IgnoreDataMember]
+        public EAVInstance ParentInstance
+        {
+            get;
+            set;
+        }
+
+        [DataMember(Name = "Subject")]
+        protected EAVSubject subject;
+        [IgnoreDataMember]
+        public EAVSubject Subject
+        {
+            get;
+            set;
+        }
+
+        [DataMember(Name = "Container")]
+        protected EAVContainer container;
+        [IgnoreDataMember]
+        public EAVContainer Container
+        {
+            get;
+            set;
+        }
+
+        [DataMember(Name = "ChildInstances")]
+        private ObservableCollection<EAVInstance> childInstances;
+        [IgnoreDataMember]
+        public ICollection<EAVInstance> ChildInstances
+        {
+            get { if (ObjectState != ObjectState.Deleted) return (childInstances); else return (new ReadOnlyObservableCollection<EAVInstance>(childInstances)); }
+        }
+
+        [DataMember(Name = "Values")]
+        private ObservableCollection<EAVValue> values;
+        [IgnoreDataMember]
+        public ICollection<EAVValue> Values
+        {
+            get { if (ObjectState != ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<EAVValue>(values)); }
+        }
 
         public override void MarkCreated(EAVObject obj)
         {
@@ -1026,13 +1253,115 @@ namespace EAVSandbox.Model
     [DataContract(IsReference = true)]
     public class EAVValue : EAVDataObject, EAV.Model.IEAVValue
     {
-        public int? InstanceID => throw new NotImplementedException();
+        public int? InstanceID { get { return (Instance != null ? Instance.InstanceID : null); } }
 
-        public int? AttributeID => throw new NotImplementedException();
+        public int? AttributeID { get { return (Attribute != null ? Attribute.AttributeID : null); } }
 
-        public string RawValue { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        [DataMember(Name = "Instance")]
+        protected EAVInstance instance;
+        [IgnoreDataMember]
+        public EAVInstance Instance
+        {
+            get
+            {
+                if (instance != null && !instance.Values.Contains(this))
+                {
+                    instance = null;
+                }
 
-        public string Units { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+                return (instance);
+            }
+            set
+            {
+                if (instance != value && ObjectState != ObjectState.Deleted)
+                {
+                    if (instance != null && instance.Values.Contains(this))
+                    {
+                        instance.Values.Remove(this);
+                    }
+
+                    instance = value;
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (instance != null && !instance.Values.Contains(this))
+                    {
+                        instance.Values.Add(this);
+                    }
+                }
+            }
+        }
+
+        [DataMember(Name = "Attribute")]
+        protected EAVAttribute attribute;
+        [IgnoreDataMember]
+        public EAVAttribute Attribute
+        {
+            get
+            {
+                if (attribute != null && !attribute.Values.Contains(this))
+                {
+                    attribute = null;
+                }
+
+                return (attribute);
+            }
+            set
+            {
+                if (attribute != value && ObjectState != ObjectState.Deleted)
+                {
+                    if (attribute != null && attribute.Values.Contains(this))
+                    {
+                        attribute.Values.Remove(this);
+                    }
+
+                    attribute = value;
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (attribute != null && !attribute.Values.Contains(this))
+                    {
+                        attribute.Values.Add(this);
+                    }
+                }
+            }
+        }
+
+        [DataMember(Name = "RawValue")]
+        protected string rawValue;
+        [IgnoreDataMember]
+        public string RawValue
+        {
+            get
+            {
+                return (rawValue);
+            }
+            set
+            {
+                if (rawValue != value && ObjectState != ObjectState.Deleted)
+                {
+                    rawValue = value;
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
+        [DataMember(Name = "Units")]
+        protected string units;
+        [IgnoreDataMember]
+        public string Units
+        {
+            get
+            {
+                return (units);
+            }
+            set
+            {
+                if (units != value && ObjectState != ObjectState.Deleted)
+                {
+                    units = value;
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
 
         public override void MarkCreated(EAVObject obj)
         {

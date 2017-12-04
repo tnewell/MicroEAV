@@ -59,7 +59,6 @@
     <Compile Include="EAVSandboxForm.Designer.cs">
       <DependentUpon>EAVSandboxForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ModelExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="EAVSandboxForm.resx">
@@ -92,6 +91,10 @@
     <ProjectReference Include="..\EAV.Model\EAV.Model.csproj">
       <Project>{de98cd45-4020-44ed-a4a8-98d0be529c4f}</Project>
       <Name>EAV.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EAVWebClient\EAVWebClient.csproj">
+      <Project>{e14a47c9-def4-4a96-9922-481939f880f8}</Project>
+      <Name>EAVWebClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
