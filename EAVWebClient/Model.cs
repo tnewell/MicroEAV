@@ -89,6 +89,10 @@ namespace EAVWebClient.Model
     }
 
     [DataContract(IsReference = true)]
+    [KnownType(typeof(EAVEntity))]
+    [KnownType(typeof(EAVSubject))]
+    [KnownType(typeof(EAVInstance))]
+    [KnownType(typeof(EAVValue))]
     public abstract class EAVDataObject : EAVObject
     {
         public EAVDataObject() { }
