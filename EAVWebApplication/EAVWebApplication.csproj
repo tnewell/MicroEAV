@@ -205,6 +205,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EAVFramework\EAVFramework.csproj">
+      <Project>{4445fabc-0e5c-4843-8cc8-cca798982d95}</Project>
+      <Name>EAVFramework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EAVWebClient\EAVServiceClient.csproj">
       <Project>{e14a47c9-def4-4a96-9922-481939f880f8}</Project>
       <Name>EAVServiceClient</Name>

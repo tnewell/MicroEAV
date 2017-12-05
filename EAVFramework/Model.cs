@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 
-namespace EAVClient.Framework
+namespace EAVFramework.Model
 {
     public enum ObjectState { New, Unmodified, Modified, Deleted }
 

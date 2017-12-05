@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
 
-using EAVClient.Framework;
+using EAVFramework.Model;
+
 
 namespace EAVSandbox
 {
     public partial class EAVSandboxForm : Form
     {
-        private EAVClient.EAVClient eavClient = new EAVClient.EAVClient();
+        private EAVServiceClient.EAVClient eavClient = new EAVServiceClient.EAVClient();
 
         public EAVSandboxForm()
         {
