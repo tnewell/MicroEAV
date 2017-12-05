@@ -467,7 +467,7 @@ namespace EAVServiceClient
 
             if (value.ObjectState == ObjectState.Deleted)
             {
-                response = client.DeleteAsync(String.Format("api/data/values/{0}", value.AttributeID)).Result;
+                response = client.DeleteAsync(String.Format("api/data/instances/{0}/values/{1}", value.InstanceID, value.AttributeID)).Result;
                 if (response.IsSuccessStatusCode)
                 {
                 }

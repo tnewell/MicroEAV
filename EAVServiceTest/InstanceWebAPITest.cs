@@ -81,6 +81,8 @@ namespace EAVServiceTest
             }
         }
 
+        // TODO: DeleteInstance
+
         [TestMethod]
         [TestCategory("CRUD")]
         [TestCategory("Retrieve")]

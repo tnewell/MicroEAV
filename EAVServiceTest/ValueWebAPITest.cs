@@ -11,5 +11,10 @@ namespace EAVServiceTest
 {
     public partial class EAVServiceTestHarness
     {
+        // TODO: RetrieveValue
+
+        // TODO: UpdateValue
+
+        // TODO: DeleteValue
     }
 }

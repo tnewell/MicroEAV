@@ -58,7 +58,21 @@ namespace EAVService.Controllers
             }
         }
 
-        // TODO: DELETE
+        [HttpDelete]
+        [Route("{id}", Name = "DeleteInstance")]
+        public IHttpActionResult DeleteInstance(int id)
+        {
+            try
+            {
+                instanceClient.DeleteInstance(id);
+
+                return (Ok());
+            }
+            catch (Exception ex)
+            {
+                return (InternalServerError(ex));
+            }
+        }
 
         [HttpGet]
         [Route("{id}/instances", Name = "RetrieveChildInstances")]
