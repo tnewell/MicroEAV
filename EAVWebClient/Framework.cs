@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 
-namespace EAVWebClient.Model
+namespace EAVClient.Framework
 {
     public enum ObjectState { New, Unmodified, Modified, Deleted }
 
@@ -837,7 +837,7 @@ namespace EAVWebClient.Model
 
     #region Data Objects
     [DataContract(IsReference = true)]
-    public class EAVEntity : EAVDataObject, EAV.Model.IEAVEntity
+    public class EAVEntity : EAVObject, EAV.Model.IEAVEntity
     {
         public EAVEntity()
         {

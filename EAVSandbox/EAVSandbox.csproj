@@ -92,9 +92,9 @@
       <Project>{de98cd45-4020-44ed-a4a8-98d0be529c4f}</Project>
       <Name>EAV.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EAVWebClient\EAVWebClient.csproj">
+    <ProjectReference Include="..\EAVWebClient\EAVServiceClient.csproj">
       <Project>{e14a47c9-def4-4a96-9922-481939f880f8}</Project>
-      <Name>EAVWebClient</Name>
+      <Name>EAVServiceClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

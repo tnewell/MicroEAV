@@ -7,8 +7,8 @@
     <ProjectGuid>{E14A47C9-DEF4-4A96-9922-481939F880F8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EAVWebClient</RootNamespace>
-    <AssemblyName>EAVWebClient</AssemblyName>
+    <RootNamespace>EAVServiceClient</RootNamespace>
+    <AssemblyName>EAVServiceClient</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model.cs" />
+    <Compile Include="Framework.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Client.cs" />
   </ItemGroup>

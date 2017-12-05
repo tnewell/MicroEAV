@@ -11,19 +11,17 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
-using EAVWebClient.Model;
+using EAVClient.Framework;
 
 namespace EAVSandbox
 {
     public partial class EAVSandboxForm : Form
     {
-        private EAVWebClient.EAVWebClient client;
+        private EAVClient.EAVClient eavClient = new EAVClient.EAVClient();
 
         public EAVSandboxForm()
         {
             InitializeComponent();
-
-            client = new EAVWebClient.EAVWebClient("http://localhost:10240");
         }
 
         private EAVContext BuildContext()
@@ -165,33 +163,35 @@ namespace EAVSandbox
 
         private void ctlGoButton_Click(object sender, EventArgs e)
         {
+            HttpClient client = new HttpClient() { BaseAddress = new Uri("http://localhost:10240") };
+
             ctlResults.Text = null;
 
             // Do this to cause our web service to initialize
-            var contexts = client.LoadContexts();
+            var contexts = eavClient.LoadContexts(client);
 
             ctlResults.Text += String.Format("Save Started: {0:HH:mm:ss.fff}\r\n", DateTime.Now);
 
             // Build and save a context
             var context1 = BuildContext();
 
-            client.SaveMetadata(context1);
+            eavClient.SaveMetadata(client, context1);
 
             ctlResults.Text += String.Format("Create Complete: {0:HH:mm:ss.fff}\r\n", DateTime.Now);
 
             // Reload contexts (should be at least one now)
-            contexts = client.LoadContexts();
+            contexts = eavClient.LoadContexts(client);
 
             var context2 = contexts.First();
 
             // Get the associated metadata
-            client.LoadMetadata(context2);
+            eavClient.LoadMetadata(client, context2);
 
             // Mark deleted
             context2.MarkDeleted();
 
             // Delete it
-            client.SaveMetadata(context2);
+            eavClient.SaveMetadata(client, context2);
 
             ctlResults.Text += String.Format("Delete Complete: {0:HH:mm:ss.fff}\r\n", DateTime.Now);
 
