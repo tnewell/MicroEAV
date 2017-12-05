@@ -939,7 +939,7 @@ namespace EAVWebClient.Model
     {
         public EAVSubject()
         {
-            instances = new ObservableCollection<EAVInstance>();
+            instances = new ObservableCollection<EAVRootInstance>();
             instances.CollectionChanged += Instances_CollectionChanged;
         }
 
@@ -1020,6 +1020,7 @@ namespace EAVWebClient.Model
                     }
 
                     entity = value;
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
 
                     if (entity != null && !entity.Subjects.Contains(this))
                     {
@@ -1053,6 +1054,7 @@ namespace EAVWebClient.Model
                     }
 
                     context = value;
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
 
                     if (context != null && !context.Subjects.Contains(this))
                     {
@@ -1082,11 +1084,11 @@ namespace EAVWebClient.Model
         }
 
         [DataMember(Name = "Instances")]
-        private ObservableCollection<EAVInstance> instances;
+        private ObservableCollection<EAVRootInstance> instances;
         [IgnoreDataMember]
-        public ICollection<EAVInstance> Instances
+        public ICollection<EAVRootInstance> Instances
         {
-            get { if (ObjectState != ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAVInstance>(instances)); }
+            get { if (ObjectState != ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAVRootInstance>(instances)); }
         }
 
         public override void MarkCreated(EAVObject obj)
@@ -1130,11 +1132,13 @@ namespace EAVWebClient.Model
     }
 
     [DataContract(IsReference = true)]
-    public class EAVInstance : EAVDataObject, EAV.Model.IEAVInstance
+    [KnownType(typeof(EAVRootInstance))]
+    [KnownType(typeof(EAVChildInstance))]
+    public abstract class EAVInstance : EAVDataObject, EAV.Model.IEAVInstance
     {
         public EAVInstance()
         {
-            childInstances = new ObservableCollection<EAVInstance>();
+            childInstances = new ObservableCollection<EAVChildInstance>();
             childInstances.CollectionChanged += ChildInstances_CollectionChanged;
 
             values = new ObservableCollection<EAVValue>();
@@ -1203,69 +1207,73 @@ namespace EAVWebClient.Model
         [DataMember(Name = "ParentInstance")]
         protected EAVInstance parentInstance;
         [IgnoreDataMember]
-        public EAVInstance ParentInstance
+        public abstract EAVInstance ParentInstance
         {
-            get
-            {
-                if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
-                {
-                    parentInstance = null;
-                }
+            get;
+            set;
+            //get
+            //{
+            //    if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
+            //    {
+            //        parentInstance = null;
+            //    }
 
-                return (parentInstance);
-            }
-            set
-            {
-                if (parentInstance != value && ObjectState != ObjectState.Deleted)
-                {
-                    if (parentInstance != null && parentInstance.ChildInstances.Contains(this))
-                    {
-                        parentInstance.ChildInstances.Remove(this);
-                    }
+            //    return (parentInstance);
+            //}
+            //set
+            //{
+            //    if (parentInstance != value && ObjectState != ObjectState.Deleted)
+            //    {
+            //        if (parentInstance != null && parentInstance.ChildInstances.Contains(this))
+            //        {
+            //            parentInstance.ChildInstances.Remove(this);
+            //        }
 
-                    parentInstance = value;
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+            //        parentInstance = value;
+            //        if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
 
-                    if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
-                    {
-                        parentInstance.ChildInstances.Add(this);
-                    }
-                }
-            }
+            //        if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
+            //        {
+            //            parentInstance.ChildInstances.Add(this);
+            //        }
+            //    }
+            //}
         }
 
         [DataMember(Name = "Subject")]
         protected EAVSubject subject;
         [IgnoreDataMember]
-        public EAVSubject Subject
+        public abstract EAVSubject Subject
         {
-            get
-            {
-                if (subject != null && !subject.Instances.Contains(this))
-                {
-                    subject = null;
-                }
+            get;
+            set;
+            //get
+            //{
+            //    if (subject != null && !subject.Instances.Contains(this))
+            //    {
+            //        subject = null;
+            //    }
 
-                return (subject);
-            }
-            set
-            {
-                if (subject != value && ObjectState != ObjectState.Deleted)
-                {
-                    if (subject != null && subject.Instances.Contains(this))
-                    {
-                        subject.Instances.Remove(this);
-                    }
+            //    return (subject);
+            //}
+            //set
+            //{
+            //    if (subject != value && ObjectState != ObjectState.Deleted)
+            //    {
+            //        if (subject != null && subject.Instances.Contains(this))
+            //        {
+            //            subject.Instances.Remove(this);
+            //        }
 
-                    subject = value;
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+            //        subject = value;
+            //        if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
 
-                    if (subject != null && !subject.Instances.Contains(this))
-                    {
-                        subject.Instances.Add(this);
-                    }
-                }
-            }
+            //        if (subject != null && !subject.Instances.Contains(this))
+            //        {
+            //            subject.Instances.Add(this);
+            //        }
+            //    }
+            //}
         }
 
         [DataMember(Name = "Container")]
@@ -1303,11 +1311,11 @@ namespace EAVWebClient.Model
         }
 
         [DataMember(Name = "ChildInstances")]
-        private ObservableCollection<EAVInstance> childInstances;
+        private ObservableCollection<EAVChildInstance> childInstances;
         [IgnoreDataMember]
-        public ICollection<EAVInstance> ChildInstances
+        public ICollection<EAVChildInstance> ChildInstances
         {
-            get { if (ObjectState != ObjectState.Deleted) return (childInstances); else return (new ReadOnlyObservableCollection<EAVInstance>(childInstances)); }
+            get { if (ObjectState != ObjectState.Deleted) return (childInstances); else return (new ReadOnlyObservableCollection<EAVChildInstance>(childInstances)); }
         }
 
         [DataMember(Name = "Values")]
@@ -1316,6 +1324,13 @@ namespace EAVWebClient.Model
         public ICollection<EAVValue> Values
         {
             get { if (ObjectState != ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<EAVValue>(values)); }
+        }
+
+        protected void SetStateRecursive(ObjectState state)
+        {
+            this.ObjectState = state;
+            foreach (EAVInstance childInstance in ChildInstances)
+                childInstance.SetStateRecursive(state);
         }
 
         public override void MarkCreated(EAVObject obj)
@@ -1364,9 +1379,111 @@ namespace EAVWebClient.Model
         }
     }
 
+    public class EAVRootInstance : EAVInstance
+    {
+        public EAVRootInstance()
+        {
+            parentInstance = null;
+        }
+
+        public override EAVSubject Subject
+        {
+            get
+            {
+                if (subject != null && !subject.Instances.Contains(this))
+                {
+                    subject = null;
+                }
+
+                return (subject);
+            }
+            set
+            {
+                if (subject != value && ObjectState != ObjectState.Deleted)
+                {
+                    if (subject != null && subject.Instances.Contains(this))
+                    {
+                        subject.Instances.Remove(this);
+                    }
+
+                    subject = value;
+                    SetStateRecursive(ObjectState != ObjectState.New ? ObjectState.Modified : ObjectState);
+
+                    if (subject != null && !subject.Instances.Contains(this))
+                    {
+                        subject.Instances.Add(this);
+                    }
+                }
+            }
+        }
+
+        public override EAVInstance ParentInstance
+        {
+            get
+            {
+                return (null);
+            }
+            set
+            {
+                if (value != null) throw (new InvalidOperationException("The ParentInstance property may only accept 'null' as a value."));
+            }
+        }
+    }
+
+    public class EAVChildInstance : EAVInstance
+    {
+        public EAVChildInstance() { }
+
+        public override EAVSubject Subject
+        {
+            get
+            {
+                subject = parentInstance != null ? parentInstance.Subject : null;
+                return (subject);
+            }
+            set
+            {
+                throw (new InvalidOperationException("The Subject property must be set on the root instance for this instance."));
+            }
+        }
+
+        public override EAVInstance ParentInstance
+        {
+            get
+            {
+                if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
+                {
+                    parentInstance = null;
+                }
+
+                return (parentInstance);
+            }
+            set
+            {
+                if (parentInstance != value && ObjectState != ObjectState.Deleted)
+                {
+                    if (parentInstance != null && parentInstance.ChildInstances.Contains(this))
+                    {
+                        parentInstance.ChildInstances.Remove(this);
+                    }
+
+                    parentInstance = value;
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
+                    {
+                        parentInstance.ChildInstances.Add(this);
+                    }
+                }
+            }
+        }
+    }
+
     [DataContract(IsReference = true)]
     public class EAVValue : EAVDataObject, EAV.Model.IEAVValue
     {
+        public EAVValue() { }
+
         public int? InstanceID { get { return (Instance != null ? Instance.InstanceID : null); } }
 
         public int? AttributeID { get { return (Attribute != null ? Attribute.AttributeID : null); } }
