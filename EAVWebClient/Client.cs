@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
@@ -100,6 +101,31 @@ namespace EAVServiceClient
             }
         }
 
+        public void LoadMetadata(HttpClient client, EAVContext context)
+        {
+            try
+            {
+                LoadRootContainers(client, context);
+            }
+            catch (Exception ex)
+            {
+                throw (new ApplicationException("Attempt to get metadata failed.", ex));
+            }
+        }
+
+        public IEnumerable<EAVContext> LoadContexts(HttpClient client)
+        {
+            HttpResponseMessage response = client.GetAsync("api/meta/contexts").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                return (response.Content.ReadAsAsync<IEnumerable<EAVContext>>().Result);
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to get contexts failed."));
+            }
+        }
+
         private void LoadValues(HttpClient client, EAVInstance instance)
         {
             HttpResponseMessage response = client.GetAsync(String.Format("api/data/instances/{0}/values", instance.InstanceID)).Result;
@@ -145,7 +171,9 @@ namespace EAVServiceClient
 
         private void LoadRootInstances(HttpClient client, EAVSubject subject, EAVRootContainer rootContainer)
         {
+#pragma warning disable IDE0031 // Use null propagation
             HttpResponseMessage response = client.GetAsync(String.Format("api/data/subjects/{0}/instances?container={1}", subject.SubjectID, rootContainer != null ? rootContainer.ContainerID : null)).Result;
+#pragma warning restore IDE0031 // Use null propagation
             if (response.IsSuccessStatusCode)
             {
                 var rootInstances = response.Content.ReadAsAsync<IEnumerable<EAVRootInstance>>().Result;
@@ -166,28 +194,15 @@ namespace EAVServiceClient
             }
         }
 
-        public IEnumerable<EAVContext> LoadContexts(HttpClient client)
-        {
-            HttpResponseMessage response = client.GetAsync("api/meta/contexts").Result;
-            if (response.IsSuccessStatusCode)
-            {
-                return (response.Content.ReadAsAsync<IEnumerable<EAVContext>>().Result);
-            }
-            else
-            {
-                throw (new ApplicationException("Attempt to get contexts failed."));
-            }
-        }
-
-        public void LoadMetadata(HttpClient client, EAVContext context)
+        public void LoadData(HttpClient client, EAVSubject subject, EAVRootContainer rootContainer = null)
         {
             try
             {
-                LoadRootContainers(client, context);
+                LoadRootInstances(client, subject, rootContainer);
             }
             catch (Exception ex)
             {
-                throw (new ApplicationException("Attempt to get metadata failed.", ex));
+                throw (new ApplicationException("Attempt to load data failed.", ex));
             }
         }
 
@@ -211,16 +226,9 @@ namespace EAVServiceClient
             }
         }
 
-        public void LoadData(HttpClient client, EAVSubject subject, EAVRootContainer rootContainer = null)
+        public IEnumerable<EAVEntity> LoadEntities(HttpClient client)
         {
-            try
-            {
-                LoadRootInstances(client, subject, rootContainer);
-            }
-            catch (Exception ex)
-            {
-                throw (new ApplicationException("Attempt to load data failed.", ex));
-            }
+            return (Enumerable.Empty<EAVEntity>());
         }
         #endregion
 
@@ -231,7 +239,7 @@ namespace EAVServiceClient
 
             if (attribute.ObjectState == ObjectState.New)
             {
-                response = client.PostAsJsonAsync<EAV.Model.IEAVAttribute>(String.Format("api/meta/containers/{0}/attributes", attribute.Container.ContainerID), attribute).Result;
+                response = client.PostAsJsonAsync<EAV.Model.IEAVAttribute>(String.Format("api/meta/containers/{0}/attributes", attribute.ContainerID), attribute).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     EAVAttribute newAttribute = response.Content.ReadAsAsync<EAVAttribute>().Result;
@@ -275,7 +283,7 @@ namespace EAVServiceClient
 
             if (container.ObjectState == ObjectState.New)
             {
-                response = client.PostAsJsonAsync<EAV.Model.IEAVContainer>(String.Format("api/meta/containers/{0}/containers", container.ParentContainer.ContainerID), container).Result;
+                response = client.PostAsJsonAsync<EAV.Model.IEAVContainer>(String.Format("api/meta/containers/{0}/containers", container.ParentContainerID), container).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     EAVContainer newContainer = response.Content.ReadAsAsync<EAVChildContainer>().Result;
@@ -329,7 +337,7 @@ namespace EAVServiceClient
 
             if (container.ObjectState == ObjectState.New)
             {
-                response = client.PostAsJsonAsync<EAV.Model.IEAVContainer>(String.Format("api/meta/contexts/{0}/containers", container.Context.ContextID), container).Result;
+                response = client.PostAsJsonAsync<EAV.Model.IEAVContainer>(String.Format("api/meta/contexts/{0}/containers", container.ContextID), container).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     EAVContainer newContainer = response.Content.ReadAsAsync<EAVRootContainer>().Result;
@@ -426,8 +434,205 @@ namespace EAVServiceClient
             }
         }
 
+        private void SaveValue(HttpClient client, EAVValue value)
+        {
+            HttpResponseMessage response;
+
+            if (value.ObjectState == ObjectState.New)
+            {
+                response = client.PostAsJsonAsync<EAV.Model.IEAVValue>(String.Format("api/data/instances/{0}/values?attribute={1}", value.InstanceID, value.AttributeID), value).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    EAVValue newValue = response.Content.ReadAsAsync<EAVValue>().Result;
+
+                    value.MarkCreated(newValue);
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to create value failed."));
+                }
+            }
+            else if (value.ObjectState == ObjectState.Modified)
+            {
+                response = client.PatchAsJsonAsync<EAV.Model.IEAVValue>("api/data/values", value).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    value.MarkCreated();
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to update value failed."));
+                }
+            }
+
+            if (value.ObjectState == ObjectState.Deleted)
+            {
+                response = client.DeleteAsync(String.Format("api/data/values/{0}", value.AttributeID)).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to delete value failed."));
+                }
+            }
+        }
+
+        private void SaveChildInstance(HttpClient client, EAVChildInstance instance)
+        {
+            HttpResponseMessage response;
+
+            if (instance.ObjectState == ObjectState.New)
+            {
+                response = client.PostAsJsonAsync<EAV.Model.IEAVInstance>(String.Format("api/data/instances/{0}/instances", instance.ParentInstanceID), instance).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    EAVInstance newInstance = response.Content.ReadAsAsync<EAVChildInstance>().Result;
+
+                    instance.MarkCreated(newInstance);
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to create child instance failed."));
+                }
+            }
+            else if (instance.ObjectState == ObjectState.Modified)
+            {
+                response = client.PatchAsJsonAsync<EAV.Model.IEAVInstance>("api/data/instances", instance).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    instance.MarkCreated();
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to update child instance failed."));
+                }
+            }
+
+            foreach (EAVValue value in instance.Values)
+            {
+                SaveValue(client, value);
+            }
+
+            foreach (EAVChildInstance childInstance in instance.ChildInstances)
+            {
+                SaveChildInstance(client, childInstance);
+            }
+
+            if (instance.ObjectState == ObjectState.Deleted)
+            {
+                response = client.DeleteAsync(String.Format("api/data/instances/{0}", instance.InstanceID)).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to delete child instance failed."));
+                }
+            }
+        }
+
+        private void SaveRootInstance(HttpClient client, EAVRootInstance instance)
+        {
+            HttpResponseMessage response;
+
+            if (instance.ObjectState == ObjectState.New)
+            {
+                response = client.PostAsJsonAsync<EAV.Model.IEAVInstance>(String.Format("api/data/subjects/{0}/instances", instance.SubjectID), instance).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    EAVInstance newInstance = response.Content.ReadAsAsync<EAVRootInstance>().Result;
+
+                    instance.MarkCreated(newInstance);
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to create root instance failed."));
+                }
+            }
+            else if (instance.ObjectState == ObjectState.Modified)
+            {
+                response = client.PatchAsJsonAsync<EAV.Model.IEAVInstance>("api/data/instances", instance).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    instance.MarkCreated();
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to update root instance failed."));
+                }
+            }
+
+            foreach (EAVValue value in instance.Values)
+            {
+                SaveValue(client, value);
+            }
+
+            foreach (EAVChildInstance childInstance in instance.ChildInstances)
+            {
+                SaveChildInstance(client, childInstance);
+            }
+
+            if (instance.ObjectState == ObjectState.Deleted)
+            {
+                response = client.DeleteAsync(String.Format("api/data/instances/{0}", instance.InstanceID)).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to delete root instance failed."));
+                }
+            }
+        }
+
         public void SaveData(HttpClient client, EAVSubject subject, EAVRootContainer container = null)
         {
+            HttpResponseMessage response;
+
+            if (subject.ObjectState == ObjectState.New)
+            {
+                response = client.PostAsJsonAsync<EAV.Model.IEAVSubject>(String.Format("api/data/entities/{0}/subjects", subject.EntityID), subject).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    EAVSubject newSubject = response.Content.ReadAsAsync<EAVSubject>().Result;
+
+                    subject.MarkCreated(newSubject);
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to create subject failed."));
+                }
+            }
+            else if (subject.ObjectState == ObjectState.Modified)
+            {
+                response = client.PatchAsJsonAsync<EAV.Model.IEAVSubject>("api/data/subjects", subject).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    subject.MarkCreated();
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to update subject failed."));
+                }
+            }
+
+            foreach (EAVRootInstance rootInstance in subject.Instances)
+            {
+                SaveRootInstance(client, rootInstance);
+            }
+
+            if (subject.ObjectState == ObjectState.Deleted)
+            {
+                response = client.DeleteAsync(String.Format("api/data/subjects/{0}", subject.SubjectID)).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to delete subject failed."));
+                }
+            }
         }
         #endregion
     }

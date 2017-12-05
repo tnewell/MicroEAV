@@ -15,8 +15,7 @@ namespace EAVService.Controllers
         {
             get
             {
-                int value = 0;
-                return (Int32.TryParse(QueryItem("container"), out value) ? (int?)value : null);
+                return (Int32.TryParse(QueryItem("container"), out int value) ? (int?)value : null);
             }
         }
 
