@@ -214,10 +214,20 @@ namespace EAVWebClient.Model
             get { if (ObjectState != ObjectState.Deleted) return (subjects); else return (new ReadOnlyObservableCollection<EAVSubject>(subjects)); }
         }
 
-        public override void MarkCreated(EAVObject obj)
+        public override void MarkCreated(EAVObject obj = null)
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (obj == null && this.contextID != null)
+            {
+                ObjectState = ObjectState.Unmodified;
+                return;
+            }
+            else if (obj == null)
+            {
+                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
+            }
 
             EAV.Model.IEAVContext context = obj as EAV.Model.IEAVContext;
 
@@ -474,10 +484,20 @@ namespace EAVWebClient.Model
                 childContainer.SetStateRecursive(state);
         }
 
-        public override void MarkCreated(EAVObject obj)
+        public override void MarkCreated(EAVObject obj = null)
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (obj == null && this.containerID != null)
+            {
+                ObjectState = ObjectState.Unmodified;
+                return;
+            }
+            else if (obj == null)
+            {
+                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
+            }
 
             EAV.Model.IEAVContainer container = obj as EAV.Model.IEAVContainer;
 
@@ -764,10 +784,20 @@ namespace EAVWebClient.Model
             get { if (ObjectState != ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<EAVValue>(values)); }
         }
 
-        public override void MarkCreated(EAVObject obj)
+        public override void MarkCreated(EAVObject obj = null)
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (obj == null && this.attributeID != null)
+            {
+                ObjectState = ObjectState.Unmodified;
+                return;
+            }
+            else if (obj == null)
+            {
+                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
+            }
 
             EAV.Model.IEAVAttribute attribute = obj as EAV.Model.IEAVAttribute;
 
@@ -891,10 +921,20 @@ namespace EAVWebClient.Model
             get { if (ObjectState != ObjectState.Deleted) return (subjects); else return (new ReadOnlyObservableCollection<EAVSubject>(subjects)); }
         }
 
-        public override void MarkCreated(EAVObject obj)
+        public override void MarkCreated(EAVObject obj = null)
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (obj == null && this.entityID != null)
+            {
+                ObjectState = ObjectState.Unmodified;
+                return;
+            }
+            else if (obj == null)
+            {
+                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
+            }
 
             EAV.Model.IEAVEntity entity = obj as EAV.Model.IEAVEntity;
 
@@ -1091,10 +1131,20 @@ namespace EAVWebClient.Model
             get { if (ObjectState != ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAVRootInstance>(instances)); }
         }
 
-        public override void MarkCreated(EAVObject obj)
+        public override void MarkCreated(EAVObject obj = null)
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (obj == null && this.subjectID != null)
+            {
+                ObjectState = ObjectState.Unmodified;
+                return;
+            }
+            else if (obj == null)
+            {
+                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
+            }
 
             EAV.Model.IEAVSubject subject = obj as EAV.Model.IEAVSubject;
 
@@ -1333,10 +1383,20 @@ namespace EAVWebClient.Model
                 childInstance.SetStateRecursive(state);
         }
 
-        public override void MarkCreated(EAVObject obj)
+        public override void MarkCreated(EAVObject obj = null)
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (obj == null && this.instanceID != null)
+            {
+                ObjectState = ObjectState.Unmodified;
+                return;
+            }
+            else if (obj == null)
+            {
+                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
+            }
 
             EAV.Model.IEAVInstance instance = obj as EAV.Model.IEAVInstance;
 
@@ -1594,10 +1654,22 @@ namespace EAVWebClient.Model
             }
         }
 
-        public override void MarkCreated(EAVObject obj)
+        public override void MarkCreated(EAVObject obj = null)
         {
+            // TODO: Rethink what object state means for value objects
+
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (obj == null && Attribute != null && Attribute.AttributeID != null && Instance != null && Instance.InstanceID != null)
+            {
+                ObjectState = ObjectState.Unmodified;
+                return;
+            }
+            else if (obj == null)
+            {
+                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
+            }
 
             EAV.Model.IEAVValue value = obj as EAV.Model.IEAVValue;
 

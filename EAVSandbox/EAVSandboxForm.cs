@@ -167,21 +167,31 @@ namespace EAVSandbox
         {
             ctlResults.Text = null;
 
+            // Do this to cause our web service to initialize
             var contexts = client.LoadContexts();
 
             ctlResults.Text += String.Format("Save Started: {0:HH:mm:ss.fff}\r\n", DateTime.Now);
 
+            // Build and save a context
             var context1 = BuildContext();
 
-            client.SaveContext(context1);
+            client.SaveMetadata(context1);
 
             ctlResults.Text += String.Format("Create Complete: {0:HH:mm:ss.fff}\r\n", DateTime.Now);
 
-            var context2 = client.LoadContext(context1.Name);
+            // Reload contexts (should be at least one now)
+            contexts = client.LoadContexts();
 
+            var context2 = contexts.First();
+
+            // Get the associated metadata
+            client.LoadMetadata(context2);
+
+            // Mark deleted
             context2.MarkDeleted();
 
-            client.SaveContext(context2);
+            // Delete it
+            client.SaveMetadata(context2);
 
             ctlResults.Text += String.Format("Delete Complete: {0:HH:mm:ss.fff}\r\n", DateTime.Now);
 

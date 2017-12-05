@@ -49,7 +49,7 @@ namespace EAVWebClient
 
                 foreach (Model.EAVAttribute attribute in attributes)
                 {
-                    attribute.MarkCreated(attribute);
+                    attribute.MarkCreated();
 
                     container.Attributes.Add(attribute);
                 }
@@ -69,7 +69,7 @@ namespace EAVWebClient
 
                 foreach (Model.EAVChildContainer childContainer in childContainers)
                 {
-                    childContainer.MarkCreated(childContainer);
+                    childContainer.MarkCreated();
 
                     LoadAttributes(childContainer);
                     LoadChildContainers(childContainer);
@@ -92,7 +92,7 @@ namespace EAVWebClient
 
                 foreach (Model.EAVRootContainer rootContainer in rootContainers)
                 {
-                    rootContainer.MarkCreated(rootContainer);
+                    rootContainer.MarkCreated();
 
                     LoadAttributes(rootContainer);
                     LoadChildContainers(rootContainer);
@@ -106,22 +106,69 @@ namespace EAVWebClient
             }
         }
 
-        public Model.EAVContext LoadContext(string name)
+        private void LoadValues(Model.EAVInstance instance)
         {
-            HttpResponseMessage response = client.GetAsync(String.Format("api/meta/contexts/{0}", Uri.EscapeUriString(name))).Result;
+            HttpResponseMessage response = client.GetAsync(String.Format("api/data/instances/{0}/values", instance.InstanceID)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var context = response.Content.ReadAsAsync<Model.EAVContext>().Result;
+                var values = response.Content.ReadAsAsync<IEnumerable<Model.EAVValue>>().Result;
 
-                context.MarkCreated(context);
+                foreach (Model.EAVValue value in values)
+                {
+                    value.MarkCreated();
 
-                LoadRootContainers(context);
-
-                return (context);
+                    instance.Values.Add(value);
+                }
             }
             else
             {
-                throw (new ApplicationException("Attempt to get context failed."));
+                throw (new ApplicationException("Attempt to get values failed."));
+            }
+        }
+
+        private void LoadChildInstances(Model.EAVInstance parentInstance)
+        {
+            HttpResponseMessage response = client.GetAsync(String.Format("api/data/instances/{0}/instances", parentInstance.InstanceID)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var childInstances = response.Content.ReadAsAsync<IEnumerable<Model.EAVChildInstance>>().Result;
+
+                foreach (Model.EAVChildInstance childInstance in childInstances)
+                {
+                    childInstance.MarkCreated();
+
+                    LoadValues(childInstance);
+                    LoadChildInstances(childInstance);
+
+                    parentInstance.ChildInstances.Add(childInstance);
+                }
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to get child instances failed."));
+            }
+        }
+
+        private void LoadRootInstances(Model.EAVSubject subject, Model.EAVRootContainer rootContainer)
+        {
+            HttpResponseMessage response = client.GetAsync(String.Format("api/data/subjects/{0}/instances?container={1}", subject.SubjectID, rootContainer != null ? rootContainer.ContainerID : null)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var rootInstances = response.Content.ReadAsAsync<IEnumerable<Model.EAVRootInstance>>().Result;
+
+                foreach (Model.EAVRootInstance rootInstance in rootInstances)
+                {
+                    rootInstance.MarkCreated();
+
+                    LoadValues(rootInstance);
+                    LoadChildInstances(rootInstance);
+
+                    subject.Instances.Add(rootInstance);
+                }
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to get root instances failed."));
             }
         }
 
@@ -135,6 +182,50 @@ namespace EAVWebClient
             else
             {
                 throw (new ApplicationException("Attempt to get contexts failed."));
+            }
+        }
+
+        public void LoadMetadata(Model.EAVContext context)
+        {
+            try
+            {
+                LoadRootContainers(context);
+            }
+            catch (Exception ex)
+            {
+                throw (new ApplicationException("Attempt to get metadata failed.", ex));
+            }
+        }
+
+        public void LoadSubjects(Model.EAVContext context)
+        {
+            HttpResponseMessage response = client.GetAsync(String.Format("api/data/contexts/{0}/subjects", context.ContextID)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var subjects = response.Content.ReadAsAsync<IEnumerable<Model.EAVSubject>>().Result;
+
+                foreach (Model.EAVSubject subject in subjects)
+                {
+                    subject.MarkCreated();
+
+                    context.Subjects.Add(subject);
+                }
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to get subjects failed."));
+            }
+        }
+
+        public void LoadData(Model.EAVSubject subject, Model.EAVRootContainer rootContainer = null)
+        {
+            try
+            {
+                LoadRootInstances(subject, rootContainer);
+            }
+            catch (Exception ex)
+            {
+                throw (new ApplicationException("Attempt to load data failed.", ex));
             }
         }
         #endregion
@@ -289,7 +380,7 @@ namespace EAVWebClient
             }
         }
 
-        public void SaveContext(Model.EAVContext context)
+        public void SaveMetadata(Model.EAVContext context)
         {
             HttpResponseMessage response;
 
@@ -298,7 +389,9 @@ namespace EAVWebClient
                 response = client.PostAsJsonAsync<EAV.Model.IEAVContext>("api/meta/contexts", context).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    context.MarkCreated(response.Content.ReadAsAsync<Model.EAVContext>().Result);
+                    Model.EAVContext newContext = response.Content.ReadAsAsync<Model.EAVContext>().Result;
+
+                    context.MarkCreated(newContext);
                 }
                 else
                 {
@@ -333,6 +426,10 @@ namespace EAVWebClient
                     throw (new ApplicationException("Attempt to delete context failed."));
                 }
             }
+        }
+
+        public void SaveData(Model.EAVSubject subject, Model.EAVRootContainer container = null)
+        {
         }
         #endregion
     }
