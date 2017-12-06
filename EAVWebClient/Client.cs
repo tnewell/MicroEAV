@@ -171,9 +171,7 @@ namespace EAVServiceClient
 
         private void LoadRootInstances(HttpClient client, EAVSubject subject, EAVRootContainer rootContainer)
         {
-#pragma warning disable IDE0031 // Use null propagation
             HttpResponseMessage response = client.GetAsync(String.Format("api/data/subjects/{0}/instances?container={1}", subject.SubjectID, rootContainer != null ? rootContainer.ContainerID : null)).Result;
-#pragma warning restore IDE0031 // Use null propagation
             if (response.IsSuccessStatusCode)
             {
                 var rootInstances = response.Content.ReadAsAsync<IEnumerable<EAVRootInstance>>().Result;
@@ -244,7 +242,8 @@ namespace EAVServiceClient
                 {
                     EAVAttribute newAttribute = response.Content.ReadAsAsync<EAVAttribute>().Result;
 
-                    attribute.MarkCreated(newAttribute);
+                    attribute.AttributeID = newAttribute.AttributeID;
+                    attribute.MarkCreated();
                 }
                 else
                 {
@@ -288,7 +287,8 @@ namespace EAVServiceClient
                 {
                     EAVContainer newContainer = response.Content.ReadAsAsync<EAVChildContainer>().Result;
 
-                    container.MarkCreated(newContainer);
+                    container.ContainerID = newContainer.ContainerID;
+                    container.MarkCreated();
                 }
                 else
                 {
@@ -342,7 +342,8 @@ namespace EAVServiceClient
                 {
                     EAVContainer newContainer = response.Content.ReadAsAsync<EAVRootContainer>().Result;
 
-                    container.MarkCreated(newContainer);
+                    container.ContainerID = newContainer.ContainerID;
+                    container.MarkCreated();
                 }
                 else
                 {
@@ -396,7 +397,8 @@ namespace EAVServiceClient
                 {
                     EAVContext newContext = response.Content.ReadAsAsync<EAVContext>().Result;
 
-                    context.MarkCreated(newContext);
+                    context.ContextID = newContext.ContextID;
+                    context.MarkCreated();
                 }
                 else
                 {
@@ -445,7 +447,7 @@ namespace EAVServiceClient
                 {
                     EAVValue newValue = response.Content.ReadAsAsync<EAVValue>().Result;
 
-                    value.MarkCreated(newValue);
+                    value.MarkCreated();
                 }
                 else
                 {
@@ -489,7 +491,8 @@ namespace EAVServiceClient
                 {
                     EAVInstance newInstance = response.Content.ReadAsAsync<EAVChildInstance>().Result;
 
-                    instance.MarkCreated(newInstance);
+                    instance.InstanceID = newInstance.InstanceID;
+                    instance.MarkCreated();
                 }
                 else
                 {
@@ -543,7 +546,8 @@ namespace EAVServiceClient
                 {
                     EAVInstance newInstance = response.Content.ReadAsAsync<EAVRootInstance>().Result;
 
-                    instance.MarkCreated(newInstance);
+                    instance.InstanceID = newInstance.InstanceID;
+                    instance.MarkCreated();
                 }
                 else
                 {
@@ -597,7 +601,8 @@ namespace EAVServiceClient
                 {
                     EAVSubject newSubject = response.Content.ReadAsAsync<EAVSubject>().Result;
 
-                    subject.MarkCreated(newSubject);
+                    subject.SubjectID = newSubject.SubjectID;
+                    subject.MarkCreated();
                 }
                 else
                 {

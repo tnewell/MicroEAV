@@ -17,7 +17,7 @@ namespace EAVFramework.Model
         [DataMember()]
         public ObjectState ObjectState { get; set; }
 
-        public abstract void MarkCreated(EAVObject obj);
+        public abstract void MarkCreated();
 
         public abstract void MarkDeleted();
     }
@@ -196,6 +196,17 @@ namespace EAVFramework.Model
             {
                 return (contextID);
             }
+            set
+            {
+                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && contextID == null))
+                {
+                    contextID = value;
+                }
+                else
+                {
+                    throw (new InvalidOperationException("This property has already been set."));
+                }
+            }
         }
 
         [DataMember(Name = "Containers")]
@@ -214,42 +225,12 @@ namespace EAVFramework.Model
             get { if (ObjectState != ObjectState.Deleted) return (subjects); else return (new ReadOnlyObservableCollection<EAVSubject>(subjects)); }
         }
 
-        public override void MarkCreated(EAVObject obj = null)
+        public override void MarkCreated()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
 
-            if (obj == null && this.contextID != null)
-            {
-                ObjectState = ObjectState.Unmodified;
-                return;
-            }
-            else if (obj == null)
-            {
-                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
-            }
-
-            EAV.Model.IEAVContext context = obj as EAV.Model.IEAVContext;
-
-            if (context == null)
-                throw (new ArgumentException("Parameter 'obj' must implement the EAV.Model.IEAVContext interface.", "obj"));
-
-            if (context.ContextID == null)
-                throw (new InvalidOperationException("Property 'ContextID' of parameter 'obj' may not not be null."));
-
-            if (this.contextID == null)
-            {
-                contextID = context.ContextID;
-                ObjectState = ObjectState.Unmodified;
-            }
-            else if (this.contextID == context.ContextID)
-            {
-                ObjectState = ObjectState.Unmodified;
-            }
-            else
-            {
-                throw (new InvalidOperationException("Operation failed. Object has already been marked created."));
-            }
+            ObjectState = ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
@@ -410,6 +391,17 @@ namespace EAVFramework.Model
             {
                 return (containerID);
             }
+            set
+            {
+                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && containerID == null))
+                {
+                    containerID = value;
+                }
+                else
+                {
+                    throw (new InvalidOperationException("This property has already been set."));
+                }
+            }
         }
 
         public int? ContextID { get { return (Context != null ? Context.ContextID : null); } }
@@ -484,42 +476,12 @@ namespace EAVFramework.Model
                 childContainer.SetStateRecursive(state);
         }
 
-        public override void MarkCreated(EAVObject obj = null)
+        public override void MarkCreated()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
 
-            if (obj == null && this.containerID != null)
-            {
-                ObjectState = ObjectState.Unmodified;
-                return;
-            }
-            else if (obj == null)
-            {
-                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
-            }
-
-            EAV.Model.IEAVContainer container = obj as EAV.Model.IEAVContainer;
-
-            if (container == null)
-                throw (new ArgumentException("Parameter 'obj' must implement the EAV.Model.IEAVContainer interface.", "obj"));
-
-            if (container.ContainerID == null)
-                throw (new InvalidOperationException("Property 'ContainerID' of parameter 'obj' may not not be null."));
-
-            if (this.containerID == null)
-            {
-                containerID = container.ContainerID;
-                ObjectState = ObjectState.Unmodified;
-            }
-            else if (this.containerID == container.ContainerID)
-            {
-                ObjectState = ObjectState.Unmodified;
-            }
-            else
-            {
-                throw (new InvalidOperationException("Operation failed. Object has already been marked created."));
-            }
+            ObjectState = ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
@@ -700,6 +662,17 @@ namespace EAVFramework.Model
             {
                 return (attributeID);
             }
+            set
+            {
+                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && attributeID == null))
+                {
+                    attributeID = value;
+                }
+                else
+                {
+                    throw (new InvalidOperationException("This property has already been set."));
+                }
+            }
         }
 
         public int? ContainerID { get { return (Container != null ? Container.ContainerID : null); } }
@@ -784,42 +757,12 @@ namespace EAVFramework.Model
             get { if (ObjectState != ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<EAVValue>(values)); }
         }
 
-        public override void MarkCreated(EAVObject obj = null)
+        public override void MarkCreated()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
 
-            if (obj == null && this.attributeID != null)
-            {
-                ObjectState = ObjectState.Unmodified;
-                return;
-            }
-            else if (obj == null)
-            {
-                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
-            }
-
-            EAV.Model.IEAVAttribute attribute = obj as EAV.Model.IEAVAttribute;
-
-            if (attribute == null)
-                throw (new ArgumentException("Parameter 'obj' must implement the EAV.Model.IEAVAttribute interface.", "obj"));
-
-            if (attribute.AttributeID == null)
-                throw (new InvalidOperationException("Property 'AttributeID' of parameter 'obj' may not not be null."));
-
-            if (this.attributeID == null)
-            {
-                attributeID = attribute.AttributeID;
-                ObjectState = ObjectState.Unmodified;
-            }
-            else if (this.AttributeID == attribute.AttributeID)
-            {
-                ObjectState = ObjectState.Unmodified;
-            }
-            else
-            {
-                throw (new InvalidOperationException("Operation failed. Object has already been marked created."));
-            }
+            ObjectState = ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
@@ -892,6 +835,17 @@ namespace EAVFramework.Model
             {
                 return (entityID);
             }
+            set
+            {
+                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && entityID == null))
+                {
+                    entityID = value;
+                }
+                else
+                {
+                    throw (new InvalidOperationException("This property has already been set."));
+                }
+            }
         }
 
         [DataMember(Name = "Descriptor")]
@@ -921,42 +875,12 @@ namespace EAVFramework.Model
             get { if (ObjectState != ObjectState.Deleted) return (subjects); else return (new ReadOnlyObservableCollection<EAVSubject>(subjects)); }
         }
 
-        public override void MarkCreated(EAVObject obj = null)
+        public override void MarkCreated()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
 
-            if (obj == null && this.entityID != null)
-            {
-                ObjectState = ObjectState.Unmodified;
-                return;
-            }
-            else if (obj == null)
-            {
-                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
-            }
-
-            EAV.Model.IEAVEntity entity = obj as EAV.Model.IEAVEntity;
-
-            if (entity == null)
-                throw (new ArgumentException("Parameter 'obj' must implement the EAV.Model.IEAVEntity interface.", "obj"));
-
-            if (entity.EntityID == null)
-                throw (new InvalidOperationException("Property 'EntityID' of parameter 'obj' may not not be null."));
-
-            if (this.entityID == null)
-            {
-                entityID = entity.EntityID;
-                ObjectState = ObjectState.Unmodified;
-            }
-            else if (this.EntityID == entity.EntityID)
-            {
-                ObjectState = ObjectState.Unmodified;
-            }
-            else
-            {
-                throw (new InvalidOperationException("Operation failed. Object has already been marked created."));
-            }
+            ObjectState = ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
@@ -1029,6 +953,17 @@ namespace EAVFramework.Model
             get
             {
                 return (subjectID);
+            }
+            set
+            {
+                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && subjectID == null))
+                {
+                    subjectID = value;
+                }
+                else
+                {
+                    throw (new InvalidOperationException("This property has already been set."));
+                }
             }
         }
 
@@ -1131,42 +1066,12 @@ namespace EAVFramework.Model
             get { if (ObjectState != ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAVRootInstance>(instances)); }
         }
 
-        public override void MarkCreated(EAVObject obj = null)
+        public override void MarkCreated()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
 
-            if (obj == null && this.subjectID != null)
-            {
-                ObjectState = ObjectState.Unmodified;
-                return;
-            }
-            else if (obj == null)
-            {
-                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
-            }
-
-            EAV.Model.IEAVSubject subject = obj as EAV.Model.IEAVSubject;
-
-            if (subject == null)
-                throw (new ArgumentException("Parameter 'obj' must implement the EAV.Model.IEAVSubject interface.", "obj"));
-
-            if (subject.SubjectID == null)
-                throw (new InvalidOperationException("Property 'SubjectID' of parameter 'obj' may not not be null."));
-
-            if (this.subjectID == null)
-            {
-                subjectID = subject.SubjectID;
-                ObjectState = ObjectState.Unmodified;
-            }
-            else if (this.SubjectID == subject.SubjectID)
-            {
-                ObjectState = ObjectState.Unmodified;
-            }
-            else
-            {
-                throw (new InvalidOperationException("Operation failed. Object has already been marked created."));
-            }
+            ObjectState = ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
@@ -1245,6 +1150,17 @@ namespace EAVFramework.Model
             get
             {
                 return (instanceID);
+            }
+            set
+            {
+                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && instanceID == null))
+                {
+                    instanceID = value;
+                }
+                else
+                {
+                    throw (new InvalidOperationException("This property has already been set."));
+                }
             }
         }
 
@@ -1383,42 +1299,12 @@ namespace EAVFramework.Model
                 childInstance.SetStateRecursive(state);
         }
 
-        public override void MarkCreated(EAVObject obj = null)
+        public override void MarkCreated()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
 
-            if (obj == null && this.instanceID != null)
-            {
-                ObjectState = ObjectState.Unmodified;
-                return;
-            }
-            else if (obj == null)
-            {
-                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
-            }
-
-            EAV.Model.IEAVInstance instance = obj as EAV.Model.IEAVInstance;
-
-            if (instance == null)
-                throw (new ArgumentException("Parameter 'obj' must implement the EAV.Model.IEAVInstance interface.", "obj"));
-
-            if (instance.InstanceID == null)
-                throw (new InvalidOperationException("Property 'InstanceID' of parameter 'obj' may not not be null."));
-
-            if (this.instanceID == null)
-            {
-                instanceID = instance.InstanceID;
-                ObjectState = ObjectState.Unmodified;
-            }
-            else if (this.instanceID == instance.InstanceID)
-            {
-                ObjectState = ObjectState.Unmodified;
-            }
-            else
-            {
-                throw (new InvalidOperationException("Operation failed. Object has already been marked created."));
-            }
+            ObjectState = ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
@@ -1654,27 +1540,12 @@ namespace EAVFramework.Model
             }
         }
 
-        public override void MarkCreated(EAVObject obj = null)
+        public override void MarkCreated()
         {
             // TODO: Rethink what object state means for value objects
 
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
-
-            if (obj == null && Attribute != null && Attribute.AttributeID != null && Instance != null && Instance.InstanceID != null)
-            {
-                ObjectState = ObjectState.Unmodified;
-                return;
-            }
-            else if (obj == null)
-            {
-                throw (new InvalidOperationException("Operation failed. Object cannot mark self created."));
-            }
-
-            EAV.Model.IEAVValue value = obj as EAV.Model.IEAVValue;
-
-            if (value == null)
-                throw (new ArgumentException("Parameter 'obj' must implement the EAV.Model.IEAVValue interface.", "obj"));
 
             ObjectState = ObjectState.Unmodified;
         }
