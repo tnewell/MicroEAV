@@ -245,7 +245,15 @@ namespace EAVServiceClient
 
         public IEnumerable<EAVEntity> LoadEntities(HttpClient client)
         {
-            return (Enumerable.Empty<EAVEntity>());
+            HttpResponseMessage response = client.GetAsync(String.Format("api/data/entities")).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                return(response.Content.ReadAsAsync<IEnumerable<EAVEntity>>().Result);
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to get subjects failed."));
+            }
         }
         #endregion
 
