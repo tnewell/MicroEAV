@@ -44,7 +44,7 @@ namespace EAVServiceClient
 
                 foreach (EAVAttribute attribute in attributes)
                 {
-                    attribute.MarkCreated();
+                    attribute.MarkUnmodified();
 
                     container.Attributes.Add(attribute);
                 }
@@ -64,7 +64,7 @@ namespace EAVServiceClient
 
                 foreach (EAVChildContainer childContainer in childContainers)
                 {
-                    childContainer.MarkCreated();
+                    childContainer.MarkUnmodified();
 
                     LoadAttributes(client, childContainer);
                     LoadChildContainers(client, childContainer);
@@ -87,7 +87,7 @@ namespace EAVServiceClient
 
                 foreach (EAVRootContainer rootContainer in rootContainers)
                 {
-                    rootContainer.MarkCreated();
+                    rootContainer.MarkUnmodified();
 
                     LoadAttributes(client, rootContainer);
                     LoadChildContainers(client, rootContainer);
@@ -135,7 +135,7 @@ namespace EAVServiceClient
 
                 foreach (EAVValue value in values)
                 {
-                    value.MarkCreated();
+                    value.MarkUnmodified();
 
                     instance.Values.Add(value);
                 }
@@ -155,7 +155,7 @@ namespace EAVServiceClient
 
                 foreach (EAVChildInstance childInstance in childInstances)
                 {
-                    childInstance.MarkCreated();
+                    childInstance.MarkUnmodified();
 
                     LoadValues(client, childInstance);
                     LoadChildInstances(client, childInstance);
@@ -178,7 +178,7 @@ namespace EAVServiceClient
 
                 foreach (EAVRootInstance rootInstance in rootInstances)
                 {
-                    rootInstance.MarkCreated();
+                    rootInstance.MarkUnmodified();
 
                     LoadValues(client, rootInstance);
                     LoadChildInstances(client, rootInstance);
@@ -189,6 +189,23 @@ namespace EAVServiceClient
             else
             {
                 throw (new ApplicationException("Attempt to get root instances failed."));
+            }
+        }
+
+        private void LoadEntity(HttpClient client, EAVSubject subject)
+        {
+            HttpResponseMessage response = client.GetAsync(String.Format("api/data/entities/{0}", subject.EntityID)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var entity = response.Content.ReadAsAsync<EAVEntity>().Result;
+
+                entity.MarkUnmodified();
+
+                subject.Entity = entity;
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to get entity failed."));
             }
         }
 
@@ -213,7 +230,9 @@ namespace EAVServiceClient
 
                 foreach (EAVSubject subject in subjects)
                 {
-                    subject.MarkCreated();
+                    LoadEntity(client, subject);
+
+                    subject.MarkUnmodified();
 
                     context.Subjects.Add(subject);
                 }
@@ -243,7 +262,7 @@ namespace EAVServiceClient
                     EAVAttribute newAttribute = response.Content.ReadAsAsync<EAVAttribute>().Result;
 
                     attribute.AttributeID = newAttribute.AttributeID;
-                    attribute.MarkCreated();
+                    attribute.MarkUnmodified();
                 }
                 else
                 {
@@ -255,7 +274,7 @@ namespace EAVServiceClient
                 response = client.PatchAsJsonAsync<EAV.Model.IEAVAttribute>("api/meta/attributes", attribute).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    attribute.MarkCreated();
+                    attribute.MarkUnmodified();
                 }
                 else
                 {
@@ -288,7 +307,7 @@ namespace EAVServiceClient
                     EAVContainer newContainer = response.Content.ReadAsAsync<EAVChildContainer>().Result;
 
                     container.ContainerID = newContainer.ContainerID;
-                    container.MarkCreated();
+                    container.MarkUnmodified();
                 }
                 else
                 {
@@ -300,7 +319,7 @@ namespace EAVServiceClient
                 response = client.PatchAsJsonAsync<EAV.Model.IEAVContainer>("api/meta/containers", container).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    container.MarkCreated();
+                    container.MarkUnmodified();
                 }
                 else
                 {
@@ -343,7 +362,7 @@ namespace EAVServiceClient
                     EAVContainer newContainer = response.Content.ReadAsAsync<EAVRootContainer>().Result;
 
                     container.ContainerID = newContainer.ContainerID;
-                    container.MarkCreated();
+                    container.MarkUnmodified();
                 }
                 else
                 {
@@ -355,7 +374,7 @@ namespace EAVServiceClient
                 response = client.PatchAsJsonAsync<EAV.Model.IEAVContainer>("api/meta/containers", container).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    container.MarkCreated();
+                    container.MarkUnmodified();
                 }
                 else
                 {
@@ -398,7 +417,7 @@ namespace EAVServiceClient
                     EAVContext newContext = response.Content.ReadAsAsync<EAVContext>().Result;
 
                     context.ContextID = newContext.ContextID;
-                    context.MarkCreated();
+                    context.MarkUnmodified();
                 }
                 else
                 {
@@ -410,7 +429,7 @@ namespace EAVServiceClient
                 response = client.PatchAsJsonAsync<EAV.Model.IEAVContext>("api/meta/contexts", context).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    context.MarkCreated();
+                    context.MarkUnmodified();
                 }
                 else
                 {
@@ -447,7 +466,7 @@ namespace EAVServiceClient
                 {
                     EAVValue newValue = response.Content.ReadAsAsync<EAVValue>().Result;
 
-                    value.MarkCreated();
+                    value.MarkUnmodified();
                 }
                 else
                 {
@@ -459,7 +478,7 @@ namespace EAVServiceClient
                 response = client.PatchAsJsonAsync<EAV.Model.IEAVValue>("api/data/values", value).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    value.MarkCreated();
+                    value.MarkUnmodified();
                 }
                 else
                 {
@@ -486,13 +505,13 @@ namespace EAVServiceClient
 
             if (instance.ObjectState == ObjectState.New)
             {
-                response = client.PostAsJsonAsync<EAV.Model.IEAVInstance>(String.Format("api/data/instances/{0}/instances", instance.ParentInstanceID), instance).Result;
+                response = client.PostAsJsonAsync<EAV.Model.IEAVInstance>(String.Format("api/data/instances/{0}/instances?container={1}", instance.ParentInstanceID, instance.ContainerID), instance).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     EAVInstance newInstance = response.Content.ReadAsAsync<EAVChildInstance>().Result;
 
                     instance.InstanceID = newInstance.InstanceID;
-                    instance.MarkCreated();
+                    instance.MarkUnmodified();
                 }
                 else
                 {
@@ -504,7 +523,7 @@ namespace EAVServiceClient
                 response = client.PatchAsJsonAsync<EAV.Model.IEAVInstance>("api/data/instances", instance).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    instance.MarkCreated();
+                    instance.MarkUnmodified();
                 }
                 else
                 {
@@ -541,13 +560,13 @@ namespace EAVServiceClient
 
             if (instance.ObjectState == ObjectState.New)
             {
-                response = client.PostAsJsonAsync<EAV.Model.IEAVInstance>(String.Format("api/data/subjects/{0}/instances", instance.SubjectID), instance).Result;
+                response = client.PostAsJsonAsync<EAV.Model.IEAVInstance>(String.Format("api/data/subjects/{0}/instances?container={1}", instance.SubjectID, instance.ContainerID), instance).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     EAVInstance newInstance = response.Content.ReadAsAsync<EAVRootInstance>().Result;
 
                     instance.InstanceID = newInstance.InstanceID;
-                    instance.MarkCreated();
+                    instance.MarkUnmodified();
                 }
                 else
                 {
@@ -559,7 +578,7 @@ namespace EAVServiceClient
                 response = client.PatchAsJsonAsync<EAV.Model.IEAVInstance>("api/data/instances", instance).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    instance.MarkCreated();
+                    instance.MarkUnmodified();
                 }
                 else
                 {
@@ -590,7 +609,7 @@ namespace EAVServiceClient
             }
         }
 
-        public void SaveData(HttpClient client, EAVSubject subject, EAVRootContainer container = null)
+        public void SaveData(HttpClient client, EAVSubject subject)
         {
             HttpResponseMessage response;
 
@@ -602,7 +621,7 @@ namespace EAVServiceClient
                     EAVSubject newSubject = response.Content.ReadAsAsync<EAVSubject>().Result;
 
                     subject.SubjectID = newSubject.SubjectID;
-                    subject.MarkCreated();
+                    subject.MarkUnmodified();
                 }
                 else
                 {
@@ -614,7 +633,7 @@ namespace EAVServiceClient
                 response = client.PatchAsJsonAsync<EAV.Model.IEAVSubject>("api/data/subjects", subject).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    subject.MarkCreated();
+                    subject.MarkUnmodified();
                 }
                 else
                 {

@@ -113,7 +113,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<EAV.Model.IEAVSubject>(subjectClient.CreateSubject(subject, ContextID.Value, id)));
+                return (Ok<EAV.Model.IEAVSubject>(subjectClient.CreateSubject(subject, ContextID.GetValueOrDefault(), id)));
             }
             catch (Exception ex)
             {

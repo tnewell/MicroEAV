@@ -119,9 +119,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                var x = containerClient.CreateRootContainer(container, id);
-
-                return (Ok<EAV.Model.IEAVContainer>(x));
+                return (Ok<EAV.Model.IEAVContainer>(containerClient.CreateRootContainer(container, id)));
             }
             catch (Exception ex)
             {

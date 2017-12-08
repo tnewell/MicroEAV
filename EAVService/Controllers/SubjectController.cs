@@ -85,7 +85,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<EAV.Model.IEAVInstance>(instanceClient.CreateRootInstance(instance, ContainerID.Value, id)));
+                return (Ok<EAV.Model.IEAVInstance>(instanceClient.CreateRootInstance(instance, ContainerID.GetValueOrDefault(), id)));
             }
             catch (Exception ex)
             {

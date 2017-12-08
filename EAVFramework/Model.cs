@@ -17,7 +17,7 @@ namespace EAVFramework.Model
         [DataMember()]
         public ObjectState ObjectState { get; set; }
 
-        public abstract void MarkCreated();
+        public abstract void MarkUnmodified();
 
         public abstract void MarkDeleted();
     }
@@ -225,7 +225,7 @@ namespace EAVFramework.Model
             get { if (ObjectState != ObjectState.Deleted) return (subjects); else return (new ReadOnlyObservableCollection<EAVSubject>(subjects)); }
         }
 
-        public override void MarkCreated()
+        public override void MarkUnmodified()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
@@ -476,7 +476,7 @@ namespace EAVFramework.Model
                 childContainer.SetStateRecursive(state);
         }
 
-        public override void MarkCreated()
+        public override void MarkUnmodified()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
@@ -757,7 +757,7 @@ namespace EAVFramework.Model
             get { if (ObjectState != ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<EAVValue>(values)); }
         }
 
-        public override void MarkCreated()
+        public override void MarkUnmodified()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
@@ -875,7 +875,7 @@ namespace EAVFramework.Model
             get { if (ObjectState != ObjectState.Deleted) return (subjects); else return (new ReadOnlyObservableCollection<EAVSubject>(subjects)); }
         }
 
-        public override void MarkCreated()
+        public override void MarkUnmodified()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
@@ -1066,7 +1066,7 @@ namespace EAVFramework.Model
             get { if (ObjectState != ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAVRootInstance>(instances)); }
         }
 
-        public override void MarkCreated()
+        public override void MarkUnmodified()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
@@ -1299,7 +1299,7 @@ namespace EAVFramework.Model
                 childInstance.SetStateRecursive(state);
         }
 
-        public override void MarkCreated()
+        public override void MarkUnmodified()
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
@@ -1540,25 +1540,21 @@ namespace EAVFramework.Model
             }
         }
 
-        public override void MarkCreated()
+        public override void MarkUnmodified()
         {
-            // TODO: Rethink what object state means for value objects
-
             if (ObjectState == ObjectState.Deleted)
-                throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+                throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked 'Unmodified'."));
 
-            ObjectState = ObjectState.Unmodified;
+            if (Attribute != null && Attribute.ObjectState != ObjectState.New && Instance != null && Instance.ObjectState != ObjectState.New)
+                ObjectState = ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
         {
             if (ObjectState == ObjectState.New)
-                throw (new InvalidOperationException("Operation failed. Object in 'New' state may not be marked deleted."));
+                throw (new InvalidOperationException("Operation failed. Object in 'New' state may not be marked 'Deleted'."));
 
-            if (ObjectState != ObjectState.Deleted)
-            {
-                ObjectState = ObjectState.Deleted;
-            }
+            ObjectState = ObjectState.Deleted;
         }
     }
     #endregion
