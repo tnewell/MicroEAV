@@ -68,14 +68,14 @@ namespace EAVStoreClientTestHarness
             EAVStoreClient.EAVSubjectClient client = new EAVStoreClient.EAVSubjectClient();
             int entityID = SelectRandomItem(this.DbContext.Entities).Entity_ID;
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
-            string subjectDescriptor = Guid.NewGuid().ToString();
+            string subjectIdentifier = Guid.NewGuid().ToString();
 
             EAV.Model.IEAVSubject subject = client.CreateSubject(new EAV.Model.BaseEAVSubject()
             {
-                Identifier = subjectDescriptor,
+                Identifier = subjectIdentifier,
             }, contextID, entityID);
 
-            Assert.IsNotNull(subject, "Failed to create subject with descriptor '{0}' for context ID {1} and entity ID {2}.", subjectDescriptor, contextID, entityID);
+            Assert.IsNotNull(subject, "Failed to create subject with identifier '{0}' for context ID {1} and entity ID {2}.", subjectIdentifier, contextID, entityID);
 
             ResetDatabaseContext();
 
@@ -84,6 +84,33 @@ namespace EAVStoreClientTestHarness
             Assert.IsNotNull(dbSubject, String.Format("Failed to retrieve subject ID {0} from the database.", subject.SubjectID));
 
             Assert.AreEqual(subject.Identifier, dbSubject.Identifier, "Property 'Identifier' was not created correctly.");
+        }
+
+        [TestMethod]
+        [TestCategory("CRUD")]
+        [TestCategory("Create")]
+        [TestCategory("Container")]
+        [ExpectedException(typeof(System.Data.Entity.Infrastructure.DbUpdateException))]
+        public void CreateDuplicateSubject_Identifier()
+        {
+            EAVStoreClient.EAVSubjectClient client = new EAVStoreClient.EAVSubjectClient();
+            int entityID = SelectRandomItem(this.DbContext.Entities).Entity_ID;
+            int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
+            string subjectIdentifier = Guid.NewGuid().ToString();
+
+            EAV.Model.IEAVSubject container = client.CreateSubject(new EAV.Model.BaseEAVSubject()
+            {
+                Identifier = subjectIdentifier,
+            }, contextID, entityID);
+
+            Assert.IsNotNull(container, "Failed to create subject with identifier '{0}' for context ID {1} and entity ID {2}.", subjectIdentifier, contextID, entityID);
+
+            client.CreateSubject(new EAV.Model.BaseEAVSubject()
+            {
+                Identifier = subjectIdentifier,
+            }, contextID, entityID);
+
+            Assert.Fail("Failed to throw exception creating subject with duplicate name.");
         }
 
         [TestMethod]
