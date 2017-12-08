@@ -666,6 +666,50 @@ namespace EAVServiceClient
                 }
             }
         }
+
+        private void SaveEntity(HttpClient client, EAVEntity entity)
+        {
+            HttpResponseMessage response;
+
+            if (entity.ObjectState == ObjectState.New)
+            {
+                response = client.PostAsJsonAsync<EAV.Model.IEAVEntity>(String.Format("api/data/entities"), entity).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    EAVEntity newEntity = response.Content.ReadAsAsync<EAVEntity>().Result;
+
+                    entity.MarkUnmodified();
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to create entity failed."));
+                }
+            }
+            else if (entity.ObjectState == ObjectState.Modified)
+            {
+                response = client.PatchAsJsonAsync<EAV.Model.IEAVEntity>("api/data/entities", entity).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    entity.MarkUnmodified();
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to update entity failed."));
+                }
+            }
+
+            if (entity.ObjectState == ObjectState.Deleted)
+            {
+                response = client.DeleteAsync(String.Format("api/data/entities/{1}", entity.EntityID)).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to delete entity failed."));
+                }
+            }
+        }
         #endregion
     }
 }

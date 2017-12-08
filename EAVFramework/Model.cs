@@ -89,7 +89,6 @@ namespace EAVFramework.Model
     }
 
     [DataContract(IsReference = true)]
-    [KnownType(typeof(EAVEntity))]
     [KnownType(typeof(EAVSubject))]
     [KnownType(typeof(EAVInstance))]
     [KnownType(typeof(EAVValue))]
