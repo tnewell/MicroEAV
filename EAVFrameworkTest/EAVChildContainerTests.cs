@@ -14,9 +14,9 @@ namespace EAVFrameworkTest
     {
         #region Object State Tests
         [TestMethod]
-        public void CreateRootContainer()
+        public void CreateChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -36,9 +36,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void SetRootContainerUnmodifiedFromNew()
+        public void SetChildContainerUnmodifiedFromNew()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -48,9 +48,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void SetRootContainerModifiedFromNew()
+        public void SetChildContainerModifiedFromNew()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -64,9 +64,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void SetRootContainerDeletedFromNew()
+        public void SetChildContainerDeletedFromNew()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -76,9 +76,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void SetRootContainerModifiedFromUnmodified()
+        public void SetChildContainerModifiedFromUnmodified()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -94,9 +94,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void SetRootContainerDeletedFromUnmodified()
+        public void SetChildContainerDeletedFromUnmodified()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -110,9 +110,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void SetRootContainerUnmodifiedFromModified()
+        public void SetChildContainerUnmodifiedFromModified()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -132,9 +132,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void SetRootContainerDeletedFromModified()
+        public void SetChildContainerDeletedFromModified()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -155,9 +155,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void SetRootContainerUnmodifiedFromDeleted()
+        public void SetChildContainerUnmodifiedFromDeleted()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -173,9 +173,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void SetRootContainerModifiedFromDeleted()
+        public void SetChildContainerModifiedFromDeleted()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -193,26 +193,26 @@ namespace EAVFrameworkTest
         }
         #endregion
 
-        #region RootContainer ID Property Tests
+        #region ChildContainer ID Property Tests
         [TestMethod]
-        public void TestRootContainerIDForNewRootContainer()
+        public void TestChildContainerIDForNewChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
             int id = rng.Next();
             aContainer.ContainerID = id;
 
-            Assert.AreEqual(id, aContainer.ContainerID, "Property 'RootContainerID' was not set correctly.");
+            Assert.AreEqual(id, aContainer.ContainerID, "Property 'ChildContainerID' was not set correctly.");
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Setting property in 'New' state should not alter object state.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void TestRootContainerIDForUnmodifiedRootContainer()
+        public void TestChildContainerIDForUnmodifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -223,22 +223,22 @@ namespace EAVFrameworkTest
             int id = rng.Next();
             aContainer.ContainerID = id;
 
-            Assert.AreEqual(id, aContainer.ContainerID, "Property 'RootContainerID' was not set correctly.");
-            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Setting null property 'RootContainerID' in 'Unmodified' state should not alter object state.");
+            Assert.AreEqual(id, aContainer.ContainerID, "Property 'ChildContainerID' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Setting null property 'ChildContainerID' in 'Unmodified' state should not alter object state.");
 
             aContainer.ContainerID = id;
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void TestRootContainerIDForModifiedRootContainer()
+        public void TestChildContainerIDForModifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             int id = rng.Next();
             aContainer.ContainerID = id;
 
-            Assert.AreEqual(id, aContainer.ContainerID, "Property 'RootContainerID' was not set correctly.");
+            Assert.AreEqual(id, aContainer.ContainerID, "Property 'ChildContainerID' was not set correctly.");
 
             aContainer.MarkUnmodified();
 
@@ -254,9 +254,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void TestRootContainerIDForDeletedRootContainer()
+        public void TestChildContainerIDForDeletedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             aContainer.MarkUnmodified();
 
@@ -272,9 +272,9 @@ namespace EAVFrameworkTest
 
         #region Name Property Tests
         [TestMethod]
-        public void TestNameForNewRootContainer()
+        public void TestNameForNewChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -286,9 +286,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestNameForUnmodifiedRootContainer()
+        public void TestNameForUnmodifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -304,9 +304,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestNameForModifiedRootContainer()
+        public void TestNameForModifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -332,9 +332,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestNameForDeletedRootContainer()
+        public void TestNameForDeletedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -355,9 +355,9 @@ namespace EAVFrameworkTest
 
         #region DataName Property Tests
         [TestMethod]
-        public void TestDataNameForNewRootContainer()
+        public void TestDataNameForNewChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -369,9 +369,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestDataNameForUnmodifiedRootContainer()
+        public void TestDataNameForUnmodifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -387,9 +387,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestDataNameForModifiedRootContainer()
+        public void TestDataNameForModifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -415,9 +415,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestDataNameForDeletedRootContainer()
+        public void TestDataNameForDeletedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -438,9 +438,9 @@ namespace EAVFrameworkTest
 
         #region DisplayText Property Tests
         [TestMethod]
-        public void TestDisplayTextForNewRootContainer()
+        public void TestDisplayTextForNewChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -452,9 +452,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestDisplayTextForUnmodifiedRootContainer()
+        public void TestDisplayTextForUnmodifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -470,9 +470,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestDisplayTextForModifiedRootContainer()
+        public void TestDisplayTextForModifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -498,9 +498,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestDisplayTextForDeletedRootContainer()
+        public void TestDisplayTextForDeletedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -521,9 +521,9 @@ namespace EAVFrameworkTest
 
         #region IsRepeating Property Tests
         [TestMethod]
-        public void TestIsRepeatingForNewRootContainer()
+        public void TestIsRepeatingForNewChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -534,9 +534,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestIsRepeatingForUnmodifiedRootContainer()
+        public void TestIsRepeatingForUnmodifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -551,9 +551,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestIsRepeatingForModifiedRootContainer()
+        public void TestIsRepeatingForModifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -573,9 +573,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestIsRepeatingForDeletedRootContainer()
+        public void TestIsRepeatingForDeletedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -596,41 +596,22 @@ namespace EAVFrameworkTest
 
         #region Context Property Tests
         [TestMethod]
-        public void TestContextForNewRootContainer()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestContextForNewChildContainer()
         {
-            EAVContainer aContainer = new EAVRootContainer();
+            EAVContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
             EAVContext aContext = new EAVContext();
             aContainer.Context = aContext;
-
-            Assert.AreEqual(aContext, aContainer.Context, "Property 'Context' was not set correctly.");
-            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Setting property in 'New' state should not alter object state.");
         }
 
         [TestMethod]
-        public void TestContextForUnmodifiedRootContainer()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestContextForUnmodifiedChildContainer()
         {
-            EAVContainer aContainer = new EAVRootContainer();
-
-            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
-
-            aContainer.MarkUnmodified();
-
-            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
-
-            EAVContext aContext = new EAVContext();
-            aContainer.Context = aContext;
-
-            Assert.AreEqual(aContext, aContainer.Context, "Property 'Context' was not set correctly.");
-            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Setting property in 'Unmodified' state should alter state to 'Modified'.");
-        }
-
-        [TestMethod]
-        public void TestContextForModifiedRootContainer()
-        {
-            EAVContainer aContainer = new EAVRootContainer();
+            EAVContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -640,21 +621,29 @@ namespace EAVFrameworkTest
 
             EAVContext aContext = new EAVContext();
             aContainer.Context = aContext;
-
-            Assert.AreEqual(aContext, aContainer.Context, "Property 'Context' was not set correctly.");
-            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Setting property in 'Unmodified' state should alter state to 'Modified'.");
-
-            aContext = new EAVContext();
-            aContainer.Context = aContext;
-
-            Assert.AreEqual(aContext, aContainer.Context, "Property 'Context' was not set correctly.");
-            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Setting property in 'Modified' state should not alter object state.");
         }
 
         [TestMethod]
-        public void TestContextForDeletedRootContainer()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestContextForModifiedChildContainer()
         {
-            EAVContainer aContainer = new EAVRootContainer();
+            EAVContainer aContainer = new EAVChildContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            EAVContext aContext = new EAVContext();
+            aContainer.Context = aContext;
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestContextForDeletedChildContainer()
+        {
+            EAVContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -668,81 +657,28 @@ namespace EAVFrameworkTest
 
             EAVContext aContext = new EAVContext();
             aContainer.Context = aContext;
-
-            Assert.AreNotEqual(aContext, aContainer.Context, "Setting property in 'Deleted' state should not alter property value.");
-            Assert.IsTrue(aContainer.ObjectState == ObjectState.Deleted, "Setting property in 'Deleted' state should not alter object state.");
-        }
-
-        [TestMethod]
-        public void TestContextInteractionWithRootContainer()
-        {
-            int attributeID = rng.Next();
-            EAVRootContainer aContainer = new EAVRootContainer() { ContainerID = attributeID };
-            int containerID = rng.Next();
-            EAVContext aContext = new EAVContext() { ContextID = containerID };
-
-            Assert.AreEqual(attributeID, aContainer.ContainerID, "Property 'ContainerID' was not set properly.");
-            Assert.AreEqual(containerID, aContext.ContextID, "Property 'ContextID' was not set properly.");
-
-            Assert.IsNull(aContainer.Context, "Property 'Context' should be null.");
-            Assert.IsTrue(aContext.Containers.Count == 0, "Collection property 'Containers' of EAVContext object should be empty.");
-
-            aContainer.Context = aContext;
-
-            Assert.AreEqual(aContext, aContainer.Context, "Property 'Context' was not set properly.");
-            Assert.AreEqual(containerID, aContainer.Context.ContextID, "Property 'ContextID' was not set properly.");
-
-            Assert.IsTrue(aContext.Containers.Count == 1, "Collection property 'Containers' was not set properly.");
-            Assert.AreEqual(attributeID, aContext.Containers.First().ContainerID, "Property 'ContainerID' was not set properly.");
-
-            attributeID = rng.Next();
-            aContainer = new EAVRootContainer() { ContainerID = attributeID };
-            containerID = rng.Next();
-            aContext = new EAVContext() { ContextID = containerID };
-
-            aContext.Containers.Add(aContainer);
-
-            Assert.AreEqual(aContext, aContainer.Context, "Property 'Context' was not set properly.");
-            Assert.AreEqual(containerID, aContainer.Context.ContextID, "Property 'ContextID' was not set properly.");
-
-            Assert.IsTrue(aContext.Containers.Count == 1, "Collection property 'Containers' was not set properly.");
-            Assert.AreEqual(attributeID, aContext.Containers.First().ContainerID, "Property 'ContainerID' was not set properly.");
         }
         #endregion
 
         #region ParentContainer Property Tests
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void TestParentContainerForNewRootContainer()
+        public void TestParentContainerForNewContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
-
-            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
-            Assert.IsNull(aContainer.ParentContainer, "Property 'ParentContainer' shoud be null on creation.");
-
-            aContainer.ParentContainer = new EAVRootContainer();
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void TestParentContainerForUnmodifiedRootContainer()
-        {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
-            aContainer.MarkUnmodified();
+            EAVRootContainer aParentContainer = new EAVRootContainer();
+            aContainer.ParentContainer = aParentContainer;
 
-            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
-
-            aContainer.ParentContainer = new EAVRootContainer();
+            Assert.AreEqual(aParentContainer, aContainer.ParentContainer, "Property 'ParentContainer' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Setting property in 'New' state should not alter object state.");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void TestParentContainerForModifiedRootContainer()
+        public void TestParentContainerForUnmodifiedContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -750,14 +686,41 @@ namespace EAVFrameworkTest
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
 
-            aContainer.ParentContainer = new EAVRootContainer();
+            EAVRootContainer aParentContainer = new EAVRootContainer();
+            aContainer.ParentContainer = aParentContainer;
+
+            Assert.AreEqual(aParentContainer, aContainer.ParentContainer, "Property 'ParentContainer' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Setting property in 'Unmodified' state should alter state to 'Modified'.");
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void TestParentContainerForDeletedRootContainer()
+        public void TestParentContainerForModifiedContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            EAVRootContainer aParentContainer = new EAVRootContainer();
+            aContainer.ParentContainer = aParentContainer;
+
+            Assert.AreEqual(aParentContainer, aContainer.ParentContainer, "Property 'ParentContainer' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Setting property in 'Unmodified' state should alter state to 'Modified'.");
+
+            aParentContainer = new EAVRootContainer();
+            aContainer.ParentContainer = aParentContainer;
+
+            Assert.AreEqual(aParentContainer, aContainer.ParentContainer, "Property 'ParentContainer' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Setting property in 'Modified' state should not alter object state.");
+        }
+
+        [TestMethod]
+        public void TestParentContainerForDeletedContainer()
+        {
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -769,15 +732,55 @@ namespace EAVFrameworkTest
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.Deleted, "Object was not correctly marked 'Deleted'.");
 
-            aContainer.ParentContainer = new EAVRootContainer();
+            EAVRootContainer aParentContainer = new EAVRootContainer();
+            aContainer.ParentContainer = aParentContainer;
+
+            Assert.AreNotEqual(aParentContainer, aContainer.ParentContainer, "Setting property in 'Deleted' state should not alter property value.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Deleted, "Setting property in 'Deleted' state should not alter object state.");
+        }
+
+        [TestMethod]
+        public void TestParentContainerInteractionWithContainer()
+        {
+            int childContainerID = rng.Next();
+            EAVChildContainer aChildContainer = new EAVChildContainer() { ContainerID = childContainerID };
+            int rootContainerID = rng.Next();
+            EAVRootContainer aParentContainer = new EAVRootContainer() { ContainerID = rootContainerID };
+
+            Assert.AreEqual(childContainerID, aChildContainer.ContainerID, "Property 'ContainerID' was not set properly.");
+            Assert.AreEqual(rootContainerID, aParentContainer.ContainerID, "Property 'ContainerID' was not set properly.");
+
+            Assert.IsNull(aChildContainer.ParentContainer, "Property 'ParentContainer' should be null.");
+            Assert.IsTrue(aParentContainer.ChildContainers.Count == 0, "Collection property 'ChildContainers' of EAVRootContainer object should be empty.");
+
+            aChildContainer.ParentContainer = aParentContainer;
+
+            Assert.AreEqual(aParentContainer, aChildContainer.ParentContainer, "Property 'ParentContainer' was not set properly.");
+            Assert.AreEqual(rootContainerID, aChildContainer.ParentContainer.ContainerID, "Property 'ContainerID' was not set properly.");
+
+            Assert.IsTrue(aParentContainer.ChildContainers.Count == 1, "Collection property 'ChildContainers' was not set properly.");
+            Assert.AreEqual(childContainerID, aParentContainer.ChildContainers.First().ContainerID, "Property 'ContainerID' was not set properly.");
+
+            childContainerID = rng.Next();
+            aChildContainer = new EAVChildContainer() { ContainerID = childContainerID };
+            rootContainerID = rng.Next();
+            aParentContainer = new EAVRootContainer() { ContainerID = rootContainerID };
+
+            aParentContainer.ChildContainers.Add(aChildContainer);
+
+            Assert.AreEqual(aParentContainer, aChildContainer.ParentContainer, "Property 'ParentContainer' was not set properly.");
+            Assert.AreEqual(rootContainerID, aChildContainer.ParentContainer.ContainerID, "Property 'ContainerID' was not set properly.");
+
+            Assert.IsTrue(aParentContainer.ChildContainers.Count == 1, "Collection property 'ChildContainers' was not set properly.");
+            Assert.AreEqual(childContainerID, aParentContainer.ChildContainers.First().ContainerID, "Property 'ContainerID' was not set properly.");
         }
         #endregion
 
         #region ChildContainers Property Tests
         [TestMethod]
-        public void TestChildContainersForNewRootContainer()
+        public void TestChildContainersForNewChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -797,9 +800,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestChildContainersForUnmodifiedRootContainer()
+        public void TestChildContainersForUnmodifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -831,9 +834,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestChildContainersForModifiedRootContainer()
+        public void TestChildContainersForModifiedChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -862,9 +865,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void TestChildContainersForDeletedRootContainerWithAdd()
+        public void TestChildContainersForDeletedChildContainerWithAdd()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -881,9 +884,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void TestChildContainersForDeletedRootContainerWithRemove()
+        public void TestChildContainersForDeletedChildContainerWithRemove()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -908,9 +911,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void TestChildContainersForDeletedRootContainerWithClear()
+        public void TestChildContainersForDeletedChildContainerWithClear()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
 
@@ -933,9 +936,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void TestChildContainersInteractionWithRootContainer()
+        public void TestChildContainersInteractionWithChildContainer()
         {
-            EAVRootContainer aContainer = new EAVRootContainer();
+            EAVChildContainer aContainer = new EAVChildContainer();
 
             int id = rng.Next();
             aContainer.ContainerID = id;

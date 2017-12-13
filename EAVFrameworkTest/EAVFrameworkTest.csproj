@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EAVChildContainerTests.cs" />
     <Compile Include="EAVRootContainerTests.cs" />
     <Compile Include="EAVAttributeTests.cs" />
     <Compile Include="EAVFrameworkTestHarness.cs" />
