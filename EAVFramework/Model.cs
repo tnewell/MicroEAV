@@ -8,6 +8,7 @@ namespace EAVFramework.Model
 {
     public enum ObjectState { New, Unmodified, Modified, Deleted }
 
+    #region Infrastructure
     [DataContract(IsReference = true)]
     [KnownType(typeof(EAVMetadataObject))]
     public abstract class EAVObject
@@ -96,6 +97,7 @@ namespace EAVFramework.Model
     {
         public EAVDataObject() { }
     }
+    #endregion
 
     #region Metadata Objects
     [DataContract(IsReference = true)]
@@ -759,7 +761,7 @@ namespace EAVFramework.Model
         public override void MarkUnmodified()
         {
             if (ObjectState == ObjectState.Deleted)
-                throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+                throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked unmodified."));
 
             ObjectState = ObjectState.Unmodified;
         }
@@ -772,12 +774,14 @@ namespace EAVFramework.Model
             if (ObjectState != ObjectState.Deleted)
             {
                 ObjectState = ObjectState.Deleted;
+
+                foreach (EAVValue value in values)
+                    value.MarkDeleted();
             }
         }
     }
     #endregion
 
-    #region Data Objects
     [DataContract(IsReference = true)]
     public class EAVEntity : EAVObject, EAV.Model.IEAVEntity
     {
@@ -897,6 +901,7 @@ namespace EAVFramework.Model
         }
     }
 
+    #region Data Objects
     [DataContract(IsReference = true)]
     public class EAVSubject : EAVDataObject, EAV.Model.IEAVSubject
     {
