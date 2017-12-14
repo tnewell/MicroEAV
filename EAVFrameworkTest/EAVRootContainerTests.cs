@@ -33,6 +33,12 @@ namespace EAVFrameworkTest
 
             Assert.IsNotNull(aContainer.ChildContainers, "Property 'ChildContainers' is null on creation.");
             Assert.IsTrue(aContainer.ChildContainers.Count == 0, "Property 'ChildContainers' is not empty on creation.");
+
+            Assert.IsNotNull(aContainer.Attributes, "Property 'Attributes' is null on creation.");
+            Assert.IsTrue(aContainer.Attributes.Count == 0, "Property 'Attributes' is not empty on creation.");
+
+            Assert.IsNotNull(aContainer.Instances, "Property 'Instances' is null on creation.");
+            Assert.IsTrue(aContainer.Instances.Count == 0, "Property 'Instances' is not empty on creation.");
         }
 
         [TestMethod]
@@ -193,7 +199,7 @@ namespace EAVFrameworkTest
         }
         #endregion
 
-        #region RootContainer ID Property Tests
+        #region RootContainerID Property Tests
         [TestMethod]
         public void TestRootContainerIDForNewRootContainer()
         {
@@ -676,13 +682,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void TestContextInteractionWithRootContainer()
         {
-            int attributeID = rng.Next();
-            EAVRootContainer aContainer = new EAVRootContainer() { ContainerID = attributeID };
             int containerID = rng.Next();
-            EAVContext aContext = new EAVContext() { ContextID = containerID };
+            EAVRootContainer aContainer = new EAVRootContainer() { ContainerID = containerID };
+            int contextID = rng.Next();
+            EAVContext aContext = new EAVContext() { ContextID = contextID };
 
-            Assert.AreEqual(attributeID, aContainer.ContainerID, "Property 'ContainerID' was not set properly.");
-            Assert.AreEqual(containerID, aContext.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(containerID, aContainer.ContainerID, "Property 'ContainerID' was not set properly.");
+            Assert.AreEqual(contextID, aContext.ContextID, "Property 'ContextID' was not set properly.");
 
             Assert.IsNull(aContainer.Context, "Property 'Context' should be null.");
             Assert.IsTrue(aContext.Containers.Count == 0, "Collection property 'Containers' of EAVContext object should be empty.");
@@ -690,23 +696,23 @@ namespace EAVFrameworkTest
             aContainer.Context = aContext;
 
             Assert.AreEqual(aContext, aContainer.Context, "Property 'Context' was not set properly.");
-            Assert.AreEqual(containerID, aContainer.Context.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(contextID, aContainer.Context.ContextID, "Property 'ContextID' was not set properly.");
 
             Assert.IsTrue(aContext.Containers.Count == 1, "Collection property 'Containers' was not set properly.");
-            Assert.AreEqual(attributeID, aContext.Containers.First().ContainerID, "Property 'ContainerID' was not set properly.");
+            Assert.AreEqual(containerID, aContext.Containers.First().ContainerID, "Property 'ContainerID' was not set properly.");
 
-            attributeID = rng.Next();
-            aContainer = new EAVRootContainer() { ContainerID = attributeID };
             containerID = rng.Next();
-            aContext = new EAVContext() { ContextID = containerID };
+            aContainer = new EAVRootContainer() { ContainerID = containerID };
+            contextID = rng.Next();
+            aContext = new EAVContext() { ContextID = contextID };
 
             aContext.Containers.Add(aContainer);
 
             Assert.AreEqual(aContext, aContainer.Context, "Property 'Context' was not set properly.");
-            Assert.AreEqual(containerID, aContainer.Context.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(contextID, aContainer.Context.ContextID, "Property 'ContextID' was not set properly.");
 
             Assert.IsTrue(aContext.Containers.Count == 1, "Collection property 'Containers' was not set properly.");
-            Assert.AreEqual(attributeID, aContext.Containers.First().ContainerID, "Property 'ContainerID' was not set properly.");
+            Assert.AreEqual(containerID, aContext.Containers.First().ContainerID, "Property 'ContainerID' was not set properly.");
         }
         #endregion
 
@@ -951,6 +957,368 @@ namespace EAVFrameworkTest
 
             Assert.IsNotNull(aChildContainer.ParentContainerID, "Propert 'ParentContainerID' is null.");
             Assert.AreEqual(id, aChildContainer.ParentContainerID, "Property 'ParentContainerID' not set properly.");
+        }
+        #endregion
+
+        #region Attributes Property Tests
+        [TestMethod]
+        public void TestAttributesForNewRootContainer()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.Attributes.Add(new EAVAttribute());
+            aContainer.Attributes.Add(new EAVAttribute());
+
+            Assert.IsTrue(aContainer.Attributes.Count == 2, "Property 'Attributes' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Modifying property in 'New' state should not alter object state.");
+
+            aContainer.Attributes.Remove(aContainer.Attributes.First());
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Modifying property in 'New' state should not alter object state.");
+
+            aContainer.Attributes.Clear();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Modifying property in 'New' state should not alter object state.");
+        }
+
+        [TestMethod]
+        public void TestAttributesForUnmodifiedRootContainer()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.Attributes.Add(new EAVAttribute());
+            aContainer.Attributes.Add(new EAVAttribute());
+
+            Assert.IsTrue(aContainer.Attributes.Count == 2, "Property 'Attributes' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Unmodified' state should alter object state to 'Modified'.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.Attributes.Remove(aContainer.Attributes.First());
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Unmodified' state should alter object state to 'Modified'.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.Attributes.Clear();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Unmodified' state should alter object state to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void TestAttributesForModifiedRootContainer()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.Name = Guid.NewGuid().ToString();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Object was not correctly marked 'Modified'.");
+
+            aContainer.Attributes.Add(new EAVAttribute());
+            aContainer.Attributes.Add(new EAVAttribute());
+
+            Assert.IsTrue(aContainer.Attributes.Count == 2, "Property 'Attributes' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Modified' state should not alter object state.");
+
+            aContainer.Attributes.Remove(aContainer.Attributes.First());
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Modified' state should not alter object state.");
+
+            aContainer.Attributes.Clear();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Modified' state should not alter object state.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void TestAttributesForDeletedRootContainerWithAdd()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.MarkDeleted();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Deleted, "Object was not correctly marked 'Deleted'.");
+
+            aContainer.Attributes.Add(new EAVAttribute());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void TestAttributesForDeletedRootContainerWithRemove()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.Attributes.Add(new EAVAttribute());
+            aContainer.Attributes.Add(new EAVAttribute());
+
+            aContainer.MarkUnmodified();
+
+            foreach (EAVAttribute childContainer in aContainer.Attributes)
+            {
+                childContainer.MarkUnmodified();
+            }
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.MarkDeleted();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Deleted, "Object was not correctly marked 'Deleted'.");
+
+            aContainer.Attributes.Remove(aContainer.Attributes.First());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void TestAttributesForDeletedRootContainerWithClear()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.Attributes.Add(new EAVAttribute());
+
+            aContainer.MarkUnmodified();
+
+            foreach (EAVAttribute childContainer in aContainer.Attributes)
+            {
+                childContainer.MarkUnmodified();
+            }
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.MarkDeleted();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Deleted, "Object was not correctly marked 'Deleted'.");
+
+            aContainer.Attributes.Clear();
+        }
+
+        [TestMethod]
+        public void TestAttributesInteractionWithRootContainer()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            int id = rng.Next();
+            aContainer.ContainerID = id;
+
+            EAVAttribute anAttribute = new EAVAttribute();
+            aContainer.Attributes.Add(anAttribute);
+
+            Assert.IsTrue(aContainer.Attributes.Count == 1, "Collection property 'Attributes' is empty.");
+            Assert.IsTrue(aContainer.Attributes.Single() == anAttribute, "Collection property 'Attributes' not modified properly.");
+
+            Assert.IsNotNull(anAttribute.Container, "Property 'Container' is null.");
+            Assert.AreEqual(aContainer, anAttribute.Container, "Property 'Container' not set properly.");
+
+            Assert.IsNotNull(anAttribute.ContainerID, "Propert 'ContainerID' is null.");
+            Assert.AreEqual(id, anAttribute.ContainerID, "Property 'ContainerID' not set properly.");
+        }
+        #endregion
+
+        #region Instances Property Tests
+        [TestMethod]
+        public void TestInstancesForNewRootContainer()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.Instances.Add(new EAVRootInstance());
+            aContainer.Instances.Add(new EAVRootInstance());
+
+            Assert.IsTrue(aContainer.Instances.Count == 2, "Property 'Instances' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Modifying property in 'New' state should not alter object state.");
+
+            aContainer.Instances.Remove(aContainer.Instances.First());
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Modifying property in 'New' state should not alter object state.");
+
+            aContainer.Instances.Clear();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Modifying property in 'New' state should not alter object state.");
+        }
+
+        [TestMethod]
+        public void TestInstancesForUnmodifiedRootContainer()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.Instances.Add(new EAVRootInstance());
+            aContainer.Instances.Add(new EAVRootInstance());
+
+            Assert.IsTrue(aContainer.Instances.Count == 2, "Property 'Instances' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Unmodified' state should alter object state to 'Modified'.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.Instances.Remove(aContainer.Instances.First());
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Unmodified' state should alter object state to 'Modified'.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.Instances.Clear();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Unmodified' state should alter object state to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void TestInstancesForModifiedRootContainer()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.Name = Guid.NewGuid().ToString();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Object was not correctly marked 'Modified'.");
+
+            aContainer.Instances.Add(new EAVRootInstance());
+            aContainer.Instances.Add(new EAVRootInstance());
+
+            Assert.IsTrue(aContainer.Instances.Count == 2, "Property 'Instances' was not set correctly.");
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Modified' state should not alter object state.");
+
+            aContainer.Instances.Remove(aContainer.Instances.First());
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Modified' state should not alter object state.");
+
+            aContainer.Instances.Clear();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Modified, "Modifying property in 'Modified' state should not alter object state.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void TestInstancesForDeletedRootContainerWithAdd()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.MarkUnmodified();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.MarkDeleted();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Deleted, "Object was not correctly marked 'Deleted'.");
+
+            aContainer.Instances.Add(new EAVRootInstance());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void TestInstancesForDeletedRootContainerWithRemove()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.Instances.Add(new EAVRootInstance());
+            aContainer.Instances.Add(new EAVRootInstance());
+
+            aContainer.MarkUnmodified();
+
+            foreach (EAVInstance childContainer in aContainer.Instances)
+            {
+                childContainer.MarkUnmodified();
+            }
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.MarkDeleted();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Deleted, "Object was not correctly marked 'Deleted'.");
+
+            aContainer.Instances.Remove(aContainer.Instances.First());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void TestInstancesForDeletedRootContainerWithClear()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            aContainer.Instances.Add(new EAVRootInstance());
+
+            aContainer.MarkUnmodified();
+
+            foreach (EAVInstance childContainer in aContainer.Instances)
+            {
+                childContainer.MarkUnmodified();
+            }
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            aContainer.MarkDeleted();
+
+            Assert.IsTrue(aContainer.ObjectState == ObjectState.Deleted, "Object was not correctly marked 'Deleted'.");
+
+            aContainer.Instances.Clear();
+        }
+
+        [TestMethod]
+        public void TestInstancesInteractionWithRootContainer()
+        {
+            EAVRootContainer aContainer = new EAVRootContainer();
+
+            int id = rng.Next();
+            aContainer.ContainerID = id;
+
+            EAVInstance anInstance = new EAVRootInstance();
+            aContainer.Instances.Add(anInstance);
+
+            Assert.IsTrue(aContainer.Instances.Count == 1, "Collection property 'Instances' is empty.");
+            Assert.IsTrue(aContainer.Instances.Single() == anInstance, "Collection property 'Instances' not modified properly.");
+
+            Assert.IsNotNull(anInstance.Container, "Property 'Container' is null.");
+            Assert.AreEqual(aContainer, anInstance.Container, "Property 'Container' not set properly.");
+
+            Assert.IsNotNull(anInstance.ContainerID, "Propert 'ContainerID' is null.");
+            Assert.AreEqual(id, anInstance.ContainerID, "Property 'ContainerID' not set properly.");
         }
         #endregion
     }

@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EAVChildContainerTests.cs" />
+    <Compile Include="EAVEntityTests.cs" />
+    <Compile Include="EAVRootInstanceTests.cs" />
+    <Compile Include="EAVSubjectTests.cs" />
     <Compile Include="EAVRootContainerTests.cs" />
     <Compile Include="EAVAttributeTests.cs" />
     <Compile Include="EAVFrameworkTestHarness.cs" />

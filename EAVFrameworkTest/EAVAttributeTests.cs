@@ -25,8 +25,8 @@ namespace EAVFrameworkTest
             Assert.IsNull(anAttribute.Name, "Property 'Name' is not 'null' on creation.");
             Assert.IsNull(anAttribute.DataName, "Property 'DataName' is not 'null' on creation.");
             Assert.IsNull(anAttribute.DisplayText, "Property 'DisplayText' is not 'null' on creation.");
-            Assert.IsFalse(anAttribute.IsKey, "Property 'IsKey' is not 'false' on creation.");
             Assert.AreEqual(default(EAVDataType), anAttribute.DataType, "Property 'DataType' is not default value on creation.");
+            Assert.IsFalse(anAttribute.IsKey, "Property 'IsKey' is not 'false' on creation.");
 
             Assert.IsNull(anAttribute.Container, "Property 'Container' is not 'null' on creation.");
 
@@ -518,81 +518,6 @@ namespace EAVFrameworkTest
         }
         #endregion
 
-        #region IsKey Property Tests
-        [TestMethod]
-        public void TestIsKeyForNewAttribute()
-        {
-            EAVAttribute anAttribute = new EAVAttribute();
-
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
-
-            anAttribute.IsKey = true;
-
-            Assert.AreEqual(true, anAttribute.IsKey, "Property 'IsKey' was not set correctly.");
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.New, "Setting property in 'New' state should not alter object state.");
-        }
-
-        [TestMethod]
-        public void TestIsKeyForUnmodifiedAttribute()
-        {
-            EAVAttribute anAttribute = new EAVAttribute();
-
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
-
-            anAttribute.MarkUnmodified();
-
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
-
-            anAttribute.IsKey = true;
-
-            Assert.AreEqual(true, anAttribute.IsKey, "Property 'IsKey' was not set correctly.");
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Modified, "Setting property in 'Unmodified' state should alter state to 'Modified'.");
-        }
-
-        [TestMethod]
-        public void TestIsKeyForModifiedAttribute()
-        {
-            EAVAttribute anAttribute = new EAVAttribute();
-
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
-
-            anAttribute.MarkUnmodified();
-
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
-
-            anAttribute.IsKey = true;
-
-            Assert.AreEqual(true, anAttribute.IsKey, "Property 'IsKey' was not set correctly.");
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Modified, "Setting property in 'Unmodified' state should alter state to 'Modified'.");
-
-            anAttribute.IsKey = false;
-
-            Assert.AreEqual(false, anAttribute.IsKey, "Property 'IsKey' was not set correctly.");
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Modified, "Setting property in 'Modified' state should not alter object state.");
-        }
-
-        [TestMethod]
-        public void TestIsKeyForDeletedAttribute()
-        {
-            EAVAttribute anAttribute = new EAVAttribute();
-
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
-
-            anAttribute.MarkUnmodified();
-
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
-
-            anAttribute.MarkDeleted();
-
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Deleted, "Object was not correctly marked 'Deleted'.");
-
-            anAttribute.IsKey = true;
-
-            Assert.IsFalse(anAttribute.IsKey, "Setting property in 'Deleted' state should not alter property value.");
-            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Deleted, "Setting property in 'Deleted' state should not alter object state.");
-        }
-        #endregion
-
         #region DataType Property Tests
         [TestMethod]
         public void TestDataTypeForNewAttribute()
@@ -664,6 +589,81 @@ namespace EAVFrameworkTest
             anAttribute.DataType = EAVDataType.Float;
 
             Assert.AreNotEqual(EAVDataType.Float, anAttribute.DataType, "Setting property in 'Deleted' state should not alter property value.");
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Deleted, "Setting property in 'Deleted' state should not alter object state.");
+        }
+        #endregion
+
+        #region IsKey Property Tests
+        [TestMethod]
+        public void TestIsKeyForNewAttribute()
+        {
+            EAVAttribute anAttribute = new EAVAttribute();
+
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            anAttribute.IsKey = true;
+
+            Assert.AreEqual(true, anAttribute.IsKey, "Property 'IsKey' was not set correctly.");
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.New, "Setting property in 'New' state should not alter object state.");
+        }
+
+        [TestMethod]
+        public void TestIsKeyForUnmodifiedAttribute()
+        {
+            EAVAttribute anAttribute = new EAVAttribute();
+
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            anAttribute.IsKey = true;
+
+            Assert.AreEqual(true, anAttribute.IsKey, "Property 'IsKey' was not set correctly.");
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Modified, "Setting property in 'Unmodified' state should alter state to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void TestIsKeyForModifiedAttribute()
+        {
+            EAVAttribute anAttribute = new EAVAttribute();
+
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            anAttribute.IsKey = true;
+
+            Assert.AreEqual(true, anAttribute.IsKey, "Property 'IsKey' was not set correctly.");
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Modified, "Setting property in 'Unmodified' state should alter state to 'Modified'.");
+
+            anAttribute.IsKey = false;
+
+            Assert.AreEqual(false, anAttribute.IsKey, "Property 'IsKey' was not set correctly.");
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Modified, "Setting property in 'Modified' state should not alter object state.");
+        }
+
+        [TestMethod]
+        public void TestIsKeyForDeletedAttribute()
+        {
+            EAVAttribute anAttribute = new EAVAttribute();
+
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.New, "Object state is not 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Unmodified, "Object was not correctly marked 'Unmodified'.");
+
+            anAttribute.MarkDeleted();
+
+            Assert.IsTrue(anAttribute.ObjectState == ObjectState.Deleted, "Object was not correctly marked 'Deleted'.");
+
+            anAttribute.IsKey = true;
+
+            Assert.IsFalse(anAttribute.IsKey, "Setting property in 'Deleted' state should not alter property value.");
             Assert.IsTrue(anAttribute.ObjectState == ObjectState.Deleted, "Setting property in 'Deleted' state should not alter object state.");
         }
         #endregion
