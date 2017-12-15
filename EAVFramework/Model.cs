@@ -229,7 +229,10 @@ namespace EAVFramework.Model
         public override void MarkUnmodified()
         {
             if (ObjectState == ObjectState.Deleted)
-                throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+                throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked unmodified."));
+
+            if (ContextID == null)
+                throw (new InvalidOperationException("Operation failed. Object with null 'ContextID' property may not be marked unmodified."));
 
             ObjectState = ObjectState.Unmodified;
         }
@@ -481,6 +484,9 @@ namespace EAVFramework.Model
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (ContainerID == null)
+                throw (new InvalidOperationException("Operation failed. Object with null 'ContainerID' property may not be marked unmodified."));
 
             ObjectState = ObjectState.Unmodified;
         }
@@ -763,6 +769,9 @@ namespace EAVFramework.Model
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked unmodified."));
 
+            if (AttributeID == null)
+                throw (new InvalidOperationException("Operation failed. Object with null 'AttributeID' property may not be marked unmodified."));
+
             ObjectState = ObjectState.Unmodified;
         }
 
@@ -882,6 +891,9 @@ namespace EAVFramework.Model
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (EntityID == null)
+                throw (new InvalidOperationException("Operation failed. Object with null 'EntityID' property may not be marked unmodified."));
 
             ObjectState = ObjectState.Unmodified;
         }
@@ -1074,6 +1086,9 @@ namespace EAVFramework.Model
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (SubjectID == null)
+                throw (new InvalidOperationException("Operation failed. Object with null 'SubjectID' property may not be marked unmodified."));
 
             ObjectState = ObjectState.Unmodified;
         }
@@ -1307,6 +1322,9 @@ namespace EAVFramework.Model
         {
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
+
+            if (InstanceID == null)
+                throw (new InvalidOperationException("Operation failed. Object with null 'InstanceID' property may not be marked unmodified."));
 
             ObjectState = ObjectState.Unmodified;
         }
@@ -1549,8 +1567,10 @@ namespace EAVFramework.Model
             if (ObjectState == ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked 'Unmodified'."));
 
-            if (Attribute != null && Attribute.ObjectState != ObjectState.New && Instance != null && Instance.ObjectState != ObjectState.New)
-                ObjectState = ObjectState.Unmodified;
+            if (Attribute == null || Attribute.ObjectState == ObjectState.New || Instance == null || Instance.ObjectState == ObjectState.New)
+                throw (new InvalidOperationException("Operation failed. Object with null or new 'Attribute' property or null or new Instance property may not be marked unmodified."));
+
+            ObjectState = ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()

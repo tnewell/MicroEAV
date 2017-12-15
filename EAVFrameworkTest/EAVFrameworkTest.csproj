@@ -50,6 +50,8 @@
   <ItemGroup>
     <Compile Include="EAVChildContainerTests.cs" />
     <Compile Include="EAVEntityTests.cs" />
+    <Compile Include="EAVChildInstanceTests.cs" />
+    <Compile Include="EAVValueTests.cs" />
     <Compile Include="EAVRootInstanceTests.cs" />
     <Compile Include="EAVSubjectTests.cs" />
     <Compile Include="EAVRootContainerTests.cs" />
