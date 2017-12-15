@@ -181,10 +181,309 @@ namespace EAVFrameworkTest
         #endregion
 
         #region Primitive Properties
-        //    Set When New
-        //    Set When Unmodified
-        //        Set When Modified
-        //    Set When Deleted
+        #region Name
+        [TestMethod]
+        public void RootContainerSetNameWhenNew()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer();
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            string value = Guid.NewGuid().ToString();
+            aRootContainer.Name = value;
+
+            Assert.AreEqual(value, aRootContainer.Name, "Property 'Name' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void RootContainerSetNameWhenUnmodified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            string value = Guid.NewGuid().ToString();
+            aRootContainer.Name = value;
+
+            Assert.AreEqual(value, aRootContainer.Name, "Property 'Name' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void RootContainerSetNameWhenModified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            string value = Guid.NewGuid().ToString();
+            aRootContainer.Name = value;
+
+            Assert.AreEqual(value, aRootContainer.Name, "Property 'Name' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = Guid.NewGuid().ToString();
+            aRootContainer.Name = value;
+
+            Assert.AreEqual(value, aRootContainer.Name, "Property 'Name' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RootContainerSetNameWhenDeleted()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aRootContainer.Name = Guid.NewGuid().ToString();
+        }
+        #endregion
+
+        #region DataName
+        [TestMethod]
+        public void RootContainerSetDataNameWhenNew()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer();
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            string value = Guid.NewGuid().ToString();
+            aRootContainer.DataName = value;
+
+            Assert.AreEqual(value, aRootContainer.DataName, "Property 'DataName' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void RootContainerSetDataNameWhenUnmodified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            string value = Guid.NewGuid().ToString();
+            aRootContainer.DataName = value;
+
+            Assert.AreEqual(value, aRootContainer.DataName, "Property 'DataName' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void RootContainerSetDataNameWhenModified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            string value = Guid.NewGuid().ToString();
+            aRootContainer.DataName = value;
+
+            Assert.AreEqual(value, aRootContainer.DataName, "Property 'DataName' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = Guid.NewGuid().ToString();
+            aRootContainer.DataName = value;
+
+            Assert.AreEqual(value, aRootContainer.DataName, "Property 'DataName' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RootContainerSetDataNameWhenDeleted()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aRootContainer.DataName = Guid.NewGuid().ToString();
+        }
+        #endregion
+
+        #region DisplayText
+        [TestMethod]
+        public void RootContainerSetDisplayTextWhenNew()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer();
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            string value = Guid.NewGuid().ToString();
+            aRootContainer.DisplayText = value;
+
+            Assert.AreEqual(value, aRootContainer.DisplayText, "Property 'DisplayText' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void RootContainerSetDisplayTextWhenUnmodified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            string value = Guid.NewGuid().ToString();
+            aRootContainer.DisplayText = value;
+
+            Assert.AreEqual(value, aRootContainer.DisplayText, "Property 'DisplayText' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void RootContainerSetDisplayTextWhenModified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            string value = Guid.NewGuid().ToString();
+            aRootContainer.DisplayText = value;
+
+            Assert.AreEqual(value, aRootContainer.DisplayText, "Property 'DisplayText' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = Guid.NewGuid().ToString();
+            aRootContainer.DisplayText = value;
+
+            Assert.AreEqual(value, aRootContainer.DisplayText, "Property 'DisplayText' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RootContainerSetDisplayTextWhenDeleted()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aRootContainer.DisplayText = Guid.NewGuid().ToString();
+        }
+        #endregion
+
+        #region IsRepeating
+        [TestMethod]
+        public void RootContainerSetIsRepeatingWhenNew()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer();
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.IsRepeating = true;
+
+            Assert.AreEqual(true, aRootContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void RootContainerSetIsRepeatingWhenUnmodified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.IsRepeating = true;
+
+            Assert.AreEqual(true, aRootContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void RootContainerSetIsRepeatingWhenModified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.IsRepeating = true;
+
+            Assert.AreEqual(true, aRootContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            aRootContainer.IsRepeating = false;
+
+            Assert.AreEqual(false, aRootContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RootContainerSetIsRepeatingWhenDeleted()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aRootContainer.IsRepeating = true;
+        }
+        #endregion
         #endregion
 
         #region Object Properties

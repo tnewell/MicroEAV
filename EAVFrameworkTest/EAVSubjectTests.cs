@@ -175,10 +175,82 @@ namespace EAVFrameworkTest
         #endregion
 
         #region Primitive Properties
-        //    Set When New
-        //    Set When Unmodified
-        //        Set When Modified
-        //    Set When Deleted
+        #region Identifier
+        [TestMethod]
+        public void SubjectSetIdentifierWhenNew()
+        {
+            EAVSubject aSubject = new EAVSubject();
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            string value = Guid.NewGuid().ToString();
+            aSubject.Identifier = value;
+
+            Assert.AreEqual(value, aSubject.Identifier, "Property 'Identifier' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void SubjectSetIdentifierWhenUnmodified()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            aSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            string value = Guid.NewGuid().ToString();
+            aSubject.Identifier = value;
+
+            Assert.AreEqual(value, aSubject.Identifier, "Property 'Identifier' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aSubject.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void SubjectSetIdentifierWhenModified()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            aSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            string value = Guid.NewGuid().ToString();
+            aSubject.Identifier = value;
+
+            Assert.AreEqual(value, aSubject.Identifier, "Property 'Identifier' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aSubject.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = Guid.NewGuid().ToString();
+            aSubject.Identifier = value;
+
+            Assert.AreEqual(value, aSubject.Identifier, "Property 'Identifier' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aSubject.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void SubjectSetIdentifierWhenDeleted()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            aSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aSubject.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aSubject.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aSubject.Identifier = Guid.NewGuid().ToString();
+        }
+        #endregion
         #endregion
 
         #region Object Properties

@@ -42,9 +42,13 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (name != value && ObjectState != ObjectState.Deleted)
+                if (name != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Name' may not be modified when object in 'Deleted' state."));
+
                     name = value;
+
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
@@ -61,9 +65,13 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (dataName != value && ObjectState != ObjectState.Deleted)
+                if (dataName != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'DataName' may not be modified when object in 'Deleted' state."));
+
                     dataName = value;
+
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
@@ -80,9 +88,13 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (displayText != value && ObjectState != ObjectState.Deleted)
+                if (displayText != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'DisplayText' may not be modified when object in 'Deleted' state."));
+
                     displayText = value;
+
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
@@ -441,9 +453,13 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (isRepeating != value && ObjectState != ObjectState.Deleted)
+                if (isRepeating != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'IsRepeating' may not be modified when object in 'Deleted' state."));
+
                     isRepeating = value;
+
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
@@ -729,9 +745,13 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (dataType != value && ObjectState != ObjectState.Deleted)
+                if (dataType != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'DataType' may not be modified when object in 'Deleted' state."));
+
                     dataType = value;
+
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
@@ -748,9 +768,13 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (isKey != value && ObjectState != ObjectState.Deleted)
+                if (isKey != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'IsKey' may not be modified when object in 'Deleted' state."));
+
                     isKey = value;
+
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
@@ -871,9 +895,13 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (descriptor != value && ObjectState != ObjectState.Deleted)
+                if (descriptor != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Descriptor' may not be modified when object in 'Deleted' state."));
+
                     descriptor = value;
+
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
@@ -1066,9 +1094,13 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (identifier != value && ObjectState != ObjectState.Deleted)
+                if (identifier != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Identifier' may not be modified when object in 'Deleted' state."));
+
                     identifier = value;
+
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
@@ -1535,9 +1567,13 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (rawValue != value && ObjectState != ObjectState.Deleted)
+                if (rawValue != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'RawValue' may not be modified when object in 'Deleted' state."));
+
                     rawValue = value;
+
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
@@ -1554,9 +1590,13 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (units != value && ObjectState != ObjectState.Deleted)
+                if (units != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Units' may not be modified when object in 'Deleted' state."));
+
                     units = value;
+
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }

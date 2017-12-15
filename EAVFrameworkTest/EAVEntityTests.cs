@@ -170,10 +170,82 @@ namespace EAVFrameworkTest
         #endregion
 
         #region Primitive Properties
-        //    Set When New
-        //    Set When Unmodified
-        //        Set When Modified
-        //    Set When Deleted
+        #region Descriptor
+        [TestMethod]
+        public void EntitySetDescriptorWhenNew()
+        {
+            EAVEntity aEntity = new EAVEntity();
+
+            Assert.AreEqual(ObjectState.New, aEntity.ObjectState, "Object state should be 'New' on creation.");
+
+            string value = Guid.NewGuid().ToString();
+            aEntity.Descriptor = value;
+
+            Assert.AreEqual(value, aEntity.Descriptor, "Property 'Descriptor' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aEntity.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void EntitySetDescriptorWhenUnmodified()
+        {
+            EAVEntity aEntity = new EAVEntity() { EntityID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aEntity.ObjectState, "Object state should be 'New' on creation.");
+
+            aEntity.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aEntity.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            string value = Guid.NewGuid().ToString();
+            aEntity.Descriptor = value;
+
+            Assert.AreEqual(value, aEntity.Descriptor, "Property 'Descriptor' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aEntity.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void EntitySetDescriptorWhenModified()
+        {
+            EAVEntity aEntity = new EAVEntity() { EntityID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aEntity.ObjectState, "Object state should be 'New' on creation.");
+
+            aEntity.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aEntity.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            string value = Guid.NewGuid().ToString();
+            aEntity.Descriptor = value;
+
+            Assert.AreEqual(value, aEntity.Descriptor, "Property 'Descriptor' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aEntity.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = Guid.NewGuid().ToString();
+            aEntity.Descriptor = value;
+
+            Assert.AreEqual(value, aEntity.Descriptor, "Property 'Descriptor' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aEntity.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void EntitySetDescriptorWhenDeleted()
+        {
+            EAVEntity aEntity = new EAVEntity() { EntityID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aEntity.ObjectState, "Object state should be 'New' on creation.");
+
+            aEntity.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aEntity.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aEntity.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aEntity.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aEntity.Descriptor = Guid.NewGuid().ToString();
+        }
+        #endregion
         #endregion
 
         #region Object Properties
