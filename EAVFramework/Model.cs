@@ -546,8 +546,11 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (context != value && ObjectState != ObjectState.Deleted)
+                if (context != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Context' may not be modified when object in 'Deleted' state."));
+
                     if (context != null && context.Containers.Contains(this))
                     {
                         context.Containers.Remove(this);
@@ -572,6 +575,9 @@ namespace EAVFramework.Model
             }
             set
             {
+                if (ObjectState == ObjectState.Deleted)
+                    throw (new InvalidOperationException("Operation failed. Property 'ParentContainer' may not be modified when object in 'Deleted' state."));
+
                 if (value != null) throw (new InvalidOperationException("The ParentContainer property may only accept 'null' as a value."));
             }
         }
@@ -593,6 +599,9 @@ namespace EAVFramework.Model
             }
             set
             {
+                if (ObjectState == ObjectState.Deleted)
+                    throw (new InvalidOperationException("Operation failed. Property 'Context' may not be modified when object in 'Deleted' state."));
+
                 throw (new InvalidOperationException("The Context property must be set on the root container for this container."));
             }
         }
@@ -610,8 +619,11 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (parentContainer != value && ObjectState != ObjectState.Deleted)
+                if (parentContainer != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'ParentContainer' may not be modified when object in 'Deleted' state."));
+
                     if (parentContainer != null && parentContainer.ChildContainers.Contains(this))
                     {
                         parentContainer.ChildContainers.Remove(this);
@@ -716,8 +728,11 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (container != value && ObjectState != ObjectState.Deleted)
+                if (container != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Container' may not be modified when object in 'Deleted' state."));
+
                     if (container != null && container.Attributes.Contains(this))
                     {
                         container.Attributes.Remove(this);
@@ -1031,8 +1046,11 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (entity != value && ObjectState != ObjectState.Deleted)
+                if (entity != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Entity' may not be modified when object in 'Deleted' state."));
+
                     if (entity != null && entity.Subjects.Contains(this))
                     {
                         entity.Subjects.Remove(this);
@@ -1065,8 +1083,11 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (context != value && ObjectState != ObjectState.Deleted)
+                if (context != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Context' may not be modified when object in 'Deleted' state."));
+
                     if (context != null && context.Subjects.Contains(this))
                     {
                         context.Subjects.Remove(this);
@@ -1228,33 +1249,6 @@ namespace EAVFramework.Model
         {
             get;
             set;
-            //get
-            //{
-            //    if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
-            //    {
-            //        parentInstance = null;
-            //    }
-
-            //    return (parentInstance);
-            //}
-            //set
-            //{
-            //    if (parentInstance != value && ObjectState != ObjectState.Deleted)
-            //    {
-            //        if (parentInstance != null && parentInstance.ChildInstances.Contains(this))
-            //        {
-            //            parentInstance.ChildInstances.Remove(this);
-            //        }
-
-            //        parentInstance = value;
-            //        if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
-
-            //        if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
-            //        {
-            //            parentInstance.ChildInstances.Add(this);
-            //        }
-            //    }
-            //}
         }
 
         [DataMember(Name = "Subject")]
@@ -1264,33 +1258,6 @@ namespace EAVFramework.Model
         {
             get;
             set;
-            //get
-            //{
-            //    if (subject != null && !subject.Instances.Contains(this))
-            //    {
-            //        subject = null;
-            //    }
-
-            //    return (subject);
-            //}
-            //set
-            //{
-            //    if (subject != value && ObjectState != ObjectState.Deleted)
-            //    {
-            //        if (subject != null && subject.Instances.Contains(this))
-            //        {
-            //            subject.Instances.Remove(this);
-            //        }
-
-            //        subject = value;
-            //        if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
-
-            //        if (subject != null && !subject.Instances.Contains(this))
-            //        {
-            //            subject.Instances.Add(this);
-            //        }
-            //    }
-            //}
         }
 
         [DataMember(Name = "Container")]
@@ -1399,8 +1366,11 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (subject != value && ObjectState != ObjectState.Deleted)
+                if (subject != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Subject' may not be modified when object in 'Deleted' state."));
+
                     if (subject != null && subject.Instances.Contains(this))
                     {
                         subject.Instances.Remove(this);
@@ -1425,6 +1395,9 @@ namespace EAVFramework.Model
             }
             set
             {
+                if (ObjectState == ObjectState.Deleted)
+                    throw (new InvalidOperationException("Operation failed. Property 'ParentInstance' may not be modified when object in 'Deleted' state."));
+
                 if (value != null) throw (new InvalidOperationException("The ParentInstance property may only accept 'null' as a value."));
             }
         }
@@ -1443,6 +1416,9 @@ namespace EAVFramework.Model
             }
             set
             {
+                if (ObjectState == ObjectState.Deleted)
+                    throw (new InvalidOperationException("Operation failed. Property 'Subject' may not be modified when object in 'Deleted' state."));
+
                 throw (new InvalidOperationException("The Subject property must be set on the root instance for this instance."));
             }
         }
@@ -1460,8 +1436,11 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (parentInstance != value && ObjectState != ObjectState.Deleted)
+                if (parentInstance != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'ParentInstance' may not be modified when object in 'Deleted' state."));
+
                     if (parentInstance != null && parentInstance.ChildInstances.Contains(this))
                     {
                         parentInstance.ChildInstances.Remove(this);
@@ -1504,8 +1483,11 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (instance != value && ObjectState != ObjectState.Deleted)
+                if (instance != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Instance' may not be modified when object in 'Deleted' state."));
+
                     if (instance != null && instance.Values.Contains(this))
                     {
                         instance.Values.Remove(this);
@@ -1538,8 +1520,11 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (attribute != value && ObjectState != ObjectState.Deleted)
+                if (attribute != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Attribute' may not be modified when object in 'Deleted' state."));
+
                     if (attribute != null && attribute.Values.Contains(this))
                     {
                         attribute.Values.Remove(this);

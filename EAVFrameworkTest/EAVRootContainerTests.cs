@@ -487,11 +487,186 @@ namespace EAVFrameworkTest
         #endregion
 
         #region Object Properties
-        // Include associated ID property
-        //    Set When New
-        //    Set When Unmodified
-        //        Set When Modified
-        //    Set When Deleted
+        #region Context
+        [TestMethod]
+        public void RootContainerSetContextWhenNew()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer();
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVContext value = new EAVContext() { ContextID = rng.Next() };
+            aRootContainer.Context = value;
+
+            Assert.AreEqual(value, aRootContainer.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(value.ContextID, aRootContainer.ContextID, "Property 'ContextID' was not reported properly.");
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void RootContainerSetContextWhenUnmodified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVContext value = new EAVContext() { ContextID = rng.Next() };
+            aRootContainer.Context = value;
+
+            Assert.AreEqual(value, aRootContainer.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(value.ContextID, aRootContainer.ContextID, "Property 'ContextID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void RootContainerSetContextWhenModified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVContext value = new EAVContext() { ContextID = rng.Next() };
+            aRootContainer.Context = value;
+
+            Assert.AreEqual(value, aRootContainer.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(value.ContextID, aRootContainer.ContextID, "Property 'ContextID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = new EAVContext() { ContextID = rng.Next() };
+            aRootContainer.Context = value;
+
+            Assert.AreEqual(value, aRootContainer.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(value.ContextID, aRootContainer.ContextID, "Property 'ContextID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RootContainerSetContextWhenDeleted()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aRootContainer.Context = new EAVContext() { ContextID = rng.Next() };
+        }
+        #endregion
+
+        #region ParentContainer
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RootContainerSetParentContainerWithObjectWhenNew()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer();
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.ParentContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+        }
+
+        [TestMethod]
+        public void RootContainerSetParentContainerWithNullWhenNew()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer();
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.ParentContainer = null;
+
+            Assert.IsNull(aRootContainer.ParentContainer, "Property 'ParentContainer' was not set properly.");
+            Assert.IsNull(aRootContainer.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RootContainerSetParentContainerWithObjectWhenUnmodified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.ParentContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+        }
+
+        [TestMethod]
+        public void RootContainerSetParentContainerWithNullWhenUnmodified()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.ParentContainer = null;
+
+            Assert.IsNull(aRootContainer.ParentContainer, "Property 'ParentContainer' was not set properly.");
+            Assert.IsNull(aRootContainer.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state should remain 'Unmodified' when property set.");
+        }
+
+        // Set When Modified - N/A
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RootContainerSetParentContainerWithObjectWhenDeleted()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aRootContainer.ParentContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RootContainerSetParentContainerWithNullWhenDeleted()
+        {
+            EAVRootContainer aRootContainer = new EAVRootContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aRootContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aRootContainer.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aRootContainer.ParentContainer = null;
+        }
+        #endregion
         #endregion
 
         #region Collection Properties

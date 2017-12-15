@@ -254,11 +254,167 @@ namespace EAVFrameworkTest
         #endregion
 
         #region Object Properties
-        // Include associated ID property
-        //    Set When New
-        //    Set When Unmodified
-        //        Set When Modified
-        //    Set When Deleted
+        #region Entity
+        [TestMethod]
+        public void SubjectSetEntityWhenNew()
+        {
+            EAVSubject anSubject = new EAVSubject();
+
+            Assert.AreEqual(ObjectState.New, anSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVEntity value = new EAVEntity() { EntityID = rng.Next() };
+            anSubject.Entity = value;
+
+            Assert.AreEqual(value, anSubject.Entity, "Property 'Entity' was not set properly.");
+            Assert.AreEqual(value.EntityID, anSubject.EntityID, "Property 'EntityID' was not reported properly.");
+            Assert.AreEqual(ObjectState.New, anSubject.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void SubjectSetEntityWhenUnmodified()
+        {
+            EAVSubject anSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            anSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVEntity value = new EAVEntity() { EntityID = rng.Next() };
+            anSubject.Entity = value;
+
+            Assert.AreEqual(value, anSubject.Entity, "Property 'Entity' was not set properly.");
+            Assert.AreEqual(value.EntityID, anSubject.EntityID, "Property 'EntityID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, anSubject.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void SubjectSetEntityWhenModified()
+        {
+            EAVSubject anSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            anSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVEntity value = new EAVEntity() { EntityID = rng.Next() };
+            anSubject.Entity = value;
+
+            Assert.AreEqual(value, anSubject.Entity, "Property 'Entity' was not set properly.");
+            Assert.AreEqual(value.EntityID, anSubject.EntityID, "Property 'EntityID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, anSubject.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = new EAVEntity() { EntityID = rng.Next() };
+            anSubject.Entity = value;
+
+            Assert.AreEqual(value, anSubject.Entity, "Property 'Entity' was not set properly.");
+            Assert.AreEqual(value.EntityID, anSubject.EntityID, "Property 'EntityID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, anSubject.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void SubjectSetEntityWhenDeleted()
+        {
+            EAVSubject anSubject = new EAVSubject();
+
+            Assert.AreEqual(ObjectState.New, anSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            anSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            anSubject.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, anSubject.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            anSubject.Entity = new EAVEntity() { EntityID = rng.Next() };
+        }
+        #endregion
+
+        #region Context
+        [TestMethod]
+        public void SubjectSetContextWhenNew()
+        {
+            EAVSubject anSubject = new EAVSubject();
+
+            Assert.AreEqual(ObjectState.New, anSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVContext value = new EAVContext() { ContextID = rng.Next() };
+            anSubject.Context = value;
+
+            Assert.AreEqual(value, anSubject.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(value.ContextID, anSubject.ContextID, "Property 'ContextID' was not reported properly.");
+            Assert.AreEqual(ObjectState.New, anSubject.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void SubjectSetContextWhenUnmodified()
+        {
+            EAVSubject anSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            anSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVContext value = new EAVContext() { ContextID = rng.Next() };
+            anSubject.Context = value;
+
+            Assert.AreEqual(value, anSubject.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(value.ContextID, anSubject.ContextID, "Property 'ContextID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, anSubject.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void SubjectSetContextWhenModified()
+        {
+            EAVSubject anSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            anSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVContext value = new EAVContext() { ContextID = rng.Next() };
+            anSubject.Context = value;
+
+            Assert.AreEqual(value, anSubject.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(value.ContextID, anSubject.ContextID, "Property 'ContextID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, anSubject.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = new EAVContext() { ContextID = rng.Next() };
+            anSubject.Context = value;
+
+            Assert.AreEqual(value, anSubject.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(value.ContextID, anSubject.ContextID, "Property 'ContextID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, anSubject.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void SubjectSetContextWhenDeleted()
+        {
+            EAVSubject anSubject = new EAVSubject();
+
+            Assert.AreEqual(ObjectState.New, anSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            anSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            anSubject.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, anSubject.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            anSubject.Context = new EAVContext() { ContextID = rng.Next() };
+        }
+        #endregion
         #endregion
 
         #region Collection Properties
