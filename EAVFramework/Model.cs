@@ -1276,8 +1276,11 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (container != value && ObjectState != ObjectState.Deleted)
+                if (container != value)
                 {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'RawValue' may not be modified when object in 'Deleted' state."));
+
                     if (container != null && container.Instances.Contains(this))
                     {
                         container.Instances.Remove(this);
