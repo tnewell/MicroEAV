@@ -297,6 +297,9 @@ namespace EAVFrameworkTest
         #endregion
 
         #region Object Properties
+
+        // TODO: Add tests for when either Instance or Attribute not set
+
         #region Instance
         [TestMethod]
         public void ValueSetInstanceWhenNew()
@@ -310,6 +313,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(value, aValue.Instance, "Property 'Instance' was not set properly.");
             Assert.AreEqual(value.InstanceID, aValue.InstanceID, "Property 'InstanceID' was not reported properly.");
+            Assert.IsTrue(value.Values.Contains(aValue), "Property 'Values' was not updated properly.");
             Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
         }
 
@@ -331,6 +335,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(value, aValue.Instance, "Property 'Instance' was not set properly.");
             Assert.AreEqual(value.InstanceID, aValue.InstanceID, "Property 'InstanceID' was not reported properly.");
+            Assert.IsTrue(value.Values.Contains(aValue), "Property 'Values' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
@@ -352,6 +357,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(value, aValue.Instance, "Property 'Instance' was not set properly.");
             Assert.AreEqual(value.InstanceID, aValue.InstanceID, "Property 'InstanceID' was not reported properly.");
+            Assert.IsTrue(value.Values.Contains(aValue), "Property 'Values' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
 
             value = new EAVChildInstance() { InstanceID = rng.Next() };
@@ -359,6 +365,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(value, aValue.Instance, "Property 'Instance' was not set properly.");
             Assert.AreEqual(value.InstanceID, aValue.InstanceID, "Property 'InstanceID' was not reported properly.");
+            Assert.IsTrue(value.Values.Contains(aValue), "Property 'Values' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
@@ -379,6 +386,97 @@ namespace EAVFrameworkTest
             Assert.AreEqual(ObjectState.Deleted, aValue.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aValue.Instance = new EAVChildInstance() { InstanceID = rng.Next() };
+        }
+        #endregion
+
+        #region Attribute
+        [TestMethod]
+        public void ValueSetAttributeWhenNew()
+        {
+            EAVValue aValue = new EAVValue();
+
+            Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVAttribute value = new EAVAttribute() { AttributeID = rng.Next() };
+            aValue.Attribute = value;
+
+            Assert.AreEqual(value, aValue.Attribute, "Property 'Attribute' was not set properly.");
+            Assert.AreEqual(value.AttributeID, aValue.AttributeID, "Property 'AttributeID' was not reported properly.");
+            Assert.IsTrue(value.Values.Contains(aValue), "Property 'Values' was not updated properly.");
+            Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void ValueSetAttributeWhenUnmodified()
+        {
+            EAVValue aValue = new EAVValue() { Attribute = new EAVAttribute() { AttributeID = rng.Next() }, Instance = new EAVChildInstance() { InstanceID = rng.Next() } };
+
+            Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+
+            aValue.Attribute.MarkUnmodified();
+            aValue.Instance.MarkUnmodified();
+
+            aValue.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVAttribute value = new EAVAttribute() { AttributeID = rng.Next() };
+            aValue.Attribute = value;
+
+            Assert.AreEqual(value, aValue.Attribute, "Property 'Attribute' was not set properly.");
+            Assert.AreEqual(value.AttributeID, aValue.AttributeID, "Property 'AttributeID' was not reported properly.");
+            Assert.IsTrue(value.Values.Contains(aValue), "Property 'Values' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void ValueSetAttributeWhenModified()
+        {
+            EAVValue aValue = new EAVValue() { Attribute = new EAVAttribute() { AttributeID = rng.Next() }, Instance = new EAVChildInstance() { InstanceID = rng.Next() } };
+
+            Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+
+            aValue.Attribute.MarkUnmodified();
+            aValue.Instance.MarkUnmodified();
+
+            aValue.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVAttribute value = new EAVAttribute() { AttributeID = rng.Next() };
+            aValue.Attribute = value;
+
+            Assert.AreEqual(value, aValue.Attribute, "Property 'Attribute' was not set properly.");
+            Assert.AreEqual(value.AttributeID, aValue.AttributeID, "Property 'AttributeID' was not reported properly.");
+            Assert.IsTrue(value.Values.Contains(aValue), "Property 'Values' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = new EAVAttribute() { AttributeID = rng.Next() };
+            aValue.Attribute = value;
+
+            Assert.AreEqual(value, aValue.Attribute, "Property 'Attribute' was not set properly.");
+            Assert.AreEqual(value.AttributeID, aValue.AttributeID, "Property 'AttributeID' was not reported properly.");
+            Assert.IsTrue(value.Values.Contains(aValue), "Property 'Values' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ValueSetAttributeWhenDeleted()
+        {
+            EAVValue aValue = new EAVValue();
+
+            Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+
+            aValue.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aValue.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aValue.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aValue.Attribute = new EAVAttribute() { AttributeID = rng.Next() };
         }
         #endregion
         #endregion

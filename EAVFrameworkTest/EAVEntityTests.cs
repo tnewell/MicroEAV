@@ -253,22 +253,91 @@ namespace EAVFrameworkTest
         #endregion
 
         #region Collection Properties
-        //    Add When New
-        //    Add When Unmodified
-        //        Add When Modified
-        //    Add When Deleted
 
+        #region Subjects
+        [TestMethod]
+        public void EntitySetSubjectsWhenNew()
+        {
+            EAVEntity aEntity = new EAVEntity() { EntityID = rng.Next() };
 
-        //    Remove When New
-        //    Remove When Unmodified
-        //        Remove When Modified
-        //    Remove When Deleted
+            Assert.AreEqual(ObjectState.New, aEntity.ObjectState, "Object state should be 'New' on creation.");
 
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aEntity.Subjects.Add(value);
 
-        //    Clear When New
-        //    Clear When Unmodified
-        //        Clear When Modified
-        //    Clear When Deleted
+            Assert.IsTrue(aEntity.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.AreEqual(aEntity, value.Entity, "Property 'Entity' was not set properly.");
+            Assert.AreEqual(aEntity.EntityID, value.EntityID, "Property 'EntityID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aEntity.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void EntitySetSubjectsWhenUnmodified()
+        {
+            EAVEntity aEntity = new EAVEntity() { EntityID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aEntity.ObjectState, "Object state should be 'New' on creation.");
+
+            aEntity.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aEntity.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aEntity.Subjects.Add(value);
+
+            Assert.IsTrue(aEntity.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.AreEqual(aEntity, value.Entity, "Property 'Entity' was not set properly.");
+            Assert.AreEqual(aEntity.EntityID, value.EntityID, "Property 'EntityID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aEntity.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void EntitySetSubjectsWhenModified()
+        {
+            EAVEntity aEntity = new EAVEntity() { EntityID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aEntity.ObjectState, "Object state should be 'New' on creation.");
+
+            aEntity.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aEntity.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aEntity.Subjects.Add(value);
+
+            Assert.IsTrue(aEntity.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.AreEqual(aEntity, value.Entity, "Property 'Entity' was not set properly.");
+            Assert.AreEqual(aEntity.EntityID, value.EntityID, "Property 'EntityID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aEntity.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = new EAVSubject() { SubjectID = rng.Next() };
+            aEntity.Subjects.Add(value);
+
+            Assert.IsTrue(aEntity.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.AreEqual(aEntity, value.Entity, "Property 'Entity' was not set properly.");
+            Assert.AreEqual(aEntity.EntityID, value.EntityID, "Property 'EntityID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aEntity.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void EntitySetSubjectsWhenDeleted()
+        {
+            EAVEntity aEntity = new EAVEntity() { EntityID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aEntity.ObjectState, "Object state should be 'New' on creation.");
+
+            aEntity.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aEntity.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aEntity.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aEntity.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aEntity.Subjects.Add(new EAVSubject() { SubjectID = rng.Next() });
+        }
+        #endregion
         #endregion
     }
 }

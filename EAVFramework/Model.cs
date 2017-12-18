@@ -1212,6 +1212,40 @@ namespace EAVFramework.Model
 
         private void Values_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (e.OldItems != null)
+                    {
+                        foreach (EAVValue value in e.OldItems)
+                        {
+                            if (value.Instance == this)
+                            {
+                                value.Instance = null;
+                            }
+                        }
+                    }
+
+                    if (e.NewItems != null)
+                    {
+                        foreach (EAVValue value in e.NewItems)
+                        {
+                            if (value.Instance != this)
+                            {
+                                value.Instance = this;
+                            }
+                        }
+                    }
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                    break;
+            }
         }
 
         [DataMember(Name = "InstanceID")]

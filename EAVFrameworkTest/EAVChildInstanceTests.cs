@@ -261,25 +261,226 @@ namespace EAVFrameworkTest
             aChildInstance.Container = new EAVChildContainer() { ContainerID = rng.Next() };
         }
         #endregion
+
+        #region Subject
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ChildInstanceSetSubjectWhenNew()
+        {
+            EAVChildInstance aChildInstance = new EAVChildInstance();
+
+            Assert.AreEqual(ObjectState.New, aChildInstance.ObjectState, "Object state should be 'New' on creation.");
+
+            aChildInstance.Subject = new EAVSubject() { SubjectID = rng.Next() };
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ChildInstanceSetSubjectWhenUnmodified()
+        {
+            EAVChildInstance aChildInstance = new EAVChildInstance() { InstanceID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aChildInstance.ObjectState, "Object state should be 'New' on creation.");
+
+            aChildInstance.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aChildInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aChildInstance.Subject = new EAVSubject() { SubjectID = rng.Next() };
+        }
+
+        // Set When Modified - N/A
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ChildInstanceSetSubjectWhenDeleted()
+        {
+            EAVChildInstance aChildInstance = new EAVChildInstance() { InstanceID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aChildInstance.ObjectState, "Object state should be 'New' on creation.");
+
+            aChildInstance.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aChildInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aChildInstance.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aChildInstance.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aChildInstance.Subject = new EAVSubject() { SubjectID = rng.Next() };
+        }
+        #endregion
+
+        #region ParentInstance
+        [TestMethod]
+        public void ChildInstanceSetParentInstanceWhenNew()
+        {
+            EAVChildInstance aChildInstance = new EAVChildInstance();
+
+            Assert.AreEqual(ObjectState.New, aChildInstance.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            aChildInstance.ParentInstance = value;
+
+            Assert.AreEqual(value, aChildInstance.ParentInstance, "Property 'ParentInstance' was not set properly.");
+            Assert.AreEqual(value.ParentInstanceID, aChildInstance.ParentInstanceID, "Property 'ParentInstanceID' was not reported properly.");
+            Assert.AreEqual(ObjectState.New, aChildInstance.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void ChildInstanceSetParentInstanceWhenUnmodified()
+        {
+            EAVChildInstance aChildInstance = new EAVChildInstance() { InstanceID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aChildInstance.ObjectState, "Object state should be 'New' on creation.");
+
+            aChildInstance.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aChildInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            aChildInstance.ParentInstance = value;
+
+            Assert.AreEqual(value, aChildInstance.ParentInstance, "Property 'ParentInstance' was not set properly.");
+            Assert.AreEqual(value.ParentInstanceID, aChildInstance.ParentInstanceID, "Property 'ParentInstanceID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildInstance.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void ChildInstanceSetParentInstanceWhenModified()
+        {
+            EAVChildInstance aChildInstance = new EAVChildInstance() { InstanceID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aChildInstance.ObjectState, "Object state should be 'New' on creation.");
+
+            aChildInstance.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aChildInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            aChildInstance.ParentInstance = value;
+
+            Assert.AreEqual(value, aChildInstance.ParentInstance, "Property 'ParentInstance' was not set properly.");
+            Assert.AreEqual(value.ParentInstanceID, aChildInstance.ParentInstanceID, "Property 'ParentInstanceID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildInstance.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = new EAVChildInstance() { InstanceID = rng.Next() };
+            aChildInstance.ParentInstance = value;
+
+            Assert.AreEqual(value, aChildInstance.ParentInstance, "Property 'ParentInstance' was not set properly.");
+            Assert.AreEqual(value.ParentInstanceID, aChildInstance.ParentInstanceID, "Property 'ParentInstanceID' was not reported properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildInstance.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ChildInstanceSetParentInstanceWhenDeleted()
+        {
+            EAVChildInstance aChildInstance = new EAVChildInstance() { InstanceID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aChildInstance.ObjectState, "Object state should be 'New' on creation.");
+
+            aChildInstance.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aChildInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aChildInstance.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aChildInstance.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aChildInstance.ParentInstance = new EAVChildInstance() { InstanceID = rng.Next() };
+        }
+        #endregion
         #endregion
 
         #region Collection Properties
-        //    Add When New
-        //    Add When Unmodified
-        //        Add When Modified
-        //    Add When Deleted
 
+        // TODO: Child Instances
 
-        //    Remove When New
-        //    Remove When Unmodified
-        //        Remove When Modified
-        //    Remove When Deleted
+        #region Values
+        [TestMethod]
+        public void ChildInstanceSetValuesWhenNew()
+        {
+            EAVChildInstance anInstance = new EAVChildInstance() { InstanceID = rng.Next() };
 
+            Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
-        //    Clear When New
-        //    Clear When Unmodified
-        //        Clear When Modified
-        //    Clear When Deleted
+            EAVValue value = new EAVValue();
+            anInstance.Values.Add(value);
+
+            Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
+            Assert.AreEqual(anInstance, value.Instance, "Property 'Instance' was not set properly.");
+            Assert.AreEqual(anInstance.InstanceID, value.InstanceID, "Property 'InstanceID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void ChildInstanceSetValuesWhenUnmodified()
+        {
+            EAVChildInstance anInstance = new EAVChildInstance() { InstanceID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
+
+            anInstance.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVValue value = new EAVValue();
+            anInstance.Values.Add(value);
+
+            Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
+            Assert.AreEqual(anInstance, value.Instance, "Property 'Instance' was not set properly.");
+            Assert.AreEqual(anInstance.InstanceID, value.InstanceID, "Property 'InstanceID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anInstance.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void ChildInstanceSetValuesWhenModified()
+        {
+            EAVChildInstance anInstance = new EAVChildInstance() { InstanceID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
+
+            anInstance.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVValue value = new EAVValue();
+            anInstance.Values.Add(value);
+
+            Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
+            Assert.AreEqual(anInstance, value.Instance, "Property 'Instance' was not set properly.");
+            Assert.AreEqual(anInstance.InstanceID, value.InstanceID, "Property 'InstanceID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anInstance.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = new EAVValue();
+            anInstance.Values.Add(value);
+
+            Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
+            Assert.AreEqual(anInstance, value.Instance, "Property 'Instance' was not set properly.");
+            Assert.AreEqual(anInstance.InstanceID, value.InstanceID, "Property 'InstanceID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anInstance.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void ChildInstanceSetValuesWhenDeleted()
+        {
+            EAVChildInstance anInstance = new EAVChildInstance() { InstanceID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
+
+            anInstance.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            anInstance.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, anInstance.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            anInstance.Values.Add(new EAVValue());
+        }
+        #endregion
         #endregion
     }
 }
