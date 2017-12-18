@@ -297,9 +297,6 @@ namespace EAVFrameworkTest
         #endregion
 
         #region Object Properties
-
-        // TODO: Add tests for when either Instance or Attribute not set
-
         #region Instance
         [TestMethod]
         public void ValueSetInstanceWhenNew()
@@ -326,6 +323,7 @@ namespace EAVFrameworkTest
 
             aValue.Attribute.MarkUnmodified();
             aValue.Instance.MarkUnmodified();
+
             aValue.MarkUnmodified();
 
             Assert.AreEqual(ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
@@ -337,6 +335,19 @@ namespace EAVFrameworkTest
             Assert.AreEqual(value.InstanceID, aValue.InstanceID, "Property 'InstanceID' was not reported properly.");
             Assert.IsTrue(value.Values.Contains(aValue), "Property 'Values' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ValueSetInstanceWhenUnmodifiedWithNullAttribute()
+        {
+            EAVValue aValue = new EAVValue() { Instance = new EAVChildInstance() { InstanceID = rng.Next() } };
+
+            Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+
+            aValue.Instance.MarkUnmodified();
+
+            aValue.MarkUnmodified();
         }
 
         [TestMethod]
@@ -427,6 +438,19 @@ namespace EAVFrameworkTest
             Assert.AreEqual(value.AttributeID, aValue.AttributeID, "Property 'AttributeID' was not reported properly.");
             Assert.IsTrue(value.Values.Contains(aValue), "Property 'Values' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ValueSetAttributeWhenUnmodifiedWithNullInstance()
+        {
+            EAVValue aValue = new EAVValue() { Attribute = new EAVAttribute() { AttributeID = rng.Next() } };
+
+            Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+
+            aValue.Attribute.MarkUnmodified();
+
+            aValue.MarkUnmodified();
         }
 
         [TestMethod]

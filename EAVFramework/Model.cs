@@ -1270,7 +1270,7 @@ namespace EAVFramework.Model
             }
         }
 
-        public int? ParentInstanceID { get { return (ParentInstance != null ? ParentInstance.ParentInstanceID : null); } }
+        public int? ParentInstanceID { get { return (ParentInstance != null ? ParentInstance.InstanceID : null); } }
 
         public int? SubjectID { get { return (Subject != null ? Subject.SubjectID : null); } }
 
