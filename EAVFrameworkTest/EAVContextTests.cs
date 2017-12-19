@@ -413,7 +413,7 @@ namespace EAVFrameworkTest
         #region Collection Properties
         #region Containers
         [TestMethod]
-        public void ContextSetContainersWhenNew()
+        public void ContextAddToContainersWhenNew()
         {
             EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
 
@@ -429,7 +429,7 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void ContextSetContainersWhenUnmodified()
+        public void ContextAddToContainersWhenUnmodified()
         {
             EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
 
@@ -449,7 +449,7 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void ContextSetContainersWhenModified()
+        public void ContextAddToContainersWhenModified()
         {
             EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
 
@@ -478,7 +478,7 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void ContextSetContainersWhenDeleted()
+        public void ContextAddToContainersWhenDeleted()
         {
             EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
 
@@ -593,10 +593,12 @@ namespace EAVFrameworkTest
             value.MarkUnmodified();
 
             Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
             Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.Containers.Remove(value);
         }
@@ -621,6 +623,7 @@ namespace EAVFrameworkTest
             Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.IsFalse(aContext.Containers.Any(), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
@@ -648,6 +651,7 @@ namespace EAVFrameworkTest
             Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.IsFalse(aContext.Containers.Any(), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
@@ -675,6 +679,7 @@ namespace EAVFrameworkTest
             Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.IsFalse(aContext.Containers.Any(), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
@@ -693,10 +698,12 @@ namespace EAVFrameworkTest
             value.MarkUnmodified();
 
             Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
             Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.Containers.Clear();
         }
@@ -704,7 +711,7 @@ namespace EAVFrameworkTest
 
         #region Subjects
         [TestMethod]
-        public void ContextSetSubjectsWhenNew()
+        public void ContextAddToSubjectsWhenNew()
         {
             EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
 
@@ -720,7 +727,7 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void ContextSetSubjectsWhenUnmodified()
+        public void ContextAddToSubjectsWhenUnmodified()
         {
             EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
 
@@ -740,7 +747,7 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void ContextSetSubjectsWhenModified()
+        public void ContextAddToSubjectsWhenModified()
         {
             EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
 
@@ -769,7 +776,7 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void ContextSetSubjectsWhenDeleted()
+        public void ContextAddToSubjectsWhenDeleted()
         {
             EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
 
@@ -882,10 +889,12 @@ namespace EAVFrameworkTest
             value.MarkUnmodified();
 
             Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
             Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.Subjects.Remove(value);
         }
@@ -910,6 +919,7 @@ namespace EAVFrameworkTest
             Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.IsFalse(aContext.Subjects.Any(), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
@@ -937,6 +947,7 @@ namespace EAVFrameworkTest
             Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.IsFalse(aContext.Subjects.Any(), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
@@ -962,6 +973,7 @@ namespace EAVFrameworkTest
             Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.IsFalse(aContext.Subjects.Any(), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
@@ -980,10 +992,12 @@ namespace EAVFrameworkTest
             value.MarkUnmodified();
 
             Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
             Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.Subjects.Clear();
         }

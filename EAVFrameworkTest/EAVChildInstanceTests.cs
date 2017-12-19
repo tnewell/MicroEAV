@@ -396,7 +396,7 @@ namespace EAVFrameworkTest
         #region Collection Properties
         #region ChildInstances
         [TestMethod]
-        public void ChildInstanceSetChildInstancesWhenNew()
+        public void ChildInstanceAddToChildInstancesWhenNew()
         {
             EAVChildInstance aParentInstance = new EAVChildInstance() { InstanceID = rng.Next() };
 
@@ -412,7 +412,7 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void ChildInstanceSetChildInstancesWhenUnmodified()
+        public void ChildInstanceAddToChildInstancesWhenUnmodified()
         {
             EAVChildInstance aParentInstance = new EAVChildInstance() { InstanceID = rng.Next() };
 
@@ -432,7 +432,7 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void ChildInstanceSetChildInstancesWhenModified()
+        public void ChildInstanceAddToChildInstancesWhenModified()
         {
             EAVChildInstance aParentInstance = new EAVChildInstance() { InstanceID = rng.Next() };
 
@@ -461,7 +461,7 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void ChildInstanceSetChildInstancesWhenDeleted()
+        public void ChildInstanceAddToChildInstancesWhenDeleted()
         {
             EAVChildInstance aParentInstance = new EAVChildInstance() { InstanceID = rng.Next() };
 
@@ -481,7 +481,7 @@ namespace EAVFrameworkTest
 
         #region Values
         [TestMethod]
-        public void ChildInstanceSetValuesWhenNew()
+        public void ChildInstanceAddToValuesWhenNew()
         {
             EAVChildInstance anInstance = new EAVChildInstance() { InstanceID = rng.Next() };
 
@@ -497,7 +497,7 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void ChildInstanceSetValuesWhenUnmodified()
+        public void ChildInstanceAddToValuesWhenUnmodified()
         {
             EAVChildInstance anInstance = new EAVChildInstance() { InstanceID = rng.Next() };
 
@@ -517,7 +517,7 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void ChildInstanceSetValuesWhenModified()
+        public void ChildInstanceAddToValuesWhenModified()
         {
             EAVChildInstance anInstance = new EAVChildInstance() { InstanceID = rng.Next() };
 
@@ -546,7 +546,7 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void ChildInstanceSetValuesWhenDeleted()
+        public void ChildInstanceAddToValuesWhenDeleted()
         {
             EAVChildInstance anInstance = new EAVChildInstance() { InstanceID = rng.Next() };
 

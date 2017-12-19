@@ -428,7 +428,7 @@ namespace EAVFrameworkTest
         #region Collection Properties
         #region Instances
         [TestMethod]
-        public void SubjectSetInstancesWhenNew()
+        public void SubjectAddToInstancesWhenNew()
         {
             EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
 
@@ -444,7 +444,7 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void SubjectSetInstancesWhenUnmodified()
+        public void SubjectAddToInstancesWhenUnmodified()
         {
             EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
 
@@ -464,7 +464,7 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void SubjectSetInstancesWhenModified()
+        public void SubjectAddToInstancesWhenModified()
         {
             EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
 
@@ -493,7 +493,7 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void SubjectSetInstancesWhenDeleted()
+        public void SubjectAddToInstancesWhenDeleted()
         {
             EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
 

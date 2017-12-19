@@ -521,6 +521,9 @@ namespace EAVFramework.Model
 
                 foreach (EAVContainer container in childContainers)
                     container.MarkDeleted();
+
+                foreach (EAVInstance instance in instances)
+                    instance.MarkDeleted();
             }
         }
     }
