@@ -1157,6 +1157,9 @@ namespace EAVFramework.Model
             if (ObjectState != ObjectState.Deleted)
             {
                 ObjectState = ObjectState.Deleted;
+
+                foreach (EAVInstance instance in instances)
+                    instance.MarkDeleted();
             }
         }
     }

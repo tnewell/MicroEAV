@@ -509,6 +509,225 @@ namespace EAVFrameworkTest
 
             aSubject.Instances.Add(new EAVRootInstance() { InstanceID = rng.Next() });
         }
+
+        [TestMethod]
+        public void SubjectRemoveFromInstancesWhenNew()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootInstance value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+            value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+
+            Assert.IsTrue(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.AreEqual(aSubject, value.Subject, "Property 'Subject' was not set properly.");
+            Assert.AreEqual(aSubject.SubjectID, value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should remain 'New' when property set.");
+
+            aSubject.Instances.Remove(value);
+
+            Assert.IsFalse(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.IsNull(value.Subject, "Property 'Subject' was not set properly.");
+            Assert.IsNull(value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void SubjectRemoveFromInstancesWhenUnmodified()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootInstance value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+            value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+
+            Assert.IsTrue(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.AreEqual(aSubject, value.Subject, "Property 'Subject' was not set properly.");
+            Assert.AreEqual(aSubject.SubjectID, value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should remain 'New' when property set.");
+
+            aSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aSubject.Instances.Remove(value);
+
+            Assert.IsFalse(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.IsNull(value.Subject, "Property 'Subject' was not set properly.");
+            Assert.IsNull(value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aSubject.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void SubjectRemoveFromInstancesWhenModified()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            aSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVRootInstance value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+            value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+
+            Assert.IsTrue(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.AreEqual(aSubject, value.Subject, "Property 'Subject' was not set properly.");
+            Assert.AreEqual(aSubject.SubjectID, value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aSubject.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            aSubject.Instances.Remove(value);
+
+            Assert.IsFalse(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.IsNull(value.Subject, "Property 'Subject' was not set properly.");
+            Assert.IsNull(value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aSubject.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void SubjectRemoveFromInstancesWhenDeleted()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootInstance value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+
+            aSubject.MarkUnmodified();
+            value.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aSubject.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aSubject.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aSubject.Instances.Remove(value);
+        }
+
+        [TestMethod]
+        public void SubjectClearInstancesWhenNew()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootInstance value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+            value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+
+            Assert.IsTrue(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.AreEqual(aSubject, value.Subject, "Property 'Subject' was not set properly.");
+            Assert.AreEqual(aSubject.SubjectID, value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should remain 'New' when property set.");
+
+            aSubject.Instances.Clear();
+
+            Assert.IsFalse(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.IsNull(value.Subject, "Property 'Subject' was not set properly.");
+            Assert.IsNull(value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.IsFalse(aSubject.Instances.Any(), "Property 'Instances' was not updated properly.");
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void SubjectClearInstancesWhenUnmodified()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootInstance value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+            value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+
+            Assert.IsTrue(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.AreEqual(aSubject, value.Subject, "Property 'Subject' was not set properly.");
+            Assert.AreEqual(aSubject.SubjectID, value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should remain 'New' when property set.");
+
+            aSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aSubject.Instances.Clear();
+
+            Assert.IsFalse(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.IsNull(value.Subject, "Property 'Subject' was not set properly.");
+            Assert.IsNull(value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.IsFalse(aSubject.Instances.Any(), "Property 'Instances' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, aSubject.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void SubjectClearInstancesWhenModified()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            aSubject.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVRootInstance value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+            value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+
+            Assert.IsTrue(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.AreEqual(aSubject, value.Subject, "Property 'Subject' was not set properly.");
+            Assert.AreEqual(aSubject.SubjectID, value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aSubject.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            aSubject.Instances.Clear();
+
+            Assert.IsFalse(aSubject.Instances.Contains(value), "Property 'Instances' was not updated properly.");
+            Assert.IsNull(value.Subject, "Property 'Subject' was not set properly.");
+            Assert.IsNull(value.SubjectID, "Property 'SubjectID' was not set properly.");
+            Assert.IsFalse(aSubject.Instances.Any(), "Property 'Instances' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, aSubject.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void SubjectClearInstancesWhenDeleted()
+        {
+            EAVSubject aSubject = new EAVSubject() { SubjectID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootInstance value = new EAVRootInstance() { InstanceID = rng.Next() };
+            aSubject.Instances.Add(value);
+
+            aSubject.MarkUnmodified();
+            value.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aSubject.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aSubject.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aSubject.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aSubject.Instances.Clear();
+        }
         #endregion
         #endregion
     }
