@@ -494,6 +494,212 @@ namespace EAVFrameworkTest
 
             aContext.Containers.Add(new EAVRootContainer() { ContainerID = rng.Next() });
         }
+
+        [TestMethod]
+        public void ContextRemoveFromContainersWhenNew()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+            value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+
+            Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+
+            aContext.Containers.Remove(value);
+
+            Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void ContextRemoveFromContainersWhenUnmodified()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+            value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+
+            Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+
+            aContext.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aContext.Containers.Remove(value);
+
+            Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void ContextRemoveFromContainersWhenModified()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            aContext.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+            value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+
+            Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            aContext.Containers.Remove(value);
+
+            Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void ContextRemoveFromContainersWhenDeleted()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+
+            aContext.MarkUnmodified();
+            value.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aContext.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aContext.Containers.Remove(value);
+        }
+
+        [TestMethod]
+        public void ContextClearContainersWhenNew()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+
+            Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+
+            aContext.Containers.Clear();
+
+            Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void ContextClearContainersWhenUnmodified()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+
+            Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+
+            aContext.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aContext.Containers.Clear();
+
+            Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void ContextClearContainersWhenModified()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            aContext.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+
+            Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            aContext.Containers.Clear();
+
+            Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void ContextClearContainersWhenDeleted()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            aContext.Containers.Add(value);
+
+            aContext.MarkUnmodified();
+            value.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aContext.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aContext.Containers.Clear();
+        }
         #endregion
 
         #region Subjects
@@ -578,6 +784,208 @@ namespace EAVFrameworkTest
             Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.Subjects.Add(new EAVSubject() { SubjectID = rng.Next() });
+        }
+
+        [TestMethod]
+        public void ContextRemoveFromSubjectsWhenNew()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+            value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+
+            Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+
+            aContext.Subjects.Remove(value);
+
+            Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void ContextRemoveFromSubjectsWhenUnmodified()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+            value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+
+            Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+
+            aContext.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aContext.Subjects.Remove(value);
+
+            Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void ContextRemoveFromSubjectsWhenModified()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+            value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+
+            Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+
+            aContext.MarkUnmodified();
+
+            aContext.Subjects.Remove(value);
+
+            Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void ContextRemoveFromSubjectsWhenDeleted()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+
+            aContext.MarkUnmodified();
+            value.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aContext.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aContext.Subjects.Remove(value);
+        }
+
+        [TestMethod]
+        public void ContextClearSubjectsWhenNew()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+
+            Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+
+            aContext.Subjects.Clear();
+
+            Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void ContextClearSubjectsWhenUnmodified()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+
+            Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+
+            aContext.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aContext.Subjects.Clear();
+
+            Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void ContextClearSubjectsWhenModified()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+
+            Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
+            Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
+            Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+
+            aContext.MarkUnmodified();
+
+            aContext.Subjects.Clear();
+
+            Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Containers' was not updated properly.");
+            Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
+            Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void ContextClearSubjectsWhenDeleted()
+        {
+            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            aContext.Subjects.Add(value);
+
+            aContext.MarkUnmodified();
+            value.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aContext.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aContext.Subjects.Clear();
         }
         #endregion
         #endregion
