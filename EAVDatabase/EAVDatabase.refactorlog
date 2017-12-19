@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="604f7b8a-9620-4990-b26d-50e66c70a5e2" ChangeDateTime="12/19/2017 19:21:39">
+    <Property Name="ElementName" Value="[dbo].[Context].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Context]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Context_ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="aac1326d-2987-4ff9-82e7-c18feacf437a" ChangeDateTime="12/19/2017 19:24:19">
+    <Property Name="ElementName" Value="[dbo].[Container].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Container]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Container_ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="50730ac9-6638-4be2-a6c8-1aaacf10bd61" ChangeDateTime="12/19/2017 19:37:01">
+    <Property Name="ElementName" Value="[dbo].[Attribute].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Attribute]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Attribute_ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="df5e2e8e-7092-4e30-a882-f388f77a2c8d" ChangeDateTime="12/19/2017 19:40:32">
+    <Property Name="ElementName" Value="[dbo].[Data_Type].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Data_Type]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Data_Type_ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="af2f7704-e375-40fa-9458-733fd29a5082" ChangeDateTime="12/19/2017 19:42:44">
+    <Property Name="ElementName" Value="[dbo].[Entity].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Entity]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Entity_ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5bf2a2bb-0256-4a52-b184-8714eba33e88" ChangeDateTime="12/19/2017 19:43:54">
+    <Property Name="ElementName" Value="[dbo].[Subject].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Subject]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Subject_ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bdfe64cc-f6a3-4ac4-8b7d-1f9d7a5dd1cb" ChangeDateTime="12/19/2017 19:46:49">
+    <Property Name="ElementName" Value="[dbo].[Instance].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Instance]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Instance_ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0d039318-4c95-4e27-87df-249349b3fb44" ChangeDateTime="12/19/2017 19:48:05">
+    <Property Name="ElementName" Value="[dbo].[Value].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Value]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Attribute_ID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6bb3c832-9d1b-4f0c-85c1-88e4e459ccae" ChangeDateTime="12/19/2017 20:40:26">
+    <Property Name="ElementName" Value="[dbo].[Attribute].[Display_Name]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Attribute]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Display_Text" />
+  </Operation>
+</Operations>
