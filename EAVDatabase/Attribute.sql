@@ -6,6 +6,7 @@
     [Name] NVARCHAR(1024) NOT NULL, 
     [Data_Name] NVARCHAR(256) NULL, 
     [Display_Text] NVARCHAR(1024) NULL, 
+	[Sequence] INT NOT NULL, 
     [Is_Key] BIT NOT NULL, 
     CONSTRAINT [FK_Attribute_Container] FOREIGN KEY ([Container_ID]) REFERENCES [Container]([Container_ID]), 
     CONSTRAINT [FK_Attribute_DataType] FOREIGN KEY ([Data_Type_ID]) REFERENCES [Data_Type]([Data_Type_ID]), 

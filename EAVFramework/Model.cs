@@ -442,6 +442,29 @@ namespace EAVFramework.Model
             set;
         }
 
+        [DataMember(Name = "Sequence")]
+        protected int sequence;
+        [IgnoreDataMember]
+        public int Sequence
+        {
+            get
+            {
+                return (sequence);
+            }
+            set
+            {
+                if (sequence != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Sequence' may not be modified when object in 'Deleted' state."));
+
+                    sequence = value;
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
         [DataMember(Name = "IsRepeating")]
         protected bool isRepeating;
         [IgnoreDataMember]
@@ -769,6 +792,29 @@ namespace EAVFramework.Model
                         throw (new InvalidOperationException("Operation failed. Property 'DataType' may not be modified when object in 'Deleted' state."));
 
                     dataType = value;
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
+        [DataMember(Name = "Sequence")]
+        protected int sequence;
+        [IgnoreDataMember]
+        public int Sequence
+        {
+            get
+            {
+                return (sequence);
+            }
+            set
+            {
+                if (sequence != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Sequence' may not be modified when object in 'Deleted' state."));
+
+                    sequence = value;
 
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }

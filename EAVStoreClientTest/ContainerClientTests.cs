@@ -295,7 +295,7 @@ namespace EAVStoreClientTestHarness
         {
             EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
             EAVStoreClient.Context dbContext = SelectRandomItem(this.DbContext.Contexts);
-            EAVStoreClient.Container dbContainerIn = CreateContainer(dbContext.Context_ID, null, Guid.NewGuid().ToString(), true);
+            EAVStoreClient.Container dbContainerIn = CreateContainer(dbContext.Context_ID, null, Guid.NewGuid().ToString(), rng.Next(), true);
 
             client.DeleteContainer(dbContainerIn.Container_ID);
 
@@ -312,7 +312,7 @@ namespace EAVStoreClientTestHarness
         {
             EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
             EAVStoreClient.Container dbParentContainer = SelectRandomItem<EAVStoreClient.Container>(this.DbContext.Containers);
-            EAVStoreClient.Container dbContainerIn = CreateContainer(dbParentContainer.Context_ID, dbParentContainer.Container_ID, Guid.NewGuid().ToString(), true);
+            EAVStoreClient.Container dbContainerIn = CreateContainer(dbParentContainer.Context_ID, dbParentContainer.Container_ID, Guid.NewGuid().ToString(), rng.Next(), true);
 
             client.DeleteContainer(dbContainerIn.Container_ID);
 

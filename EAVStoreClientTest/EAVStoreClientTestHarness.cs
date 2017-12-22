@@ -64,7 +64,7 @@ namespace EAVStoreClientTestHarness
             return (dbContext);
         }
 
-        private static EAVStoreClient.Container CreateContainer(int contextID, int? parentContainerID, string name, bool isRepeating = false)
+        private static EAVStoreClient.Container CreateContainer(int contextID, int? parentContainerID, string name, int sequence, bool isRepeating = false)
         {
             EAVStoreClient.Container dbContainer;
 
@@ -76,6 +76,7 @@ namespace EAVStoreClientTestHarness
                     Data_Name = name.ToUpper(),
                     Display_Text = name + ":",
                     Name = name,
+                    Sequence = sequence,
                     Is_Repeating = isRepeating,
                     Parent_Container_ID = parentContainerID
                 });
@@ -86,7 +87,7 @@ namespace EAVStoreClientTestHarness
             return (dbContainer);
         }
 
-        private static EAVStoreClient.Attribute CreateAttribute(int containerID, string name, EAV.Model.EAVDataType dataType, bool isKey = false)
+        private static EAVStoreClient.Attribute CreateAttribute(int containerID, string name, EAV.Model.EAVDataType dataType, int sequence, bool isKey = false)
         {
             EAVStoreClient.Attribute dbAttribute;
 
@@ -99,6 +100,7 @@ namespace EAVStoreClientTestHarness
                     Data_Type = ctx.LookupDataType(dataType),
                     Display_Text = name + ":",
                     Name = name,
+                    Sequence = sequence,
                     Is_Key = isKey,
                 });
 
@@ -203,11 +205,11 @@ namespace EAVStoreClientTestHarness
                 var typeList = new Queue<EAV.Model.EAVDataType>(Enum.GetValues(typeof(EAV.Model.EAVDataType)).OfType<EAV.Model.EAVDataType>());
 
                 // Context 1
-                dbContainer = CreateContainer(contexts[0].Context_ID, null, "Root Container 1-1", false);
+                dbContainer = CreateContainer(contexts[0].Context_ID, null, "Root Container 1-1", 1, false);
 
                 attributes.Clear();
                 foreach (EAV.Model.EAVDataType dt in Enum.GetValues(typeof(EAV.Model.EAVDataType)))
-                    attributes[dt] = CreateAttribute(dbContainer.Container_ID, String.Format("Attribute 1-1-{0}", ((int) dt) + 1), dt, dt == EAV.Model.EAVDataType.String);
+                    attributes[dt] = CreateAttribute(dbContainer.Container_ID, String.Format("Attribute 1-1-{0}", ((int) dt) + 1), dt, (int) dt, dt == EAV.Model.EAVDataType.String);
 
                 foreach (EAVStoreClient.Subject dbSubject in subjects)
                 {
@@ -222,11 +224,11 @@ namespace EAVStoreClientTestHarness
                 }
 
                 // Context 2
-                dbParentContainer = CreateContainer(contexts[1].Context_ID, null, "Root Container 2-1", false);
+                dbParentContainer = CreateContainer(contexts[1].Context_ID, null, "Root Container 2-1", 2, false);
 
                 attributes.Clear();
                 foreach (EAV.Model.EAVDataType dt in Enum.GetValues(typeof(EAV.Model.EAVDataType)))
-                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-{0}", ((int) dt) + 1), dt, dt == EAV.Model.EAVDataType.String);
+                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-{0}", ((int) dt) + 1), dt, (int)dt, dt == EAV.Model.EAVDataType.String);
 
                 foreach (EAVStoreClient.Subject dbSubject in subjects)
                 {
@@ -240,11 +242,11 @@ namespace EAVStoreClientTestHarness
                     typeList.Enqueue(typeList.Dequeue());
                 }
 
-                dbContainer = CreateContainer(contexts[1].Context_ID, dbParentContainer.Container_ID, "Child Container 2-1-1", false);
+                dbContainer = CreateContainer(contexts[1].Context_ID, dbParentContainer.Container_ID, "Child Container 2-1-1", 1, false);
 
                 attributes.Clear();
                 foreach (EAV.Model.EAVDataType dt in Enum.GetValues(typeof(EAV.Model.EAVDataType)))
-                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-1-{0}", ((int)dt) + 1), dt, dt == EAV.Model.EAVDataType.String);
+                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-1-{0}", ((int)dt) + 1), dt, (int)dt, dt == EAV.Model.EAVDataType.String);
 
                 foreach (EAVStoreClient.Subject dbSubject in subjects)
                 {
@@ -258,11 +260,11 @@ namespace EAVStoreClientTestHarness
                     typeList.Enqueue(typeList.Dequeue());
                 }
 
-                dbContainer = CreateContainer(contexts[1].Context_ID, dbParentContainer.Container_ID, "Child Container 2-1-2", true);
+                dbContainer = CreateContainer(contexts[1].Context_ID, dbParentContainer.Container_ID, "Child Container 2-1-2", 2, true);
 
                 attributes.Clear();
                 foreach (EAV.Model.EAVDataType dt in Enum.GetValues(typeof(EAV.Model.EAVDataType)))
-                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-2-{0}", ((int)dt) + 1), dt, dt == EAV.Model.EAVDataType.String);
+                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-2-{0}", ((int)dt) + 1), dt, (int)dt, dt == EAV.Model.EAVDataType.String);
 
                 foreach (EAVStoreClient.Subject dbSubject in subjects)
                 {
@@ -324,7 +326,7 @@ namespace EAVStoreClientTestHarness
         }
     }
 
-    public static class TeztExtensions
+    public static class TestExtensions
     {
         public static string Flip(this String value)
         {

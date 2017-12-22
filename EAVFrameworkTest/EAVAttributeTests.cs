@@ -31,6 +31,7 @@ namespace EAVFrameworkTest
             Assert.IsNull(anAttribute.DataName, "Property 'DataName' should be null on creation.");
             Assert.IsNull(anAttribute.DisplayText, "Property 'DisplayText' should be null on creation.");
             Assert.AreEqual(default(EAVDataType), anAttribute.DataType, "Property 'DataType' should be default on creation.");
+            Assert.AreEqual(0, anAttribute.Sequence, "Property 'Sequence' should be zero on creation.");
             Assert.IsFalse(anAttribute.IsKey, "Property 'IsKey' should be false on creation.");
 
             Assert.IsNull(anAttribute.Container, "Property 'Container' should be null on creation.");
@@ -489,6 +490,83 @@ namespace EAVFrameworkTest
             Assert.AreEqual(ObjectState.Deleted, anAttribute.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             anAttribute.DataType = GetRandomDataType();
+        }
+        #endregion
+
+        #region Sequence
+        [TestMethod]
+        public void AttributeSetSequenceWhenNew()
+        {
+            EAVAttribute anAttribute = new EAVAttribute();
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            int value = rng.Next();
+            anAttribute.Sequence = value;
+
+            Assert.AreEqual(value, anAttribute.Sequence, "Property 'Sequence' was not set properly.");
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void AttributeSetSequenceWhenUnmodified()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            int value = rng.Next();
+            anAttribute.Sequence = value;
+
+            Assert.AreEqual(value, anAttribute.Sequence, "Property 'Sequence' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void AttributeSetSequenceWhenModified()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            int value = rng.Next();
+            anAttribute.Sequence = value;
+
+            Assert.AreEqual(value, anAttribute.Sequence, "Property 'Sequence' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            value = rng.Next();
+            anAttribute.Sequence = value;
+
+            Assert.AreEqual(value, anAttribute.Sequence, "Property 'Sequence' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void AttributeSetSequenceWhenDeleted()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            anAttribute.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, anAttribute.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            anAttribute.Sequence = rng.Next();
         }
         #endregion
 

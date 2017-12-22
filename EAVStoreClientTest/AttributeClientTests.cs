@@ -206,7 +206,7 @@ namespace EAVStoreClientTestHarness
         {
             EAVStoreClient.EAVAttributeClient client = new EAVStoreClient.EAVAttributeClient();
             EAVStoreClient.Container dbContainer = SelectRandomItem(this.DbContext.Containers);
-            EAVStoreClient.Attribute dbAttributeIn = CreateAttribute(dbContainer.Container_ID, Guid.NewGuid().ToString(), EAV.Model.EAVDataType.String, true);
+            EAVStoreClient.Attribute dbAttributeIn = CreateAttribute(dbContainer.Container_ID, Guid.NewGuid().ToString(), EAV.Model.EAVDataType.String, rng.Next(), true);
 
             client.DeleteAttribute(dbAttributeIn.Attribute_ID);
 

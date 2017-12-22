@@ -32,6 +32,7 @@ namespace EAV.Model
         string Name { get; set; }
         string DataName { get; set; }
         string DisplayText { get; set; }
+        int Sequence { get; set; }
         bool IsRepeating { get; set; }
     }
 
@@ -46,6 +47,7 @@ namespace EAV.Model
         string DataName { get; set; }
         string DisplayText { get; set; }
         EAVDataType DataType { get; set; }
+        int Sequence { get; set; }
         bool IsKey { get; set; }
     }
     #endregion
@@ -142,6 +144,7 @@ namespace EAV.Model
         public string Name { get; set; }
         public string DataName { get; set; }
         public string DisplayText { get; set; }
+        public int Sequence { get; set; }
         public bool IsRepeating { get; set; }
     }
 
@@ -167,6 +170,7 @@ namespace EAV.Model
         public string DataName { get; set; }
         public string DisplayText { get; set; }
         public EAVDataType DataType { get; set; }
+        public int Sequence { get; set; }
         public bool IsKey { get; set; }
     }
     #endregion

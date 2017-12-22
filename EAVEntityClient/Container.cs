@@ -29,6 +29,7 @@ namespace EAVStoreClient
         public string Data_Name { get; set; }
         public string Display_Text { get; set; }
         public bool Is_Repeating { get; set; }
+        public int Sequence { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Attribute> Attributes { get; set; }
