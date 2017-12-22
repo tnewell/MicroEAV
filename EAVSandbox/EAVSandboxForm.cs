@@ -179,7 +179,7 @@ namespace EAVSandbox
             var context2 = contexts.First();
 
             // Get the associated metadata
-            eavClient.LoadMetadata(client, context2);
+            //eavClient.LoadMetadata(client, context2);
 
             // Mark deleted
             context2.MarkDeleted();
