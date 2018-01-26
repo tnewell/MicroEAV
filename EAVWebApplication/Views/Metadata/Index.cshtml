@@ -17,26 +17,6 @@
 @section scripts
 {
     <script>
-        //$(function () {
-        //    $('.validation-summary-errors').each(function () {
-        //        $(this).addClass('alert');
-        //        $(this).addClass('alert-danger');
-        //    });
-
-        //    $('form').each(function () {
-        //        $(this).find('div.form-group').each(function () {
-        //            if ($(this).find('span.field-validation-error').length > 0) {
-        //                $(this).addClass('has-error');
-        //                $(this).find('span.field-validation-error').
-        //                    removeClass('field-validation-error');
-        //            }
-        //        });
-        //    });
-
-        //});
-    </script>
-    
-    <script>
 
         // Necessary to keep load() calls from caching response
         $.ajaxSetup(
@@ -127,6 +107,7 @@
 
 @using (Html.BeginForm("SaveMetadata", "Metadata", FormMethod.Post, new { id = "ctlMetadataForm" }))
 {
+    <div id="ctlDialogContainer"></div>
 
     <div class="row" style="margin-top: 25px; margin-bottom: 20px; padding: 10px 3px 10px 3px; border: solid 1px #000033; border-radius: 3px; background-color: #d0e9eb; ">
 
@@ -141,9 +122,6 @@
     </div>
 
     <input type="submit" class="btn" value="Save" />
-
-    <div id="ctlDialogContainer">
-    </div>
 }
 
 

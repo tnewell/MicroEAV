@@ -124,9 +124,9 @@ namespace EAVWebApplication.Controllers
         {
             model = TempData["MetadataModel"] as MetadataModel;
 
-            // TODO: Maybe add new context here?
+            EAVContext context = new EAVContext() { ContextID = model.NextContextID };
 
-            model.TheStack.Push(new ContextModel());
+            model.TheStack.Push((ContextModel) context);
 
             TempData["MetadataModel"] = model;
 
@@ -140,18 +140,12 @@ namespace EAVWebApplication.Controllers
 
             model.SelectedContextID = postedModel.SelectedContextID;
 
-            EAVContext context = model.Contexts.Single(it => it.ContextID.GetValueOrDefault() == model.SelectedContextID);
+            EAVContext context = model.CurrentContext;
 
             if (!context.Containers.Any())
                 eavClient.LoadRootContainers(client, context);
 
-            model.TheStack.Push(new ContextModel()
-            {
-                ID = context.ContextID.GetValueOrDefault(),
-                Name = context.Name,
-                DataName = context.DataName,
-                DisplayText = context.DisplayText,
-            });
+            model.TheStack.Push((ContextModel)context);
 
             TempData["MetadataModel"] = model;
 
@@ -163,11 +157,11 @@ namespace EAVWebApplication.Controllers
         {
             model = TempData["MetadataModel"] as MetadataModel;
 
+            EAVContext context = model.CurrentContext;
+
             // See if we should be doing an update
             if (Boolean.Parse(Request["update"]))
             {
-                EAVContext context = model.Contexts.Single(it => it.ContextID.GetValueOrDefault() == postedModel.ID);
-
                 context.Name = postedModel.Name;
                 context.DataName = postedModel.DataName;
                 context.DisplayText = postedModel.DisplayText;
@@ -201,7 +195,7 @@ namespace EAVWebApplication.Controllers
 
             EAVRootContainer container = new EAVRootContainer() { ContainerID = model.NextContainerID, Context = model.CurrentContext };
 
-            model.TheStack.Push(new ContainerModel() { ID = container.ContainerID.Value });
+            model.TheStack.Push((ContainerModel) container);
 
             TempData["MetadataModel"] = model;
 
@@ -239,7 +233,7 @@ namespace EAVWebApplication.Controllers
             EAVContainer parentContainer = FindContainer(model.CurrentContext.Containers, postedModel.ID);
             EAVChildContainer childContainer = new EAVChildContainer() { ContainerID = model.NextContainerID, ParentContainer = parentContainer };
 
-            model.TheStack.Push(new ContainerModel() { ID = childContainer.ContainerID.Value, ParentID = childContainer.ParentContainerID.Value });
+            model.TheStack.Push((ContainerModel)childContainer);
 
             TempData["MetadataModel"] = model;
 

@@ -260,6 +260,10 @@
     <Content Include="Scripts\jquery-3.2.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EAV.Model\EAV.Model.csproj">
+      <Project>{DE98CD45-4020-44ED-A4A8-98D0BE529C4F}</Project>
+      <Name>EAV.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EAVFramework\EAVFramework.csproj">
       <Project>{4445fabc-0e5c-4843-8cc8-cca798982d95}</Project>
       <Name>EAVFramework</Name>
