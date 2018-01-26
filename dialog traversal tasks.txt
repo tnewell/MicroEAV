@@ -1,0 +1,115 @@
+
+UP
+---------
+Select context
+Persist [NO] dialog info
+POST
+Persist [NO] model info
+Set [context] model info
+Return [context] dialog info
+Display [context] dialog
+Set [context] validation
+
+DISMISS
+---------
+POST
+Restore [NO] model info
+Restore [NO] dialog info
+Reset [form] validation
+
+DOWN
+---------
+Validate [context] dialog info
+POST
+Update [context] model info
+Restore [NO] model info
+Restore [NO] dialog info
+Reset [form] validation
+
+===============================================================
+
+UP
+---------
+Select [root container]
+Persist [context] dialog info
+POST
+Persist [context] model info
+Set [root container] model info
+Return [root container] dialog info
+Display [container] dialog
+Set [root container] validation
+
+DISMISS
+---------
+POST
+Restore [context] model info
+Restore [context] dialog info
+Reset [context] validation
+
+DOWN
+---------
+Validate [container] dialog info
+POST
+Update [root container] model info
+Restore [context] model info
+Restore [context] dialog info
+Reset [context] validation
+
+===============================================================
+
+UP
+---------
+Select [child container]
+Persist [parent container] dialog info
+POST
+Persist [parent container] model info
+Set [child container] model info
+Return [child container] dialog info
+Display [container] dialog
+Set [container] validation
+
+DISMISS
+---------
+POST
+Restore [parent container] model info
+Restore [parent container] dialog info
+Reset [container] validation
+
+DOWN
+---------
+Validate [child container] dialog info
+POST
+Update [child container] model info
+Restore [parent container] model info
+Restore [parent container] dialog info
+Reset [container] validation
+
+===============================================================
+
+UP
+---------
+Select [attribute]
+Persist [container] dialog info
+POST
+Persist [container] model info
+Set [attribute] model info
+Return [attribute] dialog info
+Display [attribute] dialog
+Set [attribute] validation
+
+DISMISS
+---------
+POST
+Restore [NO] model info
+Restore [container] dialog info
+Reset [container] validation
+
+DOWN
+---------
+Validate [attribute] dialog info
+POST
+Update [attribute] model info
+Restore [NO] model info
+Restore [container] dialog info
+Reset [container] validation
+

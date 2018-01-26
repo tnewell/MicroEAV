@@ -1,0 +1,149 @@
+﻿@model MetadataModel
+
+<style type="text/css">
+    .field-validation-error
+    {
+        color: red;
+    }
+
+    .input-validation-error
+    {
+        border-color: #FF8080;
+        box-shadow: 0px 0px 6px 2px rgba(255,204,204,0.60), inset 0px 0px 1px 1px rgba(0,0,0,0.075);
+    }
+</style>
+
+
+@section scripts
+{
+    <script>
+        //$(function () {
+        //    $('.validation-summary-errors').each(function () {
+        //        $(this).addClass('alert');
+        //        $(this).addClass('alert-danger');
+        //    });
+
+        //    $('form').each(function () {
+        //        $(this).find('div.form-group').each(function () {
+        //            if ($(this).find('span.field-validation-error').length > 0) {
+        //                $(this).addClass('has-error');
+        //                $(this).find('span.field-validation-error').
+        //                    removeClass('field-validation-error');
+        //            }
+        //        });
+        //    });
+
+        //});
+    </script>
+    
+    <script>
+
+        // Necessary to keep load() calls from caching response
+        $.ajaxSetup(
+        {
+            cache: false,
+        });
+
+        //$.fn.bootstrapBtn = $.fn.button.noConflict();
+
+        function metadataAction(url)
+        {
+            $.ajax(
+            {
+                url: url,
+                type: 'POST',
+                data: new FormData(document.getElementById('ctlMetadataForm')),
+                processData: false,
+                contentType: false,
+                cache: false,
+                dataType: "json",
+                success: function(response, status, request)
+                {
+                    console.log('Connection to server made. Status: \'' + status + '\'.');
+
+                    if ($('#ctlDialogContainer').dialog('instance'))
+                        $('#ctlDialogContainer').dialog('destroy');
+
+                    if (response.dialogURL)
+                    {
+                        openDialog(response.dialogTitle, response.dialogURL, response.updateURL);
+                    }
+                    else
+                    {
+                        $('#ctlDialogContainer').empty();
+                        resetValidation('form');
+                    }
+                },
+                error: function(request, status, err)
+                {
+                    console.log('Connection to server not made. Status: \'' + status + '\'\r\nReported error: \'' + err + '\'\r\n')
+
+                    alert('[ERROR] Status: \'' + status + '\' - Error: ' + err + '.');
+                },
+                complete: function(request, status)
+                {
+                },
+            });
+        }
+
+        function openDialog(dialogTitle, dialogURL, updateURL)
+        {
+            $('#ctlDialogContainer').dialog(
+            {
+                modal: true,
+                appendTo: 'form',
+                title: dialogTitle,
+                open: function () { $('.ui-dialog-titlebar-close').hide(); $(this).load(dialogURL, function () { resetValidation('#ctlDialogContainer'); }); },
+                buttons:
+                {
+                    "Accept": function () { if ($('#ctlMetadataForm').valid()) { metadataAction(updateURL + '?update=true'); $(this).dialog('close'); } },
+                    "Dismiss": function () { metadataAction(updateURL + '?update=false'); $(this).dialog('close'); }
+                },
+            });
+        }
+
+        function resetValidation(selector)
+        {
+            var jqForm = $('form');
+
+            jqForm.removeData("unobtrusiveValidation").removeData("validator");
+
+            $.validator.unobtrusive.parse(selector || 'form');
+
+            jqForm.valid();
+        }
+
+        function contextEditUpdated(response, status, request)
+        {
+            $('#ctlContextList option[value="' + response.data.ID + '"]').text(response.data.Name).prop('selected', true);
+        }
+
+    </script>
+}
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("SaveMetadata", "Metadata", FormMethod.Post, new { id = "ctlMetadataForm" }))
+{
+
+    <div class="row" style="margin-top: 25px; margin-bottom: 20px; padding: 10px 3px 10px 3px; border: solid 1px #000033; border-radius: 3px; background-color: #d0e9eb; ">
+
+        <div class="col-md-2 col-lg-2">
+            @Html.DropDownListFor(m => m.SelectedContextID, Model.Contexts.OrderBy(it => it.Name).Select(it => new SelectListItem() { Text = it.Name ?? "<New Context>", Value = it.ContextID.GetValueOrDefault().ToString() }), new { id = "ctlContextList", @class = "form-control", onchange = "$('#ctlEditContext').val($('#ctlContextList').val() > 0 ? 'Edit Context' : 'Create Context');" })
+        </div>
+
+        <div class="col-md-2 col-lg-2">
+            <input type="button" class="btn" id="ctlEditContext" value="Create Context" onclick="metadataAction('@Url.Content("~/Metadata/EditContext")');" />
+        </div>
+
+    </div>
+
+    <input type="submit" class="btn" value="Save" />
+
+    <div id="ctlDialogContainer">
+    </div>
+}
+
+

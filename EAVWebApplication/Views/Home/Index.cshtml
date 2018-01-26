@@ -1,23 +1,4 @@
-﻿@section scripts
-{
-<script>
-
-    $("#dialog1").dialog({ autoOpen: false, modal: true });
-    $("#dialog2").dialog({ autoOpen: false, modal: true });
-
-    $("#opener1").click(function () {
-        $("#dialog1").dialog("open");
-    });
-
-    $("#opener2").click(function () {
-        $("#dialog2").dialog("open");
-    });
-
-</script>
-}
-
-
-@{
+﻿@{
     ViewBag.Title = "Home Page";
 }
 
@@ -47,22 +28,4 @@
         <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
     </div>
-</div>
-
-<hr />
-
-<div class="row">
-
-    <button id="opener1">open the dialog</button>
-
-    <div id="dialog1" title="Dialog Title">
-        I'm a dialog
-        <br />
-        <button id="opener2">open the other dialog</button>
-
-        <div id="dialog2" title="Dialog Title">
-            I'm a dialog too (get it?)
-        </div>
-    </div>
-
 </div>
