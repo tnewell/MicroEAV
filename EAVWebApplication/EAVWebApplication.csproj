@@ -250,9 +250,11 @@
     <Content Include="Views\Metadata\Index.cshtml" />
     <Content Include="Views\Metadata\ContextEditorDialog.cshtml" />
     <Content Include="Views\Metadata\ContainerEditorDialog.cshtml" />
+    <Content Include="Views\Metadata\EditorTemplates\ContainerModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Metadata\DisplayTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

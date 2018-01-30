@@ -21,4 +21,8 @@
 
 <hr />
 
+@Html.EditorFor(m => m.Containers)
+
+<hr />
+
 <input type="button" class="btn" id="ctlAddContainer" value="Add Root Container" onclick="metadataAction('@Url.Content("~/Metadata/AddRootContainer")'); $('ctlDialogContainer').dialog('close');" />

@@ -23,6 +23,10 @@ namespace EAVWebApplication.Controllers
         {
         }
 
+        protected bool UpdateRequested { get { return (Boolean.TryParse(Request["update"] ?? Boolean.FalseString, out Boolean x) ? x : false); } }
+
+        protected int ID { get { return (Int32.TryParse(Request["id"] ?? "0", out int x) ? x : 0); } }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -57,9 +61,6 @@ namespace EAVWebApplication.Controllers
         public ActionResult Index()
         {
             model = new MetadataModel();
-
-            // Add a blank
-            model.Contexts.Add(new EAVContext());
 
             // Add any existing contexts
             foreach (var item in eavClient.LoadContexts(client))
@@ -112,11 +113,13 @@ namespace EAVWebApplication.Controllers
         {
             model = TempData["MetadataModel"] as MetadataModel;
 
-            var dialogModel = model.TheStack.Pop();
+            ContextModel context = model.TheStack.Pop() as ContextModel;
+
+            context.InitializeContainers(model.CurrentContext);
 
             TempData["MetadataModel"] = model;
 
-            return PartialView("ContextEditorDialog", dialogModel);
+            return PartialView("ContextEditorDialog", context);
         }
 
         [HttpPost]
@@ -124,7 +127,11 @@ namespace EAVWebApplication.Controllers
         {
             model = TempData["MetadataModel"] as MetadataModel;
 
+            // Create a blank to work with and use that as our dialog model
             EAVContext context = new EAVContext() { ContextID = model.NextContextID };
+
+            model.Contexts.Add(context);
+            model.SelectedContextID = context.ContextID.Value;
 
             model.TheStack.Push((ContextModel) context);
 
@@ -142,8 +149,11 @@ namespace EAVWebApplication.Controllers
 
             EAVContext context = model.CurrentContext;
 
-            if (!context.Containers.Any())
+            // TODO: Check state after loading containers, verify that Modified doesn't go away if set
+            if (context.ObjectState != ObjectState.Deleted && context.ObjectState != ObjectState.New && !context.Containers.Any())
+            {
                 eavClient.LoadRootContainers(client, context);
+            }
 
             model.TheStack.Push((ContextModel)context);
 
@@ -159,12 +169,15 @@ namespace EAVWebApplication.Controllers
 
             EAVContext context = model.CurrentContext;
 
-            // See if we should be doing an update
-            if (Boolean.Parse(Request["update"]))
+            if (UpdateRequested)
             {
                 context.Name = postedModel.Name;
                 context.DataName = postedModel.DataName;
                 context.DisplayText = postedModel.DisplayText;
+            }
+            else if (context.ObjectState == ObjectState.New && (String.IsNullOrWhiteSpace(context.Name) || (String.IsNullOrWhiteSpace(context.DataName))))
+            {
+                model.Contexts.Remove(context);
             }
 
             TempData["MetadataModel"] = model;
@@ -179,11 +192,13 @@ namespace EAVWebApplication.Controllers
         {
             model = TempData["MetadataModel"] as MetadataModel;
 
-            var dialogModel = model.TheStack.Pop();
+            ContainerModel container = model.TheStack.Pop() as ContainerModel;
+
+            container.InitializeContainers(FindContainer(model.CurrentContext.Containers, container.ID));
 
             TempData["MetadataModel"] = model;
 
-            return PartialView("ContainerEditorDialog", dialogModel);
+            return PartialView("ContainerEditorDialog", container);
         }
 
         [HttpPost]
@@ -193,9 +208,26 @@ namespace EAVWebApplication.Controllers
 
             model.TheStack.Push(postedModel);
 
+            // Create a blank to work with and use that as our dialog model
             EAVRootContainer container = new EAVRootContainer() { ContainerID = model.NextContainerID, Context = model.CurrentContext };
 
             model.TheStack.Push((ContainerModel) container);
+
+            TempData["MetadataModel"] = model;
+
+            return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateRootContainer")));
+        }
+
+        [HttpPost]
+        public ActionResult EditRootContainer(ContextModel postedModel)
+        {
+            model = TempData["MetadataModel"] as MetadataModel;
+
+            model.TheStack.Push(postedModel);
+
+            EAVContainer container = FindContainer(model.CurrentContext.Containers, ID);
+
+            model.TheStack.Push((ContainerModel)container);
 
             TempData["MetadataModel"] = model;
 
@@ -207,15 +239,18 @@ namespace EAVWebApplication.Controllers
         {
             model = TempData["MetadataModel"] as MetadataModel;
 
-            EAVContainer container = FindContainer(model.CurrentContext.Containers, postedModel.ID);
+            EAVRootContainer container = FindContainer(model.CurrentContext.Containers, postedModel.ID) as EAVRootContainer;
 
-            // See if we should be doing an update
-            if (Boolean.Parse(Request["update"]))
+            if (UpdateRequested)
             {
                 container.Name = postedModel.Name;
                 container.DataName = postedModel.DataName;
                 container.DisplayText = postedModel.DisplayText;
                 container.IsRepeating = postedModel.IsRepeating;
+            }
+            else if (container.ObjectState == ObjectState.New && (String.IsNullOrWhiteSpace(container.Name) || (String.IsNullOrWhiteSpace(container.DataName))))
+            {
+                container.Context.Containers.Remove(container);
             }
 
             TempData["MetadataModel"] = model;
@@ -241,19 +276,38 @@ namespace EAVWebApplication.Controllers
         }
 
         [HttpPost]
+        public ActionResult EditChildContainer(ContextModel postedModel)
+        {
+            model = TempData["MetadataModel"] as MetadataModel;
+
+            model.TheStack.Push(postedModel);
+
+            EAVContainer container = FindContainer(model.CurrentContext.Containers, ID);
+
+            model.TheStack.Push((ContainerModel)container);
+
+            TempData["MetadataModel"] = model;
+
+            return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateChildContainer")));
+        }
+
+        [HttpPost]
         public ActionResult UpdateChildContainer(ContainerModel postedModel)
         {
             model = TempData["MetadataModel"] as MetadataModel;
 
-            EAVContainer container = FindContainer(model.CurrentContext.Containers, postedModel.ID);
+            EAVChildContainer container = FindContainer(model.CurrentContext.Containers, postedModel.ID) as EAVChildContainer;
 
-            // See if we should be doing an update
-            if (Boolean.Parse(Request["update"]))
+            if (UpdateRequested)
             {
                 container.Name = postedModel.Name;
                 container.DataName = postedModel.DataName;
                 container.DisplayText = postedModel.DisplayText;
                 container.IsRepeating = postedModel.IsRepeating;
+            }
+            else if (container.ObjectState == ObjectState.New && (String.IsNullOrWhiteSpace(container.Name) || (String.IsNullOrWhiteSpace(container.DataName))))
+            {
+                container.ParentContainer.ChildContainers.Remove(container);
             }
 
             TempData["MetadataModel"] = model;

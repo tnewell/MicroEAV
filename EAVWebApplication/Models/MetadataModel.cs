@@ -47,17 +47,20 @@ public class ContextModel
 {
     public static explicit operator ContextModel(EAVContext context)
     {
-        return (new ContextModel()
-        {
-            ID = context.ContextID.GetValueOrDefault(),
-            Name = context.Name,
-            DataName = context.DataName,
-            DisplayText = context.DisplayText,
-        });
+        return (new ContextModel(context));
     }
 
     public ContextModel()
     {
+        containers = new List<ContainerModel>();
+    }
+
+    public ContextModel(EAVContext context)
+    {
+        ID = context.ContextID.GetValueOrDefault();
+        Name = context.Name;
+        DataName = context.DataName;
+        DisplayText = context.DisplayText;
     }
 
     public int ID { get; set; }
@@ -66,38 +69,52 @@ public class ContextModel
     [Required(ErrorMessage = "(required)")]
     public string DataName { get; set; }
     public string DisplayText { get; set; }
+
+    private List<ContainerModel> containers;
+    public ICollection<ContainerModel> Containers { get { return (containers); } }
+
+    public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
+
+    public void InitializeContainers(EAVContext context)
+    {
+        containers.Clear();
+        containers.AddRange(context.Containers.Select(it => (ContainerModel) it));
+    }
 }
 
 public class ContainerModel
 {
+    public static explicit operator ContainerModel(EAVContainer container)
+    {
+        return (new ContainerModel(container));
+    }
+
     public static explicit operator ContainerModel(EAVRootContainer container)
     {
-        return (new ContainerModel()
-        {
-            ID = container.ContainerID.GetValueOrDefault(),
-            Name = container.Name,
-            DataName = container.DataName,
-            DisplayText = container.DisplayText,
-            IsRepeating = container.IsRepeating,
-        });
+        return (new ContainerModel(container));
     }
 
     public static explicit operator ContainerModel(EAVChildContainer container)
     {
-        return (new ContainerModel()
-        {
-            ID = container.ContainerID.GetValueOrDefault(),
-            ParentID = container.ParentContainerID.GetValueOrDefault(),
-            Name = container.Name,
-            DataName = container.DataName,
-            DisplayText = container.DisplayText,
-            IsRepeating = container.IsRepeating,
-        });
+        return (new ContainerModel(container));
     }
 
     public ContainerModel()
     {
+        childContainers = new List<ContainerModel>();
+        attributes = new List<AttributeModel>();
     }
+
+    public ContainerModel(EAVContainer container)
+    {
+        ID = container.ContainerID.GetValueOrDefault();
+        Name = container.Name;
+        DataName = container.DataName;
+        DisplayText = container.DisplayText;
+        IsRepeating = container.IsRepeating;
+    }
+
+    public bool ChildContainer { get; set; }
 
     public int ID { get; set; }
     public int ParentID { get; set; }
@@ -107,28 +124,51 @@ public class ContainerModel
     public string DataName { get; set; }
     public string DisplayText { get; set; }
     public bool IsRepeating { get; set;  }
+
+    private List<ContainerModel> childContainers;
+    public ICollection<ContainerModel> ChildContainers { get { return (childContainers); } }
+
+    private List<AttributeModel> attributes;
+    public ICollection<AttributeModel> Attributes { get { return (attributes); } }
+
+    public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
+
+    public void InitializeContainers(EAVContainer container)
+    {
+        childContainers.Clear();
+        childContainers.AddRange(container.ChildContainers.Select(it => (ContainerModel)it));
+    }
+
+    public void InitializeAttributes(EAVContainer container)
+    {
+        attributes.Clear();
+        attributes.AddRange(container.Attributes.Select(it => (AttributeModel)it));
+    }
 }
 
 public class AttributeModel
 {
     public static explicit operator AttributeModel(EAVAttribute attribute)
     {
-        return (new AttributeModel()
-        {
-            ID = attribute.AttributeID.GetValueOrDefault(),
-            Name = attribute.Name,
-            DataName = attribute.DataName,
-            DisplayText = attribute.DisplayText,
-            DataType = attribute.DataType,
-            IsKey = attribute.IsKey,
-        });
+        return (new AttributeModel(attribute));
     }
 
     public AttributeModel()
     {
     }
 
+    public AttributeModel(EAVAttribute attribute)
+    {
+        ID = attribute.AttributeID.GetValueOrDefault();
+        Name = attribute.Name;
+        DataName = attribute.DataName;
+        DisplayText = attribute.DisplayText;
+        DataType = attribute.DataType;
+        IsKey = attribute.IsKey;
+    }
+
     public int ID { get; set; }
+    public int ContainerID { get; set; }
     [Required(ErrorMessage = "(required)")]
     public string Name { get; set; }
     [Required(ErrorMessage = "(required)")]
@@ -136,4 +176,6 @@ public class AttributeModel
     public string DisplayText { get; set; }
     public EAVDataType DataType { get; set; }
     public bool IsKey { get; set; }
+
+    public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 }
