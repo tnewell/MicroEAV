@@ -61,6 +61,8 @@ public class ContextModel
         Name = context.Name;
         DataName = context.DataName;
         DisplayText = context.DisplayText;
+
+        containers = new List<ContainerModel>();
     }
 
     public int ID { get; set; }
@@ -108,10 +110,14 @@ public class ContainerModel
     public ContainerModel(EAVContainer container)
     {
         ID = container.ContainerID.GetValueOrDefault();
+        ParentID = container.ParentContainerID.GetValueOrDefault();
         Name = container.Name;
         DataName = container.DataName;
         DisplayText = container.DisplayText;
         IsRepeating = container.IsRepeating;
+
+        childContainers = new List<ContainerModel>();
+        attributes = new List<AttributeModel>();
     }
 
     public bool ChildContainer { get; set; }
