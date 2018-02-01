@@ -230,6 +230,8 @@
     <Content Include="Views\Metadata\ContextEditorDialog.cshtml" />
     <Content Include="Views\Metadata\ContainerEditorDialog.cshtml" />
     <Content Include="Views\Metadata\EditorTemplates\ContainerModel.cshtml" />
+    <Content Include="Views\Metadata\AttributeEditorDialog.cshtml" />
+    <Content Include="Views\Metadata\EditorTemplates\AttributeModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

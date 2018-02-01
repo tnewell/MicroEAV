@@ -1,6 +1,7 @@
-﻿@model ContextModel
+﻿@model AttributeModel
 
 @Html.HiddenFor(m => m.ID)
+@Html.HiddenFor(m => m.ContainerID)
 
 <div class="form-group">
     @Html.LabelFor(m => m.Name, new { htmlAttributes = new { @class = "form-label" } })
@@ -19,13 +20,14 @@
     @Html.EditorFor(m => m.DisplayText, new { htmlAttributes = new { @class = "form-control" } })
 </div>
 
-@if (Model.Containers.Any())
-{
-    <hr />
+<div class="form-group">
+    @Html.LabelFor(m => m.DataType, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.EnumDropDownListFor(m => m.DataType, new { @class = "form-control" })
+</div>
 
-    @Html.EditorFor(m => m.Containers)
-}
+<div class="form-group">
+    <label>
+        @Html.EditorFor(m => m.IsKey) <span style="font-weight: bold;">Key Attribute</span>
+    </label>
+</div>
 
-<hr />
-
-<input type="button" class="btn" id="ctlAddContainer" value="Add Root Container" onclick="metadataAction('@Url.Content("~/Metadata/AddRootContainer")'); $('ctlDialogContainer').dialog('close');" />

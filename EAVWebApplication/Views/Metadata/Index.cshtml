@@ -24,8 +24,6 @@
             cache: false,
         });
 
-        //$.fn.bootstrapBtn = $.fn.button.noConflict();
-
         function metadataAction(url)
         {
             $.ajax(
@@ -51,6 +49,16 @@
                     else
                     {
                         $('#ctlDialogContainer').empty();
+
+                        var ctlDropdown = $("#ctlContextList");
+
+                        ctlDropdown.find('option').remove();
+
+                        $.each(response.contextList[0], function ()
+                        {
+                            ctlDropdown.append($("<option />").val(this.Value).text(this.Text));
+                        });
+
                         resetValidation('form');
                     }
                 },

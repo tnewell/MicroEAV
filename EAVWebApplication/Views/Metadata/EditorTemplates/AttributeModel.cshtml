@@ -1,0 +1,5 @@
+﻿@model AttributeModel
+
+<div>
+    <label>Name:</label> <span style="text-decoration: underline; cursor: pointer;" onclick="metadataAction('@Url.Content("~/Metadata/EditAttribute")?id=' + @Model.ID);">@Html.DisplayFor(m => m.Name)</span> <label>Data Name:</label> @Html.DisplayFor(m => m.DataName) <label>Display Text:</label> @Html.DisplayFor(m => m.DisplayText)
+</div>

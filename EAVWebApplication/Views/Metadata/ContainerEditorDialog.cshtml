@@ -4,33 +4,47 @@
 @Html.HiddenFor(m => m.ParentID)
 
 <div class="form-group">
-    <label>Name</label>
+    @Html.LabelFor(m => m.Name, new { htmlAttributes = new { @class = "form-label" } })
     @Html.ValidationMessageFor(m => m.Name)
-    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+    @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })
 </div>
 
 <div class="form-group">
-    <label>Data Name</label>
+    @Html.LabelFor(m => m.DataName, new { htmlAttributes = new { @class = "form-control" } })
     @Html.ValidationMessageFor(m => m.DataName)
-    @Html.TextBoxFor(m => m.DataName, new { @class = "form-control" })
+    @Html.EditorFor(m => m.DataName, new { htmlAttributes = new { @class = "form-control" } })
 </div>
 
 <div class="form-group">
-    <label>Display Text</label>
-    @Html.TextBoxFor(m => m.DisplayText, new { @class = "form-control" })
+    @Html.LabelFor(m => m.DisplayText, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.EditorFor(m => m.DisplayText, new { htmlAttributes = new { @class = "form-control" } })
 </div>
 
 <div class="form-group">
     <label>
-        @Html.CheckBoxFor(m => m.IsRepeating) <span style="font-weight: bold;">Repeating</span>
+        @Html.EditorFor(m => m.IsRepeating) <span style="font-weight: bold;">Repeating</span>
     </label>
 </div>
 
-<hr />
+@if (Model.ChildContainers.Any())
+{
+    <hr />
 
-@Html.EditorFor(m => m.ChildContainers)
+    @Html.EditorFor(m => m.ChildContainers)
+}
 
 <hr />
 
 <input type="button" class="btn" id="ctlAddContainer" value="Add Child Container" onclick="metadataAction('@Url.Content("~/Metadata/AddChildContainer")'); $('ctlDialogContainer').dialog('close');" />
+
+@if (Model.Attributes.Any())
+{
+    <hr />
+
+    @Html.EditorFor(m => m.Attributes)
+}
+
+<hr />
+
+<input type="button" class="btn" id="ctlAddAttribute" value="Add Attribute" onclick="metadataAction('@Url.Content("~/Metadata/AddAttribute")'); $('ctlDialogContainer').dialog('close');" />
 

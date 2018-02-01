@@ -12,12 +12,13 @@ public class MetadataModel
     {
         NextContextID = Int32.MinValue + 1;
         NextContainerID = Int32.MinValue + 1;
+        NextAttributeID = Int32.MinValue + 1;
 
         contexts = new List<EAVContext>();
     }
 
-    private Stack<object> theStack = new Stack<object>();
-    public Stack<object> TheStack { get { return (theStack); } }
+    private Stack<object> dialogStack = new Stack<object>();
+    public Stack<object> DialogStack { get { return (dialogStack); } }
 
     private List<EAVContext> contexts;
     public ICollection<EAVContext> Contexts { get { return (contexts); } }
@@ -36,6 +37,14 @@ public class MetadataModel
     {
         get { lock (containerIDLock) { return (nextContainerID++); } }
         private set { lock (containerIDLock) { nextContainerID = value; } }
+    }
+
+    private object attributeIDLock = new object();
+    private int nextAttributeID;
+    public int NextAttributeID
+    {
+        get { lock (attributeIDLock) { return (nextAttributeID++); } }
+        private set { lock (attributeIDLock) { nextAttributeID = value; } }
     }
 
     public int SelectedContextID { get; set; }
@@ -66,10 +75,16 @@ public class ContextModel
     }
 
     public int ID { get; set; }
+
+    [Display(Name = "Name")]
     [Required(ErrorMessage = "(required)")]
     public string Name { get; set; }
+
+    [Display(Name = "Data Name")]
     [Required(ErrorMessage = "(required)")]
     public string DataName { get; set; }
+
+    [Display(Name = "Display Text")]
     public string DisplayText { get; set; }
 
     private List<ContainerModel> containers;
@@ -123,12 +138,21 @@ public class ContainerModel
     public bool ChildContainer { get; set; }
 
     public int ID { get; set; }
+
     public int ParentID { get; set; }
+
+    [Display(Name = "Name")]
     [Required(ErrorMessage = "(required)")]
     public string Name { get; set; }
+
+    [Display(Name = "Data Name")]
     [Required(ErrorMessage = "(required)")]
     public string DataName { get; set; }
+
+    [Display(Name = "Display Text")]
     public string DisplayText { get; set; }
+
+    [Display(Name = "Repeating")]
     public bool IsRepeating { get; set;  }
 
     private List<ContainerModel> childContainers;
@@ -166,6 +190,7 @@ public class AttributeModel
     public AttributeModel(EAVAttribute attribute)
     {
         ID = attribute.AttributeID.GetValueOrDefault();
+        ContainerID = attribute.ContainerID.GetValueOrDefault();
         Name = attribute.Name;
         DataName = attribute.DataName;
         DisplayText = attribute.DisplayText;
@@ -174,13 +199,24 @@ public class AttributeModel
     }
 
     public int ID { get; set; }
+
     public int ContainerID { get; set; }
+
+    [Display(Name = "Name")]
     [Required(ErrorMessage = "(required)")]
     public string Name { get; set; }
+
+    [Display(Name = "Data Name")]
     [Required(ErrorMessage = "(required)")]
     public string DataName { get; set; }
+
+    [Display(Name = "Display Text")]
     public string DisplayText { get; set; }
+
+    [Display(Name = "Data Type")]
     public EAVDataType DataType { get; set; }
+
+    [Display(Name = "Key")]
     public bool IsKey { get; set; }
 
     public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
