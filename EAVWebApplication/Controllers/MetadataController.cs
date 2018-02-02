@@ -112,7 +112,7 @@ namespace EAVWebApplication.Controllers
 
             ContextModel context = metadata.DialogStack.Pop() as ContextModel;
 
-            context.InitializeContainers(metadata.CurrentContext);
+            context.InitializeContainers(metadata.CurrentContext.Containers);
 
             TempData["Metadata"] = metadata;
 
@@ -192,8 +192,8 @@ namespace EAVWebApplication.Controllers
             ContainerModel container = metadata.DialogStack.Pop() as ContainerModel;
             EAVContainer parentContainer = FindContainer(metadata.CurrentContext.Containers, container.ID);
 
-            container.InitializeContainers(parentContainer);
-            container.InitializeAttributes(parentContainer);
+            container.InitializeContainers(parentContainer.ChildContainers);
+            container.InitializeAttributes(parentContainer.Attributes);
 
             TempData["Metadata"] = metadata;
 

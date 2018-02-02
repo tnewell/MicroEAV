@@ -95,10 +95,10 @@ public class ContextModel
 
     public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 
-    public void InitializeContainers(EAVContext context)
+    public void InitializeContainers(IEnumerable<EAVContainer> containers)
     {
-        containers.Clear();
-        containers.AddRange(context.Containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel) it));
+        this.containers.Clear();
+        this.containers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel) it));
     }
 }
 
@@ -169,16 +169,16 @@ public class ContainerModel
 
     public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 
-    public void InitializeContainers(EAVContainer container)
+    public void InitializeContainers(IEnumerable<EAVContainer> containers)
     {
-        childContainers.Clear();
-        childContainers.AddRange(container.ChildContainers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel)it));
+        this.childContainers.Clear();
+        this.childContainers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel)it));
     }
 
-    public void InitializeAttributes(EAVContainer container)
+    public void InitializeAttributes(IEnumerable<EAVAttribute> attributes)
     {
-        attributes.Clear();
-        attributes.AddRange(container.Attributes.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (AttributeModel)it));
+        this.attributes.Clear();
+        this.attributes.AddRange(attributes.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (AttributeModel)it));
     }
 }
 

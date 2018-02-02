@@ -18,6 +18,8 @@
 {
     <script>
 
+        $.fn.bootstrapBtn = $.fn.button.noConflict();
+
         // Necessary to keep load() calls from caching response
         $.ajaxSetup(
         {
@@ -79,12 +81,23 @@
                 appendTo: 'form',
                 title: dialogTitle,
                 width: 640,
-                open: function () { $('.ui-dialog-titlebar-close').hide(); $(this).load(dialogURL, function () { resetValidation('#ctlDialogContainer'); }); },
+                show: "fade", // Having this here actually allows the first input control to get focus rather than the 'Accept' button.
+                open: function () { $('.ui-dialog-titlebar-close').hide(); $('div.ui-dialog-buttonpane span.ui-button-icon').removeClass('ui-button-icon ui-icon'); $(this).load(dialogURL, function () { resetValidation('#ctlDialogContainer'); }); },
                 buttons:
-                {
-                    "Accept": function () { if ($('#ctlMetadataForm').valid()) { dialogAction(updateURL + '?update=true'); $(this).dialog('close'); } },
-                    "Dismiss": function () { dialogAction(updateURL + '?update=false'); $(this).dialog('close'); }
-                },
+                [
+                    {
+                        class: "btn btn-sm",
+                        text: "Accept",
+                        icon: "glyphicon glyphicon-ok",
+                        click: function () { if ($('#ctlMetadataForm').valid()) { dialogAction(updateURL + '?update=true'); $(this).dialog('close'); } },
+                    },
+                    {
+                        class: "btn btn-sm",
+                        text: "Discard",
+                        icon: "glyphicon glyphicon-remove",
+                        click: function () { dialogAction(updateURL + '?update=false'); $(this).dialog('close'); },
+                    }
+                ],
             });
         }
 
@@ -117,8 +130,8 @@
         </div>
 
         <div class="col-md-3 col-lg-3">
-            <input type="button" class="btn" id="ctlEditContext" value="Edit Context" onclick="dialogAction('@Url.Content("~/Metadata/EditContext")');" />
-            <input type="button" class="btn" id="ctlNewContext" value="Create Context" onclick="dialogAction('@Url.Content("~/Metadata/AddContext")');" />
+            <button type="button" class="btn btn-sm" id="ctlEditContext" onclick="dialogAction('@Url.Content("~/Metadata/EditContext")');"><span class="glyphicon glyphicon-pencil"></span> Edit Context</button>
+            <button type="button" class="btn btn-sm" id="ctlNewContext" onclick="dialogAction('@Url.Content("~/Metadata/AddContext")');"><span class="glyphicon glyphicon-plus"></span> New Context</button>
         </div>
 
     </div>

@@ -36,7 +36,7 @@
 
 <hr />
 
-<input type="button" class="btn" id="ctlAddContainer" value="Add Child Container" onclick="dialogAction('@Url.Content("~/Metadata/AddChildContainer")'); $('ctlDialogContainer').dialog('close');" />
+<button type="button" class="btn btn-sm" id="ctlAddContainer" onclick="dialogAction('@Url.Content("~/Metadata/AddChildContainer")'); $('#ctlDialogContainer').dialog('close');"><span class="glyphicon glyphicon-plus"></span> Add Child Container</button>
 
 @if (Model.Attributes.Any())
 {
@@ -47,5 +47,5 @@
 
 <hr />
 
-<input type="button" class="btn" id="ctlAddAttribute" value="Add Attribute" onclick="dialogAction('@Url.Content("~/Metadata/AddAttribute")'); $('ctlDialogContainer').dialog('close');" />
+<button type="button" class="btn btn-sm" id="ctlAddAttribute" onclick="dialogAction('@Url.Content("~/Metadata/AddAttribute")'); $('#ctlDialogContainer').dialog('close');"><span class="glyphicon glyphicon-plus"></span> Add Attribute</button>
 

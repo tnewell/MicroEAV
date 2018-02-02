@@ -29,4 +29,4 @@
 
 <hr />
 
-<input type="button" class="btn" id="ctlAddContainer" value="Add Root Container" onclick="dialogAction('@Url.Content("~/Metadata/AddRootContainer")'); $('ctlDialogContainer').dialog('close');" />
+<button type="button" class="btn btn-sm" id="ctlAddContainer" onclick="dialogAction('@Url.Content("~/Metadata/AddRootContainer")'); $('#ctlDialogContainer').dialog('close');"><span class="glyphicon glyphicon-plus"></span> Add Root Container</button>
