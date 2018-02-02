@@ -24,7 +24,7 @@
             cache: false,
         });
 
-        function metadataAction(url)
+        function dialogAction(url)
         {
             $.ajax(
             {
@@ -54,10 +54,7 @@
 
                         ctlDropdown.find('option').remove();
 
-                        $.each(response.contextList[0], function ()
-                        {
-                            ctlDropdown.append($("<option />").val(this.Value).text(this.Text));
-                        });
+                        $.each(response.contextList[0], function () { ctlDropdown.append($("<option />").val(this.Value).text(this.Text)); });
 
                         resetValidation('form');
                     }
@@ -85,8 +82,8 @@
                 open: function () { $('.ui-dialog-titlebar-close').hide(); $(this).load(dialogURL, function () { resetValidation('#ctlDialogContainer'); }); },
                 buttons:
                 {
-                    "Accept": function () { if ($('#ctlMetadataForm').valid()) { metadataAction(updateURL + '?update=true'); $(this).dialog('close'); } },
-                    "Dismiss": function () { metadataAction(updateURL + '?update=false'); $(this).dialog('close'); }
+                    "Accept": function () { if ($('#ctlMetadataForm').valid()) { dialogAction(updateURL + '?update=true'); $(this).dialog('close'); } },
+                    "Dismiss": function () { dialogAction(updateURL + '?update=false'); $(this).dialog('close'); }
                 },
             });
         }
@@ -100,11 +97,6 @@
             $.validator.unobtrusive.parse(selector || 'form');
 
             jqForm.valid();
-        }
-
-        function contextEditUpdated(response, status, request)
-        {
-            $('#ctlContextList option[value="' + response.data.ID + '"]').text(response.data.Name).prop('selected', true);
         }
 
     </script>
@@ -125,8 +117,8 @@
         </div>
 
         <div class="col-md-3 col-lg-3">
-            <input type="button" class="btn" id="ctlEditContext" value="Edit Context" onclick="metadataAction('@Url.Content("~/Metadata/EditContext")');" />
-            <input type="button" class="btn" id="ctlNewContext" value="Create Context" onclick="metadataAction('@Url.Content("~/Metadata/AddContext")');" />
+            <input type="button" class="btn" id="ctlEditContext" value="Edit Context" onclick="dialogAction('@Url.Content("~/Metadata/EditContext")');" />
+            <input type="button" class="btn" id="ctlNewContext" value="Create Context" onclick="dialogAction('@Url.Content("~/Metadata/AddContext")');" />
         </div>
 
     </div>

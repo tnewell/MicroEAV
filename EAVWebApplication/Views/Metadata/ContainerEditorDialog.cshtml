@@ -2,21 +2,22 @@
 
 @Html.HiddenFor(m => m.ID)
 @Html.HiddenFor(m => m.ParentID)
+@Html.HiddenFor(m => m.Existing)
 
 <div class="form-group">
-    @Html.LabelFor(m => m.Name, new { htmlAttributes = new { @class = "form-label" } })
+    @Html.LabelFor(m => m.Name, new { @class = "form-label" })
     @Html.ValidationMessageFor(m => m.Name)
     @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })
 </div>
 
 <div class="form-group">
-    @Html.LabelFor(m => m.DataName, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.LabelFor(m => m.DataName, new { @class = "form-label" })
     @Html.ValidationMessageFor(m => m.DataName)
     @Html.EditorFor(m => m.DataName, new { htmlAttributes = new { @class = "form-control" } })
 </div>
 
 <div class="form-group">
-    @Html.LabelFor(m => m.DisplayText, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.LabelFor(m => m.DisplayText, new { @class = "form-label" })
     @Html.EditorFor(m => m.DisplayText, new { htmlAttributes = new { @class = "form-control" } })
 </div>
 
@@ -35,7 +36,7 @@
 
 <hr />
 
-<input type="button" class="btn" id="ctlAddContainer" value="Add Child Container" onclick="metadataAction('@Url.Content("~/Metadata/AddChildContainer")'); $('ctlDialogContainer').dialog('close');" />
+<input type="button" class="btn" id="ctlAddContainer" value="Add Child Container" onclick="dialogAction('@Url.Content("~/Metadata/AddChildContainer")'); $('ctlDialogContainer').dialog('close');" />
 
 @if (Model.Attributes.Any())
 {
@@ -46,5 +47,5 @@
 
 <hr />
 
-<input type="button" class="btn" id="ctlAddAttribute" value="Add Attribute" onclick="metadataAction('@Url.Content("~/Metadata/AddAttribute")'); $('ctlDialogContainer').dialog('close');" />
+<input type="button" class="btn" id="ctlAddAttribute" value="Add Attribute" onclick="dialogAction('@Url.Content("~/Metadata/AddAttribute")'); $('ctlDialogContainer').dialog('close');" />
 

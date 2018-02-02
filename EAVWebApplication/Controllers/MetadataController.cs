@@ -152,7 +152,7 @@ namespace EAVWebApplication.Controllers
                 eavClient.LoadRootContainers(client, context);
             }
 
-            metadata.DialogStack.Push((ContextModel)context);
+            metadata.DialogStack.Push(new ContextModel(context) { Existing = true });
 
             TempData["Metadata"] = metadata;
 
@@ -190,10 +190,10 @@ namespace EAVWebApplication.Controllers
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
             ContainerModel container = metadata.DialogStack.Pop() as ContainerModel;
-            EAVContainer parentContiner = FindContainer(metadata.CurrentContext.Containers, container.ID);
+            EAVContainer parentContainer = FindContainer(metadata.CurrentContext.Containers, container.ID);
 
-            container.InitializeContainers(parentContiner);
-            container.InitializeAttributes(parentContiner);
+            container.InitializeContainers(parentContainer);
+            container.InitializeAttributes(parentContainer);
 
             TempData["Metadata"] = metadata;
 
@@ -226,11 +226,30 @@ namespace EAVWebApplication.Controllers
 
             EAVContainer container = FindContainer(metadata.CurrentContext.Containers, ID);
 
-            metadata.DialogStack.Push((ContainerModel)container);
+            metadata.DialogStack.Push(new ContainerModel(container) { Existing = true });
 
             TempData["Metadata"] = metadata;
 
             return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateRootContainer"), null));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteRootContainer(ContextModel postedModel)
+        {
+            MetadataModel metadata = TempData["Metadata"] as MetadataModel;
+
+            metadata.DialogStack.Push(postedModel);
+
+            EAVRootContainer container = FindContainer(metadata.CurrentContext.Containers, ID) as EAVRootContainer;
+
+            if (container.ObjectState != ObjectState.New)
+                container.MarkDeleted();
+            else
+                metadata.CurrentContext.Containers.Remove(container);
+
+            TempData["Metadata"] = metadata;
+
+            return (BuildResult("Context Editor", Url.Content("~/Metadata/ContextEditorDialog"), Url.Content("~/Metadata/UpdateContext"), null));
         }
 
         [HttpPost]
@@ -283,11 +302,33 @@ namespace EAVWebApplication.Controllers
 
             EAVContainer container = FindContainer(metadata.CurrentContext.Containers, ID);
 
-            metadata.DialogStack.Push((ContainerModel)container);
+            metadata.DialogStack.Push(new ContainerModel(container) { Existing = true });
 
             TempData["Metadata"] = metadata;
 
             return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateChildContainer"), null));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteChildContainer(ContainerModel postedModel)
+        {
+            MetadataModel metadata = TempData["Metadata"] as MetadataModel;
+
+            metadata.DialogStack.Push(postedModel);
+
+            EAVChildContainer container = FindContainer(metadata.CurrentContext.Containers, ID) as EAVChildContainer;
+
+            if (container.ObjectState != ObjectState.New)
+                container.MarkDeleted();
+            else
+                container.ParentContainer.ChildContainers.Remove(container);
+
+            TempData["Metadata"] = metadata;
+
+            if (container.ParentContainer is EAVRootContainer)
+                return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateRootContainer"), null));
+            else
+                return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateChildContainer"), null));
         }
 
         [HttpPost]
@@ -358,11 +399,34 @@ namespace EAVWebApplication.Controllers
             EAVContainer container = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
             EAVAttribute attribute = container.Attributes.Single(it => it.AttributeID == ID);
 
-            metadata.DialogStack.Push((AttributeModel)attribute);
+            metadata.DialogStack.Push(new AttributeModel(attribute) { Existing = true });
 
             TempData["Metadata"] = metadata;
 
             return (BuildResult("Attribute Editor", Url.Content("~/Metadata/AttributeEditorDialog"), Url.Content("~/Metadata/UpdateAttribute"), null));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteAttribute(ContainerModel postedModel)
+        {
+            MetadataModel metadata = TempData["Metadata"] as MetadataModel;
+
+            metadata.DialogStack.Push(postedModel);
+
+            EAVContainer container = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
+            EAVAttribute attribute = container.Attributes.Single(it => it.AttributeID == ID);
+
+            if (attribute.ObjectState != ObjectState.New)
+                attribute.MarkDeleted();
+            else
+                container.Attributes.Remove(attribute);
+
+            TempData["Metadata"] = metadata;
+
+            if (container is EAVRootContainer)
+                return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateRootContainer"), null));
+            else
+                return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateChildContainer"), null));
         }
 
         [HttpPost]

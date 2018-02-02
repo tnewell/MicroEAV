@@ -82,6 +82,7 @@ public class ContextModel
 
     [Display(Name = "Data Name")]
     [Required(ErrorMessage = "(required)")]
+    [MaxLength(256)]
     public string DataName { get; set; }
 
     [Display(Name = "Display Text")]
@@ -90,12 +91,14 @@ public class ContextModel
     private List<ContainerModel> containers;
     public ICollection<ContainerModel> Containers { get { return (containers); } }
 
+    public bool Existing { get; set; }
+
     public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 
     public void InitializeContainers(EAVContext context)
     {
         containers.Clear();
-        containers.AddRange(context.Containers.Select(it => (ContainerModel) it));
+        containers.AddRange(context.Containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel) it));
     }
 }
 
@@ -147,6 +150,7 @@ public class ContainerModel
 
     [Display(Name = "Data Name")]
     [Required(ErrorMessage = "(required)")]
+    [MaxLength(256)]
     public string DataName { get; set; }
 
     [Display(Name = "Display Text")]
@@ -161,18 +165,20 @@ public class ContainerModel
     private List<AttributeModel> attributes;
     public ICollection<AttributeModel> Attributes { get { return (attributes); } }
 
+    public bool Existing { get; set; }
+
     public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 
     public void InitializeContainers(EAVContainer container)
     {
         childContainers.Clear();
-        childContainers.AddRange(container.ChildContainers.Select(it => (ContainerModel)it));
+        childContainers.AddRange(container.ChildContainers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel)it));
     }
 
     public void InitializeAttributes(EAVContainer container)
     {
         attributes.Clear();
-        attributes.AddRange(container.Attributes.Select(it => (AttributeModel)it));
+        attributes.AddRange(container.Attributes.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (AttributeModel)it));
     }
 }
 
@@ -208,6 +214,7 @@ public class AttributeModel
 
     [Display(Name = "Data Name")]
     [Required(ErrorMessage = "(required)")]
+    [MaxLength(256)]
     public string DataName { get; set; }
 
     [Display(Name = "Display Text")]
@@ -218,6 +225,8 @@ public class AttributeModel
 
     [Display(Name = "Key")]
     public bool IsKey { get; set; }
+
+    public bool Existing { get; set; }
 
     public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 }
