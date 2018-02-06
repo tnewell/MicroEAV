@@ -207,8 +207,7 @@ namespace EAVWebApplication.Controllers
 
             metadata.DialogStack.Push(postedModel);
 
-            // Create a blank to work with and use that as our dialog metadata
-            EAVRootContainer container = new EAVRootContainer() { ContainerID = metadata.NextContainerID, Context = metadata.CurrentContext };
+            EAVRootContainer container = new EAVRootContainer() { ContainerID = metadata.NextContainerID, Context = metadata.CurrentContext, Sequence = metadata.CurrentContext.Containers.Max(it => it.Sequence) + 1 };
 
             metadata.DialogStack.Push((ContainerModel) container);
 
@@ -290,7 +289,7 @@ namespace EAVWebApplication.Controllers
             metadata.DialogStack.Push(postedModel);
 
             EAVContainer parentContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
-            EAVChildContainer childContainer = new EAVChildContainer() { ContainerID = metadata.NextContainerID, ParentContainer = parentContainer };
+            EAVChildContainer childContainer = new EAVChildContainer() { ContainerID = metadata.NextContainerID, ParentContainer = parentContainer, Sequence = parentContainer.ChildContainers.Max(it => it.Sequence) + 1 };
 
             metadata.DialogStack.Push((ContainerModel)childContainer);
 
@@ -385,8 +384,8 @@ namespace EAVWebApplication.Controllers
 
             metadata.DialogStack.Push(postedModel);
 
-            // Create a blank to work with and use that as our dialog metadata
-            EAVAttribute attribute = new EAVAttribute() { AttributeID = metadata.NextAttributeID, Container = FindContainer(metadata.CurrentContext.Containers, postedModel.ID) };
+            EAVContainer container = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
+            EAVAttribute attribute = new EAVAttribute() { AttributeID = metadata.NextAttributeID, Container = container, Sequence = container.Attributes.Max(it => it.Sequence) + 1 };
 
             metadata.DialogStack.Push((AttributeModel)attribute);
 

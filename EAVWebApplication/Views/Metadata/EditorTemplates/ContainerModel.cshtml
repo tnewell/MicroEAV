@@ -6,7 +6,14 @@
 }
 
 <div>
-    <label>Name:</label> @Html.DisplayFor(m => m.Name) <label>Data Name:</label> @Html.DisplayFor(m => m.DataName) <label>Display Text:</label> @Html.DisplayFor(m => m.DisplayText)
-    <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content(editActionUrl)');"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
-    <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content(deleteActionUrl)');"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+    <span>@Model.Sequence</span>.
+    <span>
+        <label>@Html.DisplayFor(m => m.DisplayText)</label> ( @Html.DisplayFor(m => m.Name) )
+    </span>
+    <span>
+        <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content(editActionUrl)');"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+    </span>
+    <span>
+        <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content(deleteActionUrl)');"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+    </span>
 </div>

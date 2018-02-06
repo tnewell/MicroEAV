@@ -100,6 +100,7 @@ namespace EAVStoreClient
                 IsRepeating = dbContainer.Is_Repeating,
                 ParentContainerID = dbContainer.Parent_Container_ID,
                 Name = dbContainer.Name,
+                Sequence = dbContainer.Sequence,
             });
         }
 
@@ -117,6 +118,7 @@ namespace EAVStoreClient
                 Is_Repeating = container.IsRepeating,
                 Parent_Container_ID = container.ParentContainerID.GetValueOrDefault(),
                 Name = container.Name,
+                Sequence = container.Sequence,
             });
         }
 
@@ -129,6 +131,7 @@ namespace EAVStoreClient
             Is_Repeating = container.IsRepeating;
             Parent_Container_ID = container.ParentContainerID;
             Name = container.Name;
+            Sequence = container.Sequence;
         }
     }
 
@@ -163,6 +166,7 @@ namespace EAVStoreClient
                 DisplayText = dbAttribute.Display_Text,
                 IsKey = dbAttribute.Is_Key,
                 Name = dbAttribute.Name,
+                Sequence = dbAttribute.Sequence,
             });
         }
 
@@ -179,10 +183,9 @@ namespace EAVStoreClient
                 Display_Text = attribute.DisplayText,
                 Is_Key = attribute.IsKey,
                 Name = attribute.Name,
+                Sequence = attribute.Sequence,
             });
         }
-
-        //public Attribute() { }
 
         public Attribute(EAV.Model.IEAVAttribute attribute)
         {
@@ -192,6 +195,7 @@ namespace EAVStoreClient
             Display_Text = attribute.DisplayText;
             Is_Key = attribute.IsKey;
             Name = attribute.Name;
+            Sequence = attribute.Sequence;
         }
     }
 

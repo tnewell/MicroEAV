@@ -76,6 +76,7 @@ namespace EAVStoreClientTestHarness
                 DisplayText = attributeName + ":",
                 DataType = EAV.Model.EAVDataType.String,
                 IsKey = true,
+                Sequence = rng.Next(),
             }, containerID);
 
             Assert.IsNotNull(attribute, "Failed to create attribute with name '{0}' for container ID {1}.", attributeName, containerID);
@@ -91,6 +92,7 @@ namespace EAVStoreClientTestHarness
             Assert.AreEqual(attribute.DisplayText, dbAttribute.Display_Text, "Property 'DisplayText' was not created correctly.");
             Assert.AreEqual(attribute.DataType.ToString(), dbAttribute.Data_Type.Name, "Property 'DataType' was not created correctly.");
             Assert.AreEqual(attribute.IsKey, dbAttribute.Is_Key, "Property 'IsKey' was not created correctly.");
+            Assert.AreEqual(attribute.Sequence, dbAttribute.Sequence, "Property 'Sequence' was not created correctly.");
         }
 
         [TestMethod]
@@ -111,6 +113,7 @@ namespace EAVStoreClientTestHarness
                 DisplayText = attributeName + ":",
                 DataType = EAV.Model.EAVDataType.String,
                 IsKey = true,
+                Sequence = rng.Next(),
             }, containerID);
 
             Assert.IsNotNull(attribute, "Failed to create attribute with name '{0}' for container ID {1}.", attributeName, containerID);
@@ -122,6 +125,7 @@ namespace EAVStoreClientTestHarness
                 DisplayText = attributeName + ":",
                 DataType = EAV.Model.EAVDataType.String,
                 IsKey = true,
+                Sequence = rng.Next(),
             }, containerID);
 
             Assert.Fail("Failed to throw exception creating attribute with duplicate name.");
@@ -145,6 +149,7 @@ namespace EAVStoreClientTestHarness
                 DisplayText = attributeName + ":",
                 DataType = EAV.Model.EAVDataType.String,
                 IsKey = true,
+                Sequence = rng.Next(),
             }, containerID);
 
             Assert.IsNotNull(attribute, "Failed to create attribute with name '{0}' for container ID {1}.", attributeName, containerID);
@@ -156,6 +161,7 @@ namespace EAVStoreClientTestHarness
                 DisplayText = attributeName + ":",
                 DataType = EAV.Model.EAVDataType.String,
                 IsKey = true,
+                Sequence = rng.Next(),
             }, containerID);
 
             Assert.Fail("Failed to throw exception creating attribute with duplicate data name.");
@@ -172,6 +178,7 @@ namespace EAVStoreClientTestHarness
             string oldDataName = dbAttribute.Data_Name;
             string oldDisplayText = dbAttribute.Display_Text;
             bool oldIsKey = dbAttribute.Is_Key;
+            int oldSequence = dbAttribute.Sequence;
 
             EAVStoreClient.EAVAttributeClient client = new EAVStoreClient.EAVAttributeClient();
 
@@ -181,6 +188,7 @@ namespace EAVStoreClientTestHarness
             attribute.DataName = oldDataName.Flip();
             attribute.DisplayText = oldDisplayText.Flip();
             attribute.IsKey = !oldIsKey;
+            attribute.Sequence = -oldSequence;
 
             client.UpdateAttribute(attribute);
 
@@ -196,6 +204,8 @@ namespace EAVStoreClientTestHarness
             Assert.AreNotEqual(oldDisplayText, dbAttribute.Display_Text);
             Assert.AreEqual(attribute.IsKey, dbAttribute.Is_Key);
             Assert.AreNotEqual(oldIsKey, dbAttribute.Is_Key);
+            Assert.AreEqual(attribute.Sequence, dbAttribute.Sequence);
+            Assert.AreNotEqual(oldSequence, dbAttribute.Sequence);
         }
 
         [TestMethod]

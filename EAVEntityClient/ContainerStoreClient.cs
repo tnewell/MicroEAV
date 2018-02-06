@@ -108,6 +108,9 @@ namespace EAVStoreClient
                     if (dbContainer.Is_Repeating != container.IsRepeating)
                         dbContainer.Is_Repeating = container.IsRepeating;
 
+                    if (dbContainer.Sequence != container.Sequence)
+                        dbContainer.Sequence = container.Sequence;
+
                     ctx.SaveChanges();
                 }
                 else

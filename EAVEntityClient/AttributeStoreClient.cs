@@ -70,6 +70,9 @@ namespace EAVStoreClient
                     if (dbAttribute.Is_Key != attribute.IsKey)
                         dbAttribute.Is_Key = attribute.IsKey;
 
+                    if (dbAttribute.Sequence != attribute.Sequence)
+                        dbAttribute.Sequence = attribute.Sequence;
+
                     ctx.SaveChanges();
                 }
                 else

@@ -89,7 +89,7 @@ public class ContextModel
     public string DisplayText { get; set; }
 
     private List<ContainerModel> containers;
-    public ICollection<ContainerModel> Containers { get { return (containers); } }
+    public IEnumerable<ContainerModel> Containers { get { return (containers.OrderBy(it => it.Sequence)); } }
 
     public bool Existing { get; set; }
 
@@ -133,6 +133,7 @@ public class ContainerModel
         DataName = container.DataName;
         DisplayText = container.DisplayText;
         IsRepeating = container.IsRepeating;
+        Sequence = container.Sequence;
 
         childContainers = new List<ContainerModel>();
         attributes = new List<AttributeModel>();
@@ -159,11 +160,13 @@ public class ContainerModel
     [Display(Name = "Repeating")]
     public bool IsRepeating { get; set;  }
 
+    public int Sequence { get; set; }
+
     private List<ContainerModel> childContainers;
-    public ICollection<ContainerModel> ChildContainers { get { return (childContainers); } }
+    public IEnumerable<ContainerModel> ChildContainers { get { return (childContainers.OrderBy(it=> it.Sequence)); } }
 
     private List<AttributeModel> attributes;
-    public ICollection<AttributeModel> Attributes { get { return (attributes); } }
+    public IEnumerable<AttributeModel> Attributes { get { return (attributes.OrderBy(it => it.Sequence)); } }
 
     public bool Existing { get; set; }
 
@@ -202,6 +205,7 @@ public class AttributeModel
         DisplayText = attribute.DisplayText;
         DataType = attribute.DataType;
         IsKey = attribute.IsKey;
+        Sequence = attribute.Sequence;
     }
 
     public int ID { get; set; }
@@ -225,6 +229,8 @@ public class AttributeModel
 
     [Display(Name = "Key")]
     public bool IsKey { get; set; }
+
+    public int Sequence { get; set; }
 
     public bool Existing { get; set; }
 

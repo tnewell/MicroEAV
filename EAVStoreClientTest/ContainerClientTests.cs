@@ -74,6 +74,7 @@ namespace EAVStoreClientTestHarness
                 Name = containerName,
                 DataName = containerName.ToUpper(),
                 DisplayText = containerName + ":",
+                Sequence = rng.Next(),
             }, contextID);
 
             Assert.IsNotNull(container, "Failed to create container with name '{0}' for context ID {1}.", containerName, contextID);
@@ -90,6 +91,7 @@ namespace EAVStoreClientTestHarness
             Assert.AreEqual(container.DataName, dbContainer.Data_Name, "Property 'DataName' was not created correctly.");
             Assert.AreEqual(container.DisplayText, dbContainer.Display_Text, "Property 'DisplayText' was not created correctly.");
             Assert.AreEqual(container.IsRepeating, dbContainer.Is_Repeating, "Property 'IsRepeating' was not created correctly.");
+            Assert.AreEqual(container.Sequence, dbContainer.Sequence, "Property 'Sequence' was not created correctly.");
         }
 
         [TestMethod]
@@ -108,6 +110,7 @@ namespace EAVStoreClientTestHarness
                 Name = containerName,
                 DataName = containerName.ToUpper(),
                 DisplayText = containerName + ":",
+                Sequence = rng.Next(),
             }, contextID);
 
             Assert.IsNotNull(container, "Failed to create container with name '{0}' for context ID {1}.", containerName, contextID);
@@ -117,6 +120,7 @@ namespace EAVStoreClientTestHarness
                 Name = containerName,
                 DataName = containerName.ToUpper() + "1",
                 DisplayText = containerName + ":",
+                Sequence = rng.Next(),
             }, contextID);
 
             Assert.Fail("Failed to throw exception creating container with duplicate name.");
@@ -138,6 +142,7 @@ namespace EAVStoreClientTestHarness
                 Name = containerName,
                 DataName = containerName.ToUpper(),
                 DisplayText = containerName + ":",
+                Sequence = rng.Next(),
             }, contextID);
 
             Assert.IsNotNull(container, "Failed to create container with name '{0}' for context ID {1}.", containerName, contextID);
@@ -147,6 +152,7 @@ namespace EAVStoreClientTestHarness
                 Name = containerName + "1",
                 DataName = containerName.ToUpper(),
                 DisplayText = containerName + ":",
+                Sequence = rng.Next(),
             }, contextID);
 
             Assert.Fail("Failed to throw exception creating root container with duplicate data name.");
@@ -168,6 +174,7 @@ namespace EAVStoreClientTestHarness
                 DataName = containerName.ToUpper(),
                 DisplayText = containerName + ":",
                 IsRepeating = true,
+                Sequence = rng.Next(),
             }, parentContainerID);
 
             Assert.IsNotNull(container, "Failed to create container with name '{0}' for parent container ID {1}.", containerName, parentContainerID);
@@ -184,6 +191,7 @@ namespace EAVStoreClientTestHarness
             Assert.AreEqual(container.DataName, dbContainer.Data_Name, "Property 'DataName' was not created correctly.");
             Assert.AreEqual(container.DisplayText, dbContainer.Display_Text, "Property 'DisplayText' was not created correctly.");
             Assert.AreEqual(container.IsRepeating, dbContainer.Is_Repeating, "Property 'IsRepeating' was not created correctly.");
+            Assert.AreEqual(container.Sequence, dbContainer.Sequence, "Property 'Sequence' was not created correctly.");
         }
 
         [TestMethod]
@@ -203,6 +211,7 @@ namespace EAVStoreClientTestHarness
                 DataName = containerName.ToUpper(),
                 DisplayText = containerName + ":",
                 IsRepeating = true,
+                Sequence = rng.Next(),
             }, parentContainerID);
 
             Assert.IsNotNull(container, "Failed to create container with name '{0}' for parent container ID {1}.", containerName, parentContainerID);
@@ -213,6 +222,7 @@ namespace EAVStoreClientTestHarness
                 DataName = containerName.ToUpper() + "1",
                 DisplayText = containerName + ":",
                 IsRepeating = true,
+                Sequence = rng.Next(),
             }, parentContainerID);
 
             Assert.Fail("Failed to throw exception creating child container with duplicate name.");
@@ -235,6 +245,7 @@ namespace EAVStoreClientTestHarness
                 DataName = containerName.ToUpper(),
                 DisplayText = containerName + ":",
                 IsRepeating = true,
+                Sequence = rng.Next(),
             }, parentContainerID);
 
             Assert.IsNotNull(container, "Failed to create container with name '{0}' for parent container ID {1}.", containerName, parentContainerID);
@@ -245,6 +256,7 @@ namespace EAVStoreClientTestHarness
                 DataName = containerName.ToUpper(),
                 DisplayText = containerName + ":",
                 IsRepeating = true,
+                Sequence = rng.Next(),
             }, parentContainerID);
 
             Assert.Fail("Failed to throw exception creating child container with duplicate name.");
@@ -261,6 +273,7 @@ namespace EAVStoreClientTestHarness
             string oldDataName = dbContainer.Data_Name;
             string oldDisplayText = dbContainer.Display_Text;
             bool oldIsRepeating = dbContainer.Is_Repeating;
+            int oldSequence = dbContainer.Sequence;
 
             EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
 
@@ -270,6 +283,7 @@ namespace EAVStoreClientTestHarness
             container.DataName = oldDataName.Flip();
             container.DisplayText = oldDisplayText.Flip();
             container.IsRepeating = !oldIsRepeating;
+            container.Sequence = -oldSequence;
 
             client.UpdateContainer(container);
 
@@ -285,6 +299,8 @@ namespace EAVStoreClientTestHarness
             Assert.AreNotEqual(oldDisplayText, dbContainer.Display_Text);
             Assert.AreEqual(container.IsRepeating, dbContainer.Is_Repeating);
             Assert.AreNotEqual(oldIsRepeating, dbContainer.Is_Repeating);
+            Assert.AreEqual(container.Sequence, dbContainer.Sequence);
+            Assert.AreNotEqual(oldSequence, dbContainer.Sequence);
         }
 
         [TestMethod]
