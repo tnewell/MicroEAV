@@ -224,7 +224,13 @@ namespace EAVWebApplication.Controllers
 
             metadata.DialogStack.Push(postedModel);
 
-            EAVContainer container = FindContainer(metadata.CurrentContext.Containers, ID);
+            EAVRootContainer container = FindContainer(metadata.CurrentContext.Containers, ID) as EAVRootContainer;
+
+            // TODO: Check state after loading metadata, verify that Modified doesn't go away if set
+            if (container.ObjectState != ObjectState.Deleted && container.ObjectState != ObjectState.New && !container.ChildContainers.Any() && !container.Attributes.Any())
+            {
+                eavClient.LoadMetadata(client, metadata.CurrentContext, container);
+            }
 
             metadata.DialogStack.Push(new ContainerModel(container) { Existing = true });
 

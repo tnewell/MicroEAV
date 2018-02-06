@@ -4,6 +4,9 @@
 @Html.HiddenFor(m => m.ParentID)
 @Html.HiddenFor(m => m.Existing)
 
+<input type="hidden" id="HasChildContainers" value="@Model.ChildContainers.Any()" />
+<input type="hidden" id="HasAttributes" value="@Model.Attributes.Any()" />
+
 <div class="form-group">
     @Html.LabelFor(m => m.Name, new { @class = "form-label" })
     @Html.ValidationMessageFor(m => m.Name)
@@ -27,17 +30,6 @@
     </label>
 </div>
 
-@if (Model.ChildContainers.Any())
-{
-    <hr />
-
-    @Html.EditorFor(m => m.ChildContainers)
-}
-
-<hr />
-
-<button type="button" class="btn btn-sm" id="ctlAddContainer" onclick="dialogAction('@Url.Content("~/Metadata/AddChildContainer")'); $('#ctlDialogContainer').dialog('close');"><span class="glyphicon glyphicon-plus"></span> Add Child Container</button>
-
 @if (Model.Attributes.Any())
 {
     <hr />
@@ -48,4 +40,15 @@
 <hr />
 
 <button type="button" class="btn btn-sm" id="ctlAddAttribute" onclick="dialogAction('@Url.Content("~/Metadata/AddAttribute")'); $('#ctlDialogContainer').dialog('close');"><span class="glyphicon glyphicon-plus"></span> Add Attribute</button>
+
+@if (Model.ChildContainers.Any())
+{
+    <hr />
+
+    @Html.EditorFor(m => m.ChildContainers)
+}
+
+<hr />
+
+<button type="button" class="btn btn-sm" id="ctlAddContainer" onclick="dialogAction('@Url.Content("~/Metadata/AddChildContainer")'); $('#ctlDialogContainer').dialog('close');"><span class="glyphicon glyphicon-plus"></span> Add Child Container</button>
 

@@ -11,6 +11,36 @@
         border-color: #FF8080;
         box-shadow: 0px 0px 6px 2px rgba(255,204,204,0.60), inset 0px 0px 1px 1px rgba(0,0,0,0.075);
     }
+
+    .glyphicon-pencil
+    {
+        color: chocolate;
+    }
+
+    .glyphicon-plus
+    {
+        color: blue;
+    }
+
+    .glyphicon-ok
+    {
+        color: forestgreen;
+    }
+
+    .glyphicon-remove
+    {
+        color: red;
+    }
+
+    .glyphicon-key
+    {
+        color: goldenrod;
+    }
+
+    .glyphicon-trash
+    {
+        color: dimgray;
+    }
 </style>
 
 
@@ -82,20 +112,42 @@
                 title: dialogTitle,
                 width: 640,
                 show: "fade", // Having this here actually allows the first input control to get focus rather than the 'Accept' button.
-                open: function () { $('.ui-dialog-titlebar-close').hide(); $('div.ui-dialog-buttonpane span.ui-button-icon').removeClass('ui-button-icon ui-icon'); $(this).load(dialogURL, function () { resetValidation('#ctlDialogContainer'); }); },
+                open: function ()
+                {
+                    $('.ui-dialog-titlebar-close').hide();
+                    $('div.ui-dialog-buttonpane span.ui-button-icon').removeClass('ui-button-icon ui-icon'); // Using Bootstrap's icons, so don't want jQuery UI's icons
+                    $(this).load(dialogURL, function () { resetValidation('#ctlDialogContainer'); });
+                },
                 buttons:
                 [
                     {
                         class: "btn btn-sm",
                         text: "Accept",
                         icon: "glyphicon glyphicon-ok",
-                        click: function () { if ($('#ctlMetadataForm').valid()) { dialogAction(updateURL + '?update=true'); $(this).dialog('close'); } },
+                        click: function ()
+                        {
+                            if ($('#ctlMetadataForm').valid())
+                            {
+                                dialogAction(updateURL + '?update=true');
+                                $(this).dialog('close');
+                            }
+                        },
                     },
                     {
                         class: "btn btn-sm",
                         text: "Discard",
                         icon: "glyphicon glyphicon-remove",
-                        click: function () { dialogAction(updateURL + '?update=false'); $(this).dialog('close'); },
+                        click: function ()
+                        {
+                            var existing = $('#Existing').val() == 'True';
+                            var hasChildren = $('#HasChildContainers').val() == 'True' || $('#HasAttributes').val() == 'True';
+
+                            if (!hasChildren || existing)
+                            {
+                                dialogAction(updateURL + '?update=false');
+                                $(this).dialog('close');
+                            }
+                        },
                     }
                 ],
             });
