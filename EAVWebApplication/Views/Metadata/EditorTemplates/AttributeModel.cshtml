@@ -3,11 +3,13 @@
 <div>
     <span>@Model.Sequence</span>.
     <span>
-        @if (Model.IsKey)
-        { <span class="glyphicon glyphicon-key">&#x1F511;</span> }
-        else
-        { <span class="glyphicon">&nbsp;</span> }
-        <label>@Html.DisplayFor(m => m.DisplayText)</label> ( @Html.DisplayFor(m => m.Name) ) 
+        <sup>
+            @if (Model.IsKey)
+            { <span class="glyphicon glyphicon-key">&#x1F511;</span> }
+            else
+            { <span class="glyphicon">&nbsp;</span> }
+        </sup>
+        <label>@Html.DisplayFor(m => m.DisplayText)</label> ( @Html.DisplayFor(m => m.Name) )
     </span>
     <span>
         <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content("~/Metadata/EditAttribute")?id=' + @Model.ID);"><span class="glyphicon glyphicon-pencil"></span> Edit</button>

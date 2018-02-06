@@ -8,6 +8,12 @@
 <div>
     <span>@Model.Sequence</span>.
     <span>
+        <sup>
+            @if (Model.IsRepeating)
+            { <span class="glyphicon glyphicon-repeat"></span> }
+            else
+            { <span class="glyphicon">&nbsp;</span> }
+        </sup>
         <label>@Html.DisplayFor(m => m.DisplayText)</label> ( @Html.DisplayFor(m => m.Name) )
     </span>
     <span>
