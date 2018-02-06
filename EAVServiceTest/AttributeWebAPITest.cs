@@ -67,7 +67,7 @@ namespace EAVServiceTest
         public void DeleteAttribute()
         {
             var dbContainer = SelectRandomItem(this.DbContext.Containers);
-            EAVStoreClient.Attribute dbAttributeIn = CreateAttribute(dbContainer.Container_ID, Guid.NewGuid().ToString(), EAV.Model.EAVDataType.String, true);
+            EAVStoreClient.Attribute dbAttributeIn = CreateAttribute(dbContainer.Container_ID, Guid.NewGuid().ToString(), EAV.Model.EAVDataType.String, rng.Next(), true);
 
             HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/meta/attributes/{0}", dbAttributeIn.Attribute_ID)).Result;
             if (response.IsSuccessStatusCode)

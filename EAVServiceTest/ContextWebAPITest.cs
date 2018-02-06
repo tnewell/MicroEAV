@@ -264,6 +264,7 @@ namespace EAVServiceTest
                 Assert.AreEqual(container.DataName, dbContainer.Data_Name, "Property 'DataName' was not created correctly.");
                 Assert.AreEqual(container.DisplayText, dbContainer.Display_Text, "Property 'DisplayText' was not created correctly.");
                 Assert.AreEqual(container.IsRepeating, dbContainer.Is_Repeating, "Property 'IsRepeating' was not created correctly.");
+                Assert.AreEqual(container.Sequence, dbContainer.Sequence, "Property 'Sequence' was not created correctly.");
             }
             else
             {

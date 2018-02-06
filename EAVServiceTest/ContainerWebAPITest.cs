@@ -70,6 +70,7 @@ namespace EAVServiceTest
             string oldDataName = dbContainer.Data_Name;
             string oldDisplayText = dbContainer.Display_Text;
             bool oldIsRepeating = dbContainer.Is_Repeating;
+            int oldSequence = dbContainer.Sequence;
 
             var container = (EAV.Model.BaseEAVContainer)dbContainer;
 
@@ -77,6 +78,7 @@ namespace EAVServiceTest
             container.DataName = oldDataName.Flip();
             container.DisplayText = oldDisplayText.Flip();
             container.IsRepeating = !oldIsRepeating;
+            container.Sequence = -oldSequence;
 
             HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAV.Model.BaseEAVContainer>("api/meta/containers", container).Result;
             if (response.IsSuccessStatusCode)
@@ -93,6 +95,8 @@ namespace EAVServiceTest
                 Assert.AreNotEqual(oldDisplayText, dbContainer.Display_Text);
                 Assert.AreEqual(container.IsRepeating, dbContainer.Is_Repeating);
                 Assert.AreNotEqual(oldIsRepeating, dbContainer.Is_Repeating);
+                Assert.AreEqual(container.Sequence, dbContainer.Sequence);
+                Assert.AreNotEqual(oldSequence, dbContainer.Sequence);
             }
             else
             {
@@ -107,7 +111,7 @@ namespace EAVServiceTest
         public void DeleteContainer()
         {
             var dbContext = SelectRandomItem(this.DbContext.Contexts);
-            EAVStoreClient.Container dbContainerIn = CreateContainer(dbContext.Context_ID, null, Guid.NewGuid().ToString(), true);
+            EAVStoreClient.Container dbContainerIn = CreateContainer(dbContext.Context_ID, null, Guid.NewGuid().ToString(), rng.Next(), true);
 
             HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/meta/containers/{0}", dbContainerIn.Container_ID)).Result;
             if (response.IsSuccessStatusCode)
@@ -171,6 +175,7 @@ namespace EAVServiceTest
                 Assert.AreEqual(container.DataName, dbContainer.Data_Name, "Property 'DataName' was not created correctly.");
                 Assert.AreEqual(container.DisplayText, dbContainer.Display_Text, "Property 'DisplayText' was not created correctly.");
                 Assert.AreEqual(container.IsRepeating, dbContainer.Is_Repeating, "Property 'IsRepeating' was not created correctly.");
+                Assert.AreEqual(container.Sequence, dbContainer.Sequence, "Property 'Sequence' was not created correctly.");
             }
             else
             {
@@ -225,6 +230,7 @@ namespace EAVServiceTest
                 Assert.AreEqual(attribute.DataName, dbAttribute.Data_Name, "Property 'DataName' was not created correctly.");
                 Assert.AreEqual(attribute.DisplayText, dbAttribute.Display_Text, "Property 'DisplayText' was not created correctly.");
                 Assert.AreEqual(attribute.IsKey, dbAttribute.Is_Key, "Property 'IsKey' was not created correctly.");
+                Assert.AreEqual(attribute.Sequence, dbAttribute.Sequence, "Property 'Sequence' was not created correctly.");
             }
             else
             {
