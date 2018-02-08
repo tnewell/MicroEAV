@@ -1,5 +1,44 @@
 ﻿@model ContextModel
 
+<script>
+
+    $(function ()
+    {
+        $('#ContainerList').sortable(
+        {
+            axis: "y",
+            update: function (ev, ui)
+            {
+                $.each(this.children, function (ix, it)
+                {
+                    var current = $(this);
+                    var next = $(this).next();
+
+                    if (next.length > 0)
+                    {
+                        var current_sequence = current.children('input').first();
+                        var current_sequence_label = current.children('label').first();
+                        var next_sequence = next.children('input').first();
+                        var next_sequence_label = next.children('label').first();
+
+                        if (next_sequence.val() < current_sequence.val())
+                        {
+                            var tmp = current_sequence.val();
+                            current_sequence.val(next_sequence.val());
+                            current_sequence_label.text(next_sequence.val() + '.');
+                            next_sequence.val(tmp);
+                            next_sequence_label.text(tmp + '.');
+                        }
+                    }
+                });
+            },
+        });
+
+        $('#ContainerList').disableSelection();
+    });
+
+</script>
+
 @Html.HiddenFor(m => m.ID)
 @Html.HiddenFor(m => m.Existing)
 
@@ -24,7 +63,9 @@
 {
     <hr />
 
-    @Html.EditorFor(m => m.Containers)
+    <div id="ContainerList">
+        @Html.EditorFor(m => m.Containers)
+    </div>
 }
 
 <hr />

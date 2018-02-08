@@ -6,7 +6,8 @@
 }
 
 <div>
-    <span>@Model.Sequence</span>.
+    @Html.HiddenFor(m => m.Sequence)
+    <label>@(Model.Sequence).</label>
     <span>
         <sup>
             @if (Model.IsRepeating)
@@ -22,4 +23,11 @@
     <span>
         <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content(deleteActionUrl)');"><span class="glyphicon glyphicon-trash"></span> Delete</button>
     </span>
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.ParentID)
+    @Html.HiddenFor(m => m.Name)
+    @Html.HiddenFor(m => m.DataName)
+    @Html.HiddenFor(m => m.DisplayText)
+    @Html.HiddenFor(m => m.IsRepeating)
+    @Html.HiddenFor(m => m.Existing)
 </div>

@@ -72,6 +72,7 @@ public class ContextModel
         DisplayText = context.DisplayText;
 
         containers = new List<ContainerModel>();
+        InitializeContainers(context.Containers);
     }
 
     public int ID { get; set; }
@@ -89,16 +90,16 @@ public class ContextModel
     public string DisplayText { get; set; }
 
     private List<ContainerModel> containers;
-    public IEnumerable<ContainerModel> Containers { get { return (containers.OrderBy(it => it.Sequence)); } }
+    public ICollection<ContainerModel> Containers { get { return (containers); } }
 
     public bool Existing { get; set; }
 
     public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 
-    public void InitializeContainers(IEnumerable<EAVContainer> containers)
+    protected void InitializeContainers(IEnumerable<EAVContainer> containers)
     {
         this.containers.Clear();
-        this.containers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel) it));
+        this.containers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel) it).OrderBy(it => it.Sequence));
     }
 }
 
@@ -136,7 +137,10 @@ public class ContainerModel
         Sequence = container.Sequence;
 
         childContainers = new List<ContainerModel>();
+        InitializeContainers(container.ChildContainers);
+
         attributes = new List<AttributeModel>();
+        InitializeAttributes(container.Attributes);
     }
 
     public bool ChildContainer { get; set; }
@@ -163,25 +167,25 @@ public class ContainerModel
     public int Sequence { get; set; }
 
     private List<ContainerModel> childContainers;
-    public IEnumerable<ContainerModel> ChildContainers { get { return (childContainers.OrderBy(it=> it.Sequence)); } }
+    public ICollection<ContainerModel> ChildContainers { get { return (childContainers); } }
 
     private List<AttributeModel> attributes;
-    public IEnumerable<AttributeModel> Attributes { get { return (attributes.OrderBy(it => it.Sequence)); } }
+    public ICollection<AttributeModel> Attributes { get { return (attributes); } }
 
     public bool Existing { get; set; }
 
     public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 
-    public void InitializeContainers(IEnumerable<EAVContainer> containers)
+    protected void InitializeContainers(IEnumerable<EAVContainer> containers)
     {
         this.childContainers.Clear();
-        this.childContainers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel)it));
+        this.childContainers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel)it).OrderBy(it => it.Sequence));
     }
 
-    public void InitializeAttributes(IEnumerable<EAVAttribute> attributes)
+    protected void InitializeAttributes(IEnumerable<EAVAttribute> attributes)
     {
         this.attributes.Clear();
-        this.attributes.AddRange(attributes.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (AttributeModel)it));
+        this.attributes.AddRange(attributes.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (AttributeModel)it).OrderBy(it => it.Sequence));
     }
 }
 

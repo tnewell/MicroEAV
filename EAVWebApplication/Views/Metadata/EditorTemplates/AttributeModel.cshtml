@@ -1,7 +1,8 @@
 ﻿@model AttributeModel
 
 <div>
-    <span>@Model.Sequence</span>.
+    @Html.HiddenFor(m => m.Sequence)
+    <label>@(Model.Sequence).</label>
     <span>
         <sup>
             @if (Model.IsKey)
@@ -17,4 +18,12 @@
     <span>
         <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content("~/Metadata/DeleteAttribute")?id=' + @Model.ID);"><span class="glyphicon glyphicon-trash"></span> Delete</button>
     </span>
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.ContainerID)
+    @Html.HiddenFor(m => m.Name)
+    @Html.HiddenFor(m => m.DataName)
+    @Html.HiddenFor(m => m.DisplayText)
+    @Html.HiddenFor(m => m.DataType)
+    @Html.HiddenFor(m => m.IsKey)
+    @Html.HiddenFor(m => m.Existing)
 </div>
