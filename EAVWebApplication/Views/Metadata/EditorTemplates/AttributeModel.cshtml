@@ -10,7 +10,7 @@
             else
             { <span class="glyphicon">&nbsp;</span> }
         </sup>
-        <label>@Html.DisplayFor(m => m.DisplayText)</label> ( @Html.DisplayFor(m => m.Name) )
+        <label title="Name = '@Model.Name', Data Name = '@Model.DataName', Type = @Model.DataType.ToString()">@Html.DisplayFor(m => m.DisplayText)</label>
     </span>
     <span>
         <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content("~/Metadata/EditAttribute")?id=' + @Model.ID);"><span class="glyphicon glyphicon-pencil"></span> Edit</button>

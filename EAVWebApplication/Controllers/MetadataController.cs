@@ -204,6 +204,7 @@ namespace EAVWebApplication.Controllers
         {
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
+            postedModel.FixupContainerOrder();
             metadata.DialogStack.Push(postedModel);
 
             EAVRootContainer eavContainer = new EAVRootContainer() { ContainerID = metadata.NextContainerID, Context = metadata.CurrentContext, Sequence = metadata.CurrentContext.Containers.Max(it => it.Sequence) + 1 };
@@ -220,6 +221,7 @@ namespace EAVWebApplication.Controllers
         {
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
+            postedModel.FixupContainerOrder();
             metadata.DialogStack.Push(postedModel);
 
             EAVRootContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, ID) as EAVRootContainer;
@@ -295,6 +297,8 @@ namespace EAVWebApplication.Controllers
         {
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
+            postedModel.FixupContainerOrder();
+            postedModel.FixupAttributeOrder();
             metadata.DialogStack.Push(postedModel);
 
             EAVContainer eavParentContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
@@ -312,6 +316,8 @@ namespace EAVWebApplication.Controllers
         {
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
+            postedModel.FixupContainerOrder();
+            postedModel.FixupAttributeOrder();
             metadata.DialogStack.Push(postedModel);
 
             EAVContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, ID);

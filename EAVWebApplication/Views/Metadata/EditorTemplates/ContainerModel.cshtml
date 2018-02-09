@@ -9,13 +9,13 @@
     @Html.HiddenFor(m => m.Sequence)
     <label>@(Model.Sequence).</label>
     <span>
+        <label title="Name = '@Model.Name', Data Name = '@Model.DataName'">@Html.DisplayFor(m => m.DisplayText)</label>
         <sup>
             @if (Model.IsRepeating)
             { <span class="glyphicon glyphicon-repeat"></span> }
             else
             { <span class="glyphicon">&nbsp;</span> }
         </sup>
-        <label>@Html.DisplayFor(m => m.DisplayText)</label> ( @Html.DisplayFor(m => m.Name) )
     </span>
     <span>
         <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content(editActionUrl)');"><span class="glyphicon glyphicon-pencil"></span> Edit</button>

@@ -62,7 +62,6 @@
 @if (Model.Containers.Any())
 {
     <hr />
-
     <div id="ContainerList">
         @Html.EditorFor(m => m.Containers)
     </div>
@@ -70,4 +69,4 @@
 
 <hr />
 
-<button type="button" class="btn btn-sm" id="ctlAddContainer" onclick="dialogAction('@Url.Content("~/Metadata/AddRootContainer")'); $('#ctlDialogContainer').dialog('close');"><span class="glyphicon glyphicon-plus"></span> Add Root Container</button>
+<button type="button" class="btn btn-sm" id="ctlAddContainer" onclick="dialogAction('@Url.Content("~/Metadata/AddRootContainer")'); $('#ctlDialogContainer').dialog('close');"><span class="glyphicon glyphicon-plus"></span> Add Container</button>

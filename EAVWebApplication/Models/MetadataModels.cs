@@ -101,6 +101,11 @@ public class ContextModel
         this.containers.Clear();
         this.containers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel) it).OrderBy(it => it.Sequence));
     }
+
+    public void FixupContainerOrder()
+    {
+        containers.Sort((ContainerModel c1, ContainerModel c2) => { return (c1.Sequence == c2.Sequence ? 0 : (c1.Sequence > c2.Sequence ? 1 : -1)); });
+    }
 }
 
 public class ContainerModel
@@ -182,10 +187,20 @@ public class ContainerModel
         this.childContainers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel)it).OrderBy(it => it.Sequence));
     }
 
+    public void FixupContainerOrder()
+    {
+        childContainers.Sort((ContainerModel c1, ContainerModel c2) => { return (c1.Sequence == c2.Sequence ? 0 : (c1.Sequence > c2.Sequence ? 1 : -1)); });
+    }
+
     protected void InitializeAttributes(IEnumerable<EAVAttribute> attributes)
     {
         this.attributes.Clear();
         this.attributes.AddRange(attributes.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (AttributeModel)it).OrderBy(it => it.Sequence));
+    }
+
+    public void FixupAttributeOrder()
+    {
+        attributes.Sort((AttributeModel a1, AttributeModel a2) => { return (a1.Sequence == a2.Sequence ? 0 : (a1.Sequence > a2.Sequence ? 1 : -1)); });
     }
 }
 
