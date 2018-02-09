@@ -9,27 +9,19 @@
             axis: "y",
             update: function (ev, ui)
             {
+                var sequences = [];
+
                 $.each(this.children, function (ix, it)
                 {
-                    var current = $(this);
-                    var next = $(this).next();
+                    sequences.push($(this).children('input').first().val());
+                });
 
-                    if (next.length > 0)
-                    {
-                        var current_sequence = current.children('input').first();
-                        var current_sequence_label = current.children('label').first();
-                        var next_sequence = next.children('input').first();
-                        var next_sequence_label = next.children('label').first();
+                sequences = sequences.sort(function (a, b) { return (a - b); });
 
-                        if (next_sequence.val() < current_sequence.val())
-                        {
-                            var tmp = current_sequence.val();
-                            current_sequence.val(next_sequence.val());
-                            current_sequence_label.text(next_sequence.val() + '.');
-                            next_sequence.val(tmp);
-                            next_sequence_label.text(tmp + '.');
-                        }
-                    }
+                $.each(this.children, function (ix, it)
+                {
+                    $(this).children('input').first().val(sequences[ix]);
+                    $(this).children('label').first().text(sequences[ix]);
                 });
             },
         });
@@ -41,27 +33,19 @@
             axis: "y",
             update: function (ev, ui)
             {
+                var sequences = [];
+
                 $.each(this.children, function (ix, it)
                 {
-                    var current = $(this);
-                    var next = $(this).next();
+                    sequences.push($(this).children('input').first().val());
+                });
 
-                    if (next.length > 0)
-                    {
-                        var current_sequence = current.children('input').first();
-                        var current_sequence_label = current.children('label').first();
-                        var next_sequence = next.children('input').first();
-                        var next_sequence_label = next.children('label').first();
+                sequences = sequences.sort(function (a, b) { return (a - b); });
 
-                        if (next_sequence.val() < current_sequence.val())
-                        {
-                            var tmp = current_sequence.val();
-                            current_sequence.val(next_sequence.val());
-                            current_sequence_label.text(next_sequence.val() + '.');
-                            next_sequence.val(tmp);
-                            next_sequence_label.text(tmp + '.');
-                        }
-                    }
+                $.each(this.children, function (ix, it)
+                {
+                    $(this).children('input').first().val(sequences[ix]);
+                    $(this).children('label').first().text(sequences[ix] + ".");
                 });
             },
         });
@@ -110,8 +94,6 @@
     </div>
 }
 
-<hr />
-
 <button type="button" class="btn btn-sm" id="ctlAddAttribute" onclick="dialogAction('@Url.Content("~/Metadata/AddAttribute")'); $('#ctlDialogContainer').dialog('close');"><span class="glyphicon glyphicon-plus"></span> Add Attribute</button>
 
 @if (Model.ChildContainers.Any())
@@ -121,8 +103,6 @@
         @Html.EditorFor(m => m.ChildContainers)
     </div>
 }
-
-<hr />
 
 <button type="button" class="btn btn-sm" id="ctlAddContainer" onclick="dialogAction('@Url.Content("~/Metadata/AddChildContainer")'); $('#ctlDialogContainer').dialog('close');"><span class="glyphicon glyphicon-plus"></span> Add Container</button>
 

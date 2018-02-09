@@ -5,9 +5,10 @@
     var deleteActionUrl = (Model.ParentID != 0 ? "~/Metadata/DeleteChildContainer" : "~/Metadata/DeleteRootContainer") + "?id=" + Model.ID.ToString();
 }
 
-<div>
+<div style="border: solid 1px #CCCCCC; border-radius: 3px; margin-bottom: 3px; padding: 3px; background-color: #FFFFFF;">
     @Html.HiddenFor(m => m.Sequence)
-    <label>@(Model.Sequence).</label>
+    <span class="glyphicon glyphicon-menu-hamburger" style="color: lightgray; cursor: row-resize;"></span>
+    <label>@(Model.Sequence)</label>.
     <span>
         <label title="Name = '@Model.Name', Data Name = '@Model.DataName'">@Html.DisplayFor(m => m.DisplayText)</label>
         <sup>
@@ -18,10 +19,10 @@
         </sup>
     </span>
     <span>
-        <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content(editActionUrl)');"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+        <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content(editActionUrl)');"><span class="glyphicon glyphicon-pencil"></span></button>
     </span>
     <span>
-        <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content(deleteActionUrl)');"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content(deleteActionUrl)');"><span class="glyphicon glyphicon-trash"></span></button>
     </span>
     @Html.HiddenFor(m => m.ID)
     @Html.HiddenFor(m => m.ParentID)

@@ -1,8 +1,9 @@
 ﻿@model AttributeModel
 
-<div>
+<div style="border: solid 1px #CCCCCC; border-radius: 3px; margin-bottom: 3px; padding: 3px; background-color: #FFFFFF;">
     @Html.HiddenFor(m => m.Sequence)
-    <label>@(Model.Sequence).</label>
+    <span class="glyphicon glyphicon-menu-hamburger" style="color: lightgray; cursor: row-resize;"></span>
+    <label>@(Model.Sequence)</label>.
     <span>
         <sup>
             @if (Model.IsKey)
@@ -13,10 +14,10 @@
         <label title="Name = '@Model.Name', Data Name = '@Model.DataName', Type = @Model.DataType.ToString()">@Html.DisplayFor(m => m.DisplayText)</label>
     </span>
     <span>
-        <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content("~/Metadata/EditAttribute")?id=' + @Model.ID);"><span class="glyphicon glyphicon-pencil"></span> Edit</button>
+        <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content("~/Metadata/EditAttribute")?id=' + @Model.ID);"><span class="glyphicon glyphicon-pencil"></span></button>
     </span>
     <span>
-        <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content("~/Metadata/DeleteAttribute")?id=' + @Model.ID);"><span class="glyphicon glyphicon-trash"></span> Delete</button>
+        <button type="button" class="btn btn-sm" onclick="dialogAction('@Url.Content("~/Metadata/DeleteAttribute")?id=' + @Model.ID);"><span class="glyphicon glyphicon-trash"></span></button>
     </span>
     @Html.HiddenFor(m => m.ID)
     @Html.HiddenFor(m => m.ContainerID)
