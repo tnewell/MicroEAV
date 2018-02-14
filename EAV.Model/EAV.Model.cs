@@ -1,4 +1,4 @@
-﻿// MicroEAV
+﻿// MicroEAV - EAV.Model - Class interfaces for the core EAV objects as well as basic implementations of those interfaces.
 //
 // Copyright(C) 2017  Tim Newell
 
@@ -18,7 +18,9 @@
 using System;
 using System.Collections.Generic;
 
-
+/// <summary>
+/// This namespace contains class interfaces for the core EAV objects as well as basic implementations of those interfaces.
+/// </summary>
 namespace EAV.Model
 {
     #region Interfaces
@@ -102,6 +104,9 @@ namespace EAV.Model
     #region Base Implementation
 
     #region Metadata Objects
+    /// <summary>
+    /// An Entity represents a "thing" in the world about which you would like to collect/organize data.
+    /// </summary>
     public class BaseEAVEntity : IEAVEntity
     {
         public BaseEAVEntity() { }
@@ -116,6 +121,10 @@ namespace EAV.Model
         public string Descriptor { get; set; }
     }
 
+    /// <summary>
+    /// A Context represents a scope within which you will collect/organize data about Entities.
+    /// Examples might be demographics, collectibles, investments, etc.
+    /// </summary>
     public class BaseEAVContext : IEAVContext
     {
         public BaseEAVContext()
@@ -137,6 +146,11 @@ namespace EAV.Model
         public string DisplayText { get; set; }
     }
 
+    /// <summary>
+    /// A Container represents a related group of data items intended to be collected/organized together.
+    /// An example might be an address (street name, city, postal code, etc.).
+    /// Containers can be organized in hierachical relationships.
+    /// </summary>
     public class BaseEAVContainer : IEAVContainer
     {
         public BaseEAVContainer()
@@ -165,6 +179,10 @@ namespace EAV.Model
         public bool IsRepeating { get; set; }
     }
 
+    /// <summary>
+    /// An Attribute is a particular data item that will be collected/organized.
+    /// Examples might be "name", "status", "price", etc.
+    /// </summary>
     public class BaseEAVAttribute : IEAVAttribute
     {
         public BaseEAVAttribute() { }
@@ -193,6 +211,12 @@ namespace EAV.Model
     #endregion
 
     #region Data Objects
+    /// <summary>
+    /// A Subject is an instance of an Entity in a Context.
+    /// An Entity could have data collected about it within multiple Contexts
+    /// and even multiple times within the same Context.
+    /// Each instance is represented by a Subject.
+    /// </summary>
     public class BaseEAVSubject : IEAVSubject
     {
         public BaseEAVSubject()
@@ -214,6 +238,10 @@ namespace EAV.Model
         public string Identifier { get; set; }
     }
 
+    /// <summary>
+    /// An Instance is, well, just that. It represents an instance of a Container.
+    /// If Container is a class, Instance is an object of that class.
+    /// </summary>
     public class BaseEAVInstance : IEAVInstance
     {
         public BaseEAVInstance()
@@ -234,6 +262,9 @@ namespace EAV.Model
         public int? ContainerID { get; set; }
     }
 
+    /// <summary>
+    /// A Value is a value. It represents that actual piece of data referred to by an Attribute.
+    /// </summary>
     public class BaseEAVValue : IEAVValue
     {
         public BaseEAVValue() { }

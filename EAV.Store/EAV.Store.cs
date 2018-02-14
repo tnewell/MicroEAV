@@ -1,4 +1,4 @@
-﻿// MicroEAV
+﻿// MicroEAV - EAV.Store - Class interfaces to be used as a guide for implementing store clients for the MicroEAV database.
 //
 // Copyright(C) 2017  Tim Newell
 
@@ -17,7 +17,11 @@
 
 using System.Collections.Generic;
 
-
+/// <summary>
+/// This namespace contains interfaces that can be used as a guide for implementing store clients for the MicroEAV database.
+/// They are intended to capture the basic CRUD operations necessary to move data in and out of the database.
+/// Notably they are also conceived in a way so as to support RESTful operations easily.
+/// </summary>
 namespace EAV.Store
 {
     public interface IEAVEntityClient
