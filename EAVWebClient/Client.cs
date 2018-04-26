@@ -31,16 +31,22 @@ namespace EAVServiceClient
     {
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, string requestUri, T value, MediaTypeFormatter formatter)
         {
+            // ConfigureAwait is used here to avoid deadlocks.
+            // https://blog.stephencleary.com/2012/07/dont-block-on-async-code.html
             return (await client.SendAsync(new HttpRequestMessage(new HttpMethod("PATCH"), requestUri) { Content = new ObjectContent<T>(value, formatter) }).ConfigureAwait(false));
         }
 
         public static async Task<HttpResponseMessage> PatchAsJsonAsync<T>(this HttpClient client, string requestUri, T value)
         {
+            // ConfigureAwait is used here to avoid deadlocks.
+            // https://blog.stephencleary.com/2012/07/dont-block-on-async-code.html
             return (await PatchAsync<T>(client, requestUri, value, new JsonMediaTypeFormatter()).ConfigureAwait(false));
         }
 
         public static async Task<HttpResponseMessage> PatchAsXmlAsync<T>(this HttpClient client, string requestUri, T value)
         {
+            // ConfigureAwait is used here to avoid deadlocks.
+            // https://blog.stephencleary.com/2012/07/dont-block-on-async-code.html
             return (await PatchAsync<T>(client, requestUri, value, new XmlMediaTypeFormatter()).ConfigureAwait(false));
         }
     }
