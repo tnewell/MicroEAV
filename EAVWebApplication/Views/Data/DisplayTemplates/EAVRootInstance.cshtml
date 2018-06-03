@@ -1,0 +1,23 @@
+﻿@model EAVFramework.Model.EAVRootInstance
+
+
+@Html.HiddenFor(m => m.ContainerID)
+@Html.HiddenFor(m => m.SubjectID)
+@Html.HiddenFor(m => m.ParentInstanceID)
+@Html.HiddenFor(m => m.InstanceID)
+
+<div class="eav-container eav-root-container container">
+
+    <div class="row">
+        <div class="eav-container-header eav-root-container-header col-md-12 col-lg-12 col-xl-12">@Model.Container.DisplayText</div>
+    </div>
+
+    <div class="row">
+        @Html.DisplayFor(m => m.Values)
+    </div>
+
+    <div class="row">
+        @Html.DisplayFor(m => m.ChildInstances)
+    </div>
+
+</div>

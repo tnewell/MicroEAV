@@ -673,7 +673,7 @@ namespace EAVServiceClient
 
         public void LoadSubjects(HttpClient client, EAVContext context)
         {
-            HttpResponseMessage response = client.GetAsync(String.Format("api/data/contexts/{0}/subjects", context.ContextID.GetValueOrDefault())).Result;
+            HttpResponseMessage response = client.GetAsync(String.Format("api/meta/contexts/{0}/subjects", context.ContextID.GetValueOrDefault())).Result;
             if (response.IsSuccessStatusCode)
             {
                 var subjects = response.Content.ReadAsAsync<IEnumerable<EAVSubject>>().Result;
@@ -682,7 +682,7 @@ namespace EAVServiceClient
 
                 foreach (EAVSubject subject in subjects)
                 {
-                    LoadEntity(client, subject);
+                    //LoadEntity(client, subject);
 
                     subject.MarkUnmodified();
 

@@ -1,0 +1,79 @@
+﻿@model EAVWebApplication.Models.Data.DataModel
+
+@{
+    ViewBag.Title = "Data Entry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    .eav-container
+    {
+        border: solid 1px black;
+        border-radius: 3px;
+        padding-top: 5px;
+        padding-bottom: 7px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .eav-container-header
+    {
+        border: solid 1px black;
+        border-radius: 3px;
+        font-weight: bold;
+        padding: 3px;
+    }
+
+    .eav-root-container
+    {
+    }
+
+    .eav-root-container-header
+    {
+        background-color: silver;
+        font-size: large;
+    }
+
+    .eav-child-container
+    {
+        margin-top: 20px;
+    }
+
+    .eav-child-container-header
+    {
+        background-color: silver;
+        font-size: large;
+    }
+
+    .eav-attribute
+    {
+    }
+
+    .eav-attribute-caption
+    {
+        font-weight: bold;
+    }
+
+    .eav-attribute-control
+    {
+    }
+</style>
+
+<h2>@Model.CurrentContext.DisplayText</h2>
+
+@using (Html.BeginForm("SaveForm", "Data", FormMethod.Post, new { id = "ctlDataForm" }))
+{
+    @Html.HiddenFor(m => m.SelectedContextID);
+    @Html.HiddenFor(m => m.SelectedContainerID);
+    @Html.HiddenFor(m => m.SelectedSubjectID);
+
+    @Html.EditorFor(m => m.CurrentInstance)
+
+    <hr />
+
+    @Html.ActionLink("Back", "Index")
+
+    <input type="submit" class="btn" value="Save" />
+}
+

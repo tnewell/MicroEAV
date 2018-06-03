@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Http;
-using System.Web;
 using System.Web.Mvc;
 
-using EAVServiceClient;
 using EAVFramework.Model;
-using Newtonsoft.Json;
-using System.Net;
-using System.Diagnostics;
-using System.Configuration;
+
+using EAVServiceClient;
+
+using EAVWebApplication.Models.Metadata;
+
 
 namespace EAVWebApplication.Controllers
 {

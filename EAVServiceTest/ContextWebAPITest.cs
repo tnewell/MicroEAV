@@ -271,5 +271,23 @@ namespace EAVServiceTest
                 Assert.Fail(response.Content.ReadAsStringAsync().Result);
             }
         }
+
+        [TestMethod]
+        [TestCategory("CRUD")]
+        [TestCategory("Retrieve")]
+        [TestCategory("Subject")]
+        public void RetrieveSubjects()
+        {
+            Assert.Fail("Test needed.");
+        }
+
+        [TestMethod]
+        [TestCategory("CRUD")]
+        [TestCategory("Create")]
+        [TestCategory("Subject")]
+        public void CreateSubject()
+        {
+            Assert.Fail("Test needed.");
+        }
     }
 }

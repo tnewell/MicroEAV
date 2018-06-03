@@ -1454,6 +1454,27 @@ namespace EAVFramework.Model
 
     public class EAVRootInstance : EAVInstance
     {
+        public static EAVRootInstance Create(EAVRootContainer container, EAVSubject subject)
+        {
+            EAVRootInstance instance = new EAVRootInstance()
+            {
+                Container = container,
+                Subject = subject,
+            };
+
+            foreach (EAVAttribute attribute in container.Attributes)
+            {
+                EAVValue.Create(attribute, instance);
+            }
+
+            foreach (EAVChildContainer childContainer in container.ChildContainers)
+            {
+                EAVChildInstance.Create(childContainer, subject, instance);
+            }
+
+            return (instance);
+        }
+
         public EAVRootInstance()
         {
             parentInstance = null;
@@ -1511,6 +1532,27 @@ namespace EAVFramework.Model
 
     public class EAVChildInstance : EAVInstance
     {
+        public static EAVChildInstance Create(EAVChildContainer container, EAVSubject subject, EAVInstance parentInstance)
+        {
+            EAVChildInstance instance = new EAVChildInstance()
+            {
+                ParentInstance = parentInstance,
+                Container = container,
+            };
+
+            foreach (EAVAttribute attribute in container.Attributes)
+            {
+                EAVValue.Create(attribute, instance);
+            }
+
+            foreach (EAVChildContainer childContainer in container.ChildContainers)
+            {
+                EAVChildInstance.Create(childContainer, subject, instance);
+            }
+
+            return (instance);
+        }
+
         public EAVChildInstance() { }
 
         public override EAVSubject Subject
@@ -1567,6 +1609,17 @@ namespace EAVFramework.Model
     [DataContract(IsReference = true)]
     public class EAVValue : EAVDataObject, EAV.Model.IEAVValue
     {
+        public static EAVValue Create(EAVAttribute attribute, EAVInstance instance)
+        {
+            EAVValue value = new EAVValue()
+            {
+                Attribute = attribute,
+                Instance = instance,
+            };
+
+            return (value);
+        }
+
         public EAVValue() { }
 
         public int? InstanceID { get { return (Instance != null ? Instance.InstanceID : null); } }

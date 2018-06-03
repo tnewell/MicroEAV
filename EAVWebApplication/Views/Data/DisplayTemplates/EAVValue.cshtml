@@ -1,0 +1,26 @@
+﻿@model EAVFramework.Model.EAVValue
+
+
+@Html.HiddenFor(m => m.AttributeID)
+@Html.HiddenFor(m => m.InstanceID)
+
+<div class="eav-attribute col-md-4 col-lg-4 col-xl-4">
+
+    @switch (Model.Attribute.DataType)
+    {
+        case EAV.Model.EAVDataType.Boolean:
+            <label class="form-text eav-attribute-caption">@Model.Attribute.DisplayText</label>
+            <input class="form-control eav-attribute-control" />
+            break;
+        case EAV.Model.EAVDataType.DateTime:
+        case EAV.Model.EAVDataType.Float:
+        case EAV.Model.EAVDataType.Integer:
+        case EAV.Model.EAVDataType.String:
+        default:
+            <label class="form-text eav-attribute-caption">@Model.Attribute.DisplayText</label>
+            @Html.TextBoxFor(m => m.RawValue, new { @class = "form-control eav-attribute-control" })
+            break;
+    }
+
+</div>
+

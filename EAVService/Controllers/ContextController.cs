@@ -27,6 +27,15 @@ namespace EAVService.Controllers
     {
         private EAV.Store.IEAVContextClient contextClient = new EAVStoreClient.EAVContextClient();
         private EAV.Store.IEAVContainerClient containerClient = new EAVStoreClient.EAVContainerClient();
+        private EAV.Store.IEAVSubjectClient subjectClient = new EAVStoreClient.EAVSubjectClient();
+
+        public int? EntityID
+        {
+            get
+            {
+                return (Int32.TryParse(QueryItem("entity"), out int value) ? (int?) value : null);
+            }
+        }
 
         [HttpGet]
         [Route("", Name = "RetrieveContexts")]
@@ -137,6 +146,34 @@ namespace EAVService.Controllers
             try
             {
                 return (Ok<EAV.Model.IEAVContainer>(containerClient.CreateRootContainer(container, id)));
+            }
+            catch (Exception ex)
+            {
+                return (InternalServerError(ex));
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/subjects", Name = "RetrieveContextSubjects")]
+        public IHttpActionResult RetrieveSubjects(int id)
+        {
+            try
+            {
+                return (Ok<IEnumerable<EAV.Model.IEAVSubject>>(subjectClient.RetrieveSubjects(id, EntityID)));
+            }
+            catch (Exception ex)
+            {
+                return (InternalServerError(ex));
+            }
+        }
+
+        [HttpPost]
+        [Route("{id}/subjects", Name = "CreateContextSubject")]
+        public IHttpActionResult CreateSubject(int id, EAV.Model.IEAVSubject subject)
+        {
+            try
+            {
+                return (Ok<EAV.Model.IEAVSubject>(subjectClient.CreateSubject(subject, id, EntityID.GetValueOrDefault())));
             }
             catch (Exception ex)
             {
