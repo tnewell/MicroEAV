@@ -285,7 +285,7 @@ namespace EAVServiceTest
         [TestCategory("CRUD")]
         [TestCategory("Create")]
         [TestCategory("Subject")]
-        public void CreateSubject()
+        public void CreateContextSubject()
         {
             Assert.Fail("Test needed.");
         }

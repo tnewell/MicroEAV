@@ -28,6 +28,7 @@ namespace EAVStoreClient
         public string Display_Text { get; set; }
         public bool Is_Key { get; set; }
         public int Sequence { get; set; }
+        public Nullable<bool> Variable_Units { get; set; }
     
         public virtual Container Container { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

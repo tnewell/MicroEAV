@@ -861,6 +861,29 @@ namespace EAVFramework.Model
             }
         }
 
+        [DataMember(Name = "VariableUnits")]
+        protected bool? variableUnits;
+        [IgnoreDataMember]
+        public bool? VariableUnits
+        {
+            get
+            {
+                return (variableUnits);
+            }
+            set
+            {
+                if (variableUnits != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'VariableUnits' may not be modified when object in 'Deleted' state."));
+
+                    variableUnits = value;
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
         [DataMember(Name = "Values")]
         private ObservableCollection<EAVValue> values;
         [IgnoreDataMember]

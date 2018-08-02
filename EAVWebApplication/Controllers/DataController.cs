@@ -166,7 +166,8 @@ namespace EAVWebApplication.Controllers
         {
             DataModel data = TempData[TempDataModelKey] as DataModel;
 
-            ReconcileInstance(data.CurrentInstance, postedModel.CurrentInstance);
+            //ReconcileInstance(data.CurrentInstance, postedModel.CurrentInstance);
+            //ReconcileInstance(data.viewInstance, postedModel.CurrentInstance);
 
             TempData[TempDataModelKey] = data;
 

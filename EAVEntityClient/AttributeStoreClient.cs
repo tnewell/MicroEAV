@@ -90,6 +90,9 @@ namespace EAVStoreClient
                     if (dbAttribute.Sequence != attribute.Sequence)
                         dbAttribute.Sequence = attribute.Sequence;
 
+                    if (dbAttribute.Variable_Units != attribute.VariableUnits)
+                        dbAttribute.Variable_Units = attribute.VariableUnits;
+
                     ctx.SaveChanges();
                 }
                 else

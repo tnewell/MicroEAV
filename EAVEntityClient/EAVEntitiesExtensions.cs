@@ -184,6 +184,7 @@ namespace EAVStoreClient
                 IsKey = dbAttribute.Is_Key,
                 Name = dbAttribute.Name,
                 Sequence = dbAttribute.Sequence,
+                VariableUnits = dbAttribute.Variable_Units,
             });
         }
 
@@ -201,6 +202,7 @@ namespace EAVStoreClient
                 Is_Key = attribute.IsKey,
                 Name = attribute.Name,
                 Sequence = attribute.Sequence,
+                Variable_Units = attribute.VariableUnits,
             });
         }
 
@@ -213,6 +215,7 @@ namespace EAVStoreClient
             Is_Key = attribute.IsKey;
             Name = attribute.Name;
             Sequence = attribute.Sequence;
+            Variable_Units = attribute.VariableUnits;
         }
     }
 

@@ -33,6 +33,7 @@ namespace EAVFrameworkTest
             Assert.AreEqual(default(EAVDataType), anAttribute.DataType, "Property 'DataType' should be default on creation.");
             Assert.AreEqual(0, anAttribute.Sequence, "Property 'Sequence' should be zero on creation.");
             Assert.IsFalse(anAttribute.IsKey, "Property 'IsKey' should be false on creation.");
+            Assert.IsNull(anAttribute.VariableUnits, "Property 'VariableUnits' should be null on creation.");
 
             Assert.IsNull(anAttribute.Container, "Property 'Container' should be null on creation.");
 
@@ -640,6 +641,79 @@ namespace EAVFrameworkTest
             Assert.AreEqual(ObjectState.Deleted, anAttribute.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             anAttribute.IsKey = true;
+        }
+        #endregion
+
+        #region VariableUnits
+        [TestMethod]
+        public void AttributeSetVariableUnitsWhenNew()
+        {
+            EAVAttribute anAttribute = new EAVAttribute();
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            anAttribute.VariableUnits = true;
+
+            Assert.AreEqual(true, anAttribute.VariableUnits, "Property 'VariableUnits' was not set properly.");
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void AttributeSetVariableUnitsWhenUnmodified()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            anAttribute.VariableUnits = true;
+
+            Assert.AreEqual(true, anAttribute.VariableUnits, "Property 'VariableUnits' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void AttributeSetVariableUnitsWhenModified()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            anAttribute.VariableUnits = true;
+
+            Assert.AreEqual(true, anAttribute.VariableUnits, "Property 'VariableUnits' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            anAttribute.VariableUnits = false;
+
+            Assert.AreEqual(false, anAttribute.VariableUnits, "Property 'VariableUnits' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state should remain 'Modified' when property set.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void AttributeSetVariableUnitsWhenDeleted()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            anAttribute.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, anAttribute.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            anAttribute.VariableUnits = true;
         }
         #endregion
         #endregion

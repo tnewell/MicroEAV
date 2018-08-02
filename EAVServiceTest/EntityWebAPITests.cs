@@ -188,7 +188,7 @@ namespace EAVServiceTest
         [TestCategory("CRUD")]
         [TestCategory("Create")]
         [TestCategory("Subject")]
-        public void CreateSubject()
+        public void CreateEntitySubject()
         {
             var dbContext = SelectRandomItem(this.DbContext.Contexts);
             var dbEntity = SelectRandomItem(this.DbContext.Entities);

@@ -68,6 +68,7 @@ namespace EAV.Model
         EAVDataType DataType { get; set; }
         int Sequence { get; set; }
         bool IsKey { get; set; }
+        bool? VariableUnits { get; set; }
     }
     #endregion
 
@@ -207,6 +208,7 @@ namespace EAV.Model
         public EAVDataType DataType { get; set; }
         public int Sequence { get; set; }
         public bool IsKey { get; set; }
+        public bool? VariableUnits { get; set; }
     }
     #endregion
 

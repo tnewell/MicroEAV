@@ -28,7 +28,44 @@ namespace EAVWebApplication.Models.Data
         public int SelectedSubjectID { get; set; }
         public EAVSubject CurrentSubject { get { return (CurrentContext != null ? CurrentContext.Subjects.SingleOrDefault(it => it.SubjectID == SelectedSubjectID) : null); } }
 
-        private EAVRootInstance currentInstance;
-        public EAVRootInstance CurrentInstance { get { return (currentInstance); } set { currentInstance = value; } }
+        private ViewRootInstance currentInstance;
+        public ViewRootInstance CurrentInstance { get { return (currentInstance); } set { currentInstance = value; } }
     }
+
+    public class ViewRootInstance
+    {
+        private EAVRootInstance eavInstance;
+
+        public int? InstanceID { get; set; }
+        public int? ParentInstanceID { get; set; }
+        public int? SubjectID { get; set; }
+        public int? ContainerID { get; set; }
+
+        public EAVContainer Container { get { return (eavInstance.Container); } }
+        public EAVSubject Subject { get { return (eavInstance.Subject); } }
+        public EAVInstance ParentInstannce { get { return (eavInstance.ParentInstance); } }
+        public ICollection<EAVChildInstance> ChildInstances { get { return (eavInstance.ChildInstances); } }
+    }
+
+    public class ViewChildInstance
+    {
+        private EAVChildInstance eavInstance;
+
+        public int? InstanceID { get; set; }
+        public int? ParentInstanceID { get; set; }
+        public int? SubjectID { get; set; }
+        public int? ContainerID { get; set; }
+
+        public EAVContainer Container { get { return (eavInstance.Container); } }
+        public EAVSubject Subject { get { return (eavInstance.Subject); } }
+        public EAVInstance ParentInstannce { get { return (eavInstance.ParentInstance); } }
+        public ICollection<EAVChildInstance> ChildInstances { get { return (eavInstance.ChildInstances); } }
+    }
+
+    public class ViewValue : EAVValue
+    {
+        public new int? InstanceID { get; set; }
+        public new int? AttributeID { get; set; }
+    }
+
 }

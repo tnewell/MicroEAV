@@ -17,6 +17,7 @@
           <Property Name="Display_Text" Type="nvarchar" MaxLength="1024" />
           <Property Name="Sequence" Type="int" Nullable="false" />
           <Property Name="Is_Key" Type="bit" Nullable="false" />
+          <Property Name="Variable_Units" Type="bit" />
         </EntityType>
         <EntityType Name="Container">
           <Key>
@@ -130,6 +131,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Instance_Instance">
+          <End Role="Instance" Type="Self.Instance" Multiplicity="0..1" />
+          <End Role="Instance1" Type="Self.Instance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instance">
+              <PropertyRef Name="Instance_ID" />
+            </Principal>
+            <Dependent Role="Instance1">
+              <PropertyRef Name="Parent_Instance_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Instance_Subject">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
+          <End Role="Instance" Type="Self.Instance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subject">
+              <PropertyRef Name="Subject_ID" />
+            </Principal>
+            <Dependent Role="Instance">
+              <PropertyRef Name="Subject_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Subject_Context">
           <End Role="Context" Type="Self.Context" Multiplicity="1" />
           <End Role="Subject" Type="Self.Subject" Multiplicity="*" />
@@ -151,6 +176,30 @@
             </Principal>
             <Dependent Role="Subject">
               <PropertyRef Name="Entity_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Value_Attribute">
+          <End Role="Attribute" Type="Self.Attribute" Multiplicity="1" />
+          <End Role="Value" Type="Self.Value" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attribute">
+              <PropertyRef Name="Attribute_ID" />
+            </Principal>
+            <Dependent Role="Value">
+              <PropertyRef Name="Attribute_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Value_Instance">
+          <End Role="Instance" Type="Self.Instance" Multiplicity="1" />
+          <End Role="Value" Type="Self.Value" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Instance">
+              <PropertyRef Name="Instance_ID" />
+            </Principal>
+            <Dependent Role="Value">
+              <PropertyRef Name="Instance_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -179,6 +228,14 @@
             <End Role="Context" EntitySet="Context" />
             <End Role="Container" EntitySet="Container" />
           </AssociationSet>
+          <AssociationSet Name="FK_Instance_Instance" Association="Self.FK_Instance_Instance">
+            <End Role="Instance" EntitySet="Instance" />
+            <End Role="Instance1" EntitySet="Instance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Instance_Subject" Association="Self.FK_Instance_Subject">
+            <End Role="Subject" EntitySet="Subject" />
+            <End Role="Instance" EntitySet="Instance" />
+          </AssociationSet>
           <AssociationSet Name="FK_Subject_Context" Association="Self.FK_Subject_Context">
             <End Role="Context" EntitySet="Context" />
             <End Role="Subject" EntitySet="Subject" />
@@ -186,6 +243,14 @@
           <AssociationSet Name="FK_Subject_Entity" Association="Self.FK_Subject_Entity">
             <End Role="Entity" EntitySet="Entity" />
             <End Role="Subject" EntitySet="Subject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Value_Attribute" Association="Self.FK_Value_Attribute">
+            <End Role="Attribute" EntitySet="Attribute" />
+            <End Role="Value" EntitySet="Value" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Value_Instance" Association="Self.FK_Value_Instance">
+            <End Role="Instance" EntitySet="Instance" />
+            <End Role="Value" EntitySet="Value" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -207,6 +272,7 @@
           <NavigationProperty Name="Value" Relationship="Self.FK_Value_Attribute" FromRole="Attribute" ToRole="Value" />
           <NavigationProperty Name="Data_Type" Relationship="EAV.Entities.FK_Attribute_Data_Type" FromRole="Attribute" ToRole="Data_Type" />
           <Property Name="Sequence" Type="Int32" Nullable="false" />
+          <Property Name="Variable_Units" Type="Boolean" />
         </EntityType>
         <EntityType Name="Container">
           <Key>
@@ -486,6 +552,7 @@
           <EntitySetMapping Name="Attributes">
             <EntityTypeMapping TypeName="EAV.Entities.Attribute">
               <MappingFragment StoreEntitySet="Attribute">
+                <ScalarProperty Name="Variable_Units" ColumnName="Variable_Units" />
                 <ScalarProperty Name="Sequence" ColumnName="Sequence" />
                 <ScalarProperty Name="Attribute_ID" ColumnName="Attribute_ID" />
                 <ScalarProperty Name="Container_ID" ColumnName="Container_ID" />

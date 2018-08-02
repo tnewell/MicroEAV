@@ -8,6 +8,7 @@
     [Display_Text] NVARCHAR(1024) NULL, 
 	[Sequence] INT NOT NULL, 
     [Is_Key] BIT NOT NULL, 
+    [Variable_Units] BIT NULL, 
     CONSTRAINT [FK_Attribute_Container] FOREIGN KEY ([Container_ID]) REFERENCES [Container]([Container_ID]), 
     CONSTRAINT [FK_Attribute_DataType] FOREIGN KEY ([Data_Type_ID]) REFERENCES [Data_Type]([Data_Type_ID]), 
     CONSTRAINT [UK_Container_Name] UNIQUE ([Container_ID],[Name]), 
