@@ -119,6 +119,29 @@ namespace EAVServiceTest
             return (dbAttribute);
         }
 
+        private static EAVStoreClient.Unit CreateUnit(string symbol, string displayText, bool curated = false)
+        {
+            EAVStoreClient.Unit dbUnit;
+
+            using (EAVStoreClient.MicroEAVContext ctx = new EAVStoreClient.MicroEAVContext())
+            {
+                dbUnit = ctx.Units.Add(new EAVStoreClient.Unit()
+                {
+                    Singular_Name = "SN_" + displayText,
+                    Singular_Abbreviation = "SA_" + displayText.Substring(0,4),
+                    Plural_Name = "PN_" + displayText,
+                    Plural_Abbreviation = "PA_" + displayText.Substring(0, 4),
+                    Symbol = symbol,
+                    Display_Text = displayText,
+                    Curated = curated
+                });
+
+                ctx.SaveChanges();
+            }
+
+            return (dbUnit);
+        }
+
         private static EAVStoreClient.Subject CreateSubject(int contextID, int entityID, string identifier)
         {
             EAVStoreClient.Subject dbSubject;
@@ -157,7 +180,7 @@ namespace EAVServiceTest
             return (dbInstance);
         }
 
-        private static EAVStoreClient.Value CreateValue(int attributeID, int instanceID, string value, string units = null)
+        private static EAVStoreClient.Value CreateValue(int attributeID, int instanceID, string value, int? unitID)
         {
             EAVStoreClient.Value dbValue;
 
@@ -167,8 +190,8 @@ namespace EAVServiceTest
                 {
                     Attribute_ID = attributeID,
                     Instance_ID = instanceID,
-                    Units = units,
                     Raw_Value = value,
+                    Unit_ID = unitID,
                 });
 
                 ctx.SaveChanges();
@@ -188,12 +211,17 @@ namespace EAVServiceTest
         {
             using (EAVStoreClient.MicroEAVContext ctx = new EAVStoreClient.MicroEAVContext())
             {
-                ctx.Database.ExecuteSqlCommand("DELETE [Value];DELETE [Instance];DBCC CHECKIDENT ([Instance], RESEED, 0);DELETE [Subject];DBCC CHECKIDENT ([Subject], RESEED, 0);DELETE [Attribute];DBCC CHECKIDENT ([Attribute], RESEED, 0);DELETE [Container];DBCC CHECKIDENT ([Container], RESEED, 0);DELETE [Context];DBCC CHECKIDENT ([Context], RESEED, 0);DELETE [Entity];DBCC CHECKIDENT ([Entity], RESEED, 0)");
+                ctx.Database.ExecuteSqlCommand("DELETE [Value];DELETE [Instance];DBCC CHECKIDENT ([Instance], RESEED, 0);DELETE [Subject];DBCC CHECKIDENT ([Subject], RESEED, 0);DELETE [Unit];DBCC CHECKIDENT ([Unit], RESEED, 0);DELETE [Attribute];DBCC CHECKIDENT ([Attribute], RESEED, 0);DELETE [Container];DBCC CHECKIDENT ([Container], RESEED, 0);DELETE [Context];DBCC CHECKIDENT ([Context], RESEED, 0);DELETE [Entity];DBCC CHECKIDENT ([Entity], RESEED, 0)");
 
                 // Entities
                 List<EAVStoreClient.Entity> entities = new List<EAVStoreClient.Entity>();
                 for (int i = 0; i < 5; ++i)
                     entities.Add(CreateEntity(String.Format("Entity {0}", i + 1)));
+
+                // Units
+                List<EAVStoreClient.Unit> units = new List<EAVStoreClient.Unit>();
+                for (int i = 0; i < 5; ++i)
+                    units.Add(CreateUnit(String.Format("SYM{0}", i + 1), String.Format("Unit {0}", i + 1)));
 
                 // Contexts
                 List<EAVStoreClient.Context> contexts = new List<EAVStoreClient.Context>();
@@ -226,7 +254,7 @@ namespace EAVServiceTest
 
                     foreach (EAV.Model.EAVDataType dt in typeList.Take(3))
                     {
-                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? "angstroms" : null);
+                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
                     }
 
                     typeList.Enqueue(typeList.Dequeue());
@@ -245,7 +273,7 @@ namespace EAVServiceTest
 
                     foreach (EAV.Model.EAVDataType dt in typeList.Take(3))
                     {
-                        CreateValue(attributes[dt].Attribute_ID, dbParentInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? "angstroms" : null);
+                        CreateValue(attributes[dt].Attribute_ID, dbParentInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
                     }
 
                     typeList.Enqueue(typeList.Dequeue());
@@ -263,7 +291,7 @@ namespace EAVServiceTest
 
                     foreach (EAV.Model.EAVDataType dt in typeList.Take(3))
                     {
-                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? "angstroms" : null);
+                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
                     }
 
                     typeList.Enqueue(typeList.Dequeue());
@@ -281,7 +309,7 @@ namespace EAVServiceTest
 
                     foreach (EAV.Model.EAVDataType dt in typeList.Take(3))
                     {
-                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? "angstroms" : null);
+                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
                     }
 
                     typeList.Enqueue(typeList.Dequeue());

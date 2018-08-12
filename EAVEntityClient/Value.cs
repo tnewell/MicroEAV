@@ -17,9 +17,10 @@ namespace EAVStoreClient
         public int Attribute_ID { get; set; }
         public int Instance_ID { get; set; }
         public string Raw_Value { get; set; }
-        public string Units { get; set; }
+        public Nullable<int> Unit_ID { get; set; }
     
         public virtual Attribute Attribute { get; set; }
         public virtual Instance Instance { get; set; }
+        public virtual Unit Unit { get; set; }
     }
 }

@@ -19,6 +19,14 @@
           <Property Name="Is_Key" Type="bit" Nullable="false" />
           <Property Name="Variable_Units" Type="bit" />
         </EntityType>
+        <EntityType Name="Attribute_Unit">
+          <Key>
+            <PropertyRef Name="Attribute_ID" />
+            <PropertyRef Name="Unit_ID" />
+          </Key>
+          <Property Name="Attribute_ID" Type="int" Nullable="false" />
+          <Property Name="Unit_ID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Container">
           <Key>
             <PropertyRef Name="Container_ID" />
@@ -73,6 +81,19 @@
           <Property Name="Context_ID" Type="int" Nullable="false" />
           <Property Name="Identifier" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
+        <EntityType Name="Unit">
+          <Key>
+            <PropertyRef Name="Unit_ID" />
+          </Key>
+          <Property Name="Unit_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Singular_Name" Type="nvarchar" MaxLength="128" />
+          <Property Name="Singular_Abbreviation" Type="nvarchar" MaxLength="8" />
+          <Property Name="Plural_Name" Type="nvarchar" MaxLength="128" />
+          <Property Name="Plural_Abbreviation" Type="nvarchar" MaxLength="8" />
+          <Property Name="Symbol" Type="nvarchar" MaxLength="4" />
+          <Property Name="Display_Text" Type="nvarchar" MaxLength="128" />
+          <Property Name="Curated" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Value">
           <Key>
             <PropertyRef Name="Attribute_ID" />
@@ -81,7 +102,7 @@
           <Property Name="Attribute_ID" Type="int" Nullable="false" />
           <Property Name="Instance_ID" Type="int" Nullable="false" />
           <Property Name="Raw_Value" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Units" Type="nvarchar" MaxLength="32" />
+          <Property Name="Unit_ID" Type="int" />
         </EntityType>
         <Association Name="FK_Attribute_Container">
           <End Role="Container" Type="Self.Container" Multiplicity="1" />
@@ -104,6 +125,30 @@
             </Principal>
             <Dependent Role="Attribute">
               <PropertyRef Name="Data_Type_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Attribute_Unit_Attribute">
+          <End Role="Attribute" Type="Self.Attribute" Multiplicity="1" />
+          <End Role="Attribute_Unit" Type="Self.Attribute_Unit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Attribute">
+              <PropertyRef Name="Attribute_ID" />
+            </Principal>
+            <Dependent Role="Attribute_Unit">
+              <PropertyRef Name="Attribute_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Attribute_Unit_Unit">
+          <End Role="Unit" Type="Self.Unit" Multiplicity="1" />
+          <End Role="Attribute_Unit" Type="Self.Attribute_Unit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Unit">
+              <PropertyRef Name="Unit_ID" />
+            </Principal>
+            <Dependent Role="Attribute_Unit">
+              <PropertyRef Name="Unit_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -203,14 +248,28 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Value_Unit">
+          <End Role="Unit" Type="Self.Unit" Multiplicity="0..1" />
+          <End Role="Value" Type="Self.Value" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Unit">
+              <PropertyRef Name="Unit_ID" />
+            </Principal>
+            <Dependent Role="Value">
+              <PropertyRef Name="Unit_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="EAVEntitiesStoreContainer">
           <EntitySet Name="Attribute" EntityType="Self.Attribute" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Attribute_Unit" EntityType="Self.Attribute_Unit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Container" EntityType="Self.Container" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Context" EntityType="Self.Context" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Data_Type" EntityType="Self.Data_Type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Entity" EntityType="Self.Entity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Instance" EntityType="Self.Instance" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Unit" EntityType="Self.Unit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Value" EntityType="Self.Value" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Attribute_Container" Association="Self.FK_Attribute_Container">
             <End Role="Container" EntitySet="Container" />
@@ -219,6 +278,14 @@
           <AssociationSet Name="FK_Attribute_DataType" Association="Self.FK_Attribute_DataType">
             <End Role="Data_Type" EntitySet="Data_Type" />
             <End Role="Attribute" EntitySet="Attribute" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attribute_Unit_Attribute" Association="Self.FK_Attribute_Unit_Attribute">
+            <End Role="Attribute" EntitySet="Attribute" />
+            <End Role="Attribute_Unit" EntitySet="Attribute_Unit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Attribute_Unit_Unit" Association="Self.FK_Attribute_Unit_Unit">
+            <End Role="Unit" EntitySet="Unit" />
+            <End Role="Attribute_Unit" EntitySet="Attribute_Unit" />
           </AssociationSet>
           <AssociationSet Name="FK_ChildContainer_ParentContainer" Association="Self.FK_ChildContainer_ParentContainer">
             <End Role="Container" EntitySet="Container" />
@@ -252,6 +319,10 @@
             <End Role="Instance" EntitySet="Instance" />
             <End Role="Value" EntitySet="Value" />
           </AssociationSet>
+          <AssociationSet Name="FK_Value_Unit" Association="Self.FK_Value_Unit">
+            <End Role="Unit" EntitySet="Unit" />
+            <End Role="Value" EntitySet="Value" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -273,6 +344,7 @@
           <NavigationProperty Name="Data_Type" Relationship="EAV.Entities.FK_Attribute_Data_Type" FromRole="Attribute" ToRole="Data_Type" />
           <Property Name="Sequence" Type="Int32" Nullable="false" />
           <Property Name="Variable_Units" Type="Boolean" />
+          <NavigationProperty Name="Units" Relationship="EAV.Entities.Attribute_Unit" FromRole="Attribute" ToRole="Unit" />
         </EntityType>
         <EntityType Name="Container">
           <Key>
@@ -353,9 +425,10 @@
           <Property Name="Attribute_ID" Type="Int32" Nullable="false" />
           <Property Name="Instance_ID" Type="Int32" Nullable="false" />
           <Property Name="Raw_Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Units" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Attribute" Relationship="Self.FK_Value_Attribute" FromRole="Value" ToRole="Attribute" />
           <NavigationProperty Name="Instance" Relationship="Self.FK_Value_Instance" FromRole="Value" ToRole="Instance" />
+          <Property Name="Unit_ID" Type="Int32" />
+          <NavigationProperty Name="Unit" Relationship="EAV.Entities.FK_Value_Unit" FromRole="Value" ToRole="Unit" />
         </EntityType>
         <Association Name="FK_Attribute_Container">
           <End Role="Container" Type="Self.Container" Multiplicity="1" />
@@ -518,6 +591,15 @@
             <End Role="Entity" EntitySet="Entities" />
             <End Role="Subject" EntitySet="Subjects" />
           </AssociationSet>
+          <EntitySet Name="Units" EntityType="EAV.Entities.Unit" />
+          <AssociationSet Name="FK_Value_Unit" Association="EAV.Entities.FK_Value_Unit">
+            <End Role="Unit" EntitySet="Units" />
+            <End Role="Value" EntitySet="Values" />
+          </AssociationSet>
+          <AssociationSet Name="Attribute_Unit" Association="EAV.Entities.Attribute_Unit">
+            <End Role="Attribute" EntitySet="Attributes" />
+            <End Role="Unit" EntitySet="Units" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_Attribute_Data_Type">
           <End Type="EAV.Entities.Data_Type" Role="Data_Type" Multiplicity="1" />
@@ -542,6 +624,37 @@
               <PropertyRef Name="Entity_ID" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Unit">
+          <Key>
+            <PropertyRef Name="Unit_ID" />
+          </Key>
+          <Property Name="Unit_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Singular_Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Singular_Abbreviation" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="Plural_Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Plural_Abbreviation" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="Symbol" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Display_Text" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Curated" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Values" Relationship="EAV.Entities.FK_Value_Unit" FromRole="Unit" ToRole="Value" />
+          <NavigationProperty Name="Attributes" Relationship="EAV.Entities.Attribute_Unit" FromRole="Unit" ToRole="Attribute" />
+        </EntityType>
+        <Association Name="FK_Value_Unit">
+          <End Type="EAV.Entities.Unit" Role="Unit" Multiplicity="0..1" />
+          <End Type="EAV.Entities.Value" Role="Value" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Unit">
+              <PropertyRef Name="Unit_ID" />
+            </Principal>
+            <Dependent Role="Value">
+              <PropertyRef Name="Unit_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Attribute_Unit">
+          <End Type="EAV.Entities.Attribute" Role="Attribute" Multiplicity="*" />
+          <End Type="EAV.Entities.Unit" Role="Unit" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -627,13 +740,35 @@
           <EntitySetMapping Name="Values">
             <EntityTypeMapping TypeName="EAV.Entities.Value">
               <MappingFragment StoreEntitySet="Value">
+                <ScalarProperty Name="Unit_ID" ColumnName="Unit_ID" />
                 <ScalarProperty Name="Attribute_ID" ColumnName="Attribute_ID" />
                 <ScalarProperty Name="Instance_ID" ColumnName="Instance_ID" />
                 <ScalarProperty Name="Raw_Value" ColumnName="Raw_Value" />
-                <ScalarProperty Name="Units" ColumnName="Units" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Units">
+            <EntityTypeMapping TypeName="EAV.Entities.Unit">
+              <MappingFragment StoreEntitySet="Unit">
+                <ScalarProperty Name="Curated" ColumnName="Curated" />
+                <ScalarProperty Name="Display_Text" ColumnName="Display_Text" />
+                <ScalarProperty Name="Symbol" ColumnName="Symbol" />
+                <ScalarProperty Name="Plural_Abbreviation" ColumnName="Plural_Abbreviation" />
+                <ScalarProperty Name="Plural_Name" ColumnName="Plural_Name" />
+                <ScalarProperty Name="Singular_Abbreviation" ColumnName="Singular_Abbreviation" />
+                <ScalarProperty Name="Singular_Name" ColumnName="Singular_Name" />
+                <ScalarProperty Name="Unit_ID" ColumnName="Unit_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Attribute_Unit" TypeName="EAV.Entities.Attribute_Unit" StoreEntitySet="Attribute_Unit">
+            <EndProperty Name="Unit">
+              <ScalarProperty Name="Unit_ID" ColumnName="Unit_ID" />
+            </EndProperty>
+            <EndProperty Name="Attribute">
+              <ScalarProperty Name="Attribute_ID" ColumnName="Attribute_ID" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

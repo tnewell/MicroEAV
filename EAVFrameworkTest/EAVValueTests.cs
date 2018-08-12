@@ -20,7 +20,7 @@ namespace EAVFrameworkTest
             Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
             Assert.IsNull(aValue.RawValue, "Property 'RawValue' should be null on creation.");
-            Assert.IsNull(aValue.Units, "Property 'Units' should be null on creation.");
+            Assert.IsNull(aValue.Unit, "Property 'Units' should be null on creation.");
 
             Assert.IsNull(aValue.Instance, "Property 'Instance' should be null on creation.");
             Assert.IsNull(aValue.Attribute, "Property 'Attribute' should be null on creation.");
@@ -217,10 +217,11 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
-            string value = Guid.NewGuid().ToString();
-            aValue.Units = value;
+            //string value = Guid.NewGuid().ToString();
+            EAVUnit value = new EAVUnit() { DisplayText = Guid.NewGuid().ToString() };
+            aValue.Unit = value;
 
-            Assert.AreEqual(value, aValue.Units, "Property 'Units' was not set properly.");
+            Assert.AreEqual(value, aValue.Unit, "Property 'Units' was not set properly.");
             Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
         }
 
@@ -238,10 +239,11 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            string value = Guid.NewGuid().ToString();
-            aValue.Units = value;
+            //string value = Guid.NewGuid().ToString();
+            EAVUnit value = new EAVUnit() { DisplayText = Guid.NewGuid().ToString() };
+            aValue.Unit = value;
 
-            Assert.AreEqual(value, aValue.Units, "Property 'Units' was not set properly.");
+            Assert.AreEqual(value, aValue.Unit, "Property 'Units' was not set properly.");
             Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
@@ -259,16 +261,18 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            string value = Guid.NewGuid().ToString();
-            aValue.Units = value;
+            //string value = Guid.NewGuid().ToString();
+            EAVUnit value = new EAVUnit() { DisplayText = Guid.NewGuid().ToString() };
+            aValue.Unit = value;
 
-            Assert.AreEqual(value, aValue.Units, "Property 'Units' was not set properly.");
+            Assert.AreEqual(value, aValue.Unit, "Property 'Units' was not set properly.");
             Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = Guid.NewGuid().ToString();
-            aValue.Units = value;
+            //value = Guid.NewGuid().ToString();
+            value = new EAVUnit() { DisplayText = Guid.NewGuid().ToString() };
+            aValue.Unit = value;
 
-            Assert.AreEqual(value, aValue.Units, "Property 'Units' was not set properly.");
+            Assert.AreEqual(value, aValue.Unit, "Property 'Units' was not set properly.");
             Assert.AreEqual(ObjectState.Modified, aValue.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
@@ -291,7 +295,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, aValue.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aValue.Units = Guid.NewGuid().ToString();
+            aValue.Unit = new EAVUnit() { DisplayText = Guid.NewGuid().ToString() }; //Guid.NewGuid().ToString();
         }
         #endregion
         #endregion

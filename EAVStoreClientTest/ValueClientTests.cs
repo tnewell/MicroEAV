@@ -101,7 +101,6 @@ namespace EAVStoreClientTestHarness
             Assert.IsNotNull(dbValue, String.Format("Failed to retrieve instance ID {0}, attribute ID {1} from the database.", value.InstanceID, value.AttributeID));
 
             Assert.AreEqual(value.RawValue, dbValue.Raw_Value, "Property 'RawValue' was not created correctly.");
-            Assert.AreEqual(value.Units, dbValue.Units, "Property 'Units' was not created correctly.");
         }
 
         [TestMethod]
@@ -110,16 +109,14 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Value")]
         public void UpdateValue()
         {
-            var dbValue = SelectRandomItem(this.DbContext.Values.AsEnumerable().Where(it => !String.IsNullOrWhiteSpace(it.Units)));
+            var dbValue = SelectRandomItem(this.DbContext.Values.AsEnumerable().Where(it => it.Unit != null));
             string oldValue = dbValue.Raw_Value;
-            string oldUnits = dbValue.Units;
 
             EAVStoreClient.EAVValueClient client = new EAVStoreClient.EAVValueClient();
 
             var value = (EAV.Model.BaseEAVValue)dbValue;
 
             value.RawValue = oldValue.Flip();
-            value.Units = oldUnits.Flip();
 
             client.UpdateValue(value);
 
@@ -129,8 +126,6 @@ namespace EAVStoreClientTestHarness
 
             Assert.AreEqual(value.RawValue, dbValue.Raw_Value);
             Assert.AreNotEqual(oldValue, dbValue.Raw_Value);
-            Assert.AreEqual(value.Units, dbValue.Units);
-            Assert.AreNotEqual(oldUnits, dbValue.Units);
         }
 
         [TestMethod]

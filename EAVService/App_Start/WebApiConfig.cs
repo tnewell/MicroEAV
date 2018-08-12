@@ -22,6 +22,7 @@ namespace EAVService
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVContextJsonConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVContainerJsonConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVAttributeJsonConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVUnitJsonConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVEntityJsonConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVSubjectJsonConverter());
             config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVInstanceJsonConverter());
@@ -107,6 +108,30 @@ namespace EAVService
         {
             if (value is IEAVAttribute)
                 serializer.Serialize(writer, new BaseEAVAttribute((IEAVAttribute)value), typeof(IEAVAttribute));
+            else
+                serializer.Serialize(writer, value);
+        }
+    }
+
+    public class IEAVUnitJsonConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return (objectType == typeof(IEAVUnit));
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (objectType == typeof(IEAVUnit))
+                return (serializer.Deserialize<BaseEAVUnit>(reader));
+            else
+                return (null);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value is IEAVUnit)
+                serializer.Serialize(writer, new BaseEAVUnit((IEAVUnit) value), typeof(IEAVUnit));
             else
                 serializer.Serialize(writer, value);
         }

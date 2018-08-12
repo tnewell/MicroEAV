@@ -12,30 +12,27 @@ namespace EAVStoreClient
     using System;
     using System.Collections.Generic;
     
-    public partial class Attribute
+    public partial class Unit
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Attribute()
+        public Unit()
         {
-            this.Value = new HashSet<Value>();
-            this.Units = new HashSet<Unit>();
+            this.Values = new HashSet<Value>();
+            this.Attributes = new HashSet<Attribute>();
         }
     
-        public int Attribute_ID { get; set; }
-        public int Container_ID { get; set; }
-        public int Data_Type_ID { get; set; }
-        public string Name { get; set; }
-        public string Data_Name { get; set; }
+        public int Unit_ID { get; set; }
+        public string Singular_Name { get; set; }
+        public string Singular_Abbreviation { get; set; }
+        public string Plural_Name { get; set; }
+        public string Plural_Abbreviation { get; set; }
+        public string Symbol { get; set; }
         public string Display_Text { get; set; }
-        public bool Is_Key { get; set; }
-        public int Sequence { get; set; }
-        public Nullable<bool> Variable_Units { get; set; }
+        public bool Curated { get; set; }
     
-        public virtual Container Container { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Value> Value { get; set; }
-        public virtual Data_Type Data_Type { get; set; }
+        public virtual ICollection<Value> Values { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Unit> Units { get; set; }
+        public virtual ICollection<Attribute> Attributes { get; set; }
     }
 }

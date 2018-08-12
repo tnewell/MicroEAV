@@ -219,6 +219,57 @@ namespace EAVStoreClient
         }
     }
 
+    public partial class Unit
+    {
+        public static explicit operator EAV.Model.BaseEAVUnit(Unit dbUnit)
+        {
+            if (dbUnit == null)
+                return (null);
+
+            return (new EAV.Model.BaseEAVUnit()
+            {
+                UnitID = dbUnit.Unit_ID,
+                SingularName = dbUnit.Singular_Name,
+                SingularAbbreviation = dbUnit.Singular_Abbreviation,
+                PluralName = dbUnit.Plural_Name,
+                PluralAbbreviation = dbUnit.Plural_Abbreviation,
+                Symbol = dbUnit.Symbol,
+                DisplayText = dbUnit.Display_Text,
+                Curated = dbUnit.Curated,
+            });
+        }
+
+        public static explicit operator Unit(EAV.Model.BaseEAVUnit Unit)
+        {
+            if (Unit == null)
+                return (null);
+
+            return (new Unit()
+            {
+                Unit_ID = Unit.UnitID.GetValueOrDefault(),
+                Singular_Name = Unit.SingularName,
+                Singular_Abbreviation = Unit.SingularAbbreviation,
+                Plural_Name = Unit.PluralName,
+                Plural_Abbreviation = Unit.PluralAbbreviation,
+                Symbol = Unit.Symbol,
+                Display_Text = Unit.DisplayText,
+                Curated = Unit.Curated,
+            });
+        }
+
+        public Unit(EAV.Model.IEAVUnit Unit)
+        {
+            Unit_ID = Unit.UnitID.GetValueOrDefault();
+            Singular_Name = Unit.SingularName;
+            Singular_Abbreviation = Unit.SingularAbbreviation;
+            Plural_Name = Unit.PluralName;
+            Plural_Abbreviation = Unit.PluralAbbreviation;
+            Symbol = Unit.Symbol;
+            Display_Text = Unit.DisplayText;
+            Curated = Unit.Curated;
+        }
+    }
+
     public partial class Subject
     {
         public static explicit operator EAV.Model.BaseEAVSubject(Subject dbSubject)
@@ -309,7 +360,7 @@ namespace EAVStoreClient
                 AttributeID = dbValue.Attribute_ID,
                 InstanceID = dbValue.Instance_ID,
                 RawValue = dbValue.Raw_Value,
-                Units = dbValue.Units,
+                UnitID = dbValue.Unit_ID,
             });
         }
 
@@ -323,7 +374,7 @@ namespace EAVStoreClient
                 Attribute_ID = value.AttributeID.GetValueOrDefault(),
                 Instance_ID = value.InstanceID.GetValueOrDefault(),
                 Raw_Value = value.RawValue,
-                Units = value.Units,
+                Unit_ID = value.UnitID,
             });
         }
 
@@ -334,7 +385,7 @@ namespace EAVStoreClient
             Attribute_ID = value.AttributeID.GetValueOrDefault();
             Instance_ID = value.InstanceID.GetValueOrDefault();
             Raw_Value = value.RawValue;
-            Units = value.Units;
+            Unit_ID = value.UnitID;
         }
     }
 }

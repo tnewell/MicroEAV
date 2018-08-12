@@ -60,7 +60,7 @@ namespace EAVWebApplication.Controllers
                     if (valuePair.Original != null && valuePair.Modified != null) // Update
                     {
                         valuePair.Original.RawValue = valuePair.Modified.RawValue;
-                        valuePair.Original.Units = valuePair.Modified.Units;
+                        valuePair.Original.Unit = valuePair.Modified.Unit;
                     }
                     else if (valuePair.Original == null && valuePair.Modified != null) // Insert
                     {

@@ -166,7 +166,7 @@ namespace EAVServiceTest
             var dbValueKey = SelectRandomItem(dbUsableValueKeys);
             string rawValue = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Model.BaseEAVValue>(String.Format("api/data/instances/{0}/values?attribute={1}", dbValueKey.Item2, dbValueKey.Item1), new EAV.Model.BaseEAVValue() { RawValue = rawValue, Units = "N/A" }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Model.BaseEAVValue>(String.Format("api/data/instances/{0}/values?attribute={1}", dbValueKey.Item2, dbValueKey.Item1), new EAV.Model.BaseEAVValue() { RawValue = rawValue }).Result;
             if (response.IsSuccessStatusCode)
             {
                 var value = response.Content.ReadAsAsync<EAV.Model.BaseEAVValue>().Result;

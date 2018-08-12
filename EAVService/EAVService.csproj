@@ -178,6 +178,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ContainerController.cs" />
     <Compile Include="Controllers\ContextController.cs" />
+    <Compile Include="Controllers\UnitController.cs" />
     <Compile Include="Controllers\EntityController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstanceController.cs" />

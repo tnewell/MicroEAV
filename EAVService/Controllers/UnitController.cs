@@ -22,19 +22,46 @@ using System.Web.Http;
 
 namespace EAVService.Controllers
 {
-    [RoutePrefix("api/meta/attributes")]
-    public class AttributeController : BaseEAVController
+    [RoutePrefix("api/metadata/units")]
+    public class UnitController : BaseEAVController
     {
-        private EAV.Store.IEAVAttributeClient attributeClient = new EAVStoreClient.EAVAttributeClient();
         private EAV.Store.IEAVUnitClient unitClient = new EAVStoreClient.EAVUnitClient();
 
         [HttpGet]
-        [Route("{id}", Name = "RetrieveAttribute")]
-        public IHttpActionResult RetrieveAttribute(int id)
+        [Route("", Name = "RetrieveUnits")]
+        public IHttpActionResult RetrieveUnits()
         {
             try
             {
-                return (Ok<EAV.Model.IEAVAttribute>(attributeClient.RetrieveAttribute(id)));
+                return (Ok<IEnumerable<EAV.Model.IEAVUnit>>(unitClient.RetrieveUnits()));
+            }
+            catch (Exception ex)
+            {
+                return (InternalServerError(ex));
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}", Name = "RetrieveUnit")]
+        public IHttpActionResult RetrieveUnit(int id)
+        {
+            try
+            {
+                return (Ok<EAV.Model.IEAVUnit>(unitClient.RetrieveUnit(id)));
+            }
+            catch (Exception ex)
+            {
+                return (InternalServerError(ex));
+            }
+        }
+
+        [HttpPost]
+        [Route("", Name = "CreateUnit")]
+        public IHttpActionResult CreateUnit(EAV.Model.IEAVUnit unit)
+        {
+            try
+            {
+                return (Ok<EAV.Model.IEAVUnit>(unitClient.CreateUnit(unit)));
             }
             catch (Exception ex)
             {
@@ -43,12 +70,12 @@ namespace EAVService.Controllers
         }
 
         [HttpPatch]
-        [Route("", Name = "UpdateAttribute")]
-        public IHttpActionResult UpdateAttribute(EAV.Model.IEAVAttribute attribute)
+        [Route("", Name = "UpdateUnit")]
+        public IHttpActionResult UpdateUnit(EAV.Model.IEAVUnit unit)
         {
             try
             {
-                attributeClient.UpdateAttribute(attribute);
+                unitClient.UpdateUnit(unit);
 
                 return (Ok());
             }
@@ -59,28 +86,14 @@ namespace EAVService.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}", Name = "DeleteAttribute")]
-        public IHttpActionResult DeleteAttribute(int id)
+        [Route("{id}", Name = "DeleteUnit")]
+        public IHttpActionResult DeleteUnit(int id)
         {
             try
             {
-                attributeClient.DeleteAttribute(id);
+                unitClient.DeleteUnit(id);
 
                 return (Ok());
-            }
-            catch (Exception ex)
-            {
-                return (InternalServerError(ex));
-            }
-        }
-
-        [HttpGet]
-        [Route("{id}/units", Name = "RetrieveAttributeUnits")]
-        public IHttpActionResult RetrieveAttributeUnits()
-        {
-            try
-            {
-                return (Ok<IEnumerable<EAV.Model.IEAVUnit>>(unitClient.RetrieveUnits()));
             }
             catch (Exception ex)
             {

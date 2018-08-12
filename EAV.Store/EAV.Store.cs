@@ -82,6 +82,19 @@ namespace EAV.Store
         void DeleteAttribute(int attributeID);
     }
 
+    public interface IEAVUnitClient
+    {
+        IEnumerable<EAV.Model.IEAVUnit> RetrieveUnits();
+
+        EAV.Model.IEAVUnit RetrieveUnit(int UnitID);
+
+        EAV.Model.IEAVUnit CreateUnit(EAV.Model.IEAVUnit Unit);
+
+        void UpdateUnit(EAV.Model.IEAVUnit Unit);
+
+        void DeleteUnit(int UnitID);
+    }
+
     public interface IEAVSubjectClient
     {
         IEnumerable<EAV.Model.IEAVSubject> RetrieveSubjects(int? contextID, int? entityID);

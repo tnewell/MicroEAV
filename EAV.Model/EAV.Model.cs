@@ -70,6 +70,20 @@ namespace EAV.Model
         bool IsKey { get; set; }
         bool? VariableUnits { get; set; }
     }
+
+    public interface IEAVUnit
+    {
+        int? UnitID { get; set; }
+
+        string SingularName { get; set; }
+        string SingularAbbreviation { get; set; }
+        string PluralName { get; set; }
+        string PluralAbbreviation { get; set; }
+        string Symbol { get; set; }
+        string DisplayText { get; set; }
+        bool Curated { get; set; }
+    }
+
     #endregion
 
     #region Data Interfaces
@@ -94,9 +108,9 @@ namespace EAV.Model
     {
         int? InstanceID { get; }
         int? AttributeID { get; }
+        int? UnitID { get; }
 
         string RawValue { get; set; }
-        string Units { get; set; }
     }
     #endregion
 
@@ -210,6 +224,36 @@ namespace EAV.Model
         public bool IsKey { get; set; }
         public bool? VariableUnits { get; set; }
     }
+
+    /// <summary>
+    /// A Unit represents a unit of measurement.
+    /// </summary>
+    public class BaseEAVUnit : IEAVUnit
+    {
+        public BaseEAVUnit() { }
+
+        public BaseEAVUnit(IEAVUnit unit)
+        {
+            this.UnitID = unit.UnitID;
+            this.SingularName = unit.SingularName;
+            this.SingularAbbreviation = unit.SingularAbbreviation;
+            this.PluralName = unit.PluralName;
+            this.PluralAbbreviation = unit.PluralAbbreviation;
+            this.Symbol = unit.Symbol;
+            this.Curated = unit.Curated;
+        }
+
+        public int? UnitID { get; set; }
+
+        public string SingularName { get; set; }
+        public string SingularAbbreviation { get; set; }
+        public string PluralName { get; set; }
+        public string PluralAbbreviation { get; set; }
+        public string Symbol { get; set; }
+        public string DisplayText { get; set; }
+        public bool Curated { get; set; }
+    }
+
     #endregion
 
     #region Data Objects
@@ -275,15 +319,15 @@ namespace EAV.Model
         {
             this.InstanceID = value.InstanceID;
             this.AttributeID = value.AttributeID;
+            this.UnitID = value.UnitID;
             this.RawValue = value.RawValue;
-            this.Units = value.Units;
         }
 
         public int? InstanceID { get; set; }
         public int? AttributeID { get; set; }
+        public int? UnitID { get; set; }
 
         public string RawValue { get; set; }
-        public string Units { get; set; }
     }
     #endregion
 

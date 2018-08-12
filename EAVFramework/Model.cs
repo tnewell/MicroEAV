@@ -689,8 +689,49 @@ namespace EAVFramework.Model
     {
         public EAVAttribute()
         {
+            units = new ObservableCollection<EAVUnit>();
+            units.CollectionChanged += Units_CollectionChanged;
+
             values = new ObservableCollection<EAVValue>();
             values.CollectionChanged += Values_CollectionChanged;
+        }
+
+        private void Units_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+
+                    if (e.OldItems != null)
+                    {
+                        foreach (EAVUnit unit in e.OldItems)
+                        {
+                            if (unit.Attribute == this)
+                            {
+                                unit.Attribute = null;
+                            }
+                        }
+                    }
+
+                    if (e.NewItems != null)
+                    {
+                        foreach (EAVUnit unit in e.NewItems)
+                        {
+                            if (unit.Attribute != this)
+                            {
+                                unit.Attribute = this;
+                            }
+                        }
+                    }
+
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
+                    break;
+            }
         }
 
         private void Values_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -884,6 +925,14 @@ namespace EAVFramework.Model
             }
         }
 
+        [DataMember(Name = "Units")]
+        private ObservableCollection<EAVUnit> units;
+        [IgnoreDataMember]
+        public ICollection<EAVUnit> Units
+        {
+            get { if (ObjectState != ObjectState.Deleted) return (units); else return (new ReadOnlyObservableCollection<EAVUnit>(units)); }
+        }
+
         [DataMember(Name = "Values")]
         private ObservableCollection<EAVValue> values;
         [IgnoreDataMember]
@@ -914,6 +963,219 @@ namespace EAVFramework.Model
 
                 foreach (EAVValue value in values)
                     value.MarkDeleted();
+            }
+        }
+    }
+
+    [DataContract(IsReference = true)]
+    public class EAVUnit : EAVObject, EAV.Model.IEAVUnit
+    {
+        public EAVUnit()
+        {
+        }
+
+        [DataMember(Name = "UnitID")]
+        protected int? unitID;
+        [IgnoreDataMember]
+        public int? UnitID
+        {
+            get
+            {
+                return (UnitID);
+            }
+            set
+            {
+                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && UnitID == null))
+                {
+                    UnitID = value;
+                }
+                else
+                {
+                    throw (new InvalidOperationException("This property has already been set."));
+                }
+            }
+        }
+
+        [DataMember(Name = "SingularName")]
+        protected string singularName;
+        [IgnoreDataMember]
+        public string SingularName
+        {
+            get
+            {
+                return (singularName);
+            }
+            set
+            {
+                if (singularName != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'SingularName' may not be modified when object in 'Deleted' state."));
+
+                    singularName = value;
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
+        [DataMember(Name = "SingularAbbreviation")]
+        protected string singularAbbreviation;
+        [IgnoreDataMember]
+        public string SingularAbbreviation
+        {
+            get
+            {
+                return (singularAbbreviation);
+            }
+            set
+            {
+                if (singularAbbreviation != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'SingularAbbreviation' may not be modified when object in 'Deleted' state."));
+
+                    singularAbbreviation = value;
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
+        [DataMember(Name = "PluralName")]
+        protected string pluralName;
+        [IgnoreDataMember]
+        public string PluralName
+        {
+            get
+            {
+                return (pluralName);
+            }
+            set
+            {
+                if (pluralName != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'PluralName' may not be modified when object in 'Deleted' state."));
+
+                    pluralName = value;
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
+        [DataMember(Name = "PluralAbbreviation")]
+        protected string pluralAbbreviation;
+        [IgnoreDataMember]
+        public string PluralAbbreviation
+        {
+            get
+            {
+                return (pluralAbbreviation);
+            }
+            set
+            {
+                if (pluralAbbreviation != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'PluralAbbreviation' may not be modified when object in 'Deleted' state."));
+
+                    pluralAbbreviation = value;
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
+        [DataMember(Name = "Symbol")]
+        protected string symbol;
+        [IgnoreDataMember]
+        public string Symbol
+        {
+            get
+            {
+                return (symbol);
+            }
+            set
+            {
+                if (symbol != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Symbol' may not be modified when object in 'Deleted' state."));
+
+                    symbol = value;
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
+        [DataMember(Name = "DisplayText")]
+        protected string displayText;
+        [IgnoreDataMember]
+        public string DisplayText
+        {
+            get
+            {
+                return (displayText);
+            }
+            set
+            {
+                if (displayText != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'DisplayText' may not be modified when object in 'Deleted' state."));
+
+                    displayText = value;
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
+        [DataMember(Name = "Curated")]
+        protected bool curated;
+        [IgnoreDataMember]
+        public bool Curated
+        {
+            get
+            {
+                return (curated);
+            }
+            set
+            {
+                if (curated != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Curated' may not be modified when object in 'Deleted' state."));
+
+                    curated = value;
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                }
+            }
+        }
+
+        public override void MarkUnmodified()
+        {
+            if (ObjectState == ObjectState.Deleted)
+                throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked unmodified."));
+
+            if (UnitID == null)
+                throw (new InvalidOperationException("Operation failed. Object with null 'UnitID' property may not be marked unmodified."));
+
+            ObjectState = ObjectState.Unmodified;
+        }
+
+        public override void MarkDeleted()
+        {
+            if (ObjectState == ObjectState.New)
+                throw (new InvalidOperationException("Operation failed. Object in 'New' state may not be marked deleted."));
+
+            if (ObjectState != ObjectState.Deleted)
+            {
+                ObjectState = ObjectState.Deleted;
             }
         }
     }
@@ -1649,6 +1911,8 @@ namespace EAVFramework.Model
 
         public int? AttributeID { get { return (Attribute != null ? Attribute.AttributeID : null); } }
 
+        public int? UnitID { get { return (Unit != null ? Unit.UnitID : null); } }
+
         [DataMember(Name = "Instance")]
         protected EAVInstance instance;
         [IgnoreDataMember]
@@ -1746,23 +2010,23 @@ namespace EAVFramework.Model
             }
         }
 
-        [DataMember(Name = "Units")]
-        protected string units;
+        [DataMember(Name = "Unit")]
+        protected EAV.Model.IEAVUnit unit;
         [IgnoreDataMember]
-        public string Units
+        public EAV.Model.IEAVUnit Unit
         {
             get
             {
-                return (units);
+                return (unit);
             }
             set
             {
-                if (units != value)
+                if (unit != value)
                 {
                     if (ObjectState == ObjectState.Deleted)
-                        throw (new InvalidOperationException("Operation failed. Property 'Units' may not be modified when object in 'Deleted' state."));
+                        throw (new InvalidOperationException("Operation failed. Property 'Unit' may not be modified when object in 'Deleted' state."));
 
-                    units = value;
+                    unit = value;
 
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }

@@ -55,6 +55,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitClientTests.cs" />
     <Compile Include="InstanceClientTests.cs" />
     <Compile Include="ValueClientTests.cs" />
     <Compile Include="SubjectClientTests.cs" />

@@ -33,5 +33,6 @@ namespace EAVStoreClient
         public virtual DbSet<Instance> Instances { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
         public virtual DbSet<Value> Values { get; set; }
+        public virtual DbSet<Unit> Units { get; set; }
     }
 }
