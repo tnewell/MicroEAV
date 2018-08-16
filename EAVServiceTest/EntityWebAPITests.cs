@@ -165,7 +165,7 @@ namespace EAVServiceTest
         [TestCategory("CRUD")]
         [TestCategory("Retrieve")]
         [TestCategory("Subject")]
-        public void RetrieveAllSubjects()
+        public void RetrieveEntitySubjects()
         {
             var dbEntity = SelectRandomItem(this.DbContext.Entities);
             int nDbSubjects = this.DbContext.Subjects.Where(it => it.Entity_ID == dbEntity.Entity_ID).Count();

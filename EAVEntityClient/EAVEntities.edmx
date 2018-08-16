@@ -12,7 +12,7 @@
           <Property Name="Attribute_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Container_ID" Type="int" Nullable="false" />
           <Property Name="Data_Type_ID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="768" Nullable="false" />
           <Property Name="Data_Name" Type="nvarchar" MaxLength="256" />
           <Property Name="Display_Text" Type="nvarchar" MaxLength="1024" />
           <Property Name="Sequence" Type="int" Nullable="false" />
@@ -34,7 +34,7 @@
           <Property Name="Container_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Parent_Container_ID" Type="int" />
           <Property Name="Context_ID" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="768" Nullable="false" />
           <Property Name="Data_Name" Type="nvarchar" MaxLength="256" />
           <Property Name="Display_Text" Type="nvarchar" MaxLength="1024" />
           <Property Name="Sequence" Type="int" Nullable="false" />
@@ -45,7 +45,7 @@
             <PropertyRef Name="Context_ID" />
           </Key>
           <Property Name="Context_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="768" Nullable="false" />
           <Property Name="Data_Name" Type="nvarchar" MaxLength="256" />
           <Property Name="Display_Text" Type="nvarchar" MaxLength="1024" />
         </EntityType>
@@ -335,7 +335,7 @@
           <Property Name="Attribute_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Container_ID" Type="Int32" Nullable="false" />
           <Property Name="Data_Type_ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="768" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Data_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="Display_Text" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
           <Property Name="Is_Key" Type="Boolean" Nullable="false" />
@@ -353,7 +353,7 @@
           <Property Name="Container_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Parent_Container_ID" Type="Int32" />
           <Property Name="Context_ID" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="768" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Data_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="Display_Text" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
           <Property Name="Is_Repeating" Type="Boolean" Nullable="false" />
@@ -369,7 +369,7 @@
             <PropertyRef Name="Context_ID" />
           </Key>
           <Property Name="Context_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="768" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Data_Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="Display_Text" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Containers" Relationship="Self.FK_Container_Context" FromRole="Context" ToRole="Container" />

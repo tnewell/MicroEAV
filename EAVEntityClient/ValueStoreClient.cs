@@ -86,9 +86,6 @@ namespace EAVStoreClient
                     if (dbValue.Raw_Value != value.RawValue)
                         dbValue.Raw_Value = value.RawValue;
 
-                    if (dbValue.Unit_ID != value.UnitID)
-                        dbValue.Unit_ID = value.UnitID;
-
                     ctx.SaveChanges();
                 }
                 else

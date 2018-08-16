@@ -18,6 +18,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.Serialization;
 
 
@@ -701,33 +702,27 @@ namespace EAVFramework.Model
             switch (e.Action)
             {
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
+
+                    if (VariableUnits.GetValueOrDefault(true))
+                    {
+                        throw (new InvalidOperationException("Operation failed. Property 'VariableUnits' must have the value 'false' before units may be added to the Units collection."));
+                    }
+                    else if (e.NewItems != null)
+                    {
+                        IEnumerable<EAVUnit> addedUnits = e.NewItems.OfType<EAVUnit>();
+
+                        if (addedUnits.Any(it => it.ObjectState == ObjectState.Deleted || it.ObjectState == ObjectState.New || it.UnitID == null))
+                        {
+                            throw (new InvalidOperationException("Operation failed. Only existing units may be added to the Units collection."));
+                        }
+                    }
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
-
-                    if (e.OldItems != null)
-                    {
-                        foreach (EAVUnit unit in e.OldItems)
-                        {
-                            if (unit.Attribute == this)
-                            {
-                                unit.Attribute = null;
-                            }
-                        }
-                    }
-
-                    if (e.NewItems != null)
-                    {
-                        foreach (EAVUnit unit in e.NewItems)
-                        {
-                            if (unit.Attribute != this)
-                            {
-                                unit.Attribute = this;
-                            }
-                        }
-                    }
-
                     break;
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
                     break;
@@ -917,6 +912,8 @@ namespace EAVFramework.Model
                 {
                     if (ObjectState == ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'VariableUnits' may not be modified when object in 'Deleted' state."));
+                    else if (units.Any() && value.GetValueOrDefault(true))
+                        throw (new InvalidOperationException("Operation failed. Property 'VariableUnits' may not be assigned any value but false when values exist in the Units collection."));
 
                     variableUnits = value;
 
@@ -981,7 +978,7 @@ namespace EAVFramework.Model
         {
             get
             {
-                return (UnitID);
+                return (unitID);
             }
             set
             {
@@ -1911,7 +1908,29 @@ namespace EAVFramework.Model
 
         public int? AttributeID { get { return (Attribute != null ? Attribute.AttributeID : null); } }
 
-        public int? UnitID { get { return (Unit != null ? Unit.UnitID : null); } }
+        private int? unitID;
+        public int? UnitID
+        {
+            get
+            {
+                return (Unit != null ? Unit.UnitID : unitID);
+            }
+            set
+            {
+                if (unitID != value)
+                {
+                    if (ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'UnitID' may not be modified when object in 'Deleted' state."));
+                    else if (attribute != null && attribute.VariableUnits == null)
+                        throw (new InvalidOperationException("Operation failed. Property 'UnitID' may not be modified when property 'Attribute.VariableUnits' is null."));
+
+                    if (Unit == null)
+                        unitID = value;
+                    else
+                        throw (new InvalidOperationException("Property 'UnitID' may not be modified when property 'Unit' has a value."));
+                }
+            }
+        }
 
         [DataMember(Name = "Instance")]
         protected EAVInstance instance;
@@ -1970,6 +1989,8 @@ namespace EAVFramework.Model
                 {
                     if (ObjectState == ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Attribute' may not be modified when object in 'Deleted' state."));
+                    else if (value == null && UnitID != null)
+                        throw (new InvalidOperationException("Operation failed. Property 'Attribute' may not be assigned a value of 'null' when property 'UnitID' has a value."));
 
                     if (attribute != null && attribute.Values.Contains(this))
                     {
@@ -2011,9 +2032,9 @@ namespace EAVFramework.Model
         }
 
         [DataMember(Name = "Unit")]
-        protected EAV.Model.IEAVUnit unit;
+        protected EAVUnit unit;
         [IgnoreDataMember]
-        public EAV.Model.IEAVUnit Unit
+        public EAVUnit Unit
         {
             get
             {
@@ -2025,8 +2046,13 @@ namespace EAVFramework.Model
                 {
                     if (ObjectState == ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Unit' may not be modified when object in 'Deleted' state."));
+                    else if (attribute != null && attribute.VariableUnits == null)
+                        throw (new InvalidOperationException("Operation failed. Property 'Unit' may not be modified when property 'Attribute.VariableUnits' is null."));
+                    else if (value != null && value.ObjectState == ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Unit' may not be assigned object in 'Deleted' state."));
 
                     unit = value;
+                    unitID = value != null ? value.UnitID : null;
 
                     if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }

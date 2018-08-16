@@ -108,10 +108,52 @@ namespace EAVStoreClient
 
                 if (dbAttribute != null)
                 {
+                    // TODO: Right way to do this?
+                    dbAttribute.Units.Clear();
+
                     ctx.Attributes.Remove(dbAttribute);
 
                     ctx.SaveChanges();
                 }
+            }
+        }
+
+        public IEnumerable<EAV.Model.IEAVUnit> RetrieveAttributeUnits(int attributeID)
+        {
+            using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
+            {
+                var dbAttribute = ctx.Attributes.SingleOrDefault(it => it.Attribute_ID == attributeID);
+
+                if (dbAttribute != null)
+                {
+                    return(dbAttribute.Units.Select(it => (EAV.Model.BaseEAVUnit) it));
+                }
+                else
+                    throw(new Exception(String.Format("Unable to retrieve attribute ID {0}.", attributeID)));
+            }
+        }
+
+        public void UpdateAttributeUnits(int attributeID, IEnumerable<EAV.Model.IEAVUnit> units)
+        {
+            using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
+            {
+                var dbAttribute = ctx.Attributes.SingleOrDefault(it => it.Attribute_ID == attributeID);
+
+                if (dbAttribute != null)
+                {
+                    var unitsToDelete = dbAttribute.Units.GroupJoin(units, left => left.Unit_ID, right => right.UnitID.GetValueOrDefault(), (left,right) => new { UnitToDelete = left, SentinelUnit = right.FirstOrDefault() }).Where(it => it.SentinelUnit == null).Select(it => it.UnitToDelete.Unit_ID);
+                    var unitsToAdd = units.GroupJoin(dbAttribute.Units, left => left.UnitID.GetValueOrDefault(), right => right.Unit_ID, (left, right) => new { UnitToAdd = left, SentinelUnit = right.FirstOrDefault() }).Where(it => it.SentinelUnit == null && it.UnitToAdd.UnitID != 0).Select(it => it.UnitToAdd.UnitID.GetValueOrDefault());
+
+                    foreach (int id in unitsToDelete)
+                        dbAttribute.Units.Remove(dbAttribute.Units.Single(it => it.Unit_ID == id));
+
+                    foreach (int id in unitsToAdd)
+                        dbAttribute.Units.Add(ctx.Units.Single(it => it.Unit_ID == id));
+
+                    ctx.SaveChanges();
+                }
+                else
+                    throw(new Exception(String.Format("Unable to retrieve attribute ID {0}.", attributeID)));
             }
         }
     }

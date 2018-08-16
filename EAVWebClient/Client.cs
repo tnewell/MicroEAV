@@ -58,6 +58,28 @@ namespace EAVServiceClient
         }
 
         #region Load Helpers
+        private void LoadAttributeUnits(HttpClient client, EAVAttribute attribute)
+        {
+            HttpResponseMessage response = client.GetAsync(String.Format("api/meta/attribute/{0}/units", attribute.AttributeID)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var units = response.Content.ReadAsAsync<IEnumerable<EAVUnit>>().Result;
+
+                attribute.Units.Clear();
+
+                foreach (EAVUnit unit in units)
+                {
+                    unit.MarkUnmodified();
+
+                    attribute.Units.Add(unit);
+                }
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to get units failed."));
+            }
+        }
+
         private void LoadAttributes(HttpClient client, EAVContainer container)
         {
             HttpResponseMessage response = client.GetAsync(String.Format("api/meta/containers/{0}/attributes", container.ContainerID.GetValueOrDefault())).Result;
@@ -70,6 +92,8 @@ namespace EAVServiceClient
                 foreach (EAVAttribute attribute in attributes)
                 {
                     attribute.MarkUnmodified();
+
+                    LoadAttributeUnits(client, attribute);
 
                     container.Attributes.Add(attribute);
                 }
@@ -105,6 +129,19 @@ namespace EAVServiceClient
             }
         }
 
+        private void LoadValueUnit(HttpClient client, EAVValue value)
+        {
+            HttpResponseMessage response = client.GetAsync(String.Format("api/meta/units/{0}", value.UnitID)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                value.Unit = response.Content.ReadAsAsync<EAVUnit>().Result;
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to get unit failed."));
+            }
+        }
+
         private void LoadValues(HttpClient client, EAVInstance instance)
         {
             HttpResponseMessage response = client.GetAsync(String.Format("api/data/instances/{0}/values", instance.InstanceID.GetValueOrDefault())).Result;
@@ -117,6 +154,9 @@ namespace EAVServiceClient
                 foreach (EAVValue value in values)
                 {
                     value.MarkUnmodified();
+
+                    if (value.UnitID != null)
+                        LoadValueUnit(client, value);
 
                     instance.Values.Add(value);
                 }
@@ -196,6 +236,21 @@ namespace EAVServiceClient
         #endregion
 
         #region Save Helpers
+        private void SaveAttributeUnits(HttpClient client, int attributeID, IEnumerable<EAVUnit> units)
+        {
+            HttpResponseMessage response;
+
+            response = client.PatchAsJsonAsync<IEnumerable<EAV.Model.IEAVUnit>>(String.Format("api/meta/attributes/{0}/units", attributeID), units).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                // Nothing to do
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to update attribute units failed."));
+            }
+        }
+
         private void SaveAttribute(HttpClient client, EAVAttribute attribute)
         {
             HttpResponseMessage response;
@@ -208,6 +263,10 @@ namespace EAVServiceClient
                     EAVAttribute newAttribute = response.Content.ReadAsAsync<EAVAttribute>().Result;
 
                     attribute.AttributeID = newAttribute.AttributeID;
+
+                    if (!attribute.VariableUnits.GetValueOrDefault(true))
+                        SaveAttributeUnits(client, attribute.AttributeID.Value, attribute.Units);
+
                     attribute.MarkUnmodified();
                 }
                 else
@@ -220,6 +279,9 @@ namespace EAVServiceClient
                 response = client.PatchAsJsonAsync<EAV.Model.IEAVAttribute>("api/meta/attributes", attribute).Result;
                 if (response.IsSuccessStatusCode)
                 {
+                    if (!attribute.VariableUnits.GetValueOrDefault(true))
+                        SaveAttributeUnits(client, attribute.AttributeID.Value, attribute.Units);
+
                     attribute.MarkUnmodified();
                 }
                 else
@@ -233,6 +295,7 @@ namespace EAVServiceClient
                 response = client.DeleteAsync(String.Format("api/meta/attributes/{0}", attribute.AttributeID.GetValueOrDefault())).Result;
                 if (response.IsSuccessStatusCode)
                 {
+                    // Nothing to do
                 }
                 else
                 {
@@ -351,9 +414,59 @@ namespace EAVServiceClient
             }
         }
 
+        private void SaveValueUnit(HttpClient client, EAVUnit unit)
+        {
+            HttpResponseMessage response;
+
+            if (unit.ObjectState == ObjectState.New)
+            {
+                response = client.PostAsJsonAsync<EAV.Model.IEAVUnit>("api/meta/units", unit).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    EAVUnit newUnit = response.Content.ReadAsAsync<EAVUnit>().Result;
+
+                    unit.UnitID = newUnit.UnitID;
+
+                    unit.MarkUnmodified();
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to create unit failed."));
+                }
+            }
+            else if (unit.ObjectState == ObjectState.Modified)
+            {
+                response = client.PatchAsJsonAsync<EAV.Model.IEAVUnit>("api/meta/units", unit).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    unit.MarkUnmodified();
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to update unit failed."));
+                }
+            }
+
+            if (unit.ObjectState == ObjectState.Deleted)
+            {
+                response = client.DeleteAsync(String.Format("api/meta/units/{0}", unit.UnitID.GetValueOrDefault())).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    // Nothing to do
+                }
+                else
+                {
+                    throw (new ApplicationException("Attempt to delete unit failed."));
+                }
+            }
+        }
+
         private void SaveValue(HttpClient client, EAVValue value)
         {
             HttpResponseMessage response;
+
+            if (value.Unit != null)
+                SaveValueUnit(client, value.Unit);
 
             if (value.ObjectState == ObjectState.New)
             {
@@ -557,7 +670,7 @@ namespace EAVServiceClient
 
             if (entity.ObjectState == ObjectState.Deleted)
             {
-                response = client.DeleteAsync(String.Format("api/data/entities/{1}", entity.EntityID.GetValueOrDefault())).Result;
+                response = client.DeleteAsync(String.Format("api/data/entities/{0}", entity.EntityID.GetValueOrDefault())).Result;
                 if (response.IsSuccessStatusCode)
                 {
                 }

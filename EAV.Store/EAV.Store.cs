@@ -80,6 +80,10 @@ namespace EAV.Store
         void UpdateAttribute(EAV.Model.IEAVAttribute attribute);
 
         void DeleteAttribute(int attributeID);
+
+        IEnumerable<EAV.Model.IEAVUnit> RetrieveAttributeUnits(int attributeID);
+
+        void UpdateAttributeUnits(int attributeID, IEnumerable<EAV.Model.IEAVUnit> units);
     }
 
     public interface IEAVUnitClient

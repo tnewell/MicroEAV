@@ -112,7 +112,7 @@ namespace EAVService.Controllers
 
         [HttpGet]
         [Route("{id}/subjects", Name = "RetrieveEntitySubjects")]
-        public IHttpActionResult RetrieveSubjects(int id)
+        public IHttpActionResult RetrieveEntitySubjects(int id)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/subjects", Name = "CreateEntitySubject")]
-        public IHttpActionResult CreateSubject(int id, EAV.Model.IEAVSubject subject)
+        public IHttpActionResult CreateEntitySubject(int id, EAV.Model.IEAVSubject subject)
         {
             try
             {

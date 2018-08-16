@@ -276,9 +276,23 @@ namespace EAVServiceTest
         [TestCategory("CRUD")]
         [TestCategory("Retrieve")]
         [TestCategory("Subject")]
-        public void RetrieveSubjects()
+        public void RetrieveContextSubjects()
         {
-            Assert.Fail("Test needed.");
+            var dbContext = SelectRandomItem(this.DbContext.Contexts);
+            int nDbSubjects = this.DbContext.Subjects.Where(it => it.Context_ID == dbContext.Context_ID).Count();
+
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/contexts/{0}/subjects", dbContext.Context_ID)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var subjects = response.Content.ReadAsAsync<IEnumerable<EAV.Model.BaseEAVSubject>>().Result;
+                int nClientEntities = subjects.Count();
+
+                Assert.AreEqual(nDbSubjects, nClientEntities, "The number of subjects retrieved by the client does not match the number in the database.");
+            }
+            else
+            {
+                Assert.Fail(response.Content.ReadAsStringAsync().Result);
+            }
         }
 
         [TestMethod]
@@ -287,7 +301,27 @@ namespace EAVServiceTest
         [TestCategory("Subject")]
         public void CreateContextSubject()
         {
-            Assert.Fail("Test needed.");
+            var dbContext = SelectRandomItem(this.DbContext.Contexts);
+            var dbEntity = SelectRandomItem(this.DbContext.Entities);
+            string subjectIdentifier = Guid.NewGuid().ToString();
+
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Model.BaseEAVSubject>(String.Format("api/meta/contexts/{0}/subjects?entity={1}", dbContext.Context_ID, dbEntity.Entity_ID), new EAV.Model.BaseEAVSubject() { Identifier = subjectIdentifier }).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var subject = response.Content.ReadAsAsync<EAV.Model.BaseEAVSubject>().Result;
+
+                Assert.IsNotNull(subject, "Failed to create subject with identifier '{0}'", subjectIdentifier);
+
+                var dbSubject = this.DbContext.Subjects.SingleOrDefault(it => it.Subject_ID == subject.SubjectID);
+
+                Assert.IsNotNull(dbSubject, String.Format("Failed to retrieve subject ID {0} from the database.", subject.SubjectID));
+
+                Assert.AreEqual(subject.Identifier, dbSubject.Identifier, "Property 'Identifier' was not created correctly.");
+            }
+            else
+            {
+                Assert.Fail(response.Content.ReadAsStringAsync().Result);
+            }
         }
     }
 }

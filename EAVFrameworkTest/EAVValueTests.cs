@@ -228,7 +228,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ValueSetUnitsWhenUnmodified()
         {
-            EAVValue aValue = new EAVValue() { Instance = new EAVRootInstance() { InstanceID = rng.Next() }, Attribute = new EAVAttribute() { AttributeID = rng.Next() } };
+            EAVValue aValue = new EAVValue() { Instance = new EAVRootInstance() { InstanceID = rng.Next() }, Attribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = true } };
 
             Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -250,7 +250,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ValueSetUnitsWhenModified()
         {
-            EAVValue aValue = new EAVValue() { Instance = new EAVRootInstance() { InstanceID = rng.Next() }, Attribute = new EAVAttribute() { AttributeID = rng.Next() } };
+            EAVValue aValue = new EAVValue() { Instance = new EAVRootInstance() { InstanceID = rng.Next() }, Attribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = true } };
 
             Assert.AreEqual(ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 

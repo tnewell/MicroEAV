@@ -76,11 +76,27 @@ namespace EAVService.Controllers
 
         [HttpGet]
         [Route("{id}/units", Name = "RetrieveAttributeUnits")]
-        public IHttpActionResult RetrieveAttributeUnits()
+        public IHttpActionResult RetrieveAttributeUnits(int id)
         {
             try
             {
-                return (Ok<IEnumerable<EAV.Model.IEAVUnit>>(unitClient.RetrieveUnits()));
+                return (Ok<IEnumerable<EAV.Model.IEAVUnit>>(attributeClient.RetrieveAttributeUnits(id)));
+            }
+            catch (Exception ex)
+            {
+                return (InternalServerError(ex));
+            }
+        }
+
+        [HttpPatch]
+        [Route("{id}/units", Name = "UpdateAttributeUnits")]
+        public IHttpActionResult UpdatettributeUnits(int id, IEnumerable<EAV.Model.IEAVUnit> units)
+        {
+            try
+            {
+                attributeClient.UpdateAttributeUnits(id, units);
+
+                return (Ok());
             }
             catch (Exception ex)
             {
