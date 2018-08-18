@@ -982,9 +982,9 @@ namespace EAVFramework.Model
             }
             set
             {
-                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && UnitID == null))
+                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && unitID == null))
                 {
-                    UnitID = value;
+                    unitID = value;
                 }
                 else
                 {
@@ -1928,6 +1928,8 @@ namespace EAVFramework.Model
                         unitID = value;
                     else
                         throw (new InvalidOperationException("Property 'UnitID' may not be modified when property 'Unit' has a value."));
+
+                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
                 }
             }
         }

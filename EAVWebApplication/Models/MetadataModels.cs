@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-using EAV.Model;
 using EAVFramework.Model;
 
 namespace EAVWebApplication.Models.Metadata
@@ -246,7 +245,7 @@ namespace EAVWebApplication.Models.Metadata
         public string DisplayText { get; set; }
 
         [Display(Name = "Data Type")]
-        public EAVDataType DataType { get; set; }
+        public EAV.Model.EAVDataType DataType { get; set; }
 
         [Display(Name = "Key")]
         public bool IsKey { get; set; }

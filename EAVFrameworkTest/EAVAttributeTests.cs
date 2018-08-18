@@ -37,6 +37,9 @@ namespace EAVFrameworkTest
 
             Assert.IsNull(anAttribute.Container, "Property 'Container' should be null on creation.");
 
+            Assert.IsNotNull(anAttribute.Units, "Property 'Units' should not be null on creation.");
+            Assert.IsFalse(anAttribute.Units.Any(), "Property 'Units' should be empty on creation.");
+
             Assert.IsNotNull(anAttribute.Values, "Property 'Values' should not be null on creation.");
             Assert.IsFalse(anAttribute.Values.Any(), "Property 'Values' should be empty on creation.");
         }
@@ -806,6 +809,168 @@ namespace EAVFrameworkTest
         #endregion
 
         #region Collection Properties
+        #region Units
+        [TestMethod]
+        public void AttributeAddToUnitsWhenNew()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            aUnit.MarkUnmodified();
+
+            anAttribute.Units.Add(aUnit);
+
+            Assert.IsTrue(anAttribute.Units.Contains(aUnit), "Property 'Units' was not updated properly.");
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(ObjectState.Unmodified, aUnit.ObjectState, "Unit object state should remain 'Unmodified' when aUnit added to attribute.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void AttributeAddToUnitsWhenNewAndVariableUnitsNull()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = null };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            aUnit.MarkUnmodified();
+
+            anAttribute.Units.Add(aUnit);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void AttributeAddToUnitsWhenNewAndVariableUnitsTrue()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = true };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            aUnit.MarkUnmodified();
+
+            anAttribute.Units.Add(aUnit);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void AttributeAddToUnitsWhenNewAndUnitIsNew()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+
+            anAttribute.Units.Add(aUnit);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void AttributeAddToUnitsWhenNewAndUnitHasNoID()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVUnit aUnit = new EAVUnit();
+            aUnit.MarkUnmodified();
+
+            anAttribute.Units.Add(aUnit);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void AttributeAddToUnitsWhenNewAndUnitIsDeleted()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            aUnit.MarkUnmodified();
+            aUnit.MarkDeleted();
+
+            anAttribute.Units.Add(aUnit);
+        }
+
+        [TestMethod]
+        public void AttributeAddToUnitsWhenUnmodified()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            aUnit.MarkUnmodified();
+
+            anAttribute.Units.Add(aUnit);
+
+            Assert.IsTrue(anAttribute.Units.Contains(aUnit), "Property 'Units' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aUnit.ObjectState, "Unit object state should remain 'Unmodified' when aUnit added to attribute.");
+        }
+
+        [TestMethod]
+        public void AttributeAddToUnitsWhenModified()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            aUnit.MarkUnmodified();
+
+            anAttribute.Units.Add(aUnit);
+
+            Assert.IsTrue(anAttribute.Units.Contains(aUnit), "Property 'Units' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aUnit.ObjectState, "Unit object state should remain 'Unmodified' when aUnit added to attribute.");
+
+            aUnit = new EAVUnit() { UnitID = rng.Next() };
+            aUnit.MarkUnmodified();
+
+            anAttribute.Units.Add(aUnit);
+
+            Assert.IsTrue(anAttribute.Units.Contains(aUnit), "Property 'Units' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(ObjectState.Unmodified, aUnit.ObjectState, "Unit object state should remain 'Unmodified' when aUnit added to attribute.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(NotSupportedException))]
+        public void AttributeAddToUnitsWhenDeleted()
+        {
+            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+
+            Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
+
+            anAttribute.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            anAttribute.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, anAttribute.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            aUnit.MarkUnmodified();
+
+            anAttribute.Units.Add(aUnit);
+        }
+        #endregion
+
         #region Values
         [TestMethod]
         public void AttributeAddToValuesWhenNew()
