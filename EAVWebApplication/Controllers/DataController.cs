@@ -19,14 +19,13 @@ namespace EAVWebApplication.Controllers
     {
         private static readonly string TempDataModelKey = "DataModel";
 
-        private HttpClient client = new HttpClient() { BaseAddress = new Uri(ConfigurationManager.AppSettings["EAVServiceUrl"]) };
-        private EAVClient eavClient = new EAVClient();
+        private EAVDataClient eavClient = new EAVDataClient(ConfigurationManager.AppSettings["EAVServiceUrl"]);
 
-        public ICollection<EAVContext> ContextMasterList
+        public ICollection<IModelContext> ContextMasterList
         {
             get
             {
-                return (Session["Contexts"] as ICollection<EAVContext>);
+                return (Session["Contexts"] as ICollection<IModelContext>);
             }
             set
             {
@@ -42,10 +41,10 @@ namespace EAVWebApplication.Controllers
         {
             base.Initialize(requestContext);
 
-            ContextMasterList = new List<EAVContext>();
+            ContextMasterList = new List<IModelContext>();
         }
 
-        private void ReconcileInstance(EAVInstance original, EAVInstance modified)
+        private void ReconcileInstance(IModelInstance original, IModelInstance modified)
         {
             if (original == null)
                 throw (new ArgumentNullException("original", "Parameter 'original' must not be null."));
@@ -93,9 +92,9 @@ namespace EAVWebApplication.Controllers
             DataModel data = new DataModel();
 
             // Add any existing contexts
-            foreach (var item in eavClient.LoadContexts(client))
+            foreach (var item in eavClient.LoadContexts())
             {
-                eavClient.LoadSubjects(client, item);
+                eavClient.LoadSubjects(item);
 
                 ContextMasterList.Add(item);
             }
@@ -129,7 +128,7 @@ namespace EAVWebApplication.Controllers
 
             if (data.CurrentContext != null)
             {
-                eavClient.LoadRootContainers(client, data.CurrentContext);
+                eavClient.LoadRootContainers(data.CurrentContext);
 
                 containers = data.CurrentContext.Containers.Select(it => new { Text = it.Name, Value = it.ContainerID });
             }
@@ -148,13 +147,13 @@ namespace EAVWebApplication.Controllers
 
             if (data.CurrentContainer != null)
             {
-                eavClient.LoadMetadata(client, data.CurrentContext, data.CurrentContainer);
+                eavClient.LoadMetadata(data.CurrentContainer);
             }
 
             // Temporarily select a subject and add a blank instance
             data.SelectedSubjectID = 1;
 
-            data.CurrentInstance = EAVRootInstance.Create(data.CurrentContainer, data.CurrentSubject);
+            data.CurrentInstance = new ViewRootInstance(ModelRootInstance.Create(data.CurrentContainer, data.CurrentSubject));
 
             TempData[TempDataModelKey] = data;
 

@@ -22,40 +22,40 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVValueClient : EAV.Store.IEAVValueClient
+    public partial class EAVValueClient : EAV.Store.IStoreValueClient
     {
-        public IEnumerable<EAV.Model.IEAVValue> RetrieveValues(int? attributeID, int? instanceID)
+        public IEnumerable<EAV.Store.IStoreValue> RetrieveValues(int? attributeID, int? instanceID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
                 if (instanceID != null && attributeID != null)
                 {
-                    return (ctx.Values.Where(it => it.Instance_ID == instanceID && it.Attribute_ID == attributeID).AsEnumerable().Select(it => (EAV.Model.BaseEAVValue)it).ToList());
+                    return (ctx.Values.Where(it => it.Instance_ID == instanceID && it.Attribute_ID == attributeID).AsEnumerable().Select(it => (EAV.Store.StoreValue)it).ToList());
                 }
                 else if (instanceID != null && attributeID == null)
                 {
-                    return (ctx.Values.Where(it => it.Instance_ID == instanceID).AsEnumerable().Select(it => (EAV.Model.BaseEAVValue)it).ToList());
+                    return (ctx.Values.Where(it => it.Instance_ID == instanceID).AsEnumerable().Select(it => (EAV.Store.StoreValue)it).ToList());
                 }
                 else if (instanceID == null && attributeID != null)
                 {
-                    return (ctx.Values.Where(it => it.Attribute_ID == attributeID).AsEnumerable().Select(it => (EAV.Model.BaseEAVValue)it).ToList());
+                    return (ctx.Values.Where(it => it.Attribute_ID == attributeID).AsEnumerable().Select(it => (EAV.Store.StoreValue)it).ToList());
                 }
                 else
                 {
-                    return (ctx.Values.AsEnumerable().Select(it => (EAV.Model.BaseEAVValue)it).ToList());
+                    return (ctx.Values.AsEnumerable().Select(it => (EAV.Store.StoreValue)it).ToList());
                 }
             }
         }
 
-        public EAV.Model.IEAVValue RetrieveValue(int attributeID, int instanceID)
+        public EAV.Store.IStoreValue RetrieveValue(int attributeID, int instanceID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Model.BaseEAVValue)ctx.Values.SingleOrDefault(it => it.Instance_ID == instanceID && it.Attribute_ID == attributeID));
+                return ((EAV.Store.StoreValue)ctx.Values.SingleOrDefault(it => it.Instance_ID == instanceID && it.Attribute_ID == attributeID));
             }
         }
 
-        public EAV.Model.IEAVValue CreateValue(EAV.Model.IEAVValue value, int instanceID, int attributeID)
+        public EAV.Store.IStoreValue CreateValue(EAV.Store.IStoreValue value, int instanceID, int attributeID)
         {
             if (value == null)
                 return (null);
@@ -71,11 +71,11 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Model.BaseEAVValue) dbValue);
+                return ((EAV.Store.StoreValue) dbValue);
             }
         }
 
-        public void UpdateValue(EAV.Model.IEAVValue value)
+        public void UpdateValue(EAV.Store.IStoreValue value)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {

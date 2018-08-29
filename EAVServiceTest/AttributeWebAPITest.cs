@@ -21,7 +21,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/attributes/{0}", -1)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var attribute = response.Content.ReadAsAsync<EAV.Model.BaseEAVAttribute>().Result;
+                var attribute = response.Content.ReadAsAsync<EAV.Store.StoreAttribute>().Result;
 
                 Assert.IsNull(attribute, "Unexpected attribute object retrieved.");
             }
@@ -44,7 +44,7 @@ namespace EAVServiceTest
                 HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/attributes/{0}", dbAttribute.Attribute_ID)).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    var attribute = response.Content.ReadAsAsync<EAV.Model.BaseEAVAttribute>().Result;
+                    var attribute = response.Content.ReadAsAsync<EAV.Store.StoreAttribute>().Result;
 
                     Assert.IsNotNull(attribute, "Failed to retrieve attribute {0}.", dbAttribute.Attribute_ID);
                     Assert.AreEqual(dbAttribute.Attribute_ID, attribute.AttributeID, "Attribute ID values do not match.");
@@ -67,7 +67,7 @@ namespace EAVServiceTest
         public void DeleteAttribute()
         {
             var dbContainer = SelectRandomItem(this.DbContext.Containers);
-            EAVStoreClient.Attribute dbAttributeIn = CreateAttribute(dbContainer.Container_ID, Guid.NewGuid().ToString(), EAV.Model.EAVDataType.String, rng.Next(), true);
+            EAVStoreClient.Attribute dbAttributeIn = CreateAttribute(dbContainer.Container_ID, Guid.NewGuid().ToString(), EAV.EAVDataType.String, rng.Next(), true);
 
             HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/meta/attributes/{0}", dbAttributeIn.Attribute_ID)).Result;
             if (response.IsSuccessStatusCode)

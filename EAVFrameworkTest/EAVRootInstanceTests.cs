@@ -3,8 +3,6 @@ using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using EAV.Model;
-
 using EAVFramework.Model;
 
 
@@ -15,7 +13,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceCreate()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -37,7 +35,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceStateTransitionNewToUnmodifiedWithNullID()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -49,7 +47,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceStateTransitionNewToUnmodifiedWithValidID()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -62,7 +60,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceStateTransitionNewToDeleted()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -72,7 +70,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceStateTransitionUnmodifiedToDeleted()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -89,7 +87,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceStateTransitionDeletedToUnmodified()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -109,7 +107,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceSetIDWhenNew()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -123,7 +121,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceSetIDBeforeUnmodified()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -142,7 +140,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetIDAfterUnmodified()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -153,7 +151,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetIDWhenDeleted()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -185,11 +183,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceSetContainerWhenNew()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aRootInstance.Container = value;
 
             Assert.AreEqual(value, aRootInstance.Container, "Property 'Container' was not set properly.");
@@ -201,7 +199,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceSetContainerWhenUnmodified()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -209,7 +207,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aRootInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aRootInstance.Container = value;
 
             Assert.AreEqual(value, aRootInstance.Container, "Property 'Container' was not set properly.");
@@ -221,7 +219,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceSetContainerWhenModified()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -229,7 +227,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aRootInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aRootInstance.Container = value;
 
             Assert.AreEqual(value, aRootInstance.Container, "Property 'Container' was not set properly.");
@@ -237,7 +235,7 @@ namespace EAVFrameworkTest
             Assert.IsTrue(value.Instances.Contains(aRootInstance), "Property 'Instances' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aRootInstance.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new EAVRootContainer() { ContainerID = rng.Next() };
+            value = new ModelRootContainer() { ContainerID = rng.Next() };
             aRootInstance.Container = value;
 
             Assert.AreEqual(value, aRootInstance.Container, "Property 'Container' was not set properly.");
@@ -250,7 +248,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetContainerWhenDeleted()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -262,7 +260,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, aRootInstance.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aRootInstance.Container = new EAVRootContainer() { ContainerID = rng.Next() };
+            aRootInstance.Container = new ModelRootContainer() { ContainerID = rng.Next() };
         }
         #endregion
 
@@ -270,11 +268,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceSetSubjectWhenNew()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aRootInstance.Subject = value;
 
             Assert.AreEqual(value, aRootInstance.Subject, "Property 'Subject' was not set properly.");
@@ -286,7 +284,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceSetSubjectWhenUnmodified()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -294,7 +292,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aRootInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aRootInstance.Subject = value;
 
             Assert.AreEqual(value, aRootInstance.Subject, "Property 'Subject' was not set properly.");
@@ -306,7 +304,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceSetSubjectWhenModified()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -314,7 +312,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aRootInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aRootInstance.Subject = value;
 
             Assert.AreEqual(value, aRootInstance.Subject, "Property 'Subject' was not set properly.");
@@ -322,7 +320,7 @@ namespace EAVFrameworkTest
             Assert.IsTrue(value.Instances.Contains(aRootInstance), "Property 'Instances' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, aRootInstance.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new EAVSubject() { SubjectID = rng.Next() };
+            value = new ModelSubject() { SubjectID = rng.Next() };
             aRootInstance.Subject = value;
 
             Assert.AreEqual(value, aRootInstance.Subject, "Property 'Subject' was not set properly.");
@@ -335,7 +333,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetSubjectWhenDeleted()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -347,7 +345,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, aRootInstance.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aRootInstance.Subject = new EAVSubject() { SubjectID = rng.Next() };
+            aRootInstance.Subject = new ModelSubject() { SubjectID = rng.Next() };
         }
         #endregion
 
@@ -356,17 +354,17 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetParentInstanceWithObjectWhenNew()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootInstance.ParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            aRootInstance.ParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
         }
 
         [TestMethod]
         public void RootInstanceSetParentInstanceWithNullWhenNew()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance();
+            ModelRootInstance aRootInstance = new ModelRootInstance();
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -381,7 +379,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetParentInstanceWithObjectWhenUnmodified()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -389,13 +387,13 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aRootInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootInstance.ParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            aRootInstance.ParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
         }
 
         [TestMethod]
         public void RootInstanceSetParentInstanceWithNullWhenUnmodified()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -416,7 +414,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetParentInstanceWithObjectWhenDeleted()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -428,14 +426,14 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, aRootInstance.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aRootInstance.ParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            aRootInstance.ParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetParentInstanceWithNullWhenDeleted()
         {
-            EAVRootInstance aRootInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aRootInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -457,11 +455,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceAddToChildInstancesWhenNew()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -473,7 +471,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceAddToChildInstancesWhenUnmodified()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -481,7 +479,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aParentInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -493,7 +491,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceAddToChildInstancesWhenModified()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -501,7 +499,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aParentInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -509,7 +507,7 @@ namespace EAVFrameworkTest
             Assert.AreEqual(aParentInstance.InstanceID, value.ParentInstanceID, "Property 'ParentInstanceID' was not reported properly.");
             Assert.AreEqual(ObjectState.Modified, aParentInstance.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new EAVChildInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -522,7 +520,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void RootInstanceAddToChildInstancesWhenDeleted()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -534,19 +532,19 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, aParentInstance.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aParentInstance.ChildInstances.Add(new EAVChildInstance() { InstanceID = rng.Next() });
+            aParentInstance.ChildInstances.Add(new ModelChildInstance() { InstanceID = rng.Next() });
         }
 
         [TestMethod]
         public void RootInstanceRemoveFromChildInstancesWhenNew()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
-            value = new EAVChildInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -565,13 +563,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceRemoveFromChildInstancesWhenUnmodified()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
-            value = new EAVChildInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -594,7 +592,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceRemoveFromChildInstancesWhenModified()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -602,9 +600,9 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aParentInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
-            value = new EAVChildInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -624,11 +622,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void RootInstanceRemoveFromChildInstancesWhenDeleted()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -653,13 +651,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceClearChildInstancesWhenNew()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
-            value = new EAVChildInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -679,13 +677,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceClearChildInstancesWhenUnmodified()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
-            value = new EAVChildInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -709,7 +707,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceClearChildInstancesWhenModified()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -717,9 +715,9 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aParentInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
-            value = new EAVChildInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -740,11 +738,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void RootInstanceClearChildInstancesWhenDeleted()
         {
-            EAVRootInstance aParentInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance aParentInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVChildInstance value = new EAVChildInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aParentInstance.ChildInstances.Add(value);
 
             Assert.IsTrue(aParentInstance.ChildInstances.Contains(value), "Property 'ChildInstances' was not updated properly.");
@@ -771,11 +769,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceAddToValuesWhenNew()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -787,7 +785,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceAddToValuesWhenUnmodified()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -795,7 +793,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -807,7 +805,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceAddToValuesWhenModified()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -815,7 +813,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -823,7 +821,7 @@ namespace EAVFrameworkTest
             Assert.AreEqual(anInstance.InstanceID, value.InstanceID, "Property 'InstanceID' was not set properly.");
             Assert.AreEqual(ObjectState.Modified, anInstance.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new EAVValue();
+            value = new ModelValue();
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -836,7 +834,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void RootInstanceAddToValuesWhenDeleted()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -848,19 +846,19 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, anInstance.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            anInstance.Values.Add(new EAVValue());
+            anInstance.Values.Add(new ModelValue());
         }
 
         [TestMethod]
         public void RootInstanceRemoveFromValuesWhenNew()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anInstance.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -879,13 +877,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceRemoveFromValuesWhenUnmodified()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anInstance.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -908,7 +906,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceRemoveFromValuesWhenModified()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -916,9 +914,9 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anInstance.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -938,11 +936,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void RootInstanceRemoveFromValuesWhenDeleted()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue() { Attribute = new EAVAttribute() { AttributeID = rng.Next() } };
+            ModelValue value = new ModelValue() { Attribute = new ModelAttribute() { AttributeID = rng.Next() } };
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -969,13 +967,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceClearValuesWhenNew()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anInstance.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -995,13 +993,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceClearValuesWhenUnmodified()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anInstance.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1025,7 +1023,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void RootInstanceClearValuesWhenModified()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1033,9 +1031,9 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anInstance.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anInstance.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1056,11 +1054,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void RootInstanceClearValuesWhenDeleted()
         {
-            EAVRootInstance anInstance = new EAVRootInstance() { InstanceID = rng.Next() };
+            ModelRootInstance anInstance = new ModelRootInstance() { InstanceID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anInstance.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue() { Attribute = new EAVAttribute() { AttributeID = rng.Next() } };
+            ModelValue value = new ModelValue() { Attribute = new ModelAttribute() { AttributeID = rng.Next() } };
             anInstance.Values.Add(value);
 
             Assert.IsTrue(anInstance.Values.Contains(value), "Property 'Values' was not updated properly.");

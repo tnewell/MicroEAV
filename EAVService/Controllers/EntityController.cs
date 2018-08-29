@@ -25,8 +25,8 @@ namespace EAVService.Controllers
     [RoutePrefix("api/data/entities")]
     public class EntityController : BaseEAVController
     {
-        private EAV.Store.IEAVEntityClient entityClient = new EAVStoreClient.EAVEntityClient();
-        private EAV.Store.IEAVSubjectClient subjectClient = new EAVStoreClient.EAVSubjectClient();
+        private EAV.Store.IStoreEntityClient entityClient = new EAVStoreClient.EAVEntityClient();
+        private EAV.Store.IStoreSubjectClient subjectClient = new EAVStoreClient.EAVSubjectClient();
 
         public int? ContextID
         {
@@ -42,7 +42,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<IEnumerable<EAV.Model.IEAVEntity>>(entityClient.RetrieveEntities()));
+                return (Ok<IEnumerable<EAV.Store.IStoreEntity>>(entityClient.RetrieveEntities()));
             }
             catch (Exception ex)
             {
@@ -56,7 +56,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<EAV.Model.IEAVEntity>(entityClient.RetrieveEntity(id)));
+                return (Ok<EAV.Store.IStoreEntity>(entityClient.RetrieveEntity(id)));
             }
             catch (Exception ex)
             {
@@ -66,11 +66,11 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("", Name = "CreateEntity")]
-        public IHttpActionResult CreateEntity(EAV.Model.IEAVEntity entity)
+        public IHttpActionResult CreateEntity(EAV.Store.StoreEntity entity)
         {
             try
             {
-                return (Ok<EAV.Model.IEAVEntity>(entityClient.CreateEntity(entity)));
+                return (Ok<EAV.Store.IStoreEntity>(entityClient.CreateEntity(entity)));
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateEntity")]
-        public IHttpActionResult UpdateEntity(EAV.Model.IEAVEntity entity)
+        public IHttpActionResult UpdateEntity(EAV.Store.StoreEntity entity)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<IEnumerable<EAV.Model.IEAVSubject>>(subjectClient.RetrieveSubjects(ContextID, id)));
+                return (Ok<IEnumerable<EAV.Store.IStoreSubject>>(subjectClient.RetrieveSubjects(ContextID, id)));
             }
             catch (Exception ex)
             {
@@ -126,11 +126,11 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/subjects", Name = "CreateEntitySubject")]
-        public IHttpActionResult CreateEntitySubject(int id, EAV.Model.IEAVSubject subject)
+        public IHttpActionResult CreateEntitySubject(int id, EAV.Store.StoreSubject subject)
         {
             try
             {
-                return (Ok<EAV.Model.IEAVSubject>(subjectClient.CreateSubject(subject, ContextID.GetValueOrDefault(), id)));
+                return (Ok<EAV.Store.IStoreSubject>(subjectClient.CreateSubject(subject, ContextID.GetValueOrDefault(), id)));
             }
             catch (Exception ex)
             {

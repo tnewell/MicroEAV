@@ -11,28 +11,28 @@ namespace EAVSandbox
 {
     public partial class EAVSandboxForm : Form
     {
-        private EAVServiceClient.EAVClient eavClient = new EAVServiceClient.EAVClient();
+        private EAVServiceClient.EAVDataClient eavClient = new EAVServiceClient.EAVDataClient("http://localhost:10240");
 
         public EAVSandboxForm()
         {
             InitializeComponent();
         }
 
-        private EAVContext BuildContext()
+        private ModelContext BuildContext()
         {
-            Queue<EAV.Model.EAVDataType> types = new Queue<EAV.Model.EAVDataType>(Enum.GetValues(typeof(EAV.Model.EAVDataType)).OfType<EAV.Model.EAVDataType>());
+            Queue<EAV.EAVDataType> types = new Queue<EAV.EAVDataType>(Enum.GetValues(typeof(EAV.EAVDataType)).OfType<EAV.EAVDataType>());
 
-            EAVContext context = new EAVContext()
+            ModelContext context = new ModelContext()
             {
                 Name = "Test",
                 DataName = "TEST",
                 DisplayText = "Test Context",
             };
 
-            EAVRootContainer rootContainer;
-            EAVChildContainer childContainer;
+            ModelRootContainer rootContainer;
+            ModelChildContainer childContainer;
 
-            rootContainer = new EAVRootContainer()
+            rootContainer = new ModelRootContainer()
             {
                 Name = "Container 1",
                 DataName = "CONTAINER_1",
@@ -44,7 +44,7 @@ namespace EAVSandbox
 
             for (int i = 1; i <= 3; ++i)
             {
-                rootContainer.Attributes.Add(new EAVAttribute()
+                rootContainer.Attributes.Add(new ModelAttribute()
                 {
                     Name = String.Format("Attribute 1{0}", i),
                     DataName = String.Format("ATTRIBUTE_1{0}", i),
@@ -56,7 +56,7 @@ namespace EAVSandbox
                 types.Enqueue(types.Dequeue());
             }
 
-            childContainer = new EAVChildContainer()
+            childContainer = new ModelChildContainer()
             {
                 Name = "Container 11",
                 DataName = "CONTAINER_11",
@@ -68,7 +68,7 @@ namespace EAVSandbox
 
             for (int i = 1; i <= 3; ++i)
             {
-                childContainer.Attributes.Add(new EAVAttribute()
+                childContainer.Attributes.Add(new ModelAttribute()
                 {
                     Name = String.Format("Attribute 11{0}", i),
                     DataName = String.Format("ATTRIBUTE_11{0}", i),
@@ -80,7 +80,7 @@ namespace EAVSandbox
                 types.Enqueue(types.Dequeue());
             }
 
-            childContainer = new EAVChildContainer()
+            childContainer = new ModelChildContainer()
             {
                 Name = "Container 12",
                 DataName = "CONTAINER_12",
@@ -92,7 +92,7 @@ namespace EAVSandbox
 
             for (int i = 1; i <= 3; ++i)
             {
-                childContainer.Attributes.Add(new EAVAttribute()
+                childContainer.Attributes.Add(new ModelAttribute()
                 {
                     Name = String.Format("Attribute 12{0}", i),
                     DataName = String.Format("ATTRIBUTE_12{0}", i),
@@ -104,7 +104,7 @@ namespace EAVSandbox
                 types.Enqueue(types.Dequeue());
             }
 
-            rootContainer = new EAVRootContainer()
+            rootContainer = new ModelRootContainer()
             {
                 Name = "Container 2",
                 DataName = "CONTAINER_2",
@@ -116,7 +116,7 @@ namespace EAVSandbox
 
             for (int i = 1; i <= 3; ++i)
             {
-                rootContainer.Attributes.Add(new EAVAttribute()
+                rootContainer.Attributes.Add(new ModelAttribute()
                 {
                     Name = String.Format("Attribute 2{0}", i),
                     DataName = String.Format("ATTRIBUTE_2{0}", i),
@@ -128,7 +128,7 @@ namespace EAVSandbox
                 types.Enqueue(types.Dequeue());
             }
 
-            childContainer = new EAVChildContainer()
+            childContainer = new ModelChildContainer()
             {
                 Name = "Container 21",
                 DataName = "CONTAINER_21",
@@ -140,7 +140,7 @@ namespace EAVSandbox
 
             for (int i = 1; i <= 3; ++i)
             {
-                childContainer.Attributes.Add(new EAVAttribute()
+                childContainer.Attributes.Add(new ModelAttribute()
                 {
                     Name = String.Format("Attribute 21{0}", i),
                     DataName = String.Format("ATTRIBUTE_21{0}", i),
@@ -157,24 +157,22 @@ namespace EAVSandbox
 
         private void ctlGoButton_Click(object sender, EventArgs e)
         {
-            HttpClient client = new HttpClient() { BaseAddress = new Uri("http://localhost:10240") };
-
             ctlResults.Text = null;
 
             // Do this to cause our web service to initialize
-            var contexts = eavClient.LoadContexts(client);
+            var contexts = eavClient.LoadContexts();
 
             ctlResults.Text += String.Format("Save Started: {0:HH:mm:ss.fff}\r\n", DateTime.Now);
 
             // Build and save a context
             var context1 = BuildContext();
 
-            eavClient.SaveMetadata(client, context1);
+            eavClient.SaveContext(context1);
 
             ctlResults.Text += String.Format("Create Complete: {0:HH:mm:ss.fff}\r\n", DateTime.Now);
 
             // Reload contexts (should be at least one now)
-            contexts = eavClient.LoadContexts(client);
+            contexts = eavClient.LoadContexts();
 
             var context2 = contexts.First();
 
@@ -185,7 +183,7 @@ namespace EAVSandbox
             context2.MarkDeleted();
 
             // Delete it
-            eavClient.SaveMetadata(client, context2);
+            eavClient.SaveContext(context2);
 
             ctlResults.Text += String.Format("Delete Complete: {0:HH:mm:ss.fff}\r\n", DateTime.Now);
 

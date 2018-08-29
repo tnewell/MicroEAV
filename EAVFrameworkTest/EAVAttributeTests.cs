@@ -3,8 +3,6 @@ using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using EAV.Model;
-
 using EAVFramework.Model;
 
 
@@ -12,16 +10,16 @@ namespace EAVFrameworkTest
 {
     public partial class EAVFrameworkTestHarness
     {
-        private EAVDataType GetRandomDataType()
+        private EAV.EAVDataType GetRandomDataType()
         {
-            var types = Enum.GetValues(typeof(EAVDataType)).Cast<EAVDataType>().Where(it => it != default(EAVDataType));
+            var types = Enum.GetValues(typeof(EAV.EAVDataType)).Cast<EAV.EAVDataType>().Where(it => it != default(EAV.EAVDataType));
             return (types.ElementAt(rng.Next(0, types.Count())));
         }
 
         [TestMethod]
         public void AttributeCreate()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -30,7 +28,7 @@ namespace EAVFrameworkTest
             Assert.IsNull(anAttribute.Name, "Property 'Name' should be null on creation.");
             Assert.IsNull(anAttribute.DataName, "Property 'DataName' should be null on creation.");
             Assert.IsNull(anAttribute.DisplayText, "Property 'DisplayText' should be null on creation.");
-            Assert.AreEqual(default(EAVDataType), anAttribute.DataType, "Property 'DataType' should be default on creation.");
+            Assert.AreEqual(default(EAV.EAVDataType), anAttribute.DataType, "Property 'DataType' should be default on creation.");
             Assert.AreEqual(0, anAttribute.Sequence, "Property 'Sequence' should be zero on creation.");
             Assert.IsFalse(anAttribute.IsKey, "Property 'IsKey' should be false on creation.");
             Assert.IsNull(anAttribute.VariableUnits, "Property 'VariableUnits' should be null on creation.");
@@ -49,7 +47,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeStateTransitionNewToUnmodifiedWithNullID()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -61,7 +59,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeStateTransitionNewToUnmodifiedWithValidID()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -74,7 +72,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeStateTransitionNewToDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -84,7 +82,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeStateTransitionUnmodifiedToDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -101,7 +99,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeStateTransitionDeletedToUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -121,7 +119,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetIDWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -135,7 +133,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetIDBeforeUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -154,7 +152,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeSetIDAfterUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -165,7 +163,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeSetIDWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -193,7 +191,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetNameWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -207,7 +205,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetNameWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -225,7 +223,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetNameWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -250,7 +248,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeSetNameWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -270,7 +268,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetDataNameWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -284,7 +282,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetDataNameWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -302,7 +300,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetDataNameWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -327,7 +325,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeSetDataNameWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -347,7 +345,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetDisplayTextWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -361,7 +359,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetDisplayTextWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -379,7 +377,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetDisplayTextWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -404,7 +402,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeSetDisplayTextWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -424,11 +422,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetDataTypeWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVDataType dataType = GetRandomDataType();
+            EAV.EAVDataType dataType = GetRandomDataType();
             anAttribute.DataType = dataType;
 
             Assert.AreEqual(dataType, anAttribute.DataType, "Property 'DataType' was not set properly.");
@@ -438,7 +436,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetDataTypeWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -446,7 +444,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVDataType dataType = GetRandomDataType();
+            EAV.EAVDataType dataType = GetRandomDataType();
             anAttribute.DataType = dataType;
 
             Assert.AreEqual(dataType, anAttribute.DataType, "Property 'DataType' was not set properly.");
@@ -456,7 +454,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetDataTypeWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -464,7 +462,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVDataType dataType = GetRandomDataType();
+            EAV.EAVDataType dataType = GetRandomDataType();
             anAttribute.DataType = dataType;
 
             Assert.AreEqual(dataType, anAttribute.DataType, "Property 'DataType' was not set properly.");
@@ -481,7 +479,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeSetDataTypeWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -501,7 +499,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetSequenceWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -515,7 +513,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetSequenceWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -533,7 +531,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetSequenceWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -558,7 +556,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeSetSequenceWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -578,7 +576,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetIsKeyWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -591,7 +589,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetIsKeyWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -608,7 +606,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetIsKeyWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -631,7 +629,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeSetIsKeyWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -651,7 +649,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetVariableUnitsWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -664,7 +662,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetVariableUnitsWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -681,7 +679,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetVariableUnitsWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -704,7 +702,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeSetVariableUnitsWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -726,11 +724,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetContainerWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             anAttribute.Container = value;
 
             Assert.AreEqual(value, anAttribute.Container, "Property 'Container' was not set properly.");
@@ -742,7 +740,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetContainerWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -750,7 +748,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             anAttribute.Container = value;
 
             Assert.AreEqual(value, anAttribute.Container, "Property 'Container' was not set properly.");
@@ -762,7 +760,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeSetContainerWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -770,7 +768,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             anAttribute.Container = value;
 
             Assert.AreEqual(value, anAttribute.Container, "Property 'Container' was not set properly.");
@@ -778,7 +776,7 @@ namespace EAVFrameworkTest
             Assert.IsTrue(value.Attributes.Contains(anAttribute), "Property 'Attributes' was not updated properly.");
             Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new EAVRootContainer() { ContainerID = rng.Next() };
+            value = new ModelRootContainer() { ContainerID = rng.Next() };
             anAttribute.Container = value;
 
             Assert.AreEqual(value, anAttribute.Container, "Property 'Container' was not set properly.");
@@ -791,7 +789,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeSetContainerWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute();
+            ModelAttribute anAttribute = new ModelAttribute();
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -803,7 +801,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, anAttribute.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            anAttribute.Container = new EAVRootContainer() { ContainerID = rng.Next() };
+            anAttribute.Container = new ModelRootContainer() { ContainerID = rng.Next() };
         }
         #endregion
         #endregion
@@ -813,11 +811,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeAddToUnitsWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next(), VariableUnits = false };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            ModelUnit aUnit = new ModelUnit() { UnitID = rng.Next() };
             aUnit.MarkUnmodified();
 
             anAttribute.Units.Add(aUnit);
@@ -831,11 +829,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeAddToUnitsWhenNewAndVariableUnitsNull()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = null };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next(), VariableUnits = null };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            ModelUnit aUnit = new ModelUnit() { UnitID = rng.Next() };
             aUnit.MarkUnmodified();
 
             anAttribute.Units.Add(aUnit);
@@ -845,11 +843,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeAddToUnitsWhenNewAndVariableUnitsTrue()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = true };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next(), VariableUnits = true };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            ModelUnit aUnit = new ModelUnit() { UnitID = rng.Next() };
             aUnit.MarkUnmodified();
 
             anAttribute.Units.Add(aUnit);
@@ -859,11 +857,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeAddToUnitsWhenNewAndUnitIsNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next(), VariableUnits = false };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            ModelUnit aUnit = new ModelUnit() { UnitID = rng.Next() };
 
             anAttribute.Units.Add(aUnit);
         }
@@ -872,11 +870,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeAddToUnitsWhenNewAndUnitHasNoID()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next(), VariableUnits = false };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVUnit aUnit = new EAVUnit();
+            ModelUnit aUnit = new ModelUnit();
             aUnit.MarkUnmodified();
 
             anAttribute.Units.Add(aUnit);
@@ -886,11 +884,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void AttributeAddToUnitsWhenNewAndUnitIsDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next(), VariableUnits = false };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            ModelUnit aUnit = new ModelUnit() { UnitID = rng.Next() };
             aUnit.MarkUnmodified();
             aUnit.MarkDeleted();
 
@@ -900,7 +898,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeAddToUnitsWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next(), VariableUnits = false };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -908,7 +906,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            ModelUnit aUnit = new ModelUnit() { UnitID = rng.Next() };
             aUnit.MarkUnmodified();
 
             anAttribute.Units.Add(aUnit);
@@ -921,7 +919,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeAddToUnitsWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next(), VariableUnits = false };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -929,7 +927,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            ModelUnit aUnit = new ModelUnit() { UnitID = rng.Next() };
             aUnit.MarkUnmodified();
 
             anAttribute.Units.Add(aUnit);
@@ -938,7 +936,7 @@ namespace EAVFrameworkTest
             Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
             Assert.AreEqual(ObjectState.Unmodified, aUnit.ObjectState, "Unit object state should remain 'Unmodified' when aUnit added to attribute.");
 
-            aUnit = new EAVUnit() { UnitID = rng.Next() };
+            aUnit = new ModelUnit() { UnitID = rng.Next() };
             aUnit.MarkUnmodified();
 
             anAttribute.Units.Add(aUnit);
@@ -952,7 +950,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void AttributeAddToUnitsWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next(), VariableUnits = false };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next(), VariableUnits = false };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -964,7 +962,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, anAttribute.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            EAVUnit aUnit = new EAVUnit() { UnitID = rng.Next() };
+            ModelUnit aUnit = new ModelUnit() { UnitID = rng.Next() };
             aUnit.MarkUnmodified();
 
             anAttribute.Units.Add(aUnit);
@@ -975,11 +973,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeAddToValuesWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -991,7 +989,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeAddToValuesWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -999,7 +997,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1011,7 +1009,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeAddToValuesWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1019,7 +1017,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1027,7 +1025,7 @@ namespace EAVFrameworkTest
             Assert.AreEqual(anAttribute.AttributeID, value.AttributeID, "Property 'AttributeID' was not set properly.");
             Assert.AreEqual(ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new EAVValue();
+            value = new ModelValue();
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1040,7 +1038,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void AttributeAddToValuesWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1052,19 +1050,19 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, anAttribute.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            anAttribute.Values.Add(new EAVValue());
+            anAttribute.Values.Add(new ModelValue());
         }
 
         [TestMethod]
         public void AttributeRemoveFromValuesWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anAttribute.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1083,13 +1081,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeRemoveFromValuesWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anAttribute.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1112,7 +1110,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeRemoveFromValuesWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1120,9 +1118,9 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anAttribute.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1142,11 +1140,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void AttributeRemoveFromValuesWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue() { Instance = new EAVRootInstance() { InstanceID = rng.Next() } };
+            ModelValue value = new ModelValue() { Instance = new ModelRootInstance() { InstanceID = rng.Next() } };
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1173,13 +1171,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeClearValuesWhenNew()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anAttribute.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1199,13 +1197,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeClearValuesWhenUnmodified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anAttribute.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1229,7 +1227,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void AttributeClearValuesWhenModified()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1237,9 +1235,9 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, anAttribute.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVValue value = new EAVValue();
+            ModelValue value = new ModelValue();
             anAttribute.Values.Add(value);
-            value = new EAVValue();
+            value = new ModelValue();
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
@@ -1260,11 +1258,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void AttributeClearValuesWhenDeleted()
         {
-            EAVAttribute anAttribute = new EAVAttribute() { AttributeID = rng.Next() };
+            ModelAttribute anAttribute = new ModelAttribute() { AttributeID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, anAttribute.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVValue value = new EAVValue() { Instance = new EAVRootInstance() { InstanceID = rng.Next() } };
+            ModelValue value = new ModelValue() { Instance = new ModelRootInstance() { InstanceID = rng.Next() } };
             anAttribute.Values.Add(value);
 
             Assert.IsTrue(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");

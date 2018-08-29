@@ -8,14 +8,14 @@
 
     @switch (Model.Attribute.DataType)
     {
-        case EAV.Model.EAVDataType.Boolean:
+        case EAV.EAVDataType.Boolean:
             <label class="form-text eav-attribute-caption">@Model.Attribute.DisplayText</label>
             <input class="form-control eav-attribute-control" />
             break;
-        case EAV.Model.EAVDataType.DateTime:
-        case EAV.Model.EAVDataType.Float:
-        case EAV.Model.EAVDataType.Integer:
-        case EAV.Model.EAVDataType.String:
+        case EAV.EAVDataType.DateTime:
+        case EAV.EAVDataType.Float:
+        case EAV.EAVDataType.Integer:
+        case EAV.EAVDataType.String:
         default:
             <label class="form-text eav-attribute-caption">@Model.Attribute.DisplayText</label>
             @Html.TextBoxFor(m => m.RawValue, new { @class = "form-control eav-attribute-control" })

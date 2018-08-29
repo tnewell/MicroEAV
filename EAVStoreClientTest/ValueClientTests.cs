@@ -87,7 +87,7 @@ namespace EAVStoreClientTestHarness
             var valueKey = SelectRandomItem(RetrieveAvailableValueKeys());
             string rawValue = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVValue value = client.CreateValue(new EAV.Model.BaseEAVValue()
+            EAV.Store.IStoreValue value = client.CreateValue(new EAV.Store.StoreValue()
             {
                 RawValue = rawValue,
             }, valueKey.InstanceID, valueKey.AttributeID);
@@ -114,7 +114,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.EAVValueClient client = new EAVStoreClient.EAVValueClient();
 
-            var value = (EAV.Model.BaseEAVValue)dbValue;
+            var value = (EAV.Store.StoreValue)dbValue;
 
             value.RawValue = oldValue.Flip();
 

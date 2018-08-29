@@ -27,7 +27,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>2.6</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -295,6 +295,10 @@
     <ProjectReference Include="..\EAV.Model\EAV.Model.csproj">
       <Project>{DE98CD45-4020-44ED-A4A8-98D0BE529C4F}</Project>
       <Name>EAV.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EAV.Store\EAV.Store.csproj">
+      <Project>{a626330a-e997-4a38-8dce-e68a0cdec2c7}</Project>
+      <Name>EAV.Store</Name>
     </ProjectReference>
     <ProjectReference Include="..\EAVFramework\EAVFramework.csproj">
       <Project>{4445fabc-0e5c-4843-8cc8-cca798982d95}</Project>

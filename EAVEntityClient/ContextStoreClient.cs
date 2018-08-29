@@ -22,33 +22,33 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVContextClient : EAV.Store.IEAVContextClient
+    public partial class EAVContextClient : EAV.Store.IStoreContextClient
     {
-        public IEnumerable<EAV.Model.IEAVContext> RetrieveContexts()
+        public IEnumerable<EAV.Store.IStoreContext> RetrieveContexts()
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return (ctx.Contexts.AsEnumerable().Select(it => (EAV.Model.BaseEAVContext)it).ToList());
+                return (ctx.Contexts.AsEnumerable().Select(it => (EAV.Store.StoreContext)it).ToList());
             }
         }
 
-        public EAV.Model.IEAVContext RetrieveContext(int contextID)
+        public EAV.Store.IStoreContext RetrieveContext(int contextID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Model.BaseEAVContext)ctx.Contexts.SingleOrDefault(it => it.Context_ID == contextID));
+                return ((EAV.Store.StoreContext)ctx.Contexts.SingleOrDefault(it => it.Context_ID == contextID));
             }
         }
 
-        public EAV.Model.IEAVContext RetrieveContext(string name)
+        public EAV.Store.IStoreContext RetrieveContext(string name)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Model.BaseEAVContext)ctx.Contexts.SingleOrDefault(it => it.Name == name));
+                return ((EAV.Store.StoreContext)ctx.Contexts.SingleOrDefault(it => it.Name == name));
             }
         }
 
-        public EAV.Model.IEAVContext CreateContext(EAV.Model.IEAVContext context)
+        public EAV.Store.IStoreContext CreateContext(EAV.Store.IStoreContext context)
         {
             if (context == null)
                 return (null);
@@ -64,11 +64,11 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Model.BaseEAVContext)dbContext);
+                return ((EAV.Store.StoreContext)dbContext);
             }
         }
 
-        public void UpdateContext(EAV.Model.IEAVContext context)
+        public void UpdateContext(EAV.Store.IStoreContext context)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {

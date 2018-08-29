@@ -22,40 +22,40 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVSubjectClient : EAV.Store.IEAVSubjectClient
+    public partial class EAVSubjectClient : EAV.Store.IStoreSubjectClient
     {
-        public IEnumerable<EAV.Model.IEAVSubject> RetrieveSubjects(int? contextID, int? entityID)
+        public IEnumerable<EAV.Store.IStoreSubject> RetrieveSubjects(int? contextID, int? entityID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
                 if (contextID != null && entityID != null)
                 {
-                    return (ctx.Subjects.Where(it => it.Context_ID == contextID && it.Entity_ID == entityID).AsEnumerable().Select(it => (EAV.Model.BaseEAVSubject)it).ToList());
+                    return (ctx.Subjects.Where(it => it.Context_ID == contextID && it.Entity_ID == entityID).AsEnumerable().Select(it => (EAV.Store.StoreSubject)it).ToList());
                 }
                 else if (contextID != null && entityID == null)
                 {
-                    return (ctx.Subjects.Where(it => it.Context_ID == contextID).AsEnumerable().Select(it => (EAV.Model.BaseEAVSubject)it).ToList());
+                    return (ctx.Subjects.Where(it => it.Context_ID == contextID).AsEnumerable().Select(it => (EAV.Store.StoreSubject)it).ToList());
                 }
                 else if (contextID == null && entityID != null)
                 {
-                    return (ctx.Subjects.Where(it => it.Entity_ID == entityID).AsEnumerable().Select(it => (EAV.Model.BaseEAVSubject)it).ToList());
+                    return (ctx.Subjects.Where(it => it.Entity_ID == entityID).AsEnumerable().Select(it => (EAV.Store.StoreSubject)it).ToList());
                 }
                 else
                 {
-                    return (ctx.Subjects.AsEnumerable().Select(it => (EAV.Model.BaseEAVSubject)it).ToList());
+                    return (ctx.Subjects.AsEnumerable().Select(it => (EAV.Store.StoreSubject)it).ToList());
                 }
             }
         }
 
-        public EAV.Model.IEAVSubject RetrieveSubject(int subjectID)
+        public EAV.Store.IStoreSubject RetrieveSubject(int subjectID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Model.BaseEAVSubject)ctx.Subjects.SingleOrDefault(it => it.Subject_ID == subjectID));
+                return ((EAV.Store.StoreSubject)ctx.Subjects.SingleOrDefault(it => it.Subject_ID == subjectID));
             }
         }
 
-        public EAV.Model.IEAVSubject CreateSubject(EAV.Model.IEAVSubject subject, int contextID, int entityID)
+        public EAV.Store.IStoreSubject CreateSubject(EAV.Store.IStoreSubject subject, int contextID, int entityID)
         {
             if (subject == null)
                 return (null);
@@ -71,11 +71,11 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Model.BaseEAVSubject)dbSubject);
+                return ((EAV.Store.StoreSubject)dbSubject);
             }
         }
 
-        public void UpdateSubject(EAV.Model.IEAVSubject subject)
+        public void UpdateSubject(EAV.Store.IStoreSubject subject)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {

@@ -96,7 +96,7 @@ namespace EAVServiceTest
             return (dbContainer);
         }
 
-        private static EAVStoreClient.Attribute CreateAttribute(int containerID, string name, EAV.Model.EAVDataType dataType, int sequence, bool isKey = false)
+        private static EAVStoreClient.Attribute CreateAttribute(int containerID, string name, EAV.EAVDataType dataType, int sequence, bool isKey = false)
         {
             EAVStoreClient.Attribute dbAttribute;
 
@@ -237,24 +237,24 @@ namespace EAVServiceTest
                 EAVStoreClient.Container dbParentContainer = null;
                 EAVStoreClient.Instance dbInstance = null;
                 EAVStoreClient.Instance dbParentInstance = null;
-                Dictionary<EAV.Model.EAVDataType, EAVStoreClient.Attribute> attributes = new Dictionary<EAV.Model.EAVDataType, EAVStoreClient.Attribute>();
+                Dictionary<EAV.EAVDataType, EAVStoreClient.Attribute> attributes = new Dictionary<EAV.EAVDataType, EAVStoreClient.Attribute>();
 
-                var typeList = new Queue<EAV.Model.EAVDataType>(Enum.GetValues(typeof(EAV.Model.EAVDataType)).OfType<EAV.Model.EAVDataType>());
+                var typeList = new Queue<EAV.EAVDataType>(Enum.GetValues(typeof(EAV.EAVDataType)).OfType<EAV.EAVDataType>());
 
                 // Context 1
                 dbContainer = CreateContainer(contexts[0].Context_ID, null, "Root Container 1-1", 1, false);
 
                 attributes.Clear();
-                foreach (EAV.Model.EAVDataType dt in Enum.GetValues(typeof(EAV.Model.EAVDataType)))
-                    attributes[dt] = CreateAttribute(dbContainer.Container_ID, String.Format("Attribute 1-1-{0}", ((int)dt) + 1), dt, (int)dt, dt == EAV.Model.EAVDataType.String);
+                foreach (EAV.EAVDataType dt in Enum.GetValues(typeof(EAV.EAVDataType)))
+                    attributes[dt] = CreateAttribute(dbContainer.Container_ID, String.Format("Attribute 1-1-{0}", ((int)dt) + 1), dt, (int)dt, dt == EAV.EAVDataType.String);
 
                 foreach (EAVStoreClient.Subject dbSubject in subjects)
                 {
                     dbInstance = CreateInstance(dbContainer.Container_ID, dbSubject.Subject_ID, null);
 
-                    foreach (EAV.Model.EAVDataType dt in typeList.Take(3))
+                    foreach (EAV.EAVDataType dt in typeList.Take(3))
                     {
-                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
+                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
                     }
 
                     typeList.Enqueue(typeList.Dequeue());
@@ -264,16 +264,16 @@ namespace EAVServiceTest
                 dbParentContainer = CreateContainer(contexts[1].Context_ID, null, "Root Container 2-1", 2, false);
 
                 attributes.Clear();
-                foreach (EAV.Model.EAVDataType dt in Enum.GetValues(typeof(EAV.Model.EAVDataType)))
-                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-{0}", ((int)dt) + 1), dt, (int)dt, dt == EAV.Model.EAVDataType.String);
+                foreach (EAV.EAVDataType dt in Enum.GetValues(typeof(EAV.EAVDataType)))
+                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-{0}", ((int)dt) + 1), dt, (int)dt, dt == EAV.EAVDataType.String);
 
                 foreach (EAVStoreClient.Subject dbSubject in subjects)
                 {
                     dbParentInstance = CreateInstance(dbParentContainer.Container_ID, dbSubject.Subject_ID, null);
 
-                    foreach (EAV.Model.EAVDataType dt in typeList.Take(3))
+                    foreach (EAV.EAVDataType dt in typeList.Take(3))
                     {
-                        CreateValue(attributes[dt].Attribute_ID, dbParentInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
+                        CreateValue(attributes[dt].Attribute_ID, dbParentInstance.Instance_ID, "N/A", dt == EAV.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
                     }
 
                     typeList.Enqueue(typeList.Dequeue());
@@ -282,16 +282,16 @@ namespace EAVServiceTest
                 dbContainer = CreateContainer(contexts[1].Context_ID, dbParentContainer.Container_ID, "Child Container 2-1-1", 1, false);
 
                 attributes.Clear();
-                foreach (EAV.Model.EAVDataType dt in Enum.GetValues(typeof(EAV.Model.EAVDataType)))
-                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-1-{0}", ((int)dt) + 1), dt, (int)dt, dt == EAV.Model.EAVDataType.String);
+                foreach (EAV.EAVDataType dt in Enum.GetValues(typeof(EAV.EAVDataType)))
+                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-1-{0}", ((int)dt) + 1), dt, (int)dt, dt == EAV.EAVDataType.String);
 
                 foreach (EAVStoreClient.Subject dbSubject in subjects)
                 {
                     dbInstance = CreateInstance(dbContainer.Container_ID, dbSubject.Subject_ID, dbParentContainer.Container_ID);
 
-                    foreach (EAV.Model.EAVDataType dt in typeList.Take(3))
+                    foreach (EAV.EAVDataType dt in typeList.Take(3))
                     {
-                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
+                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
                     }
 
                     typeList.Enqueue(typeList.Dequeue());
@@ -300,16 +300,16 @@ namespace EAVServiceTest
                 dbContainer = CreateContainer(contexts[1].Context_ID, dbParentContainer.Container_ID, "Child Container 2-1-2", 2, true);
 
                 attributes.Clear();
-                foreach (EAV.Model.EAVDataType dt in Enum.GetValues(typeof(EAV.Model.EAVDataType)))
-                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-2-{0}", ((int)dt) + 1), dt, (int)dt, dt == EAV.Model.EAVDataType.String);
+                foreach (EAV.EAVDataType dt in Enum.GetValues(typeof(EAV.EAVDataType)))
+                    attributes[dt] = CreateAttribute(dbParentContainer.Container_ID, String.Format("Attribute 2-1-2-{0}", ((int)dt) + 1), dt, (int)dt, dt == EAV.EAVDataType.String);
 
                 foreach (EAVStoreClient.Subject dbSubject in subjects)
                 {
                     dbInstance = CreateInstance(dbContainer.Container_ID, dbSubject.Subject_ID, dbParentContainer.Container_ID);
 
-                    foreach (EAV.Model.EAVDataType dt in typeList.Take(3))
+                    foreach (EAV.EAVDataType dt in typeList.Take(3))
                     {
-                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.Model.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
+                        CreateValue(attributes[dt].Attribute_ID, dbInstance.Instance_ID, "N/A", dt == EAV.EAVDataType.Float ? (int?) units[0].Unit_ID : null);
                     }
 
                     typeList.Enqueue(typeList.Dequeue());

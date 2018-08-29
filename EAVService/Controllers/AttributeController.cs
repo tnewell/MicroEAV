@@ -25,8 +25,8 @@ namespace EAVService.Controllers
     [RoutePrefix("api/meta/attributes")]
     public class AttributeController : BaseEAVController
     {
-        private EAV.Store.IEAVAttributeClient attributeClient = new EAVStoreClient.EAVAttributeClient();
-        private EAV.Store.IEAVUnitClient unitClient = new EAVStoreClient.EAVUnitClient();
+        private EAV.Store.IStoreAttributeClient attributeClient = new EAVStoreClient.EAVAttributeClient();
+        private EAV.Store.IStoreUnitClient unitClient = new EAVStoreClient.EAVUnitClient();
 
         [HttpGet]
         [Route("{id}", Name = "RetrieveAttribute")]
@@ -34,7 +34,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<EAV.Model.IEAVAttribute>(attributeClient.RetrieveAttribute(id)));
+                return (Ok<EAV.Store.IStoreAttribute>(attributeClient.RetrieveAttribute(id)));
             }
             catch (Exception ex)
             {
@@ -44,7 +44,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateAttribute")]
-        public IHttpActionResult UpdateAttribute(EAV.Model.IEAVAttribute attribute)
+        public IHttpActionResult UpdateAttribute(EAV.Store.StoreAttribute attribute)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<IEnumerable<EAV.Model.IEAVUnit>>(attributeClient.RetrieveAttributeUnits(id)));
+                return (Ok<IEnumerable<EAV.Store.IStoreUnit>>(attributeClient.RetrieveAttributeUnits(id)));
             }
             catch (Exception ex)
             {
@@ -90,7 +90,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("{id}/units", Name = "UpdateAttributeUnits")]
-        public IHttpActionResult UpdatettributeUnits(int id, IEnumerable<EAV.Model.IEAVUnit> units)
+        public IHttpActionResult UpdatettributeUnits(int id, IEnumerable<EAV.Store.StoreUnit> units)
         {
             try
             {

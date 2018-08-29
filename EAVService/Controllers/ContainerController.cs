@@ -25,8 +25,8 @@ namespace EAVService.Controllers
     [RoutePrefix("api/meta/containers")]
     public class ContainerController : BaseEAVController
     {
-        private EAV.Store.IEAVContainerClient containerClient = new EAVStoreClient.EAVContainerClient();
-        private EAV.Store.IEAVAttributeClient attributeClient = new EAVStoreClient.EAVAttributeClient();
+        private EAV.Store.IStoreContainerClient containerClient = new EAVStoreClient.EAVContainerClient();
+        private EAV.Store.IStoreAttributeClient attributeClient = new EAVStoreClient.EAVAttributeClient();
 
         [HttpGet]
         [Route("{id}", Name = "RetrieveContainer")]
@@ -34,7 +34,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<EAV.Model.IEAVContainer>(containerClient.RetrieveContainer(id)));
+                return (Ok<EAV.Store.IStoreContainer>(containerClient.RetrieveContainer(id)));
             }
             catch (Exception ex)
             {
@@ -44,7 +44,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateContainer")]
-        public IHttpActionResult UpdateContainer(EAV.Model.IEAVContainer container)
+        public IHttpActionResult UpdateContainer(EAV.Store.IStoreContainer container)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<IEnumerable<EAV.Model.IEAVContainer>>(containerClient.RetrieveChildContainers(id)));
+                return (Ok<IEnumerable<EAV.Store.IStoreContainer>>(containerClient.RetrieveChildContainers(id)));
             }
             catch (Exception ex)
             {
@@ -90,11 +90,11 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/containers", Name = "CreateChildContainer")]
-        public IHttpActionResult CreateChildContainer(int id, EAV.Model.IEAVContainer container)
+        public IHttpActionResult CreateChildContainer(int id, EAV.Store.StoreContainer container)
         {
             try
             {
-                return (Ok<EAV.Model.IEAVContainer>(containerClient.CreateChildContainer(container, id)));
+                return (Ok<EAV.Store.IStoreContainer>(containerClient.CreateChildContainer(container, id)));
             }
             catch (Exception ex)
             {
@@ -108,7 +108,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<IEnumerable<EAV.Model.IEAVAttribute>>(attributeClient.RetrieveAttributes(id)));
+                return (Ok<IEnumerable<EAV.Store.IStoreAttribute>>(attributeClient.RetrieveAttributes(id)));
             }
             catch (Exception ex)
             {
@@ -118,11 +118,11 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/attributes", Name = "CreateAttribute")]
-        public IHttpActionResult CreateAttribute(int id, EAV.Model.IEAVAttribute attribute)
+        public IHttpActionResult CreateAttribute(int id, EAV.Store.StoreAttribute attribute)
         {
             try
             {
-                return (Ok<EAV.Model.IEAVAttribute>(attributeClient.CreateAttribute(attribute, id)));
+                return (Ok<EAV.Store.IStoreAttribute>(attributeClient.CreateAttribute(attribute, id)));
             }
             catch (Exception ex)
             {

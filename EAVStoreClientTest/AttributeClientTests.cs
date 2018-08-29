@@ -69,12 +69,12 @@ namespace EAVStoreClientTestHarness
             int containerID = SelectRandomItem(this.DbContext.Containers).Context_ID;
             string attributeName = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVAttribute attribute = client.CreateAttribute(new EAV.Model.BaseEAVAttribute()
+            EAV.Store.IStoreAttribute attribute = client.CreateAttribute(new EAV.Store.StoreAttribute()
             {
                 Name = attributeName,
                 DataName = attributeName.ToUpper(),
                 DisplayText = attributeName + ":",
-                DataType = EAV.Model.EAVDataType.String,
+                DataType = EAV.EAVDataType.String,
                 IsKey = true,
                 Sequence = rng.Next(),
                 VariableUnits = true,
@@ -108,12 +108,12 @@ namespace EAVStoreClientTestHarness
             int containerID = SelectRandomItem(this.DbContext.Containers).Context_ID;
             string attributeName = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVAttribute attribute = client.CreateAttribute(new EAV.Model.BaseEAVAttribute()
+            EAV.Store.IStoreAttribute attribute = client.CreateAttribute(new EAV.Store.StoreAttribute()
             {
                 Name = attributeName,
                 DataName = attributeName.ToUpper(),
                 DisplayText = attributeName + ":",
-                DataType = EAV.Model.EAVDataType.String,
+                DataType = EAV.EAVDataType.String,
                 IsKey = true,
                 Sequence = rng.Next(),
                 VariableUnits = true,
@@ -121,12 +121,12 @@ namespace EAVStoreClientTestHarness
 
             Assert.IsNotNull(attribute, "Failed to create attribute with name '{0}' for container ID {1}.", attributeName, containerID);
 
-            client.CreateAttribute(new EAV.Model.BaseEAVAttribute()
+            client.CreateAttribute(new EAV.Store.StoreAttribute()
             {
                 Name = attributeName,
                 DataName = attributeName.ToUpper() + "1",
                 DisplayText = attributeName + ":",
-                DataType = EAV.Model.EAVDataType.String,
+                DataType = EAV.EAVDataType.String,
                 IsKey = true,
                 Sequence = rng.Next(),
                 VariableUnits = true,
@@ -146,12 +146,12 @@ namespace EAVStoreClientTestHarness
             int containerID = SelectRandomItem(this.DbContext.Containers).Context_ID;
             string attributeName = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVAttribute attribute = client.CreateAttribute(new EAV.Model.BaseEAVAttribute()
+            EAV.Store.IStoreAttribute attribute = client.CreateAttribute(new EAV.Store.StoreAttribute()
             {
                 Name = attributeName,
                 DataName = attributeName.ToUpper(),
                 DisplayText = attributeName + ":",
-                DataType = EAV.Model.EAVDataType.String,
+                DataType = EAV.EAVDataType.String,
                 IsKey = true,
                 Sequence = rng.Next(),
                 VariableUnits = true,
@@ -159,12 +159,12 @@ namespace EAVStoreClientTestHarness
 
             Assert.IsNotNull(attribute, "Failed to create attribute with name '{0}' for container ID {1}.", attributeName, containerID);
 
-            client.CreateAttribute(new EAV.Model.BaseEAVAttribute()
+            client.CreateAttribute(new EAV.Store.StoreAttribute()
             {
                 Name = attributeName + "1",
                 DataName = attributeName.ToUpper(),
                 DisplayText = attributeName + ":",
-                DataType = EAV.Model.EAVDataType.String,
+                DataType = EAV.EAVDataType.String,
                 IsKey = true,
                 Sequence = rng.Next(),
                 VariableUnits = true,
@@ -189,7 +189,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.EAVAttributeClient client = new EAVStoreClient.EAVAttributeClient();
 
-            var attribute = (EAV.Model.BaseEAVAttribute)dbAttribute;
+            var attribute = (EAV.Store.StoreAttribute)dbAttribute;
 
             attribute.Name = oldName.Flip();
             attribute.DataName = oldDataName.Flip();
@@ -226,7 +226,7 @@ namespace EAVStoreClientTestHarness
         {
             EAVStoreClient.EAVAttributeClient client = new EAVStoreClient.EAVAttributeClient();
             EAVStoreClient.Container dbContainer = SelectRandomItem(this.DbContext.Containers);
-            EAVStoreClient.Attribute dbAttributeIn = CreateAttribute(dbContainer.Container_ID, Guid.NewGuid().ToString(), EAV.Model.EAVDataType.String, rng.Next(), true);
+            EAVStoreClient.Attribute dbAttributeIn = CreateAttribute(dbContainer.Container_ID, Guid.NewGuid().ToString(), EAV.EAVDataType.String, rng.Next(), true);
 
             client.DeleteAttribute(dbAttributeIn.Attribute_ID);
 

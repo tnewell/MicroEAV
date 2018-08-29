@@ -22,32 +22,32 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVAttributeClient : EAV.Store.IEAVAttributeClient
+    public partial class EAVAttributeClient : EAV.Store.IStoreAttributeClient
     {
-        public IEnumerable<EAV.Model.IEAVAttribute> RetrieveAttributes(int? containerID)
+        public IEnumerable<EAV.Store.IStoreAttribute> RetrieveAttributes(int? containerID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
                 if (containerID != null)
                 {
-                    return (ctx.Attributes.Include("Data_Type").Where(it => it.Container_ID == containerID).AsEnumerable().Select(it => (EAV.Model.BaseEAVAttribute)it).ToList());
+                    return (ctx.Attributes.Include("Data_Type").Where(it => it.Container_ID == containerID).AsEnumerable().Select(it => (EAV.Store.StoreAttribute)it).ToList());
                 }
                 else
                 {
-                    return (ctx.Attributes.Include("Data_Type").AsEnumerable().Select(it => (EAV.Model.BaseEAVAttribute)it).ToList());
+                    return (ctx.Attributes.Include("Data_Type").AsEnumerable().Select(it => (EAV.Store.StoreAttribute)it).ToList());
                 }
             }
         }
 
-        public EAV.Model.IEAVAttribute RetrieveAttribute(int attributeID)
+        public EAV.Store.IStoreAttribute RetrieveAttribute(int attributeID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Model.BaseEAVAttribute)ctx.Attributes.Include("Data_Type").SingleOrDefault(it => it.Attribute_ID == attributeID));
+                return ((EAV.Store.StoreAttribute)ctx.Attributes.Include("Data_Type").SingleOrDefault(it => it.Attribute_ID == attributeID));
             }
         }
 
-        public EAV.Model.IEAVAttribute CreateAttribute(EAV.Model.IEAVAttribute attribute, int containerID)
+        public EAV.Store.IStoreAttribute CreateAttribute(EAV.Store.IStoreAttribute attribute, int containerID)
         {
             if (attribute == null)
                 return (null);
@@ -63,11 +63,11 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Model.BaseEAVAttribute)dbAttribute);
+                return ((EAV.Store.StoreAttribute)dbAttribute);
             }
         }
 
-        public void UpdateAttribute(EAV.Model.IEAVAttribute attribute)
+        public void UpdateAttribute(EAV.Store.IStoreAttribute attribute)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
@@ -118,7 +118,7 @@ namespace EAVStoreClient
             }
         }
 
-        public IEnumerable<EAV.Model.IEAVUnit> RetrieveAttributeUnits(int attributeID)
+        public IEnumerable<EAV.Store.IStoreUnit> RetrieveAttributeUnits(int attributeID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
@@ -126,14 +126,14 @@ namespace EAVStoreClient
 
                 if (dbAttribute != null)
                 {
-                    return(dbAttribute.Units.Select(it => (EAV.Model.BaseEAVUnit) it));
+                    return(dbAttribute.Units.Select(it => (EAV.Store.StoreUnit) it));
                 }
                 else
                     throw(new Exception(String.Format("Unable to retrieve attribute ID {0}.", attributeID)));
             }
         }
 
-        public void UpdateAttributeUnits(int attributeID, IEnumerable<EAV.Model.IEAVUnit> units)
+        public void UpdateAttributeUnits(int attributeID, IEnumerable<EAV.Store.IStoreUnit> units)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {

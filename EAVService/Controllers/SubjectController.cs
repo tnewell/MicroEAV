@@ -25,8 +25,8 @@ namespace EAVService.Controllers
     [RoutePrefix("api/data/subjects")]
     public class SubjectController : BaseEAVController
     {
-        private EAV.Store.IEAVSubjectClient subjectClient = new EAVStoreClient.EAVSubjectClient();
-        private EAV.Store.IEAVInstanceClient instanceClient = new EAVStoreClient.EAVInstanceClient();
+        private EAV.Store.IStoreSubjectClient subjectClient = new EAVStoreClient.EAVSubjectClient();
+        private EAV.Store.IStoreInstanceClient instanceClient = new EAVStoreClient.EAVInstanceClient();
 
         public int? ContainerID
         {
@@ -42,7 +42,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<EAV.Model.IEAVSubject>(subjectClient.RetrieveSubject(id)));
+                return (Ok<EAV.Store.IStoreSubject>(subjectClient.RetrieveSubject(id)));
             }
             catch (Exception ex)
             {
@@ -52,7 +52,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateSubject")]
-        public IHttpActionResult UpdateSubject(EAV.Model.IEAVSubject subject)
+        public IHttpActionResult UpdateSubject(EAV.Store.StoreSubject subject)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<IEnumerable<EAV.Model.IEAVInstance>>(instanceClient.RetrieveRootInstances(ContainerID, id)));
+                return (Ok<IEnumerable<EAV.Store.IStoreInstance>>(instanceClient.RetrieveRootInstances(ContainerID, id)));
             }
             catch (Exception ex)
             {
@@ -98,11 +98,11 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/instances", Name = "CreateRootInstance")]
-        public IHttpActionResult CreateRootInstance(int id, EAV.Model.IEAVInstance instance)
+        public IHttpActionResult CreateRootInstance(int id, EAV.Store.IStoreInstance anInstance)
         {
             try
             {
-                return (Ok<EAV.Model.IEAVInstance>(instanceClient.CreateRootInstance(instance, ContainerID.GetValueOrDefault(), id)));
+                return (Ok<EAV.Store.IStoreInstance>(instanceClient.CreateRootInstance(anInstance, ContainerID.GetValueOrDefault(), id)));
             }
             catch (Exception ex)
             {

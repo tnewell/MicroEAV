@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Web.Http;
 using System.Xml;
 using System.Xml.Serialization;
-using EAV.Model;
+using EAV.Store;
 using Newtonsoft.Json;
 
 namespace EAVService
@@ -19,16 +19,16 @@ namespace EAVService
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
             config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
 
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVContextJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVContainerJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVAttributeJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVUnitJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVEntityJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVSubjectJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVInstanceJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IEAVValueJsonConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreContextJsonConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreContainerJsonConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreAttributeJsonConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreUnitJsonConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreEntityJsonConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreSubjectJsonConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreInstanceJsonConverter());
+            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreValueJsonConverter());
 
-            //config.Formatters.XmlFormatter.SetSerializer<EAV.Model.IEAVContext>(new EAVContextXmlSerializer(typeof(BaseEAVContext)));
+            //config.Formatters.XmlFormatter.SetSerializer<EAV.Model.StoreContext>(new EAVContextXmlSerializer(typeof(StoreContext)));
 
             // Web API routes
             config.MapHttpAttributeRoutes();
@@ -41,193 +41,193 @@ namespace EAVService
         }
     }
 
-    public class IEAVContextJsonConverter : JsonConverter
+    public class IStoreContextJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IEAVContext));
+            return (objectType == typeof(IStoreContext));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IEAVContext))
-                return (serializer.Deserialize<BaseEAVContext>(reader));
+            if (objectType == typeof(IStoreContext))
+                return (serializer.Deserialize<StoreContext>(reader));
             else
                 return (null);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is IEAVContext)
-                serializer.Serialize(writer, new BaseEAVContext((IEAVContext)value), typeof(IEAVContext));
+            if (value is IStoreContext)
+                serializer.Serialize(writer, new StoreContext((IStoreContext)value), typeof(IStoreContext));
             else
                 serializer.Serialize(writer, value);
         }
     }
 
-    public class IEAVContainerJsonConverter : JsonConverter
+    public class IStoreContainerJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IEAVContainer));
+            return (objectType == typeof(IStoreContainer));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IEAVContainer))
-                return (serializer.Deserialize<BaseEAVContainer>(reader));
+            if (objectType == typeof(IStoreContainer))
+                return (serializer.Deserialize<StoreContainer>(reader));
             else
                 return (null);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is IEAVContainer)
-                serializer.Serialize(writer, new BaseEAVContainer((IEAVContainer)value), typeof(IEAVContainer));
+            if (value is IStoreContainer)
+                serializer.Serialize(writer, new StoreContainer((IStoreContainer)value), typeof(IStoreContainer));
             else
                 serializer.Serialize(writer, value);
         }
     }
 
-    public class IEAVAttributeJsonConverter : JsonConverter
+    public class IStoreAttributeJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IEAVAttribute));
+            return (objectType == typeof(IStoreAttribute));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IEAVAttribute))
-                return (serializer.Deserialize<BaseEAVAttribute>(reader));
+            if (objectType == typeof(IStoreAttribute))
+                return (serializer.Deserialize<StoreAttribute>(reader));
             else
                 return (null);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is IEAVAttribute)
-                serializer.Serialize(writer, new BaseEAVAttribute((IEAVAttribute)value), typeof(IEAVAttribute));
+            if (value is IStoreAttribute)
+                serializer.Serialize(writer, new StoreAttribute((IStoreAttribute)value), typeof(IStoreAttribute));
             else
                 serializer.Serialize(writer, value);
         }
     }
 
-    public class IEAVUnitJsonConverter : JsonConverter
+    public class IStoreUnitJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IEAVUnit));
+            return (objectType == typeof(IStoreUnit));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IEAVUnit))
-                return (serializer.Deserialize<BaseEAVUnit>(reader));
+            if (objectType == typeof(IStoreUnit))
+                return (serializer.Deserialize<StoreUnit>(reader));
             else
                 return (null);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is IEAVUnit)
-                serializer.Serialize(writer, new BaseEAVUnit((IEAVUnit) value), typeof(IEAVUnit));
+            if (value is IStoreUnit)
+                serializer.Serialize(writer, new StoreUnit((IStoreUnit) value), typeof(IStoreUnit));
             else
                 serializer.Serialize(writer, value);
         }
     }
 
-    public class IEAVEntityJsonConverter : JsonConverter
+    public class IStoreEntityJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IEAVEntity));
+            return (objectType == typeof(IStoreEntity));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IEAVEntity))
-                return (serializer.Deserialize<BaseEAVEntity>(reader));
+            if (objectType == typeof(IStoreEntity))
+                return (serializer.Deserialize<StoreEntity>(reader));
             else
                 return (null);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is IEAVEntity)
-                serializer.Serialize(writer, new BaseEAVEntity((IEAVEntity)value), typeof(IEAVEntity));
+            if (value is IStoreEntity)
+                serializer.Serialize(writer, new StoreEntity((IStoreEntity)value), typeof(IStoreEntity));
             else
                 serializer.Serialize(writer, value);
         }
     }
 
-    public class IEAVSubjectJsonConverter : JsonConverter
+    public class IStoreSubjectJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IEAVSubject));
+            return (objectType == typeof(IStoreSubject));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IEAVSubject))
-                return (serializer.Deserialize<BaseEAVSubject>(reader));
+            if (objectType == typeof(IStoreSubject))
+                return (serializer.Deserialize<StoreSubject>(reader));
             else
                 return (null);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is IEAVSubject)
-                serializer.Serialize(writer, new BaseEAVSubject((IEAVSubject) value), typeof(IEAVSubject));
+            if (value is IStoreSubject)
+                serializer.Serialize(writer, new StoreSubject((IStoreSubject) value), typeof(IStoreSubject));
             else
                 serializer.Serialize(writer, value);
         }
     }
 
-    public class IEAVInstanceJsonConverter : JsonConverter
+    public class IStoreInstanceJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IEAVInstance));
+            return (objectType == typeof(IStoreInstance));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IEAVInstance))
-                return (serializer.Deserialize<BaseEAVInstance>(reader));
+            if (objectType == typeof(IStoreInstance))
+                return (serializer.Deserialize<StoreInstance>(reader));
             else
                 return (null);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is IEAVInstance)
-                serializer.Serialize(writer, new BaseEAVInstance((IEAVInstance)value), typeof(IEAVInstance));
+            if (value is IStoreInstance)
+                serializer.Serialize(writer, new StoreInstance((IStoreInstance)value), typeof(IStoreInstance));
             else
                 serializer.Serialize(writer, value);
         }
     }
 
-    public class IEAVValueJsonConverter : JsonConverter
+    public class IStoreValueJsonConverter : JsonConverter
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IEAVValue));
+            return (objectType == typeof(IStoreValue));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IEAVValue))
-                return (serializer.Deserialize<BaseEAVValue>(reader));
+            if (objectType == typeof(IStoreValue))
+                return (serializer.Deserialize<StoreValue>(reader));
             else
                 return (null);
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is IEAVValue)
-                serializer.Serialize(writer, new BaseEAVValue((IEAVValue)value), typeof(IEAVValue));
+            if (value is IStoreValue)
+                serializer.Serialize(writer, new StoreValue((IStoreValue)value), typeof(IStoreValue));
             else
                 serializer.Serialize(writer, value);
         }

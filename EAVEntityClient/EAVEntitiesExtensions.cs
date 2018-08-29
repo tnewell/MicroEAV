@@ -23,7 +23,7 @@ namespace EAVStoreClient
 {
     public partial class MicroEAVContext
     {
-        public Data_Type LookupDataType(EAV.Model.EAVDataType dataType)
+        public Data_Type LookupDataType(EAV.EAVDataType dataType)
         {
             return (Data_Type.Single(it => it.Name == dataType.ToString()));
         }
@@ -31,19 +31,19 @@ namespace EAVStoreClient
 
     public partial class Entity
     {
-        public static explicit operator EAV.Model.BaseEAVEntity(Entity dbEntity)
+        public static explicit operator EAV.Store.StoreEntity(Entity dbEntity)
         {
             if (dbEntity == null)
                 return (null);
 
-            return (new EAV.Model.BaseEAVEntity()
+            return (new EAV.Store.StoreEntity()
             {
                 EntityID = dbEntity.Entity_ID,
                 Descriptor = dbEntity.Descriptor,
             });
         }
 
-        public static explicit operator Entity(EAV.Model.BaseEAVEntity entity)
+        public static explicit operator Entity(EAV.Store.StoreEntity entity)
         {
             if (entity == null)
                 return (null);
@@ -55,7 +55,7 @@ namespace EAVStoreClient
             });
         }
 
-        public Entity(EAV.Model.IEAVEntity entity)
+        public Entity(EAV.Store.IStoreEntity entity)
         {
             Entity_ID = entity.EntityID.GetValueOrDefault();
             Descriptor = entity.Descriptor;
@@ -64,12 +64,12 @@ namespace EAVStoreClient
 
     public partial class Context
     {
-        public static explicit operator EAV.Model.BaseEAVContext(Context dbContext)
+        public static explicit operator EAV.Store.StoreContext(Context dbContext)
         {
             if (dbContext == null)
                 return (null);
 
-            return (new EAV.Model.BaseEAVContext()
+            return (new EAV.Store.StoreContext()
             {
                 ContextID = dbContext.Context_ID,
                 DataName = dbContext.Data_Name,
@@ -78,7 +78,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Context(EAV.Model.BaseEAVContext context)
+        public static explicit operator Context(EAV.Store.StoreContext context)
         {
             if (context == null)
                 return (null);
@@ -92,7 +92,7 @@ namespace EAVStoreClient
             });
         }
 
-        public Context(EAV.Model.IEAVContext context)
+        public Context(EAV.Store.IStoreContext context)
         {
             Context_ID = context.ContextID.GetValueOrDefault();
             Data_Name = context.DataName;
@@ -103,12 +103,12 @@ namespace EAVStoreClient
 
     public partial class Container
     {
-        public static explicit operator EAV.Model.BaseEAVContainer(Container dbContainer)
+        public static explicit operator EAV.Store.StoreContainer(Container dbContainer)
         {
             if (dbContainer == null)
                 return (null);
 
-            return (new EAV.Model.BaseEAVContainer()
+            return (new EAV.Store.StoreContainer()
             {
                 ContainerID = dbContainer.Container_ID,
                 ContextID = dbContainer.Context_ID,
@@ -121,7 +121,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Container(EAV.Model.BaseEAVContainer container)
+        public static explicit operator Container(EAV.Store.StoreContainer container)
         {
             if (container == null)
                 return(null);
@@ -139,7 +139,7 @@ namespace EAVStoreClient
             });
         }
 
-        public Container(EAV.Model.IEAVContainer container)
+        public Container(EAV.Store.IStoreContainer container)
         {
             Container_ID = container.ContainerID.GetValueOrDefault();
             Context_ID = container.ContextID.GetValueOrDefault();
@@ -154,11 +154,11 @@ namespace EAVStoreClient
 
     public partial class Data_Type
     {
-        public EAV.Model.EAVDataType Value
+        public EAV.EAVDataType Value
         {
             get
             {
-                return ((EAV.Model.EAVDataType)Enum.Parse(typeof(EAV.Model.EAVDataType), Name));
+                return ((EAV.EAVDataType)Enum.Parse(typeof(EAV.EAVDataType), Name));
             }
             set
             {
@@ -169,12 +169,12 @@ namespace EAVStoreClient
 
     public partial class Attribute
     {
-        public static explicit operator EAV.Model.BaseEAVAttribute(Attribute dbAttribute)
+        public static explicit operator EAV.Store.StoreAttribute(Attribute dbAttribute)
         {
             if (dbAttribute == null)
                 return (null);
 
-            return (new EAV.Model.BaseEAVAttribute()
+            return (new EAV.Store.StoreAttribute()
             {
                 AttributeID = dbAttribute.Attribute_ID,
                 ContainerID = dbAttribute.Container_ID,
@@ -188,7 +188,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Attribute(EAV.Model.BaseEAVAttribute attribute)
+        public static explicit operator Attribute(EAV.Store.StoreAttribute attribute)
         {
             if (attribute == null)
                 return (null);
@@ -206,7 +206,7 @@ namespace EAVStoreClient
             });
         }
 
-        public Attribute(EAV.Model.IEAVAttribute attribute)
+        public Attribute(EAV.Store.IStoreAttribute attribute)
         {
             Attribute_ID = attribute.AttributeID.GetValueOrDefault();
             Container_ID = attribute.ContainerID.GetValueOrDefault();
@@ -221,12 +221,12 @@ namespace EAVStoreClient
 
     public partial class Unit
     {
-        public static explicit operator EAV.Model.BaseEAVUnit(Unit dbUnit)
+        public static explicit operator EAV.Store.StoreUnit(Unit dbUnit)
         {
             if (dbUnit == null)
                 return (null);
 
-            return (new EAV.Model.BaseEAVUnit()
+            return (new EAV.Store.StoreUnit()
             {
                 UnitID = dbUnit.Unit_ID,
                 SingularName = dbUnit.Singular_Name,
@@ -239,45 +239,45 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Unit(EAV.Model.BaseEAVUnit Unit)
+        public static explicit operator Unit(EAV.Store.StoreUnit aUnit)
         {
-            if (Unit == null)
+            if (aUnit == null)
                 return (null);
 
             return (new Unit()
             {
-                Unit_ID = Unit.UnitID.GetValueOrDefault(),
-                Singular_Name = Unit.SingularName,
-                Singular_Abbreviation = Unit.SingularAbbreviation,
-                Plural_Name = Unit.PluralName,
-                Plural_Abbreviation = Unit.PluralAbbreviation,
-                Symbol = Unit.Symbol,
-                Display_Text = Unit.DisplayText,
-                Curated = Unit.Curated,
+                Unit_ID = aUnit.UnitID.GetValueOrDefault(),
+                Singular_Name = aUnit.SingularName,
+                Singular_Abbreviation = aUnit.SingularAbbreviation,
+                Plural_Name = aUnit.PluralName,
+                Plural_Abbreviation = aUnit.PluralAbbreviation,
+                Symbol = aUnit.Symbol,
+                Display_Text = aUnit.DisplayText,
+                Curated = aUnit.Curated,
             });
         }
 
-        public Unit(EAV.Model.IEAVUnit Unit)
+        public Unit(EAV.Store.IStoreUnit aUnit)
         {
-            Unit_ID = Unit.UnitID.GetValueOrDefault();
-            Singular_Name = Unit.SingularName;
-            Singular_Abbreviation = Unit.SingularAbbreviation;
-            Plural_Name = Unit.PluralName;
-            Plural_Abbreviation = Unit.PluralAbbreviation;
-            Symbol = Unit.Symbol;
-            Display_Text = Unit.DisplayText;
-            Curated = Unit.Curated;
+            Unit_ID = aUnit.UnitID.GetValueOrDefault();
+            Singular_Name = aUnit.SingularName;
+            Singular_Abbreviation = aUnit.SingularAbbreviation;
+            Plural_Name = aUnit.PluralName;
+            Plural_Abbreviation = aUnit.PluralAbbreviation;
+            Symbol = aUnit.Symbol;
+            Display_Text = aUnit.DisplayText;
+            Curated = aUnit.Curated;
         }
     }
 
     public partial class Subject
     {
-        public static explicit operator EAV.Model.BaseEAVSubject(Subject dbSubject)
+        public static explicit operator EAV.Store.StoreSubject(Subject dbSubject)
         {
             if (dbSubject == null)
                 return (null);
 
-            return (new EAV.Model.BaseEAVSubject()
+            return (new EAV.Store.StoreSubject()
             {
                 ContextID = dbSubject.Context_ID,
                 Identifier = dbSubject.Identifier,
@@ -286,37 +286,37 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Subject(EAV.Model.BaseEAVSubject subject)
+        public static explicit operator Subject(EAV.Store.StoreSubject aSubject)
         {
-            if (subject == null)
+            if (aSubject == null)
                 return (null);
 
             return (new Subject()
             {
-                Context_ID = subject.ContextID.GetValueOrDefault(),
-                Identifier = subject.Identifier,
-                Entity_ID = subject.EntityID.GetValueOrDefault(),
-                Subject_ID = subject.SubjectID.GetValueOrDefault(),
+                Context_ID = aSubject.ContextID.GetValueOrDefault(),
+                Identifier = aSubject.Identifier,
+                Entity_ID = aSubject.EntityID.GetValueOrDefault(),
+                Subject_ID = aSubject.SubjectID.GetValueOrDefault(),
             });
         }
 
-        public Subject(EAV.Model.IEAVSubject subject)
+        public Subject(EAV.Store.IStoreSubject aSubject)
         {
-            Context_ID = subject.ContextID.GetValueOrDefault();
-            Identifier = subject.Identifier;
-            Entity_ID = subject.EntityID.GetValueOrDefault();
-            Subject_ID = subject.SubjectID.GetValueOrDefault();
+            Context_ID = aSubject.ContextID.GetValueOrDefault();
+            Identifier = aSubject.Identifier;
+            Entity_ID = aSubject.EntityID.GetValueOrDefault();
+            Subject_ID = aSubject.SubjectID.GetValueOrDefault();
         }
     }
 
     public partial class Instance
     {
-        public static explicit operator EAV.Model.BaseEAVInstance(Instance dbInstance)
+        public static explicit operator EAV.Store.StoreInstance(Instance dbInstance)
         {
             if (dbInstance == null)
                 return (null);
 
-            return (new EAV.Model.BaseEAVInstance()
+            return (new EAV.Store.StoreInstance()
             {
                 ContainerID = dbInstance.Container_ID,
                 InstanceID = dbInstance.Instance_ID,
@@ -325,37 +325,37 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Instance(EAV.Model.BaseEAVInstance instance)
+        public static explicit operator Instance(EAV.Store.StoreInstance anInstance)
         {
-            if (instance == null)
+            if (anInstance == null)
                 return (null);
 
             return (new Instance()
             {
-                Container_ID = instance.ContainerID.GetValueOrDefault(),
-                Instance_ID = instance.InstanceID.GetValueOrDefault(),
-                Parent_Instance_ID = instance.ParentInstanceID.GetValueOrDefault(),
-                Subject_ID = instance.SubjectID.GetValueOrDefault(),
+                Container_ID = anInstance.ContainerID.GetValueOrDefault(),
+                Instance_ID = anInstance.InstanceID.GetValueOrDefault(),
+                Parent_Instance_ID = anInstance.ParentInstanceID.GetValueOrDefault(),
+                Subject_ID = anInstance.SubjectID.GetValueOrDefault(),
             });
         }
 
-        public Instance(EAV.Model.IEAVInstance instance)
+        public Instance(EAV.Store.IStoreInstance anInstance)
         {
-            Container_ID = instance.ContainerID.GetValueOrDefault();
-            Instance_ID = instance.InstanceID.GetValueOrDefault();
-            Parent_Instance_ID = instance.ParentInstanceID;
-            Subject_ID = instance.SubjectID.GetValueOrDefault();
+            Container_ID = anInstance.ContainerID.GetValueOrDefault();
+            Instance_ID = anInstance.InstanceID.GetValueOrDefault();
+            Parent_Instance_ID = anInstance.ParentInstanceID;
+            Subject_ID = anInstance.SubjectID.GetValueOrDefault();
         }
     }
 
     public partial class Value
     {
-        public static explicit operator EAV.Model.BaseEAVValue(Value dbValue)
+        public static explicit operator EAV.Store.StoreValue(Value dbValue)
         {
             if (dbValue == null)
                 return (null);
 
-            return (new EAV.Model.BaseEAVValue()
+            return (new EAV.Store.StoreValue()
             {
                 AttributeID = dbValue.Attribute_ID,
                 InstanceID = dbValue.Instance_ID,
@@ -364,7 +364,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Value(EAV.Model.BaseEAVValue value)
+        public static explicit operator Value(EAV.Store.StoreValue value)
         {
             if (value == null)
                 return (null);
@@ -380,7 +380,7 @@ namespace EAVStoreClient
 
         public Value() { }
 
-        public Value(EAV.Model.IEAVValue value)
+        public Value(EAV.Store.IStoreValue value)
         {
             Attribute_ID = value.AttributeID.GetValueOrDefault();
             Instance_ID = value.InstanceID.GetValueOrDefault();

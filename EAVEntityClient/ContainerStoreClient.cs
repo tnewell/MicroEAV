@@ -22,47 +22,47 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVContainerClient : EAV.Store.IEAVContainerClient
+    public partial class EAVContainerClient : EAV.Store.IStoreContainerClient
     {
-        public IEnumerable<EAV.Model.IEAVContainer> RetrieveRootContainers(int? contextID)
+        public IEnumerable<EAV.Store.IStoreContainer> RetrieveRootContainers(int? contextID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
                 if (contextID != null)
                 {
-                    return (ctx.Containers.Where(it => it.Context_ID == contextID && it.Parent_Container_ID == null).AsEnumerable().Select(it => (EAV.Model.BaseEAVContainer)it).ToList());
+                    return (ctx.Containers.Where(it => it.Context_ID == contextID && it.Parent_Container_ID == null).AsEnumerable().Select(it => (EAV.Store.StoreContainer)it).ToList());
                 }
                 else
                 {
-                    return (ctx.Containers.Where(it => it.Parent_Container_ID == null).AsEnumerable().Select(it => (EAV.Model.BaseEAVContainer)it).ToList());
+                    return (ctx.Containers.Where(it => it.Parent_Container_ID == null).AsEnumerable().Select(it => (EAV.Store.StoreContainer)it).ToList());
                 }
             }
         }
 
-        public IEnumerable<EAV.Model.IEAVContainer> RetrieveChildContainers(int? parentContainerID)
+        public IEnumerable<EAV.Store.IStoreContainer> RetrieveChildContainers(int? parentContainerID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
                 if (parentContainerID != null)
                 {
-                    return (ctx.Containers.Where(it => it.Parent_Container_ID == parentContainerID).AsEnumerable().Select(it => (EAV.Model.BaseEAVContainer)it).ToList());
+                    return (ctx.Containers.Where(it => it.Parent_Container_ID == parentContainerID).AsEnumerable().Select(it => (EAV.Store.StoreContainer)it).ToList());
                 }
                 else
                 {
-                    return (ctx.Containers.Where(it => it.Parent_Container_ID != null).AsEnumerable().Select(it => (EAV.Model.BaseEAVContainer)it).ToList());
+                    return (ctx.Containers.Where(it => it.Parent_Container_ID != null).AsEnumerable().Select(it => (EAV.Store.StoreContainer)it).ToList());
                 }
             }
         }
 
-        public EAV.Model.IEAVContainer RetrieveContainer(int containerID)
+        public EAV.Store.IStoreContainer RetrieveContainer(int containerID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Model.BaseEAVContainer)ctx.Containers.SingleOrDefault(it => it.Container_ID == containerID));
+                return ((EAV.Store.StoreContainer)ctx.Containers.SingleOrDefault(it => it.Container_ID == containerID));
             }
         }
 
-        public EAV.Model.IEAVContainer CreateRootContainer(EAV.Model.IEAVContainer container, int contextID)
+        public EAV.Store.IStoreContainer CreateRootContainer(EAV.Store.IStoreContainer container, int contextID)
         {
             if (container == null)
                 return (null);
@@ -77,11 +77,11 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Model.BaseEAVContainer)dbContainer);
+                return ((EAV.Store.StoreContainer)dbContainer);
             }
         }
 
-        public EAV.Model.IEAVContainer CreateChildContainer(EAV.Model.IEAVContainer container, int parentContainerID)
+        public EAV.Store.IStoreContainer CreateChildContainer(EAV.Store.IStoreContainer container, int parentContainerID)
         {
             if (container == null)
                 return (null);
@@ -101,11 +101,11 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Model.BaseEAVContainer)dbContainer);
+                return ((EAV.Store.StoreContainer)dbContainer);
             }
         }
 
-        public void UpdateContainer(EAV.Model.IEAVContainer container)
+        public void UpdateContainer(EAV.Store.IStoreContainer container)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {

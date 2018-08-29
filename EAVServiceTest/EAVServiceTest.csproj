@@ -87,6 +87,10 @@
       <Project>{de98cd45-4020-44ed-a4a8-98d0be529c4f}</Project>
       <Name>EAV.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EAV.Store\EAV.Store.csproj">
+      <Project>{a626330a-e997-4a38-8dce-e68a0cdec2c7}</Project>
+      <Name>EAV.Store</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EAVEntityClient\EAVStoreClient.csproj">
       <Project>{a02d3434-1ef6-4ef5-91ad-52708127a3ac}</Project>
       <Name>EAVStoreClient</Name>

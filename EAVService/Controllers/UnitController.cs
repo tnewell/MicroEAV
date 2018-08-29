@@ -25,7 +25,7 @@ namespace EAVService.Controllers
     [RoutePrefix("api/metadata/units")]
     public class UnitController : BaseEAVController
     {
-        private EAV.Store.IEAVUnitClient unitClient = new EAVStoreClient.EAVUnitClient();
+        private EAV.Store.IStoreUnitClient unitClient = new EAVStoreClient.EAVUnitClient();
 
         [HttpGet]
         [Route("", Name = "RetrieveUnits")]
@@ -33,7 +33,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<IEnumerable<EAV.Model.IEAVUnit>>(unitClient.RetrieveUnits()));
+                return (Ok<IEnumerable<EAV.Store.IStoreUnit>>(unitClient.RetrieveUnits()));
             }
             catch (Exception ex)
             {
@@ -47,7 +47,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<EAV.Model.IEAVUnit>(unitClient.RetrieveUnit(id)));
+                return (Ok<EAV.Store.IStoreUnit>(unitClient.RetrieveUnit(id)));
             }
             catch (Exception ex)
             {
@@ -57,11 +57,11 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("", Name = "CreateUnit")]
-        public IHttpActionResult CreateUnit(EAV.Model.IEAVUnit unit)
+        public IHttpActionResult CreateUnit(EAV.Store.StoreUnit unit)
         {
             try
             {
-                return (Ok<EAV.Model.IEAVUnit>(unitClient.CreateUnit(unit)));
+                return (Ok<EAV.Store.IStoreUnit>(unitClient.CreateUnit(unit)));
             }
             catch (Exception ex)
             {
@@ -71,7 +71,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateUnit")]
-        public IHttpActionResult UpdateUnit(EAV.Model.IEAVUnit unit)
+        public IHttpActionResult UpdateUnit(EAV.Store.StoreUnit unit)
         {
             try
             {

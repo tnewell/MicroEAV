@@ -69,7 +69,7 @@ namespace EAVStoreClientTestHarness
             int subjectID = SelectRandomItem(this.DbContext.Subjects).Subject_ID;
             int containerID = SelectRandomItem(this.DbContext.Containers.Where(it => it.Parent_Container_ID == null)).Container_ID;
 
-            EAV.Model.IEAVInstance instance = client.CreateRootInstance(new EAV.Model.BaseEAVInstance(), containerID, subjectID);
+            EAV.Store.IStoreInstance instance = client.CreateRootInstance(new EAV.Store.StoreInstance(), containerID, subjectID);
 
             Assert.IsNotNull(instance, "Failed to create instance for container ID {0} and subject ID {1}.", containerID, subjectID);
 
@@ -91,7 +91,7 @@ namespace EAVStoreClientTestHarness
             EAVStoreClient.EAVInstanceClient client = new EAVStoreClient.EAVInstanceClient();
             var dbParentInstance = SelectRandomItem(this.DbContext.Instances);
 
-            EAV.Model.IEAVInstance instance = client.CreateChildInstance(new EAV.Model.BaseEAVInstance(), dbParentInstance.Container_ID, dbParentInstance.Instance_ID);
+            EAV.Store.IStoreInstance instance = client.CreateChildInstance(new EAV.Store.StoreInstance(), dbParentInstance.Container_ID, dbParentInstance.Instance_ID);
 
             Assert.IsNotNull(instance, "Failed to create instance for container ID {0} and parent instance ID {1}.", dbParentInstance.Container_ID, dbParentInstance.Instance_ID);
 
@@ -114,7 +114,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.EAVInstanceClient client = new EAVStoreClient.EAVInstanceClient();
 
-            var instance = (EAV.Model.BaseEAVInstance)dbInstance;
+            var instance = (EAV.Store.StoreInstance)dbInstance;
 
             // There are currently no properties for this object to update
             // So this is just here for completeness and future expansion.

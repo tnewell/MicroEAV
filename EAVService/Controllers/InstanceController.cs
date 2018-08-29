@@ -25,8 +25,8 @@ namespace EAVService.Controllers
     [RoutePrefix("api/data/instances")]
     public class InstanceController : BaseEAVController
     {
-        private EAV.Store.IEAVInstanceClient instanceClient = new EAVStoreClient.EAVInstanceClient();
-        private EAV.Store.IEAVValueClient valueClient = new EAVStoreClient.EAVValueClient();
+        private EAV.Store.IStoreInstanceClient instanceClient = new EAVStoreClient.EAVInstanceClient();
+        private EAV.Store.IStoreValueClient valueClient = new EAVStoreClient.EAVValueClient();
 
         public int? ContainerID
         {
@@ -51,7 +51,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<EAV.Model.IEAVInstance>(instanceClient.RetrieveInstance(id)));
+                return (Ok<EAV.Store.IStoreInstance>(instanceClient.RetrieveInstance(id)));
             }
             catch (Exception ex)
             {
@@ -61,7 +61,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateInstance")]
-        public IHttpActionResult UpdateInstance(EAV.Model.IEAVInstance instance)
+        public IHttpActionResult UpdateInstance(EAV.Store.StoreInstance instance)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<IEnumerable<EAV.Model.IEAVInstance>>(instanceClient.RetrieveChildInstances(ContainerID, id)));
+                return (Ok<IEnumerable<EAV.Store.IStoreInstance>>(instanceClient.RetrieveChildInstances(ContainerID, id)));
             }
             catch (Exception ex)
             {
@@ -107,11 +107,11 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/instances", Name = "CreateChildInstance")]
-        public IHttpActionResult CreateChildInstance(int id, EAV.Model.IEAVInstance instance)
+        public IHttpActionResult CreateChildInstance(int id, EAV.Store.StoreInstance instance)
         {
             try
             {
-                return (Ok<EAV.Model.IEAVInstance>(instanceClient.CreateChildInstance(instance, ContainerID.GetValueOrDefault(), id)));
+                return (Ok<EAV.Store.IStoreInstance>(instanceClient.CreateChildInstance(instance, ContainerID.GetValueOrDefault(), id)));
             }
             catch (Exception ex)
             {
@@ -125,7 +125,7 @@ namespace EAVService.Controllers
         {
             try
             {
-                return (Ok<IEnumerable<EAV.Model.IEAVValue>>(valueClient.RetrieveValues(AttributeID, id)));
+                return (Ok<IEnumerable<EAV.Store.IStoreValue>>(valueClient.RetrieveValues(AttributeID, id)));
             }
             catch (Exception ex)
             {
@@ -135,11 +135,11 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/values", Name = "CreateValue")]
-        public IHttpActionResult CreateValue(int id, EAV.Model.IEAVValue value)
+        public IHttpActionResult CreateValue(int id, EAV.Store.StoreValue value)
         {
             try
             {
-                return (Ok<EAV.Model.IEAVValue>(valueClient.CreateValue(value, id, AttributeID.GetValueOrDefault())));
+                return (Ok<EAV.Store.IStoreValue>(valueClient.CreateValue(value, id, AttributeID.GetValueOrDefault())));
             }
             catch (Exception ex)
             {

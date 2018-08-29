@@ -68,7 +68,7 @@ namespace EAVStoreClientTestHarness
             EAVStoreClient.EAVEntityClient client = new EAVStoreClient.EAVEntityClient();
             string entityDescriptor = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVEntity entity = client.CreateEntity(new EAV.Model.BaseEAVEntity() { Descriptor = entityDescriptor });
+            EAV.Store.IStoreEntity entity = client.CreateEntity(new EAV.Store.StoreEntity() { Descriptor = entityDescriptor });
 
             Assert.IsNotNull(entity, "Failed to create entity with descriptor '{0}'", entityDescriptor);
 
@@ -92,7 +92,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.EAVEntityClient client = new EAVStoreClient.EAVEntityClient();
 
-            var entity = (EAV.Model.BaseEAVEntity)dbEntity;
+            var entity = (EAV.Store.StoreEntity)dbEntity;
 
             entity.Descriptor = oldDescriptor.Flip();
 

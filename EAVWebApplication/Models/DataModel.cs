@@ -12,20 +12,20 @@ namespace EAVWebApplication.Models.Data
     {
         public DataModel()
         {
-            contexts = new List<EAVContext>();
+            contexts = new List<IModelContext>();
         }
 
-        private List<EAVContext> contexts;
-        public ICollection<EAVContext> Contexts { get { return (contexts); } set { contexts.Clear(); contexts.AddRange(value); } }
+        private List<IModelContext> contexts;
+        public ICollection<IModelContext> Contexts { get { return (contexts); } set { contexts.Clear(); contexts.AddRange(value); } }
 
         public int SelectedContextID { get; set; }
-        public EAVContext CurrentContext { get { return (contexts.SingleOrDefault(it => it.ContextID == SelectedContextID)); } }
+        public IModelContext CurrentContext { get { return (contexts.SingleOrDefault(it => it.ContextID == SelectedContextID)); } }
 
         public int SelectedContainerID { get; set; }
-        public EAVRootContainer CurrentContainer { get { return (CurrentContext != null ? CurrentContext.Containers.SingleOrDefault(it => it.ContainerID == SelectedContainerID) : null); } }
+        public IModelRootContainer CurrentContainer { get { return (CurrentContext != null ? CurrentContext.Containers.SingleOrDefault(it => it.ContainerID == SelectedContainerID) : null); } }
 
         public int SelectedSubjectID { get; set; }
-        public EAVSubject CurrentSubject { get { return (CurrentContext != null ? CurrentContext.Subjects.SingleOrDefault(it => it.SubjectID == SelectedSubjectID) : null); } }
+        public IModelSubject CurrentSubject { get { return (CurrentContext != null ? CurrentContext.Subjects.SingleOrDefault(it => it.SubjectID == SelectedSubjectID) : null); } }
 
         private ViewRootInstance currentInstance;
         public ViewRootInstance CurrentInstance { get { return (currentInstance); } set { currentInstance = value; } }
@@ -33,35 +33,39 @@ namespace EAVWebApplication.Models.Data
 
     public class ViewRootInstance
     {
-        private EAVRootInstance eavInstance;
+        private IModelRootInstance eavInstance;
+
+        public ViewRootInstance(IModelRootInstance anInstance) { this.eavInstance = anInstance; }
 
         public int? InstanceID { get; set; }
         public int? ParentInstanceID { get; set; }
         public int? SubjectID { get; set; }
         public int? ContainerID { get; set; }
 
-        public EAVContainer Container { get { return (eavInstance.Container); } }
-        public EAVSubject Subject { get { return (eavInstance.Subject); } }
-        public EAVInstance ParentInstannce { get { return (eavInstance.ParentInstance); } }
-        public ICollection<EAVChildInstance> ChildInstances { get { return (eavInstance.ChildInstances); } }
+        public IModelContainer Container { get { return (eavInstance.Container); } }
+        public IModelSubject Subject { get { return (eavInstance.Subject); } }
+        public IModelInstance ParentInstannce { get { return (eavInstance.ParentInstance); } }
+        public ICollection<IModelChildInstance> ChildInstances { get { return (eavInstance.ChildInstances); } }
     }
 
     public class ViewChildInstance
     {
-        private EAVChildInstance eavInstance;
+        private IModelChildInstance eavInstance;
+
+        public ViewChildInstance(IModelChildInstance anInstance) { this.eavInstance = anInstance; }
 
         public int? InstanceID { get; set; }
         public int? ParentInstanceID { get; set; }
         public int? SubjectID { get; set; }
         public int? ContainerID { get; set; }
 
-        public EAVContainer Container { get { return (eavInstance.Container); } }
-        public EAVSubject Subject { get { return (eavInstance.Subject); } }
-        public EAVInstance ParentInstannce { get { return (eavInstance.ParentInstance); } }
-        public ICollection<EAVChildInstance> ChildInstances { get { return (eavInstance.ChildInstances); } }
+        public IModelContainer Container { get { return (eavInstance.Container); } }
+        public IModelSubject Subject { get { return (eavInstance.Subject); } }
+        public IModelInstance ParentInstannce { get { return (eavInstance.ParentInstance); } }
+        public ICollection<IModelChildInstance> ChildInstances { get { return (eavInstance.ChildInstances); } }
     }
 
-    public class ViewValue : EAVValue
+    public class ViewValue : ModelValue
     {
         public new int? InstanceID { get; set; }
         public new int? AttributeID { get; set; }

@@ -42,7 +42,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ModelAttribute.cs" />
+    <Compile Include="ModelContainer.cs" />
+    <Compile Include="ModelContext.cs" />
+    <Compile Include="ModelEntity.cs" />
+    <Compile Include="ModelInstance.cs" />
+    <Compile Include="ModelObject.cs" />
+    <Compile Include="ModelSubject.cs" />
+    <Compile Include="ModelUnit.cs" />
+    <Compile Include="ModelValue.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IModelAttribute.cs" />
+    <Compile Include="IModelContainer.cs" />
+    <Compile Include="IModelContext.cs" />
+    <Compile Include="IModelEntity.cs" />
+    <Compile Include="IModelInstance.cs" />
+    <Compile Include="IModelSubject.cs" />
+    <Compile Include="IModelUnit.cs" />
+    <Compile Include="IModelValue.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -50,6 +67,10 @@
     <ProjectReference Include="..\EAV.Model\EAV.Model.csproj">
       <Project>{de98cd45-4020-44ed-a4a8-98d0be529c4f}</Project>
       <Name>EAV.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EAV.Store\EAV.Store.csproj">
+      <Project>{a626330a-e997-4a38-8dce-e68a0cdec2c7}</Project>
+      <Name>EAV.Store</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

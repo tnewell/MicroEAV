@@ -16,8 +16,7 @@ namespace EAVWebApplication.Controllers
 {
     public class MetadataController : Controller
     {
-        private HttpClient client = new HttpClient() { BaseAddress = new Uri(ConfigurationManager.AppSettings["EAVServiceUrl"]) };
-        private EAVClient eavClient = new EAVClient();
+        private EAVDataClient eavClient = new EAVDataClient(ConfigurationManager.AppSettings["EAVServiceUrl"]);
 
         public MetadataController()
         {
@@ -31,7 +30,7 @@ namespace EAVWebApplication.Controllers
         {
             if (disposing)
             {
-                client.Dispose();
+                eavClient.Dispose();
             }
 
             base.Dispose(disposing);
@@ -50,7 +49,7 @@ namespace EAVWebApplication.Controllers
             ));
         }
 
-        private EAVContainer FindContainer(IEnumerable<EAVContainer> containers, int id)
+        private IModelContainer FindContainer(IEnumerable<IModelContainer> containers, int id)
         {
             if (containers == null || !containers.Any())
             {
@@ -66,7 +65,7 @@ namespace EAVWebApplication.Controllers
             MetadataModel metadata = new MetadataModel();
 
             // Add any existing contexts
-            foreach (var item in eavClient.LoadContexts(client))
+            foreach (var item in eavClient.LoadContexts())
             {
                 metadata.Contexts.Add(item);
             }
@@ -94,9 +93,12 @@ namespace EAVWebApplication.Controllers
         {
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
-            foreach (EAVContext context in metadata.Contexts)
+            foreach (IModelContext context in metadata.Contexts)
             {
-                eavClient.SaveMetadata(client, context);
+                foreach (IModelRootContainer container in context.Containers)
+                {
+                    eavClient.SaveMetadata(container);
+                }
             }
 
             TempData["Metadata"] = metadata;
@@ -123,7 +125,7 @@ namespace EAVWebApplication.Controllers
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
             // Create a blank to work with and use that as our dialog metadata
-            EAVContext eavContext = new EAVContext() { ContextID = metadata.NextContextID };
+            IModelContext eavContext = new ModelContext() { ContextID = metadata.NextContextID };
 
             metadata.Contexts.Add(eavContext);
             metadata.SelectedContextID = eavContext.ContextID.Value;
@@ -142,12 +144,12 @@ namespace EAVWebApplication.Controllers
 
             metadata.SelectedContextID = postedModel.SelectedContextID;
 
-            EAVContext eavContext = metadata.CurrentContext;
+            IModelContext eavContext = metadata.CurrentContext;
 
             // TODO: Check state after loading containers, verify that Modified doesn't go away if set
             if (eavContext.ObjectState != ObjectState.Deleted && eavContext.ObjectState != ObjectState.New && !eavContext.Containers.Any())
             {
-                eavClient.LoadRootContainers(client, eavContext);
+                eavClient.LoadRootContainers(eavContext);
             }
 
             metadata.DialogStack.Push(new ContextModel(eavContext) { Existing = true });
@@ -162,7 +164,7 @@ namespace EAVWebApplication.Controllers
         {
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
-            EAVContext eavContext = metadata.CurrentContext;
+            IModelContext eavContext = metadata.CurrentContext;
 
             if (UpdateRequested)
             {
@@ -207,7 +209,7 @@ namespace EAVWebApplication.Controllers
             postedModel.FixupContainerOrder();
             metadata.DialogStack.Push(postedModel);
 
-            EAVRootContainer eavContainer = new EAVRootContainer() { ContainerID = metadata.NextContainerID, Context = metadata.CurrentContext, Sequence = metadata.CurrentContext.Containers.Max(it => it.Sequence) + 1 };
+            IModelRootContainer eavContainer = new ModelRootContainer() { ContainerID = metadata.NextContainerID, Context = metadata.CurrentContext, Sequence = metadata.CurrentContext.Containers.Max(it => it.Sequence) + 1 };
 
             metadata.DialogStack.Push((ContainerModel) eavContainer);
 
@@ -224,12 +226,12 @@ namespace EAVWebApplication.Controllers
             postedModel.FixupContainerOrder();
             metadata.DialogStack.Push(postedModel);
 
-            EAVRootContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, ID) as EAVRootContainer;
+            IModelRootContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, ID) as IModelRootContainer;
 
             // TODO: Check state after loading metadata, verify that Modified doesn't go away if set
             if (eavContainer.ObjectState != ObjectState.Deleted && eavContainer.ObjectState != ObjectState.New && !eavContainer.ChildContainers.Any() && !eavContainer.Attributes.Any())
             {
-                eavClient.LoadMetadata(client, metadata.CurrentContext, eavContainer);
+                eavClient.LoadMetadata(eavContainer);
             }
 
             metadata.DialogStack.Push(new ContainerModel(eavContainer) { Existing = true });
@@ -246,7 +248,7 @@ namespace EAVWebApplication.Controllers
 
             metadata.DialogStack.Push(postedModel);
 
-            EAVRootContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, ID) as EAVRootContainer;
+            IModelRootContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, ID) as IModelRootContainer;
 
             if (eavContainer.ObjectState != ObjectState.New)
                 eavContainer.MarkDeleted();
@@ -263,7 +265,7 @@ namespace EAVWebApplication.Controllers
         {
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
-            EAVRootContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID) as EAVRootContainer;
+            IModelRootContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID) as IModelRootContainer;
 
             if (UpdateRequested)
             {
@@ -301,8 +303,8 @@ namespace EAVWebApplication.Controllers
             postedModel.FixupAttributeOrder();
             metadata.DialogStack.Push(postedModel);
 
-            EAVContainer eavParentContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
-            EAVChildContainer eavChildContainer = new EAVChildContainer() { ContainerID = metadata.NextContainerID, ParentContainer = eavParentContainer, Sequence = eavParentContainer.ChildContainers.Max(it => it.Sequence) + 1 };
+            IModelContainer eavParentContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
+            IModelChildContainer eavChildContainer = new ModelChildContainer() { ContainerID = metadata.NextContainerID, ParentContainer = eavParentContainer, Sequence = eavParentContainer.ChildContainers.Max(it => it.Sequence) + 1 };
 
             metadata.DialogStack.Push((ContainerModel)eavChildContainer);
 
@@ -320,7 +322,7 @@ namespace EAVWebApplication.Controllers
             postedModel.FixupAttributeOrder();
             metadata.DialogStack.Push(postedModel);
 
-            EAVContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, ID);
+            IModelContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, ID);
 
             metadata.DialogStack.Push(new ContainerModel(eavContainer) { Existing = true });
 
@@ -336,7 +338,7 @@ namespace EAVWebApplication.Controllers
 
             metadata.DialogStack.Push(postedModel);
 
-            EAVChildContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, ID) as EAVChildContainer;
+            IModelChildContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, ID) as IModelChildContainer;
 
             if (eavContainer.ObjectState != ObjectState.New)
                 eavContainer.MarkDeleted();
@@ -345,7 +347,7 @@ namespace EAVWebApplication.Controllers
 
             TempData["Metadata"] = metadata;
 
-            if (eavContainer.ParentContainer is EAVRootContainer)
+            if (eavContainer.ParentContainer is ModelRootContainer)
                 return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateRootContainer"), null));
             else
                 return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateChildContainer"), null));
@@ -356,7 +358,7 @@ namespace EAVWebApplication.Controllers
         {
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
-            EAVChildContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID) as EAVChildContainer;
+            IModelChildContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID) as IModelChildContainer;
 
             if (UpdateRequested)
             {
@@ -382,7 +384,7 @@ namespace EAVWebApplication.Controllers
 
             TempData["Metadata"] = metadata;
 
-            if (eavContainer.ParentContainer is EAVRootContainer)
+            if (eavContainer.ParentContainer is ModelRootContainer)
                 return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateRootContainer"), null));
             else
                 return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateChildContainer"), null));
@@ -409,8 +411,8 @@ namespace EAVWebApplication.Controllers
 
             metadata.DialogStack.Push(postedModel);
 
-            EAVContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
-            EAVAttribute eavAttribute = new EAVAttribute() { AttributeID = metadata.NextAttributeID, Container = eavContainer, Sequence = eavContainer.Attributes.Max(it => it.Sequence) + 1 };
+            IModelContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
+            IModelAttribute eavAttribute = new ModelAttribute() { AttributeID = metadata.NextAttributeID, Container = eavContainer, Sequence = eavContainer.Attributes.Max(it => it.Sequence) + 1 };
 
             metadata.DialogStack.Push((AttributeModel)eavAttribute);
 
@@ -426,8 +428,8 @@ namespace EAVWebApplication.Controllers
 
             metadata.DialogStack.Push(postedModel);
 
-            EAVContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
-            EAVAttribute eavAttribute = eavContainer.Attributes.Single(it => it.AttributeID == ID);
+            IModelContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
+            IModelAttribute eavAttribute = eavContainer.Attributes.Single(it => it.AttributeID == ID);
 
             metadata.DialogStack.Push(new AttributeModel(eavAttribute) { Existing = true });
 
@@ -443,8 +445,8 @@ namespace EAVWebApplication.Controllers
 
             metadata.DialogStack.Push(postedModel);
 
-            EAVContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
-            EAVAttribute eavAttribute = eavContainer.Attributes.Single(it => it.AttributeID == ID);
+            IModelContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ID);
+            IModelAttribute eavAttribute = eavContainer.Attributes.Single(it => it.AttributeID == ID);
 
             if (eavAttribute.ObjectState != ObjectState.New)
                 eavAttribute.MarkDeleted();
@@ -453,7 +455,7 @@ namespace EAVWebApplication.Controllers
 
             TempData["Metadata"] = metadata;
 
-            if (eavContainer is EAVRootContainer)
+            if (eavContainer is ModelRootContainer)
                 return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateRootContainer"), null));
             else
                 return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateChildContainer"), null));
@@ -464,8 +466,8 @@ namespace EAVWebApplication.Controllers
         {
             MetadataModel metadata = TempData["Metadata"] as MetadataModel;
 
-            EAVContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ContainerID);
-            EAVAttribute eavAttribute = eavContainer.Attributes.Single(it => it.AttributeID == postedModel.ID);
+            IModelContainer eavContainer = FindContainer(metadata.CurrentContext.Containers, postedModel.ContainerID);
+            IModelAttribute eavAttribute = eavContainer.Attributes.Single(it => it.AttributeID == postedModel.ID);
 
             if (UpdateRequested)
             {
@@ -482,7 +484,7 @@ namespace EAVWebApplication.Controllers
 
             TempData["Metadata"] = metadata;
 
-            if (eavContainer is EAVRootContainer)
+            if (eavContainer is ModelRootContainer)
                 return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateRootContainer"), null));
             else
                 return (BuildResult("Container Editor", Url.Content("~/Metadata/ContainerEditorDialog"), Url.Content("~/Metadata/UpdateChildContainer"), null));

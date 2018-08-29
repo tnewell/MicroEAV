@@ -68,7 +68,7 @@ namespace EAVStoreClientTestHarness
             EAVStoreClient.EAVUnitClient client = new EAVStoreClient.EAVUnitClient();
             string UnitDisplayText = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVUnit Unit = client.CreateUnit(new EAV.Model.BaseEAVUnit()
+            EAV.Store.IStoreUnit Unit = client.CreateUnit(new EAV.Store.StoreUnit()
             {
                 SingularName = "SN_" + UnitDisplayText,
                 SingularAbbreviation = "SA_" + UnitDisplayText.Substring(0, 4),
@@ -113,7 +113,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.EAVUnitClient client = new EAVStoreClient.EAVUnitClient();
 
-            var Unit = (EAV.Model.BaseEAVUnit)dbUnit;
+            var Unit = (EAV.Store.StoreUnit)dbUnit;
 
             Unit.SingularName = oldSingularName.Flip();
             Unit.SingularAbbreviation = oldSingularAbbreviation.Flip();

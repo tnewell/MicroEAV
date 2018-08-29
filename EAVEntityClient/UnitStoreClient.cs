@@ -22,84 +22,84 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVUnitClient : EAV.Store.IEAVUnitClient
+    public partial class EAVUnitClient : EAV.Store.IStoreUnitClient
     {
-        public IEnumerable<EAV.Model.IEAVUnit> RetrieveUnits()
+        public IEnumerable<EAV.Store.IStoreUnit> RetrieveUnits()
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return (ctx.Units.AsEnumerable().Select(it => (EAV.Model.BaseEAVUnit)it).ToList());
+                return (ctx.Units.AsEnumerable().Select(it => (EAV.Store.StoreUnit)it).ToList());
             }
         }
 
-        public EAV.Model.IEAVUnit RetrieveUnit(int UnitID)
+        public EAV.Store.IStoreUnit RetrieveUnit(int unitID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Model.BaseEAVUnit)ctx.Units.SingleOrDefault(it => it.Unit_ID == UnitID));
+                return ((EAV.Store.StoreUnit)ctx.Units.SingleOrDefault(it => it.Unit_ID == unitID));
             }
         }
 
-        public EAV.Model.IEAVUnit CreateUnit(EAV.Model.IEAVUnit Unit)
+        public EAV.Store.IStoreUnit CreateUnit(EAV.Store.IStoreUnit aUnit)
         {
-            if (Unit == null)
+            if (aUnit == null)
                 return (null);
 
             // TODO: Need to check that at least one string property has a non-empty value?
 
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                Unit dbUnit = new Unit(Unit);
+                Unit dbUnit = new Unit(aUnit);
 
                 ctx.Units.Add(dbUnit);
 
                 ctx.SaveChanges();
 
-                return ((EAV.Model.BaseEAVUnit)dbUnit);
+                return ((EAV.Store.StoreUnit)dbUnit);
             }
         }
 
-        public void UpdateUnit(EAV.Model.IEAVUnit Unit)
+        public void UpdateUnit(EAV.Store.IStoreUnit aUnit)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                EAVStoreClient.Unit dbUnit = ctx.Units.SingleOrDefault(it => it.Unit_ID == Unit.UnitID);
+                EAVStoreClient.Unit dbUnit = ctx.Units.SingleOrDefault(it => it.Unit_ID == aUnit.UnitID);
 
                 if (dbUnit != null)
                 {
-                    if (dbUnit.Singular_Name != Unit.SingularName)
-                        dbUnit.Singular_Name = Unit.SingularName;
+                    if (dbUnit.Singular_Name != aUnit.SingularName)
+                        dbUnit.Singular_Name = aUnit.SingularName;
 
-                    if (dbUnit.Singular_Abbreviation != Unit.SingularAbbreviation)
-                        dbUnit.Singular_Abbreviation = Unit.SingularAbbreviation;
+                    if (dbUnit.Singular_Abbreviation != aUnit.SingularAbbreviation)
+                        dbUnit.Singular_Abbreviation = aUnit.SingularAbbreviation;
 
-                    if (dbUnit.Plural_Name != Unit.PluralName)
-                        dbUnit.Plural_Name = Unit.PluralName;
+                    if (dbUnit.Plural_Name != aUnit.PluralName)
+                        dbUnit.Plural_Name = aUnit.PluralName;
 
-                    if (dbUnit.Plural_Abbreviation != Unit.PluralAbbreviation)
-                        dbUnit.Plural_Abbreviation = Unit.PluralAbbreviation;
+                    if (dbUnit.Plural_Abbreviation != aUnit.PluralAbbreviation)
+                        dbUnit.Plural_Abbreviation = aUnit.PluralAbbreviation;
 
-                    if (dbUnit.Symbol != Unit.Symbol)
-                        dbUnit.Symbol = Unit.Symbol;
+                    if (dbUnit.Symbol != aUnit.Symbol)
+                        dbUnit.Symbol = aUnit.Symbol;
 
-                    if (dbUnit.Display_Text != Unit.DisplayText)
-                        dbUnit.Display_Text = Unit.DisplayText;
+                    if (dbUnit.Display_Text != aUnit.DisplayText)
+                        dbUnit.Display_Text = aUnit.DisplayText;
 
-                    if (dbUnit.Curated != Unit.Curated)
-                        dbUnit.Curated = Unit.Curated;
+                    if (dbUnit.Curated != aUnit.Curated)
+                        dbUnit.Curated = aUnit.Curated;
 
                     ctx.SaveChanges();
                 }
                 else
-                    throw (new Exception(String.Format("Unable to retrieve Unit ID {0}.", Unit.UnitID)));
+                    throw (new Exception(String.Format("Unable to retrieve Unit ID {0}.", aUnit.UnitID)));
             }
         }
 
-        public void DeleteUnit(int UnitID)
+        public void DeleteUnit(int unitID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                var dbUnit = ctx.Units.SingleOrDefault(it => it.Unit_ID == UnitID);
+                var dbUnit = ctx.Units.SingleOrDefault(it => it.Unit_ID == unitID);
 
                 if (dbUnit != null)
                 {

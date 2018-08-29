@@ -69,7 +69,7 @@ namespace EAVStoreClientTestHarness
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
             string containerName = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVContainer container = client.CreateRootContainer(new EAV.Model.BaseEAVContainer()
+            EAV.Store.IStoreContainer container = client.CreateRootContainer(new EAV.Store.StoreContainer()
             {
                 Name = containerName,
                 DataName = containerName.ToUpper(),
@@ -105,7 +105,7 @@ namespace EAVStoreClientTestHarness
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
             string containerName = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVContainer container = client.CreateRootContainer(new EAV.Model.BaseEAVContainer()
+            EAV.Store.IStoreContainer container = client.CreateRootContainer(new EAV.Store.StoreContainer()
             {
                 Name = containerName,
                 DataName = containerName.ToUpper(),
@@ -115,7 +115,7 @@ namespace EAVStoreClientTestHarness
 
             Assert.IsNotNull(container, "Failed to create container with name '{0}' for context ID {1}.", containerName, contextID);
 
-            client.CreateRootContainer(new EAV.Model.BaseEAVContainer()
+            client.CreateRootContainer(new EAV.Store.StoreContainer()
             {
                 Name = containerName,
                 DataName = containerName.ToUpper() + "1",
@@ -137,7 +137,7 @@ namespace EAVStoreClientTestHarness
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
             string containerName = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVContainer container = client.CreateRootContainer(new EAV.Model.BaseEAVContainer()
+            EAV.Store.IStoreContainer container = client.CreateRootContainer(new EAV.Store.StoreContainer()
             {
                 Name = containerName,
                 DataName = containerName.ToUpper(),
@@ -147,7 +147,7 @@ namespace EAVStoreClientTestHarness
 
             Assert.IsNotNull(container, "Failed to create container with name '{0}' for context ID {1}.", containerName, contextID);
 
-            client.CreateRootContainer(new EAV.Model.BaseEAVContainer()
+            client.CreateRootContainer(new EAV.Store.StoreContainer()
             {
                 Name = containerName + "1",
                 DataName = containerName.ToUpper(),
@@ -168,7 +168,7 @@ namespace EAVStoreClientTestHarness
             int parentContainerID = SelectRandomItem(this.DbContext.Containers.Where(it => it.Parent_Container_ID == null)).Container_ID;
             string containerName = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVContainer container = client.CreateChildContainer(new EAV.Model.BaseEAVContainer()
+            EAV.Store.IStoreContainer container = client.CreateChildContainer(new EAV.Store.StoreContainer()
             {
                 Name = containerName,
                 DataName = containerName.ToUpper(),
@@ -205,7 +205,7 @@ namespace EAVStoreClientTestHarness
             int parentContainerID = SelectRandomItem(this.DbContext.Containers.Where(it => it.Parent_Container_ID == null)).Container_ID;
             string containerName = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVContainer container = client.CreateChildContainer(new EAV.Model.BaseEAVContainer()
+            EAV.Store.IStoreContainer container = client.CreateChildContainer(new EAV.Store.StoreContainer()
             {
                 Name = containerName,
                 DataName = containerName.ToUpper(),
@@ -216,7 +216,7 @@ namespace EAVStoreClientTestHarness
 
             Assert.IsNotNull(container, "Failed to create container with name '{0}' for parent container ID {1}.", containerName, parentContainerID);
 
-            client.CreateChildContainer(new EAV.Model.BaseEAVContainer()
+            client.CreateChildContainer(new EAV.Store.StoreContainer()
             {
                 Name = containerName,
                 DataName = containerName.ToUpper() + "1",
@@ -239,7 +239,7 @@ namespace EAVStoreClientTestHarness
             int parentContainerID = SelectRandomItem(this.DbContext.Containers.Where(it => it.Parent_Container_ID == null)).Container_ID;
             string containerName = Guid.NewGuid().ToString();
 
-            EAV.Model.IEAVContainer container = client.CreateChildContainer(new EAV.Model.BaseEAVContainer()
+            EAV.Store.IStoreContainer container = client.CreateChildContainer(new EAV.Store.StoreContainer()
             {
                 Name = containerName,
                 DataName = containerName.ToUpper(),
@@ -250,7 +250,7 @@ namespace EAVStoreClientTestHarness
 
             Assert.IsNotNull(container, "Failed to create container with name '{0}' for parent container ID {1}.", containerName, parentContainerID);
 
-            client.CreateChildContainer(new EAV.Model.BaseEAVContainer()
+            client.CreateChildContainer(new EAV.Store.StoreContainer()
             {
                 Name = containerName + "1",
                 DataName = containerName.ToUpper(),
@@ -277,7 +277,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
 
-            var container = (EAV.Model.BaseEAVContainer)dbContainer;
+            var container = (EAV.Store.StoreContainer)dbContainer;
 
             container.Name = oldName.Flip();
             container.DataName = oldDataName.Flip();

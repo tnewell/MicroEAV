@@ -22,59 +22,59 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVEntityClient : EAV.Store.IEAVEntityClient
+    public partial class EAVEntityClient : EAV.Store.IStoreEntityClient
     {
-        public IEnumerable<EAV.Model.IEAVEntity> RetrieveEntities()
+        public IEnumerable<EAV.Store.IStoreEntity> RetrieveEntities()
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return (ctx.Entities.AsEnumerable().Select(it => (EAV.Model.BaseEAVEntity)it).ToList());
+                return (ctx.Entities.AsEnumerable().Select(it => (EAV.Store.StoreEntity)it).ToList());
             }
         }
 
-        public EAV.Model.IEAVEntity RetrieveEntity(int entityID)
+        public EAV.Store.IStoreEntity RetrieveEntity(int entityID)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Model.BaseEAVEntity)ctx.Entities.SingleOrDefault(it => it.Entity_ID == entityID));
+                return ((EAV.Store.StoreEntity)ctx.Entities.SingleOrDefault(it => it.Entity_ID == entityID));
             }
         }
 
-        public EAV.Model.IEAVEntity CreateEntity(EAV.Model.IEAVEntity entity)
+        public EAV.Store.IStoreEntity CreateEntity(EAV.Store.IStoreEntity anEntity)
         {
-            if (entity == null)
+            if (anEntity == null)
                 return (null);
 
-            if (string.IsNullOrWhiteSpace(entity.Descriptor))
+            if (string.IsNullOrWhiteSpace(anEntity.Descriptor))
                 throw (new InvalidOperationException("Property 'Name' for parameter 'entity' may not be null or empty."));
 
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                Entity dbEntity = new Entity(entity);
+                Entity dbEntity = new Entity(anEntity);
 
                 ctx.Entities.Add(dbEntity);
 
                 ctx.SaveChanges();
 
-                return ((EAV.Model.BaseEAVEntity)dbEntity);
+                return ((EAV.Store.StoreEntity)dbEntity);
             }
         }
 
-        public void UpdateEntity(EAV.Model.IEAVEntity entity)
+        public void UpdateEntity(EAV.Store.IStoreEntity anEntity)
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                EAVStoreClient.Entity dbEntity = ctx.Entities.SingleOrDefault(it => it.Entity_ID == entity.EntityID);
+                EAVStoreClient.Entity dbEntity = ctx.Entities.SingleOrDefault(it => it.Entity_ID == anEntity.EntityID);
 
                 if (dbEntity != null)
                 {
-                    if (dbEntity.Descriptor != entity.Descriptor)
-                        dbEntity.Descriptor = entity.Descriptor;
+                    if (dbEntity.Descriptor != anEntity.Descriptor)
+                        dbEntity.Descriptor = anEntity.Descriptor;
 
                     ctx.SaveChanges();
                 }
                 else
-                    throw (new Exception(String.Format("Unable to retrieve entity ID {0}.", entity.EntityID)));
+                    throw (new Exception(String.Format("Unable to retrieve entity ID {0}.", anEntity.EntityID)));
             }
         }
 

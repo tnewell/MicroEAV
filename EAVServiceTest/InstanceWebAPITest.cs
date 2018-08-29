@@ -20,7 +20,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/instances/{0}", -1)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var instance = response.Content.ReadAsAsync<EAV.Model.BaseEAVInstance>().Result;
+                var instance = response.Content.ReadAsAsync<EAV.Store.StoreInstance>().Result;
 
                 Assert.IsNull(instance, "Unexpected instance object retrieved.");
             }
@@ -43,7 +43,7 @@ namespace EAVServiceTest
                 HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/instances/{0}", dbInstance.Instance_ID)).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    var instance = response.Content.ReadAsAsync<EAV.Model.BaseEAVInstance>().Result;
+                    var instance = response.Content.ReadAsAsync<EAV.Store.StoreInstance>().Result;
 
                     Assert.IsNotNull(instance, "Failed to retrieve instance {0}.", dbInstance.Instance_ID);
                     Assert.AreEqual(dbInstance.Instance_ID, instance.InstanceID, "Instance ID values do not match.");
@@ -66,9 +66,9 @@ namespace EAVServiceTest
         public void UpdateInstance()
         {
             var dbInstance = SelectRandomItem(this.DbContext.Instances);
-            var instance = (EAV.Model.BaseEAVInstance)dbInstance;
+            var instance = (EAV.Store.StoreInstance)dbInstance;
 
-            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAV.Model.BaseEAVInstance>("api/data/instances", instance).Result;
+            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAV.Store.StoreInstance>("api/data/instances", instance).Result;
             if (response.IsSuccessStatusCode)
             {
                 ResetDatabaseContext();
@@ -95,7 +95,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/instances/{0}/instances", dbParentInstance.Instance_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var instances = response.Content.ReadAsAsync<IEnumerable<EAV.Model.BaseEAVInstance>>().Result;
+                var instances = response.Content.ReadAsAsync<IEnumerable<EAV.Store.StoreInstance>>().Result;
                 int nClientInstances = instances.Count();
 
                 Assert.AreEqual(nDbChildInstances, nClientInstances, "The number of instances retrieved by the client does not match the number in the database.");
@@ -115,10 +115,10 @@ namespace EAVServiceTest
             var dbParentInstance = SelectRandomItem(this.DbContext.Instances.Where(it => it.Container.ChildContainers.Any()));
             var dbContainer = SelectRandomItem(dbParentInstance.Container.ChildContainers);
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Model.BaseEAVInstance>(String.Format("api/data/instances/{0}/instances?container={1}", dbParentInstance.Instance_ID, dbContainer.Container_ID), new EAV.Model.BaseEAVInstance()).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Store.StoreInstance>(String.Format("api/data/instances/{0}/instances?container={1}", dbParentInstance.Instance_ID, dbContainer.Container_ID), new EAV.Store.StoreInstance()).Result;
             if (response.IsSuccessStatusCode)
             {
-                var instance = response.Content.ReadAsAsync<EAV.Model.BaseEAVInstance>().Result;
+                var instance = response.Content.ReadAsAsync<EAV.Store.StoreInstance>().Result;
 
                 Assert.IsNotNull(instance, "Failed to create instance.");
 
@@ -144,7 +144,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/instances/{0}/values", dbInstance.Instance_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var values = response.Content.ReadAsAsync<IEnumerable<EAV.Model.BaseEAVValue>>().Result;
+                var values = response.Content.ReadAsAsync<IEnumerable<EAV.Store.StoreValue>>().Result;
                 int nClientValues = values.Count();
 
                 Assert.AreEqual(nDbValues, nClientValues, "The number of values retrieved by the client does not match the number in the database.");
@@ -166,10 +166,10 @@ namespace EAVServiceTest
             var dbValueKey = SelectRandomItem(dbUsableValueKeys);
             string rawValue = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Model.BaseEAVValue>(String.Format("api/data/instances/{0}/values?attribute={1}", dbValueKey.Item2, dbValueKey.Item1), new EAV.Model.BaseEAVValue() { RawValue = rawValue }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Store.StoreValue>(String.Format("api/data/instances/{0}/values?attribute={1}", dbValueKey.Item2, dbValueKey.Item1), new EAV.Store.StoreValue() { RawValue = rawValue }).Result;
             if (response.IsSuccessStatusCode)
             {
-                var value = response.Content.ReadAsAsync<EAV.Model.BaseEAVValue>().Result;
+                var value = response.Content.ReadAsAsync<EAV.Store.StoreValue>().Result;
 
                 Assert.IsNotNull(value, "Failed to create value with value '{0}'", rawValue);
 

@@ -12,7 +12,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextCreate()
         {
-            EAVContext aContext = new EAVContext();
+            ModelContext aContext = new ModelContext();
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -34,7 +34,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextStateTransitionNewToUnmodifiedWithNullID()
         {
-            EAVContext aContext = new EAVContext();
+            ModelContext aContext = new ModelContext();
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -46,7 +46,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextStateTransitionNewToUnmodifiedWithValidID()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -59,7 +59,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextStateTransitionNewToDeleted()
         {
-            EAVContext aContext = new EAVContext();
+            ModelContext aContext = new ModelContext();
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -69,7 +69,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextStateTransitionUnmodifiedToDeleted()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -86,7 +86,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextStateTransitionDeletedToUnmodified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -106,7 +106,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetIDWhenNew()
         {
-            EAVContext aContext = new EAVContext();
+            ModelContext aContext = new ModelContext();
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -120,7 +120,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetIDBeforeUnmodified()
         {
-            EAVContext aContext = new EAVContext();
+            ModelContext aContext = new ModelContext();
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -139,7 +139,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetIDAfterUnmodified()
         {
-            EAVContext aContext = new EAVContext();
+            ModelContext aContext = new ModelContext();
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -150,7 +150,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetIDWhenDeleted()
         {
-            EAVContext aContext = new EAVContext();
+            ModelContext aContext = new ModelContext();
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -178,7 +178,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetNameWhenNew()
         {
-            EAVContext aContext = new EAVContext();
+            ModelContext aContext = new ModelContext();
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -192,7 +192,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetNameWhenUnmodified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -210,7 +210,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetNameWhenModified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -235,7 +235,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetNameWhenDeleted()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -255,7 +255,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetDataNameWhenNew()
         {
-            EAVContext aContext = new EAVContext();
+            ModelContext aContext = new ModelContext();
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -269,7 +269,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetDataNameWhenUnmodified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -287,7 +287,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetDataNameWhenModified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -312,7 +312,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetDataNameWhenDeleted()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -332,7 +332,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetDisplayTextWhenNew()
         {
-            EAVContext aContext = new EAVContext();
+            ModelContext aContext = new ModelContext();
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -346,7 +346,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetDisplayTextWhenUnmodified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -364,7 +364,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextSetDisplayTextWhenModified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -389,7 +389,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetDisplayTextWhenDeleted()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -415,11 +415,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextAddToContainersWhenNew()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
@@ -431,7 +431,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextAddToContainersWhenUnmodified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -439,7 +439,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
@@ -451,7 +451,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextAddToContainersWhenModified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -459,7 +459,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
@@ -467,7 +467,7 @@ namespace EAVFrameworkTest
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
             Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new EAVRootContainer() { ContainerID = rng.Next() };
+            value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
@@ -480,7 +480,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextAddToContainersWhenDeleted()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -492,19 +492,19 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aContext.Containers.Add(new EAVRootContainer() { ContainerID = rng.Next() });
+            aContext.Containers.Add(new ModelRootContainer() { ContainerID = rng.Next() });
         }
 
         [TestMethod]
         public void ContextRemoveFromContainersWhenNew()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
-            value = new EAVRootContainer() { ContainerID = rng.Next() };
+            value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
@@ -523,13 +523,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextRemoveFromContainersWhenUnmodified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
-            value = new EAVRootContainer() { ContainerID = rng.Next() };
+            value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
@@ -552,7 +552,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextRemoveFromContainersWhenModified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -560,9 +560,9 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
-            value = new EAVRootContainer() { ContainerID = rng.Next() };
+            value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
@@ -582,11 +582,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextRemoveFromContainersWhenDeleted()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             aContext.MarkUnmodified();
@@ -606,11 +606,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextClearContainersWhenNew()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
@@ -630,11 +630,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextClearContainersWhenUnmodified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
@@ -658,7 +658,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextClearContainersWhenModified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -666,7 +666,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
@@ -687,11 +687,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextClearContainersWhenDeleted()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVRootContainer value = new EAVRootContainer() { ContainerID = rng.Next() };
+            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             aContext.MarkUnmodified();
@@ -713,11 +713,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextAddToSubjectsWhenNew()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
@@ -729,7 +729,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextAddToSubjectsWhenUnmodified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -737,7 +737,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
@@ -749,7 +749,7 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextAddToSubjectsWhenModified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -757,7 +757,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
@@ -765,7 +765,7 @@ namespace EAVFrameworkTest
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
             Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new EAVSubject() { SubjectID = rng.Next() };
+            value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
@@ -778,7 +778,7 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextAddToSubjectsWhenDeleted()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -790,19 +790,19 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aContext.Subjects.Add(new EAVSubject() { SubjectID = rng.Next() });
+            aContext.Subjects.Add(new ModelSubject() { SubjectID = rng.Next() });
         }
 
         [TestMethod]
         public void ContextRemoveFromSubjectsWhenNew()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
-            value = new EAVSubject() { SubjectID = rng.Next() };
+            value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
@@ -821,13 +821,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextRemoveFromSubjectsWhenUnmodified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
-            value = new EAVSubject() { SubjectID = rng.Next() };
+            value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
@@ -850,13 +850,13 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextRemoveFromSubjectsWhenModified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
-            value = new EAVSubject() { SubjectID = rng.Next() };
+            value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
@@ -878,11 +878,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextRemoveFromSubjectsWhenDeleted()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             aContext.MarkUnmodified();
@@ -902,11 +902,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextClearSubjectsWhenNew()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
@@ -926,11 +926,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextClearSubjectsWhenUnmodified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
@@ -954,11 +954,11 @@ namespace EAVFrameworkTest
         [TestMethod]
         public void ContextClearSubjectsWhenModified()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
@@ -981,11 +981,11 @@ namespace EAVFrameworkTest
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextClearSubjectsWhenDeleted()
         {
-            EAVContext aContext = new EAVContext() { ContextID = rng.Next() };
+            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVSubject value = new EAVSubject() { SubjectID = rng.Next() };
+            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             aContext.MarkUnmodified();

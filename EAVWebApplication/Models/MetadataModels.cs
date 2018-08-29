@@ -15,14 +15,14 @@ namespace EAVWebApplication.Models.Metadata
             NextContainerID = Int32.MinValue + 1;
             NextAttributeID = Int32.MinValue + 1;
 
-            contexts = new List<EAVContext>();
+            contexts = new List<IModelContext>();
         }
 
         private Stack<object> dialogStack = new Stack<object>();
         public Stack<object> DialogStack { get { return (dialogStack); } }
 
-        private List<EAVContext> contexts;
-        public ICollection<EAVContext> Contexts { get { return (contexts); } }
+        private List<IModelContext> contexts;
+        public ICollection<IModelContext> Contexts { get { return (contexts); } }
 
         private object contextIDLock = new object();
         private int nextContextID;
@@ -50,12 +50,12 @@ namespace EAVWebApplication.Models.Metadata
 
         public int SelectedContextID { get; set; }
 
-        public EAVContext CurrentContext { get { return (Contexts.SingleOrDefault(it => it.ContextID.GetValueOrDefault() == SelectedContextID)); } }
+        public IModelContext CurrentContext { get { return (Contexts.SingleOrDefault(it => it.ContextID.GetValueOrDefault() == SelectedContextID)); } }
     }
 
     public class ContextModel
     {
-        public static explicit operator ContextModel(EAVContext context)
+        public static explicit operator ContextModel(ModelContext context)
         {
             return (new ContextModel(context));
         }
@@ -65,7 +65,7 @@ namespace EAVWebApplication.Models.Metadata
             containers = new List<ContainerModel>();
         }
 
-        public ContextModel(EAVContext context)
+        public ContextModel(IModelContext context)
         {
             ID = context.ContextID.GetValueOrDefault();
             Name = context.Name;
@@ -97,7 +97,7 @@ namespace EAVWebApplication.Models.Metadata
 
         public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 
-        protected void InitializeContainers(IEnumerable<EAVContainer> containers)
+        protected void InitializeContainers(IEnumerable<IModelContainer> containers)
         {
             this.containers.Clear();
             this.containers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel) it).OrderBy(it => it.Sequence));
@@ -111,17 +111,17 @@ namespace EAVWebApplication.Models.Metadata
 
     public class ContainerModel
     {
-        public static explicit operator ContainerModel(EAVContainer container)
+        public static explicit operator ContainerModel(ModelContainer container)
         {
             return (new ContainerModel(container));
         }
 
-        public static explicit operator ContainerModel(EAVRootContainer container)
+        public static explicit operator ContainerModel(ModelRootContainer container)
         {
             return (new ContainerModel(container));
         }
 
-        public static explicit operator ContainerModel(EAVChildContainer container)
+        public static explicit operator ContainerModel(ModelChildContainer container)
         {
             return (new ContainerModel(container));
         }
@@ -132,7 +132,7 @@ namespace EAVWebApplication.Models.Metadata
             attributes = new List<AttributeModel>();
         }
 
-        public ContainerModel(EAVContainer container)
+        public ContainerModel(IModelContainer container)
         {
             ID = container.ContainerID.GetValueOrDefault();
             ParentID = container.ParentContainerID.GetValueOrDefault();
@@ -182,7 +182,7 @@ namespace EAVWebApplication.Models.Metadata
 
         public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 
-        protected void InitializeContainers(IEnumerable<EAVContainer> containers)
+        protected void InitializeContainers(IEnumerable<IModelContainer> containers)
         {
             this.childContainers.Clear();
             this.childContainers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel) it).OrderBy(it => it.Sequence));
@@ -193,7 +193,7 @@ namespace EAVWebApplication.Models.Metadata
             childContainers.Sort((ContainerModel c1, ContainerModel c2) => { return (c1.Sequence == c2.Sequence ? 0 : (c1.Sequence > c2.Sequence ? 1 : -1)); });
         }
 
-        protected void InitializeAttributes(IEnumerable<EAVAttribute> attributes)
+        protected void InitializeAttributes(IEnumerable<IModelAttribute> attributes)
         {
             this.attributes.Clear();
             this.attributes.AddRange(attributes.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (AttributeModel) it).OrderBy(it => it.Sequence));
@@ -207,7 +207,7 @@ namespace EAVWebApplication.Models.Metadata
 
     public class AttributeModel
     {
-        public static explicit operator AttributeModel(EAVAttribute attribute)
+        public static explicit operator AttributeModel(ModelAttribute attribute)
         {
             return (new AttributeModel(attribute));
         }
@@ -216,7 +216,7 @@ namespace EAVWebApplication.Models.Metadata
         {
         }
 
-        public AttributeModel(EAVAttribute attribute)
+        public AttributeModel(IModelAttribute attribute)
         {
             ID = attribute.AttributeID.GetValueOrDefault();
             ContainerID = attribute.ContainerID.GetValueOrDefault();
@@ -245,7 +245,7 @@ namespace EAVWebApplication.Models.Metadata
         public string DisplayText { get; set; }
 
         [Display(Name = "Data Type")]
-        public EAV.Model.EAVDataType DataType { get; set; }
+        public EAV.EAVDataType DataType { get; set; }
 
         [Display(Name = "Key")]
         public bool IsKey { get; set; }
