@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{82E345EA-964B-419D-BF90-25FCF0C62C42}</ProjectGuid>
+    <ProjectGuid>{D22882F8-405C-42B6-9E70-4A822F300BA6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EAVStoreClientTest</RootNamespace>
-    <AssemblyName>EAVStoreClientTest</AssemblyName>
+    <RootNamespace>EAVModelTest</RootNamespace>
+    <AssemblyName>EAVModelTest</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -38,12 +38,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
@@ -51,24 +45,20 @@
       <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitClientTests.cs" />
-    <Compile Include="InstanceClientTests.cs" />
-    <Compile Include="ValueClientTests.cs" />
-    <Compile Include="SubjectClientTests.cs" />
-    <Compile Include="EAVStoreClientTestHarness.cs" />
+    <Compile Include="ModelChildContainerTests.cs" />
+    <Compile Include="ModelEntityTests.cs" />
+    <Compile Include="ModelChildInstanceTests.cs" />
+    <Compile Include="ModelValueTests.cs" />
+    <Compile Include="ModelRootInstanceTests.cs" />
+    <Compile Include="ModelSubjectTests.cs" />
+    <Compile Include="ModelRootContainerTests.cs" />
+    <Compile Include="ModelAttributeTests.cs" />
+    <Compile Include="EAVModelTestHarness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EntityClientTests.cs" />
-    <Compile Include="ContextClientTests.cs" />
-    <Compile Include="ContainerClientTests.cs" />
-    <Compile Include="AttributeClientTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
+    <Compile Include="ModelContextTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EAV\EAV.csproj">
@@ -79,14 +69,17 @@
       <Project>{a626330a-e997-4a38-8dce-e68a0cdec2c7}</Project>
       <Name>EAV.Store</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EAVStoreClient\EAVStoreClient.csproj">
-      <Project>{a02d3434-1ef6-4ef5-91ad-52708127a3ac}</Project>
-      <Name>EAVStoreClient</Name>
+    <ProjectReference Include="..\EAVModel\EAV.Model.csproj">
+      <Project>{4445fabc-0e5c-4843-8cc8-cca798982d95}</Project>
+      <Name>EAV.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EAVStoreLibrary\EAVStoreLibrary.csproj">
-      <Project>{9c8cdf6d-c642-4f80-afd6-15aecc630fb1}</Project>
-      <Name>EAVStoreLibrary</Name>
+    <ProjectReference Include="..\EAVModelLibrary\EAVModelLibrary.csproj">
+      <Project>{f4dbd4b1-d24e-4ccb-b62c-be8031593557}</Project>
+      <Name>EAVModelLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

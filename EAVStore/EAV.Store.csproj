@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EAV\EAV.csproj" />
-    <ProjectReference Include="..\EAVModel\EAV.Model.csproj" />
   </ItemGroup>
 
 </Project>

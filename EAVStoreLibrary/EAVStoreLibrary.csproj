@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EAV.Model\EAV.csproj" />
-    <ProjectReference Include="..\EAV.Store\EAV.Store.csproj" />
+    <ProjectReference Include="..\EAV\EAV.csproj" />
+    <ProjectReference Include="..\EAVStore\EAV.Store.csproj" />
   </ItemGroup>
 
 </Project>
