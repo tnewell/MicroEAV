@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -68,7 +67,7 @@ namespace EAVStoreClientTestHarness
             EAVStoreClient.UnitStoreClient client = new EAVStoreClient.UnitStoreClient();
             string UnitDisplayText = Guid.NewGuid().ToString();
 
-            EAV.Store.IStoreUnit Unit = client.CreateUnit(new EAV.Store.StoreUnit()
+            EAV.Store.IStoreUnit Unit = client.CreateUnit(new EAVStoreLibrary.StoreUnit()
             {
                 SingularName = "SN_" + UnitDisplayText,
                 SingularAbbreviation = "SA_" + UnitDisplayText.Substring(0, 4),
@@ -113,7 +112,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.UnitStoreClient client = new EAVStoreClient.UnitStoreClient();
 
-            var Unit = (EAV.Store.StoreUnit)dbUnit;
+            var Unit = (EAVStoreLibrary.StoreUnit)dbUnit;
 
             Unit.SingularName = oldSingularName.Flip();
             Unit.SingularAbbreviation = oldSingularAbbreviation.Flip();

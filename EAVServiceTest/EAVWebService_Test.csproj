@@ -99,6 +99,10 @@
       <Project>{3d9f9d32-8746-48ca-bf55-247c0c37f1a1}</Project>
       <Name>EAVWebService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EAVStoreLibrary\EAVStoreLibrary.csproj">
+      <Project>{9c8cdf6d-c642-4f80-afd6-15aecc630fb1}</Project>
+      <Name>EAVStoreLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

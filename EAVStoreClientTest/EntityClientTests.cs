@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -68,7 +67,7 @@ namespace EAVStoreClientTestHarness
             EAVStoreClient.EntityStoreClient client = new EAVStoreClient.EntityStoreClient();
             string entityDescriptor = Guid.NewGuid().ToString();
 
-            EAV.Store.IStoreEntity entity = client.CreateEntity(new EAV.Store.StoreEntity() { Descriptor = entityDescriptor });
+            EAV.Store.IStoreEntity entity = client.CreateEntity(new EAVStoreLibrary.StoreEntity() { Descriptor = entityDescriptor });
 
             Assert.IsNotNull(entity, "Failed to create entity with descriptor '{0}'", entityDescriptor);
 
@@ -92,7 +91,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.EntityStoreClient client = new EAVStoreClient.EntityStoreClient();
 
-            var entity = (EAV.Store.StoreEntity)dbEntity;
+            var entity = (EAVStoreLibrary.StoreEntity)dbEntity;
 
             entity.Descriptor = oldDescriptor.Flip();
 

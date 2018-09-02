@@ -21,14 +21,14 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 
-namespace EAV.Model
+namespace EAVModelLibrary
 {
     [DataContract(IsReference = true)]
     public class ModelEntity : ModelObject, EAV.Model.IModelEntity
     {
         public ModelEntity()
         {
-            subjects = new ObservableCollection<IModelSubject>();
+            subjects = new ObservableCollection<EAV.Model.IModelSubject>();
             subjects.CollectionChanged += Subjects_CollectionChanged;
         }
 
@@ -40,7 +40,7 @@ namespace EAV.Model
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -81,7 +81,7 @@ namespace EAV.Model
             }
             set
             {
-                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && entityID == null))
+                if (ObjectState == EAV.Model.ObjectState.New || (ObjectState == EAV.Model.ObjectState.Unmodified && entityID == null))
                 {
                     entityID = value;
                 }
@@ -105,43 +105,43 @@ namespace EAV.Model
             {
                 if (descriptor != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Descriptor' may not be modified when object in 'Deleted' state."));
 
                     descriptor = value;
 
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }
 
         [DataMember(Name = "Subjects")]
-        private ObservableCollection<IModelSubject> subjects;
+        private ObservableCollection<EAV.Model.IModelSubject> subjects;
         [IgnoreDataMember]
-        public ICollection<IModelSubject> Subjects
+        public ICollection<EAV.Model.IModelSubject> Subjects
         {
-            get { if (ObjectState != ObjectState.Deleted) return (subjects); else return (new ReadOnlyObservableCollection<IModelSubject>(subjects)); }
+            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (subjects); else return (new ReadOnlyObservableCollection<EAV.Model.IModelSubject>(subjects)); }
         }
 
         public override void MarkUnmodified()
         {
-            if (ObjectState == ObjectState.Deleted)
+            if (ObjectState == EAV.Model.ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
 
             if (EntityID == null)
                 throw (new InvalidOperationException("Operation failed. Object with null 'EntityID' property may not be marked unmodified."));
 
-            ObjectState = ObjectState.Unmodified;
+            ObjectState = EAV.Model.ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
         {
-            if (ObjectState == ObjectState.New)
+            if (ObjectState == EAV.Model.ObjectState.New)
                 throw (new InvalidOperationException("Operation failed. Object in 'New' state may not be marked deleted."));
 
-            if (ObjectState != ObjectState.Deleted)
+            if (ObjectState != EAV.Model.ObjectState.Deleted)
             {
-                ObjectState = ObjectState.Deleted;
+                ObjectState = EAV.Model.ObjectState.Deleted;
 
                 foreach (ModelSubject subject in subjects)
                     subject.MarkDeleted();

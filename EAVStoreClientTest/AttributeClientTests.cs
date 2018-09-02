@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -69,7 +68,7 @@ namespace EAVStoreClientTestHarness
             int containerID = SelectRandomItem(this.DbContext.Containers).Context_ID;
             string attributeName = Guid.NewGuid().ToString();
 
-            EAV.Store.IStoreAttribute attribute = client.CreateAttribute(new EAV.Store.StoreAttribute()
+            EAV.Store.IStoreAttribute attribute = client.CreateAttribute(new EAVStoreLibrary.StoreAttribute()
             {
                 Name = attributeName,
                 DataName = attributeName.ToUpper(),
@@ -108,7 +107,7 @@ namespace EAVStoreClientTestHarness
             int containerID = SelectRandomItem(this.DbContext.Containers).Context_ID;
             string attributeName = Guid.NewGuid().ToString();
 
-            EAV.Store.IStoreAttribute attribute = client.CreateAttribute(new EAV.Store.StoreAttribute()
+            EAV.Store.IStoreAttribute attribute = client.CreateAttribute(new EAVStoreLibrary.StoreAttribute()
             {
                 Name = attributeName,
                 DataName = attributeName.ToUpper(),
@@ -121,7 +120,7 @@ namespace EAVStoreClientTestHarness
 
             Assert.IsNotNull(attribute, "Failed to create attribute with name '{0}' for container ID {1}.", attributeName, containerID);
 
-            client.CreateAttribute(new EAV.Store.StoreAttribute()
+            client.CreateAttribute(new EAVStoreLibrary.StoreAttribute()
             {
                 Name = attributeName,
                 DataName = attributeName.ToUpper() + "1",
@@ -146,7 +145,7 @@ namespace EAVStoreClientTestHarness
             int containerID = SelectRandomItem(this.DbContext.Containers).Context_ID;
             string attributeName = Guid.NewGuid().ToString();
 
-            EAV.Store.IStoreAttribute attribute = client.CreateAttribute(new EAV.Store.StoreAttribute()
+            EAV.Store.IStoreAttribute attribute = client.CreateAttribute(new EAVStoreLibrary.StoreAttribute()
             {
                 Name = attributeName,
                 DataName = attributeName.ToUpper(),
@@ -159,7 +158,7 @@ namespace EAVStoreClientTestHarness
 
             Assert.IsNotNull(attribute, "Failed to create attribute with name '{0}' for container ID {1}.", attributeName, containerID);
 
-            client.CreateAttribute(new EAV.Store.StoreAttribute()
+            client.CreateAttribute(new EAVStoreLibrary.StoreAttribute()
             {
                 Name = attributeName + "1",
                 DataName = attributeName.ToUpper(),
@@ -189,7 +188,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.AttributeStoreClient client = new EAVStoreClient.AttributeStoreClient();
 
-            var attribute = (EAV.Store.StoreAttribute)dbAttribute;
+            var attribute = (EAVStoreLibrary.StoreAttribute)dbAttribute;
 
             attribute.Name = oldName.Flip();
             attribute.DataName = oldDataName.Flip();

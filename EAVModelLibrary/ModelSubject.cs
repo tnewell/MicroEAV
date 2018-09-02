@@ -21,14 +21,14 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 
-namespace EAV.Model
+namespace EAVModelLibrary
 {
     [DataContract(IsReference = true)]
     public class ModelSubject : ModelObject, EAV.Model.IModelSubject
     {
         public ModelSubject()
         {
-            instances = new ObservableCollection<IModelRootInstance>();
+            instances = new ObservableCollection<EAV.Model.IModelRootInstance>();
             instances.CollectionChanged += Instances_CollectionChanged;
         }
 
@@ -40,7 +40,7 @@ namespace EAV.Model
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -81,7 +81,7 @@ namespace EAV.Model
             }
             set
             {
-                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && subjectID == null))
+                if (ObjectState == EAV.Model.ObjectState.New || (ObjectState == EAV.Model.ObjectState.Unmodified && subjectID == null))
                 {
                     subjectID = value;
                 }
@@ -97,9 +97,9 @@ namespace EAV.Model
         public int? ContextID { get { return (Context != null ? Context.ContextID : null); } }
 
         [DataMember(Name = "Entity")]
-        protected IModelEntity entity;
+        protected EAV.Model.IModelEntity entity;
         [IgnoreDataMember]
-        public IModelEntity Entity
+        public EAV.Model.IModelEntity Entity
         {
             get
             {
@@ -114,7 +114,7 @@ namespace EAV.Model
             {
                 if (entity != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Entity' may not be modified when object in 'Deleted' state."));
 
                     if (entity != null && entity.Subjects.Contains(this))
@@ -123,7 +123,7 @@ namespace EAV.Model
                     }
 
                     entity = value;
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (entity != null && !entity.Subjects.Contains(this))
                     {
@@ -134,9 +134,9 @@ namespace EAV.Model
         }
 
         [DataMember(Name = "Context")]
-        protected IModelContext context;
+        protected EAV.Model.IModelContext context;
         [IgnoreDataMember]
-        public IModelContext Context
+        public EAV.Model.IModelContext Context
         {
             get
             {
@@ -151,7 +151,7 @@ namespace EAV.Model
             {
                 if (context != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Context' may not be modified when object in 'Deleted' state."));
 
                     if (context != null && context.Subjects.Contains(this))
@@ -160,7 +160,7 @@ namespace EAV.Model
                     }
 
                     context = value;
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (context != null && !context.Subjects.Contains(this))
                     {
@@ -183,43 +183,43 @@ namespace EAV.Model
             {
                 if (identifier != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Identifier' may not be modified when object in 'Deleted' state."));
 
                     identifier = value;
 
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }
 
         [DataMember(Name = "Instances")]
-        private ObservableCollection<IModelRootInstance> instances;
+        private ObservableCollection<EAV.Model.IModelRootInstance> instances;
         [IgnoreDataMember]
-        public ICollection<IModelRootInstance> Instances
+        public ICollection<EAV.Model.IModelRootInstance> Instances
         {
-            get { if (ObjectState != ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<IModelRootInstance>(instances)); }
+            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAV.Model.IModelRootInstance>(instances)); }
         }
 
         public override void MarkUnmodified()
         {
-            if (ObjectState == ObjectState.Deleted)
+            if (ObjectState == EAV.Model.ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
 
             if (SubjectID == null)
                 throw (new InvalidOperationException("Operation failed. Object with null 'SubjectID' property may not be marked unmodified."));
 
-            ObjectState = ObjectState.Unmodified;
+            ObjectState = EAV.Model.ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
         {
-            if (ObjectState == ObjectState.New)
+            if (ObjectState == EAV.Model.ObjectState.New)
                 throw (new InvalidOperationException("Operation failed. Object in 'New' state may not be marked deleted."));
 
-            if (ObjectState != ObjectState.Deleted)
+            if (ObjectState != EAV.Model.ObjectState.Deleted)
             {
-                ObjectState = ObjectState.Deleted;
+                ObjectState = EAV.Model.ObjectState.Deleted;
 
                 foreach (ModelInstance instance in instances)
                     instance.MarkDeleted();

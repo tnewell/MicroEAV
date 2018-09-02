@@ -30,11 +30,11 @@ namespace EAVStoreClient
             {
                 if (containerID != null)
                 {
-                    return (ctx.Attributes.Include("Data_Type").Where(it => it.Container_ID == containerID).AsEnumerable().Select(it => (EAV.Store.StoreAttribute)it).ToList());
+                    return (ctx.Attributes.Include("Data_Type").Where(it => it.Container_ID == containerID).AsEnumerable().Select(it => (EAVStoreLibrary.StoreAttribute)it).ToList());
                 }
                 else
                 {
-                    return (ctx.Attributes.Include("Data_Type").AsEnumerable().Select(it => (EAV.Store.StoreAttribute)it).ToList());
+                    return (ctx.Attributes.Include("Data_Type").AsEnumerable().Select(it => (EAVStoreLibrary.StoreAttribute)it).ToList());
                 }
             }
         }
@@ -43,7 +43,7 @@ namespace EAVStoreClient
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Store.StoreAttribute)ctx.Attributes.Include("Data_Type").SingleOrDefault(it => it.Attribute_ID == attributeID));
+                return ((EAVStoreLibrary.StoreAttribute)ctx.Attributes.Include("Data_Type").SingleOrDefault(it => it.Attribute_ID == attributeID));
             }
         }
 
@@ -63,7 +63,7 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Store.StoreAttribute)dbAttribute);
+                return ((EAVStoreLibrary.StoreAttribute)dbAttribute);
             }
         }
 
@@ -126,7 +126,7 @@ namespace EAVStoreClient
 
                 if (dbAttribute != null)
                 {
-                    return(dbAttribute.Units.Select(it => (EAV.Store.StoreUnit) it));
+                    return(dbAttribute.Units.Select(it => (EAVStoreLibrary.StoreUnit) it));
                 }
                 else
                     throw(new Exception(String.Format("Unable to retrieve attribute ID {0}.", attributeID)));

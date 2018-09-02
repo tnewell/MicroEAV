@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -104,7 +103,7 @@ namespace EAVStoreClientTestHarness
             EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
             string contextName = Guid.NewGuid().ToString();
 
-            EAV.Store.IStoreContext context = client.CreateContext(new EAV.Store.StoreContext()
+            EAV.Store.IStoreContext context = client.CreateContext(new EAVStoreLibrary.StoreContext()
             {
                 Name = contextName,
                 DataName = contextName.ToUpper(),
@@ -134,7 +133,7 @@ namespace EAVStoreClientTestHarness
             EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
             string contextName = Guid.NewGuid().ToString();
 
-            EAV.Store.IStoreContext context = client.CreateContext(new EAV.Store.StoreContext()
+            EAV.Store.IStoreContext context = client.CreateContext(new EAVStoreLibrary.StoreContext()
             {
                 Name = contextName,
                 DataName = contextName.ToUpper(),
@@ -143,7 +142,7 @@ namespace EAVStoreClientTestHarness
 
             Assert.IsNotNull(context, "Failed to create context with name '{0}'", contextName);
 
-            client.CreateContext(new EAV.Store.StoreContext()
+            client.CreateContext(new EAVStoreLibrary.StoreContext()
             {
                 Name = contextName,
                 DataName = contextName.ToUpper() + "1",
@@ -163,7 +162,7 @@ namespace EAVStoreClientTestHarness
             EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
             string contextName = Guid.NewGuid().ToString();
 
-            EAV.Store.IStoreContext context = client.CreateContext(new EAV.Store.StoreContext()
+            EAV.Store.IStoreContext context = client.CreateContext(new EAVStoreLibrary.StoreContext()
             {
                 Name = contextName,
                 DataName = contextName.ToUpper(),
@@ -172,7 +171,7 @@ namespace EAVStoreClientTestHarness
 
             Assert.IsNotNull(context, "Failed to create context with name '{0}'", contextName);
 
-            client.CreateContext(new EAV.Store.StoreContext()
+            client.CreateContext(new EAVStoreLibrary.StoreContext()
             {
                 Name = contextName + "1",
                 DataName = contextName.ToUpper(),
@@ -195,7 +194,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
 
-            var context = (EAV.Store.StoreContext)dbContext;
+            var context = (EAVStoreLibrary.StoreContext)dbContext;
 
             context.Name = oldName.Flip();
             context.DataName = oldDataName.Flip();

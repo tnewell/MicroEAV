@@ -43,15 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clients\IModelClient.cs" />
-    <Compile Include="ModelAttribute.cs" />
-    <Compile Include="ModelContainer.cs" />
-    <Compile Include="ModelContext.cs" />
-    <Compile Include="ModelEntity.cs" />
-    <Compile Include="ModelInstance.cs" />
-    <Compile Include="ModelObject.cs" />
-    <Compile Include="ModelSubject.cs" />
-    <Compile Include="ModelUnit.cs" />
-    <Compile Include="ModelValue.cs" />
     <Compile Include="IModelAttribute.cs" />
     <Compile Include="IModelContainer.cs" />
     <Compile Include="IModelContext.cs" />

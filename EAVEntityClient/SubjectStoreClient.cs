@@ -30,19 +30,19 @@ namespace EAVStoreClient
             {
                 if (contextID != null && entityID != null)
                 {
-                    return (ctx.Subjects.Where(it => it.Context_ID == contextID && it.Entity_ID == entityID).AsEnumerable().Select(it => (EAV.Store.StoreSubject)it).ToList());
+                    return (ctx.Subjects.Where(it => it.Context_ID == contextID && it.Entity_ID == entityID).AsEnumerable().Select(it => (EAVStoreLibrary.StoreSubject)it).ToList());
                 }
                 else if (contextID != null && entityID == null)
                 {
-                    return (ctx.Subjects.Where(it => it.Context_ID == contextID).AsEnumerable().Select(it => (EAV.Store.StoreSubject)it).ToList());
+                    return (ctx.Subjects.Where(it => it.Context_ID == contextID).AsEnumerable().Select(it => (EAVStoreLibrary.StoreSubject)it).ToList());
                 }
                 else if (contextID == null && entityID != null)
                 {
-                    return (ctx.Subjects.Where(it => it.Entity_ID == entityID).AsEnumerable().Select(it => (EAV.Store.StoreSubject)it).ToList());
+                    return (ctx.Subjects.Where(it => it.Entity_ID == entityID).AsEnumerable().Select(it => (EAVStoreLibrary.StoreSubject)it).ToList());
                 }
                 else
                 {
-                    return (ctx.Subjects.AsEnumerable().Select(it => (EAV.Store.StoreSubject)it).ToList());
+                    return (ctx.Subjects.AsEnumerable().Select(it => (EAVStoreLibrary.StoreSubject)it).ToList());
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace EAVStoreClient
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Store.StoreSubject)ctx.Subjects.SingleOrDefault(it => it.Subject_ID == subjectID));
+                return ((EAVStoreLibrary.StoreSubject)ctx.Subjects.SingleOrDefault(it => it.Subject_ID == subjectID));
             }
         }
 
@@ -71,7 +71,7 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Store.StoreSubject)dbSubject);
+                return ((EAVStoreLibrary.StoreSubject)dbSubject);
             }
         }
 

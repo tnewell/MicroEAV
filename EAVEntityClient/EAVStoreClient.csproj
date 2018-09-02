@@ -139,6 +139,10 @@
       <Project>{a626330a-e997-4a38-8dce-e68a0cdec2c7}</Project>
       <Name>EAV.Store</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EAVStoreLibrary\EAVStoreLibrary.csproj">
+      <Project>{9c8cdf6d-c642-4f80-afd6-15aecc630fb1}</Project>
+      <Name>EAVStoreLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

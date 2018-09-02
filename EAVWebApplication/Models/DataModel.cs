@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 using EAV.Model;
+using EAVModelLibrary;
 
 
 namespace EAVWebApplication.Models.Data

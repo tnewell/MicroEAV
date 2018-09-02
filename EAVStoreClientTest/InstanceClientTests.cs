@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -69,7 +68,7 @@ namespace EAVStoreClientTestHarness
             int subjectID = SelectRandomItem(this.DbContext.Subjects).Subject_ID;
             int containerID = SelectRandomItem(this.DbContext.Containers.Where(it => it.Parent_Container_ID == null)).Container_ID;
 
-            EAV.Store.IStoreInstance instance = client.CreateRootInstance(new EAV.Store.StoreInstance(), containerID, subjectID);
+            EAV.Store.IStoreInstance instance = client.CreateRootInstance(new EAVStoreLibrary.StoreInstance(), containerID, subjectID);
 
             Assert.IsNotNull(instance, "Failed to create instance for container ID {0} and subject ID {1}.", containerID, subjectID);
 
@@ -91,7 +90,7 @@ namespace EAVStoreClientTestHarness
             EAVStoreClient.InstanceStoreClient client = new EAVStoreClient.InstanceStoreClient();
             var dbParentInstance = SelectRandomItem(this.DbContext.Instances);
 
-            EAV.Store.IStoreInstance instance = client.CreateChildInstance(new EAV.Store.StoreInstance(), dbParentInstance.Container_ID, dbParentInstance.Instance_ID);
+            EAV.Store.IStoreInstance instance = client.CreateChildInstance(new EAVStoreLibrary.StoreInstance(), dbParentInstance.Container_ID, dbParentInstance.Instance_ID);
 
             Assert.IsNotNull(instance, "Failed to create instance for container ID {0} and parent instance ID {1}.", dbParentInstance.Container_ID, dbParentInstance.Instance_ID);
 
@@ -114,7 +113,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.InstanceStoreClient client = new EAVStoreClient.InstanceStoreClient();
 
-            var instance = (EAV.Store.StoreInstance)dbInstance;
+            var instance = (EAVStoreLibrary.StoreInstance)dbInstance;
 
             // There are currently no properties for this object to update
             // So this is just here for completeness and future expansion.

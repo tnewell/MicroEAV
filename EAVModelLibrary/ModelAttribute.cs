@@ -22,17 +22,17 @@ using System.Linq;
 using System.Runtime.Serialization;
 
 
-namespace EAV.Model
+namespace EAVModelLibrary
 {
     [DataContract(IsReference = true)]
     public class ModelAttribute : ModelObject, EAV.Model.IModelAttribute
     {
         public ModelAttribute()
         {
-            units = new ObservableCollection<IModelUnit>();
+            units = new ObservableCollection<EAV.Model.IModelUnit>();
             units.CollectionChanged += Units_CollectionChanged;
 
-            values = new ObservableCollection<IModelValue>();
+            values = new ObservableCollection<EAV.Model.IModelValue>();
             values.CollectionChanged += Values_CollectionChanged;
         }
 
@@ -51,17 +51,17 @@ namespace EAV.Model
                     {
                         IEnumerable<ModelUnit> addedUnits = e.NewItems.OfType<ModelUnit>();
 
-                        if (addedUnits.Any(it => it.ObjectState == ObjectState.Deleted || it.ObjectState == ObjectState.New || it.UnitID == null))
+                        if (addedUnits.Any(it => it.ObjectState == EAV.Model.ObjectState.Deleted || it.ObjectState == EAV.Model.ObjectState.New || it.UnitID == null))
                         {
                             throw (new InvalidOperationException("Operation failed. Only existing units may be added to the Units collection."));
                         }
                     }
 
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                     break;
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                     break;
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
                     break;
@@ -76,7 +76,7 @@ namespace EAV.Model
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -117,7 +117,7 @@ namespace EAV.Model
             }
             set
             {
-                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && attributeID == null))
+                if (ObjectState == EAV.Model.ObjectState.New || (ObjectState == EAV.Model.ObjectState.Unmodified && attributeID == null))
                 {
                     attributeID = value;
                 }
@@ -131,9 +131,9 @@ namespace EAV.Model
         public int? ContainerID { get { return (Container != null ? Container.ContainerID : null); } }
 
         [DataMember(Name = "Container")]
-        protected IModelContainer container;
+        protected EAV.Model.IModelContainer container;
         [IgnoreDataMember]
-        public IModelContainer Container
+        public EAV.Model.IModelContainer Container
         {
             get
             {
@@ -148,7 +148,7 @@ namespace EAV.Model
             {
                 if (container != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Container' may not be modified when object in 'Deleted' state."));
 
                     if (container != null && container.Attributes.Contains(this))
@@ -157,7 +157,7 @@ namespace EAV.Model
                     }
 
                     container = value;
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (container != null && !container.Attributes.Contains(this))
                     {
@@ -180,12 +180,12 @@ namespace EAV.Model
             {
                 if (name != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Name' may not be modified when object in 'Deleted' state."));
 
                     name = value;
 
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }
@@ -203,12 +203,12 @@ namespace EAV.Model
             {
                 if (dataName != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'DataName' may not be modified when object in 'Deleted' state."));
 
                     dataName = value;
 
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }
@@ -226,12 +226,12 @@ namespace EAV.Model
             {
                 if (displayText != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'DisplayText' may not be modified when object in 'Deleted' state."));
 
                     displayText = value;
 
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }
@@ -249,12 +249,12 @@ namespace EAV.Model
             {
                 if (dataType != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'DataType' may not be modified when object in 'Deleted' state."));
 
                     dataType = value;
 
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }
@@ -272,12 +272,12 @@ namespace EAV.Model
             {
                 if (sequence != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Sequence' may not be modified when object in 'Deleted' state."));
 
                     sequence = value;
 
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }
@@ -295,12 +295,12 @@ namespace EAV.Model
             {
                 if (isKey != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'IsKey' may not be modified when object in 'Deleted' state."));
 
                     isKey = value;
 
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }
@@ -318,53 +318,53 @@ namespace EAV.Model
             {
                 if (variableUnits != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'VariableUnits' may not be modified when object in 'Deleted' state."));
                     else if (units.Any() && value.GetValueOrDefault(true))
                         throw (new InvalidOperationException("Operation failed. Property 'VariableUnits' may not be assigned any value but false when values exist in the Units collection."));
 
                     variableUnits = value;
 
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }
 
         [DataMember(Name = "Units")]
-        private ObservableCollection<IModelUnit> units;
+        private ObservableCollection<EAV.Model.IModelUnit> units;
         [IgnoreDataMember]
-        public ICollection<IModelUnit> Units
+        public ICollection<EAV.Model.IModelUnit> Units
         {
-            get { if (ObjectState != ObjectState.Deleted) return (units); else return (new ReadOnlyObservableCollection<IModelUnit>(units)); }
+            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (units); else return (new ReadOnlyObservableCollection<EAV.Model.IModelUnit>(units)); }
         }
 
         [DataMember(Name = "Values")]
-        private ObservableCollection<IModelValue> values;
+        private ObservableCollection<EAV.Model.IModelValue> values;
         [IgnoreDataMember]
-        public ICollection<IModelValue> Values
+        public ICollection<EAV.Model.IModelValue> Values
         {
-            get { if (ObjectState != ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<IModelValue>(values)); }
+            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<EAV.Model.IModelValue>(values)); }
         }
 
         public override void MarkUnmodified()
         {
-            if (ObjectState == ObjectState.Deleted)
+            if (ObjectState == EAV.Model.ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked unmodified."));
 
             if (AttributeID == null)
                 throw (new InvalidOperationException("Operation failed. Object with null 'AttributeID' property may not be marked unmodified."));
 
-            ObjectState = ObjectState.Unmodified;
+            ObjectState = EAV.Model.ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
         {
-            if (ObjectState == ObjectState.New)
+            if (ObjectState == EAV.Model.ObjectState.New)
                 throw (new InvalidOperationException("Operation failed. Object in 'New' state may not be marked deleted."));
 
-            if (ObjectState != ObjectState.Deleted)
+            if (ObjectState != EAV.Model.ObjectState.Deleted)
             {
-                ObjectState = ObjectState.Deleted;
+                ObjectState = EAV.Model.ObjectState.Deleted;
 
                 foreach (ModelValue value in values)
                     value.MarkDeleted();

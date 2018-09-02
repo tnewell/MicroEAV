@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EAV.Model\EAV.csproj" />
+    <ProjectReference Include="..\EAV.Store\EAV.Store.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -22,7 +22,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/entities")).Result;
             if (response.IsSuccessStatusCode)
             {
-                var entities = response.Content.ReadAsAsync<IEnumerable<EAV.Store.StoreEntity>>().Result;
+                var entities = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreEntity>>().Result;
                 int nClientEntities = entities.Count();
 
                 Assert.AreEqual(nDbEntities, nClientEntities, "The number of entities retrieved by the client does not match the number in the database.");
@@ -42,7 +42,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/entities/{0}", -1)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var entity = response.Content.ReadAsAsync<EAV.Store.StoreEntity>().Result;
+                var entity = response.Content.ReadAsAsync<EAVStoreLibrary.StoreEntity>().Result;
 
                 Assert.IsNull(entity, "Unexpected entity object retrieved.");
             }
@@ -65,7 +65,7 @@ namespace EAVServiceTest
                 HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/entities/{0}", dbEntity.Entity_ID)).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    var entity = response.Content.ReadAsAsync<EAV.Store.StoreEntity>().Result;
+                    var entity = response.Content.ReadAsAsync<EAVStoreLibrary.StoreEntity>().Result;
 
                     Assert.IsNotNull(entity, "Failed to retrieve entity {0}.", dbEntity.Entity_ID);
                     Assert.AreEqual(dbEntity.Entity_ID, entity.EntityID, "Entity ID values do not match.");
@@ -89,10 +89,10 @@ namespace EAVServiceTest
         {
             string entityDescriptor = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Store.StoreEntity>("api/data/entities", new EAV.Store.StoreEntity() { Descriptor = entityDescriptor }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreEntity>("api/data/entities", new EAVStoreLibrary.StoreEntity() { Descriptor = entityDescriptor }).Result;
             if (response.IsSuccessStatusCode)
             {
-                var entity = response.Content.ReadAsAsync<EAV.Store.StoreEntity>().Result;
+                var entity = response.Content.ReadAsAsync<EAVStoreLibrary.StoreEntity>().Result;
 
                 Assert.IsNotNull(entity, "Failed to create entity with descriptor '{0}'", entityDescriptor);
 
@@ -117,11 +117,11 @@ namespace EAVServiceTest
             var dbEntity = SelectRandomItem(this.DbContext.Entities);
             string oldDescriptor = dbEntity.Descriptor;
 
-            var entity = (EAV.Store.StoreEntity)dbEntity;
+            var entity = (EAVStoreLibrary.StoreEntity)dbEntity;
 
             entity.Descriptor = oldDescriptor.Flip();
 
-            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAV.Store.StoreEntity>("api/data/entities", entity).Result;
+            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAVStoreLibrary.StoreEntity>("api/data/entities", entity).Result;
             if (response.IsSuccessStatusCode)
             {
                 ResetDatabaseContext();
@@ -173,7 +173,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/entities/{0}/subjects", dbEntity.Entity_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var subjects = response.Content.ReadAsAsync<IEnumerable<EAV.Store.StoreSubject>>().Result;
+                var subjects = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreSubject>>().Result;
                 int nClientEntities = subjects.Count();
 
                 Assert.AreEqual(nDbSubjects, nClientEntities, "The number of subjects retrieved by the client does not match the number in the database.");
@@ -194,10 +194,10 @@ namespace EAVServiceTest
             var dbEntity = SelectRandomItem(this.DbContext.Entities);
             string subjectIdentifier = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Store.StoreSubject>(String.Format("api/data/entities/{0}/subjects?context={1}", dbEntity.Entity_ID, dbContext.Context_ID), new EAV.Store.StoreSubject() { Identifier = subjectIdentifier }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreSubject>(String.Format("api/data/entities/{0}/subjects?context={1}", dbEntity.Entity_ID, dbContext.Context_ID), new EAVStoreLibrary.StoreSubject() { Identifier = subjectIdentifier }).Result;
             if (response.IsSuccessStatusCode)
             {
-                var subject = response.Content.ReadAsAsync<EAV.Store.StoreSubject>().Result;
+                var subject = response.Content.ReadAsAsync<EAVStoreLibrary.StoreSubject>().Result;
 
                 Assert.IsNotNull(subject, "Failed to create subject with identifier '{0}'", subjectIdentifier);
 

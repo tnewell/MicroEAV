@@ -15,18 +15,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.If not, see<http://www.gnu.org/licenses/>.
 
-namespace EAV.Store
+namespace EAVStoreLibrary
 {
-    public class StoreEntity : EAV.Entity, EAV.Store.IStoreEntity
+    public class StoreContainer : EAV.Container, EAV.Store.IStoreContainer
     {
-        public StoreEntity() { }
+        public StoreContainer() { }
 
-        public StoreEntity(EAV.Store.IStoreEntity entity)
+        public StoreContainer(EAV.Store.IStoreContainer container)
         {
-            this.EntityID = entity.EntityID;
-            this.Descriptor = entity.Descriptor;
+            this.ContainerID = container.ContainerID;
+            this.ParentContainerID = container.ParentContainerID;
+            this.ContextID = container.ContextID;
+            this.Name = container.Name;
+            this.DataName = container.DataName;
+            this.DisplayText = container.DisplayText;
+            this.IsRepeating = container.IsRepeating;
         }
 
-        public int? EntityID { get; set; }
+        public int? ContainerID { get; set; }
+        public int? ParentContainerID { get; set; }
+        public int? ContextID { get; set; }
     }
 }

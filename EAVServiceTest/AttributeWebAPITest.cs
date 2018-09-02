@@ -21,7 +21,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/attributes/{0}", -1)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var attribute = response.Content.ReadAsAsync<EAV.Store.StoreAttribute>().Result;
+                var attribute = response.Content.ReadAsAsync<EAVStoreLibrary.StoreAttribute>().Result;
 
                 Assert.IsNull(attribute, "Unexpected attribute object retrieved.");
             }
@@ -44,7 +44,7 @@ namespace EAVServiceTest
                 HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/attributes/{0}", dbAttribute.Attribute_ID)).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    var attribute = response.Content.ReadAsAsync<EAV.Store.StoreAttribute>().Result;
+                    var attribute = response.Content.ReadAsAsync<EAVStoreLibrary.StoreAttribute>().Result;
 
                     Assert.IsNotNull(attribute, "Failed to retrieve attribute {0}.", dbAttribute.Attribute_ID);
                     Assert.AreEqual(dbAttribute.Attribute_ID, attribute.AttributeID, "Attribute ID values do not match.");

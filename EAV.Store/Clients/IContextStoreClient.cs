@@ -17,6 +17,7 @@
 
 using System.Collections.Generic;
 
+
 namespace EAV.Store.Clients
 {
     public interface IContextStoreClient

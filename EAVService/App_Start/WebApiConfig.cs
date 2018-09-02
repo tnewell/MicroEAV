@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Xml;
 using System.Xml.Serialization;
 using EAV.Store;
+using EAVStoreLibrary;
 using Newtonsoft.Json;
 
 namespace EAVService

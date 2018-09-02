@@ -8,7 +8,7 @@
 // (at your option) any later version.
 
 // This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// but WITHOUT ANY WARRANTY; without even the implied warranty ofEAV.Store.
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
 // GNU General Public License for more details.
 
@@ -18,7 +18,7 @@
 using System.Runtime.Serialization;
 
 
-namespace EAV.Model
+namespace EAVModelLibrary
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(ModelUnit))]
@@ -34,7 +34,7 @@ namespace EAV.Model
         public ModelObject() { }
 
         [DataMember()]
-        public ObjectState ObjectState { get; set; }
+        public EAV.Model.ObjectState ObjectState { get; set; }
 
         public abstract void MarkUnmodified();
 

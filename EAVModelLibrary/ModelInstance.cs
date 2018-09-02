@@ -21,7 +21,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 
-namespace EAV.Model
+namespace EAVModelLibrary
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(ModelRootInstance))]
@@ -30,10 +30,10 @@ namespace EAV.Model
     {
         public ModelInstance()
         {
-            childInstances = new ObservableCollection<IModelChildInstance>();
+            childInstances = new ObservableCollection<EAV.Model.IModelChildInstance>();
             childInstances.CollectionChanged += ChildInstances_CollectionChanged;
 
-            values = new ObservableCollection<IModelValue>();
+            values = new ObservableCollection<EAV.Model.IModelValue>();
             values.CollectionChanged += Values_CollectionChanged;
         }
 
@@ -45,7 +45,7 @@ namespace EAV.Model
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -83,7 +83,7 @@ namespace EAV.Model
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -124,7 +124,7 @@ namespace EAV.Model
             }
             set
             {
-                if (ObjectState == ObjectState.New || (ObjectState == ObjectState.Unmodified && instanceID == null))
+                if (ObjectState == EAV.Model.ObjectState.New || (ObjectState == EAV.Model.ObjectState.Unmodified && instanceID == null))
                 {
                     instanceID = value;
                 }
@@ -142,27 +142,27 @@ namespace EAV.Model
         public int? ContainerID { get { return (Container != null ? Container.ContainerID : null); } }
 
         [DataMember(Name = "ParentInstance")]
-        protected IModelInstance parentInstance;
+        protected EAV.Model.IModelInstance parentInstance;
         [IgnoreDataMember]
-        public abstract IModelInstance ParentInstance
+        public abstract EAV.Model.IModelInstance ParentInstance
         {
             get;
             set;
         }
 
         [DataMember(Name = "Subject")]
-        protected IModelSubject subject;
+        protected EAV.Model.IModelSubject subject;
         [IgnoreDataMember]
-        public abstract IModelSubject Subject
+        public abstract EAV.Model.IModelSubject Subject
         {
             get;
             set;
         }
 
         [DataMember(Name = "Container")]
-        protected IModelContainer container;
+        protected EAV.Model.IModelContainer container;
         [IgnoreDataMember]
-        public IModelContainer Container
+        public EAV.Model.IModelContainer Container
         {
             get
             {
@@ -177,7 +177,7 @@ namespace EAV.Model
             {
                 if (container != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'RawValue' may not be modified when object in 'Deleted' state."));
 
                     if (container != null && container.Instances.Contains(this))
@@ -186,7 +186,7 @@ namespace EAV.Model
                     }
 
                     container = value;
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (container != null && !container.Instances.Contains(this))
                     {
@@ -197,22 +197,22 @@ namespace EAV.Model
         }
 
         [DataMember(Name = "ChildInstances")]
-        private ObservableCollection<IModelChildInstance> childInstances;
+        private ObservableCollection<EAV.Model.IModelChildInstance> childInstances;
         [IgnoreDataMember]
-        public ICollection<IModelChildInstance> ChildInstances
+        public ICollection<EAV.Model.IModelChildInstance> ChildInstances
         {
-            get { if (ObjectState != ObjectState.Deleted) return (childInstances); else return (new ReadOnlyObservableCollection<IModelChildInstance>(childInstances)); }
+            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (childInstances); else return (new ReadOnlyObservableCollection<EAV.Model.IModelChildInstance>(childInstances)); }
         }
 
         [DataMember(Name = "Values")]
-        private ObservableCollection<IModelValue> values;
+        private ObservableCollection<EAV.Model.IModelValue> values;
         [IgnoreDataMember]
-        public ICollection<IModelValue> Values
+        public ICollection<EAV.Model.IModelValue> Values
         {
-            get { if (ObjectState != ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<IModelValue>(values)); }
+            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<EAV.Model.IModelValue>(values)); }
         }
 
-        protected void SetStateRecursive(ObjectState state)
+        protected void SetStateRecursive(EAV.Model.ObjectState state)
         {
             this.ObjectState = state;
             foreach (ModelInstance childInstance in ChildInstances)
@@ -221,23 +221,23 @@ namespace EAV.Model
 
         public override void MarkUnmodified()
         {
-            if (ObjectState == ObjectState.Deleted)
+            if (ObjectState == EAV.Model.ObjectState.Deleted)
                 throw (new InvalidOperationException("Operation failed. Object in 'Deleted' state may not be marked created."));
 
             if (InstanceID == null)
                 throw (new InvalidOperationException("Operation failed. Object with null 'InstanceID' property may not be marked unmodified."));
 
-            ObjectState = ObjectState.Unmodified;
+            ObjectState = EAV.Model.ObjectState.Unmodified;
         }
 
         public override void MarkDeleted()
         {
-            if (ObjectState == ObjectState.New)
+            if (ObjectState == EAV.Model.ObjectState.New)
                 throw (new InvalidOperationException("Operation failed. Object in 'New' state may not be marked deleted."));
 
-            if (ObjectState != ObjectState.Deleted)
+            if (ObjectState != EAV.Model.ObjectState.Deleted)
             {
-                ObjectState = ObjectState.Deleted;
+                ObjectState = EAV.Model.ObjectState.Deleted;
 
                 foreach (ModelValue value in values)
                     value.MarkDeleted();
@@ -250,7 +250,7 @@ namespace EAV.Model
 
     public class ModelRootInstance : ModelInstance, EAV.Model.IModelRootInstance
     {
-        public static IModelRootInstance Create(IModelRootContainer container, IModelSubject subject)
+        public static EAV.Model.IModelRootInstance Create(EAV.Model.IModelRootContainer container, EAV.Model.IModelSubject subject)
         {
             ModelRootInstance instance = new ModelRootInstance()
             {
@@ -276,7 +276,7 @@ namespace EAV.Model
             parentInstance = null;
         }
 
-        public override IModelSubject Subject
+        public override EAV.Model.IModelSubject Subject
         {
             get
             {
@@ -291,7 +291,7 @@ namespace EAV.Model
             {
                 if (subject != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Subject' may not be modified when object in 'Deleted' state."));
 
                     if (subject != null && subject.Instances.Contains(this))
@@ -300,7 +300,7 @@ namespace EAV.Model
                     }
 
                     subject = value;
-                    SetStateRecursive(ObjectState != ObjectState.New ? ObjectState.Modified : ObjectState);
+                    SetStateRecursive(ObjectState != EAV.Model.ObjectState.New ? EAV.Model.ObjectState.Modified : ObjectState);
 
                     if (subject != null && !subject.Instances.Contains(this))
                     {
@@ -310,7 +310,7 @@ namespace EAV.Model
             }
         }
 
-        public override IModelInstance ParentInstance
+        public override EAV.Model.IModelInstance ParentInstance
         {
             get
             {
@@ -318,7 +318,7 @@ namespace EAV.Model
             }
             set
             {
-                if (ObjectState == ObjectState.Deleted)
+                if (ObjectState == EAV.Model.ObjectState.Deleted)
                     throw (new InvalidOperationException("Operation failed. Property 'ParentInstance' may not be modified when object in 'Deleted' state."));
 
                 if (value != null) throw (new InvalidOperationException("The ParentInstance property may only accept 'null' as a value."));
@@ -328,7 +328,7 @@ namespace EAV.Model
 
     public class ModelChildInstance : ModelInstance, EAV.Model.IModelChildInstance
     {
-        public static IModelChildInstance Create(IModelChildContainer container, IModelSubject subject, IModelInstance parentInstance)
+        public static EAV.Model.IModelChildInstance Create(EAV.Model.IModelChildContainer container, EAV.Model.IModelSubject subject, EAV.Model.IModelInstance parentInstance)
         {
             ModelChildInstance instance = new ModelChildInstance()
             {
@@ -351,7 +351,7 @@ namespace EAV.Model
 
         public ModelChildInstance() { }
 
-        public override IModelSubject Subject
+        public override EAV.Model.IModelSubject Subject
         {
             get
             {
@@ -360,14 +360,14 @@ namespace EAV.Model
             }
             set
             {
-                if (ObjectState == ObjectState.Deleted)
+                if (ObjectState == EAV.Model.ObjectState.Deleted)
                     throw (new InvalidOperationException("Operation failed. Property 'Subject' may not be modified when object in 'Deleted' state."));
 
                 throw (new InvalidOperationException("The Subject property must be set on the root instance for this instance."));
             }
         }
 
-        public override IModelInstance ParentInstance
+        public override EAV.Model.IModelInstance ParentInstance
         {
             get
             {
@@ -382,7 +382,7 @@ namespace EAV.Model
             {
                 if (parentInstance != value)
                 {
-                    if (ObjectState == ObjectState.Deleted)
+                    if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'ParentInstance' may not be modified when object in 'Deleted' state."));
 
                     if (parentInstance != null && parentInstance.ChildInstances.Contains(this))
@@ -391,7 +391,7 @@ namespace EAV.Model
                     }
 
                     parentInstance = value;
-                    if (ObjectState != ObjectState.New) ObjectState = ObjectState.Modified;
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
                     {

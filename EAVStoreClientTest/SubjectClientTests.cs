@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -70,7 +69,7 @@ namespace EAVStoreClientTestHarness
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
             string subjectIdentifier = Guid.NewGuid().ToString();
 
-            EAV.Store.IStoreSubject subject = client.CreateSubject(new EAV.Store.StoreSubject()
+            EAV.Store.IStoreSubject subject = client.CreateSubject(new EAVStoreLibrary.StoreSubject()
             {
                 Identifier = subjectIdentifier,
             }, contextID, entityID);
@@ -98,14 +97,14 @@ namespace EAVStoreClientTestHarness
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
             string subjectIdentifier = Guid.NewGuid().ToString();
 
-            EAV.Store.IStoreSubject container = client.CreateSubject(new EAV.Store.StoreSubject()
+            EAV.Store.IStoreSubject container = client.CreateSubject(new EAVStoreLibrary.StoreSubject()
             {
                 Identifier = subjectIdentifier,
             }, contextID, entityID);
 
             Assert.IsNotNull(container, "Failed to create subject with identifier '{0}' for context ID {1} and entity ID {2}.", subjectIdentifier, contextID, entityID);
 
-            client.CreateSubject(new EAV.Store.StoreSubject()
+            client.CreateSubject(new EAVStoreLibrary.StoreSubject()
             {
                 Identifier = subjectIdentifier,
             }, contextID, entityID);
@@ -124,7 +123,7 @@ namespace EAVStoreClientTestHarness
 
             EAVStoreClient.SubjectStoreClient client = new EAVStoreClient.SubjectStoreClient();
 
-            var subject = (EAV.Store.StoreSubject)dbSubject;
+            var subject = (EAVStoreLibrary.StoreSubject)dbSubject;
 
             subject.Identifier = oldIdentifier.Flip();
 

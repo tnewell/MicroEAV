@@ -304,6 +304,14 @@
       <Project>{4445fabc-0e5c-4843-8cc8-cca798982d95}</Project>
       <Name>EAV.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EAVModelLibrary\EAVModelLibrary.csproj">
+      <Project>{f4dbd4b1-d24e-4ccb-b62c-be8031593557}</Project>
+      <Name>EAVModelLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EAVStoreLibrary\EAVStoreLibrary.csproj">
+      <Project>{9c8cdf6d-c642-4f80-afd6-15aecc630fb1}</Project>
+      <Name>EAVStoreLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EAVWebClient\EAVModelClient.csproj">
       <Project>{e14a47c9-def4-4a96-9922-481939f880f8}</Project>
       <Name>EAVModelClient</Name>

@@ -28,7 +28,7 @@ namespace EAVStoreClient
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return (ctx.Units.AsEnumerable().Select(it => (EAV.Store.StoreUnit)it).ToList());
+                return (ctx.Units.AsEnumerable().Select(it => (EAVStoreLibrary.StoreUnit)it).ToList());
             }
         }
 
@@ -36,7 +36,7 @@ namespace EAVStoreClient
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Store.StoreUnit)ctx.Units.SingleOrDefault(it => it.Unit_ID == unitID));
+                return ((EAVStoreLibrary.StoreUnit)ctx.Units.SingleOrDefault(it => it.Unit_ID == unitID));
             }
         }
 
@@ -55,7 +55,7 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Store.StoreUnit)dbUnit);
+                return ((EAVStoreLibrary.StoreUnit)dbUnit);
             }
         }
 

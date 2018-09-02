@@ -307,6 +307,10 @@
       <Project>{a02d3434-1ef6-4ef5-91ad-52708127a3ac}</Project>
       <Name>EAVStoreClient</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EAVStoreLibrary\EAVStoreLibrary.csproj">
+      <Project>{9c8cdf6d-c642-4f80-afd6-15aecc630fb1}</Project>
+      <Name>EAVStoreLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

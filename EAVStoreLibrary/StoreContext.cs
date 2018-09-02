@@ -15,13 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.If not, see<http://www.gnu.org/licenses/>.
 
-namespace EAV.Store
+namespace EAVStoreLibrary
 {
     public class StoreContext : EAV.Context, EAV.Store.IStoreContext
     {
-        public StoreContext()
-        {
-        }
+        public StoreContext() { }
 
         public StoreContext(EAV.Store.IStoreContext context)
         {

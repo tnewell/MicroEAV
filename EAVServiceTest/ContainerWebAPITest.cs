@@ -20,7 +20,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/containers/{0}", -1)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var container = response.Content.ReadAsAsync<EAV.Store.StoreContainer>().Result;
+                var container = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContainer>().Result;
 
                 Assert.IsNull(container, "Unexpected container object retrieved.");
             }
@@ -43,7 +43,7 @@ namespace EAVServiceTest
                 HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/containers/{0}", dbContainer.Container_ID)).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    var container = response.Content.ReadAsAsync<EAV.Store.StoreContainer>().Result;
+                    var container = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContainer>().Result;
 
                     Assert.IsNotNull(container, "Failed to retrieve container {0}.", dbContainer.Container_ID);
                     Assert.AreEqual(dbContainer.Container_ID, container.ContainerID, "Container ID values do not match.");
@@ -72,7 +72,7 @@ namespace EAVServiceTest
             bool oldIsRepeating = dbContainer.Is_Repeating;
             int oldSequence = dbContainer.Sequence;
 
-            var container = (EAV.Store.StoreContainer)dbContainer;
+            var container = (EAVStoreLibrary.StoreContainer)dbContainer;
 
             container.Name = oldName.Flip();
             container.DataName = oldDataName.Flip();
@@ -80,7 +80,7 @@ namespace EAVServiceTest
             container.IsRepeating = !oldIsRepeating;
             container.Sequence = -oldSequence;
 
-            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAV.Store.StoreContainer>("api/meta/containers", container).Result;
+            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAVStoreLibrary.StoreContainer>("api/meta/containers", container).Result;
             if (response.IsSuccessStatusCode)
             {
                 ResetDatabaseContext();
@@ -140,7 +140,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/containers/{0}/containers", dbParentContainer.Container_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var containers = response.Content.ReadAsAsync<IEnumerable<EAV.Store.StoreContainer>>().Result;
+                var containers = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreContainer>>().Result;
                 int nClientContainers = containers.Count();
 
                 Assert.AreEqual(nDbChildContainers, nClientContainers, "The number of containers retrieved by the client does not match the number in the database.");
@@ -160,10 +160,10 @@ namespace EAVServiceTest
             var dbParentContainer = SelectRandomItem(this.DbContext.Containers);
             string childContainerName = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Store.StoreContainer>(String.Format("api/meta/containers/{0}/containers", dbParentContainer.Container_ID), new EAV.Store.StoreContainer() { Name = childContainerName, DataName = childContainerName.ToUpper(), DisplayText = childContainerName + ":", IsRepeating = true }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreContainer>(String.Format("api/meta/containers/{0}/containers", dbParentContainer.Container_ID), new EAVStoreLibrary.StoreContainer() { Name = childContainerName, DataName = childContainerName.ToUpper(), DisplayText = childContainerName + ":", IsRepeating = true }).Result;
             if (response.IsSuccessStatusCode)
             {
-                var container = response.Content.ReadAsAsync<EAV.Store.StoreContainer>().Result;
+                var container = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContainer>().Result;
 
                 Assert.IsNotNull(container, "Failed to create container with name '{0}'", childContainerName);
 
@@ -195,7 +195,7 @@ namespace EAVServiceTest
             HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/containers/{0}/attributes", dbContainer.Container_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
-                var attributes = response.Content.ReadAsAsync<IEnumerable<EAV.Store.StoreAttribute>>().Result;
+                var attributes = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreAttribute>>().Result;
                 int nClientAttributes = attributes.Count();
 
                 Assert.AreEqual(nDbAttributes, nClientAttributes, "The number of attributes retrieved by the client does not match the number in the database.");
@@ -215,10 +215,10 @@ namespace EAVServiceTest
             var dbContainer = SelectRandomItem(this.DbContext.Containers);
             string attributeName = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAV.Store.StoreAttribute>(String.Format("api/meta/containers/{0}/attributes", dbContainer.Container_ID), new EAV.Store.StoreAttribute() { Name = attributeName, DataName = attributeName.ToUpper(), DisplayText = attributeName + ":", IsKey = true }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreAttribute>(String.Format("api/meta/containers/{0}/attributes", dbContainer.Container_ID), new EAVStoreLibrary.StoreAttribute() { Name = attributeName, DataName = attributeName.ToUpper(), DisplayText = attributeName + ":", IsKey = true }).Result;
             if (response.IsSuccessStatusCode)
             {
-                var attribute = response.Content.ReadAsAsync<EAV.Store.StoreAttribute>().Result;
+                var attribute = response.Content.ReadAsAsync<EAVStoreLibrary.StoreAttribute>().Result;
 
                 Assert.IsNotNull(attribute, "Failed to create attribute with name '{0}'", attributeName);
 

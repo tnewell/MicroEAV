@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using EAV.Model;
-using System.Linq;
 
 namespace EAVModelTest
 {
@@ -12,9 +11,9 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextCreate()
         {
-            ModelContext aContext = new ModelContext();
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             Assert.IsNull(aContext.ContextID, "Property 'ContextID' should be null on creation.");
 
@@ -34,34 +33,34 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextStateTransitionNewToUnmodifiedWithNullID()
         {
-            ModelContext aContext = new ModelContext();
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
         }
 
         [TestMethod]
         public void ContextStateTransitionNewToUnmodifiedWithValidID()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextStateTransitionNewToDeleted()
         {
-            ModelContext aContext = new ModelContext();
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkDeleted();
         }
@@ -69,34 +68,34 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextStateTransitionUnmodifiedToDeleted()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextStateTransitionDeletedToUnmodified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.MarkUnmodified();
         }
@@ -106,42 +105,42 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextSetIDWhenNew()
         {
-            ModelContext aContext = new ModelContext();
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             int id = rng.Next();
             aContext.ContextID = id;
 
             Assert.AreEqual(id, aContext.ContextID, "Property 'ContextID' not properly set.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state after setting property 'ContextID' should be 'New'.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state after setting property 'ContextID' should be 'New'.");
         }
 
         [TestMethod]
         public void ContextSetIDBeforeUnmodified()
         {
-            ModelContext aContext = new ModelContext();
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             int id = rng.Next();
             aContext.ContextID = id;
 
             Assert.AreEqual(id, aContext.ContextID, "Property 'ContextID' not properly set.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state after setting property 'ContextID' should be 'New'.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state after setting property 'ContextID' should be 'New'.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetIDAfterUnmodified()
         {
-            ModelContext aContext = new ModelContext();
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
         }
@@ -150,23 +149,23 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetIDWhenDeleted()
         {
-            ModelContext aContext = new ModelContext();
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             int id = rng.Next();
             aContext.ContextID = id;
 
             Assert.AreEqual(id, aContext.ContextID, "Property 'ContextID' not properly set.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state after setting property 'ContextID' should be 'New'.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state after setting property 'ContextID' should be 'New'.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             id = rng.Next();
             aContext.ContextID = id;
@@ -178,74 +177,74 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextSetNameWhenNew()
         {
-            ModelContext aContext = new ModelContext();
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             string value = Guid.NewGuid().ToString();
             aContext.Name = value;
 
             Assert.AreEqual(value, aContext.Name, "Property 'Name' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
         public void ContextSetNameWhenUnmodified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
             aContext.Name = value;
 
             Assert.AreEqual(value, aContext.Name, "Property 'Name' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
         public void ContextSetNameWhenModified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
             aContext.Name = value;
 
             Assert.AreEqual(value, aContext.Name, "Property 'Name' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
 
             value = Guid.NewGuid().ToString();
             aContext.Name = value;
 
             Assert.AreEqual(value, aContext.Name, "Property 'Name' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetNameWhenDeleted()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.Name = Guid.NewGuid().ToString();
         }
@@ -255,74 +254,74 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextSetDataNameWhenNew()
         {
-            ModelContext aContext = new ModelContext();
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             string value = Guid.NewGuid().ToString();
             aContext.DataName = value;
 
             Assert.AreEqual(value, aContext.DataName, "Property 'DataName' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
         public void ContextSetDataNameWhenUnmodified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
             aContext.DataName = value;
 
             Assert.AreEqual(value, aContext.DataName, "Property 'DataName' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
         public void ContextSetDataNameWhenModified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
             aContext.DataName = value;
 
             Assert.AreEqual(value, aContext.DataName, "Property 'DataName' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
 
             value = Guid.NewGuid().ToString();
             aContext.DataName = value;
 
             Assert.AreEqual(value, aContext.DataName, "Property 'DataName' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetDataNameWhenDeleted()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.DataName = Guid.NewGuid().ToString();
         }
@@ -332,74 +331,74 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextSetDisplayTextWhenNew()
         {
-            ModelContext aContext = new ModelContext();
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             string value = Guid.NewGuid().ToString();
             aContext.DisplayText = value;
 
             Assert.AreEqual(value, aContext.DisplayText, "Property 'DisplayText' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
         public void ContextSetDisplayTextWhenUnmodified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
             aContext.DisplayText = value;
 
             Assert.AreEqual(value, aContext.DisplayText, "Property 'DisplayText' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
         public void ContextSetDisplayTextWhenModified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
             aContext.DisplayText = value;
 
             Assert.AreEqual(value, aContext.DisplayText, "Property 'DisplayText' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
 
             value = Guid.NewGuid().ToString();
             aContext.DisplayText = value;
 
             Assert.AreEqual(value, aContext.DisplayText, "Property 'DisplayText' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetDisplayTextWhenDeleted()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.DisplayText = Guid.NewGuid().ToString();
         }
@@ -415,190 +414,190 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextAddToContainersWhenNew()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
         public void ContextAddToContainersWhenUnmodified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
         public void ContextAddToContainersWhenModified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new ModelRootContainer() { ContainerID = rng.Next() };
+            value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextAddToContainersWhenDeleted()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aContext.Containers.Add(new ModelRootContainer() { ContainerID = rng.Next() });
+            aContext.Containers.Add(new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() });
         }
 
         [TestMethod]
         public void ContextRemoveFromContainersWhenNew()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
-            value = new ModelRootContainer() { ContainerID = rng.Next() };
+            value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
 
             aContext.Containers.Remove(value);
 
             Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
         public void ContextRemoveFromContainersWhenUnmodified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
-            value = new ModelRootContainer() { ContainerID = rng.Next() };
+            value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.Containers.Remove(value);
 
             Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
         public void ContextRemoveFromContainersWhenModified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
-            value = new ModelRootContainer() { ContainerID = rng.Next() };
+            value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
 
             aContext.Containers.Remove(value);
 
             Assert.IsFalse(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextRemoveFromContainersWhenDeleted()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             aContext.MarkUnmodified();
             value.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
-            Assert.AreEqual(ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
-            Assert.AreEqual(ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.Containers.Remove(value);
         }
@@ -606,17 +605,17 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextClearContainersWhenNew()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
 
             aContext.Containers.Clear();
 
@@ -624,27 +623,27 @@ namespace EAVModelTest
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
             Assert.IsFalse(aContext.Containers.Any(), "Property 'Containers' was not updated properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
         public void ContextClearContainersWhenUnmodified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.Containers.Clear();
 
@@ -652,27 +651,27 @@ namespace EAVModelTest
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
             Assert.IsFalse(aContext.Containers.Any(), "Property 'Containers' was not updated properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
         public void ContextClearContainersWhenModified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             Assert.IsTrue(aContext.Containers.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
 
             aContext.Containers.Clear();
 
@@ -680,30 +679,30 @@ namespace EAVModelTest
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
             Assert.IsFalse(aContext.Containers.Any(), "Property 'Containers' was not updated properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextClearContainersWhenDeleted()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootContainer value = new ModelRootContainer() { ContainerID = rng.Next() };
+            EAVModelLibrary.ModelRootContainer value = new EAVModelLibrary.ModelRootContainer() { ContainerID = rng.Next() };
             aContext.Containers.Add(value);
 
             aContext.MarkUnmodified();
             value.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
-            Assert.AreEqual(ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
-            Assert.AreEqual(ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.Containers.Clear();
         }
@@ -713,156 +712,156 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextAddToSubjectsWhenNew()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
         public void ContextAddToSubjectsWhenUnmodified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
         public void ContextAddToSubjectsWhenModified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new ModelSubject() { SubjectID = rng.Next() };
+            value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextAddToSubjectsWhenDeleted()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aContext.Subjects.Add(new ModelSubject() { SubjectID = rng.Next() });
+            aContext.Subjects.Add(new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() });
         }
 
         [TestMethod]
         public void ContextRemoveFromSubjectsWhenNew()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
-            value = new ModelSubject() { SubjectID = rng.Next() };
+            value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
 
             aContext.Subjects.Remove(value);
 
             Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
         public void ContextRemoveFromSubjectsWhenUnmodified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
-            value = new ModelSubject() { SubjectID = rng.Next() };
+            value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.Subjects.Remove(value);
 
             Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
         public void ContextRemoveFromSubjectsWhenModified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
-            value = new ModelSubject() { SubjectID = rng.Next() };
+            value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
 
             aContext.MarkUnmodified();
 
@@ -871,30 +870,30 @@ namespace EAVModelTest
             Assert.IsFalse(aContext.Subjects.Contains(value), "Property 'Containers' was not updated properly.");
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextRemoveFromSubjectsWhenDeleted()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             aContext.MarkUnmodified();
             value.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
-            Assert.AreEqual(ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
-            Assert.AreEqual(ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.Subjects.Remove(value);
         }
@@ -902,17 +901,17 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextClearSubjectsWhenNew()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
 
             aContext.Subjects.Clear();
 
@@ -920,27 +919,27 @@ namespace EAVModelTest
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
             Assert.IsFalse(aContext.Subjects.Any(), "Property 'Subjects' was not updated properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
         public void ContextClearSubjectsWhenUnmodified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
 
             aContext.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.Subjects.Clear();
 
@@ -948,23 +947,23 @@ namespace EAVModelTest
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
             Assert.IsFalse(aContext.Subjects.Any(), "Property 'Subjects' was not updated properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
         public void ContextClearSubjectsWhenModified()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             Assert.IsTrue(aContext.Subjects.Contains(value), "Property 'Subjects' was not updated properly.");
             Assert.AreEqual(aContext, value.Context, "Property 'Context' was not set properly.");
             Assert.AreEqual(aContext.ContextID, value.ContextID, "Property 'ContextID' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should remain 'New' when property set.");
 
             aContext.MarkUnmodified();
 
@@ -974,30 +973,30 @@ namespace EAVModelTest
             Assert.IsNull(value.Context, "Property 'Context' was not set properly.");
             Assert.IsNull(value.ContextID, "Property 'ContextID' was not set properly.");
             Assert.IsFalse(aContext.Subjects.Any(), "Property 'Subjects' was not updated properly.");
-            Assert.AreEqual(ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(EAV.Model.ObjectState.Modified, aContext.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
         public void ContextClearSubjectsWhenDeleted()
         {
-            ModelContext aContext = new ModelContext() { ContextID = rng.Next() };
+            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext() { ContextID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelSubject value = new ModelSubject() { SubjectID = rng.Next() };
+            EAVModelLibrary.ModelSubject value = new EAVModelLibrary.ModelSubject() { SubjectID = rng.Next() };
             aContext.Subjects.Add(value);
 
             aContext.MarkUnmodified();
             value.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
-            Assert.AreEqual(ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aContext.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, value.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             aContext.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
-            Assert.AreEqual(ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aContext.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(EAV.Model.ObjectState.Deleted, value.ObjectState, "Object state failed to transition to 'Deleted'.");
 
             aContext.Subjects.Clear();
         }

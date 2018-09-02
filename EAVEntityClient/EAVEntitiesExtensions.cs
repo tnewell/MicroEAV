@@ -31,19 +31,19 @@ namespace EAVStoreClient
 
     public partial class Entity
     {
-        public static explicit operator EAV.Store.StoreEntity(Entity dbEntity)
+        public static explicit operator EAVStoreLibrary.StoreEntity(Entity dbEntity)
         {
             if (dbEntity == null)
                 return (null);
 
-            return (new EAV.Store.StoreEntity()
+            return (new EAVStoreLibrary.StoreEntity()
             {
                 EntityID = dbEntity.Entity_ID,
                 Descriptor = dbEntity.Descriptor,
             });
         }
 
-        public static explicit operator Entity(EAV.Store.StoreEntity entity)
+        public static explicit operator Entity(EAVStoreLibrary.StoreEntity entity)
         {
             if (entity == null)
                 return (null);
@@ -64,12 +64,12 @@ namespace EAVStoreClient
 
     public partial class Context
     {
-        public static explicit operator EAV.Store.StoreContext(Context dbContext)
+        public static explicit operator EAVStoreLibrary.StoreContext(Context dbContext)
         {
             if (dbContext == null)
                 return (null);
 
-            return (new EAV.Store.StoreContext()
+            return (new EAVStoreLibrary.StoreContext()
             {
                 ContextID = dbContext.Context_ID,
                 DataName = dbContext.Data_Name,
@@ -78,7 +78,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Context(EAV.Store.StoreContext context)
+        public static explicit operator Context(EAVStoreLibrary.StoreContext context)
         {
             if (context == null)
                 return (null);
@@ -103,12 +103,12 @@ namespace EAVStoreClient
 
     public partial class Container
     {
-        public static explicit operator EAV.Store.StoreContainer(Container dbContainer)
+        public static explicit operator EAVStoreLibrary.StoreContainer(Container dbContainer)
         {
             if (dbContainer == null)
                 return (null);
 
-            return (new EAV.Store.StoreContainer()
+            return (new EAVStoreLibrary.StoreContainer()
             {
                 ContainerID = dbContainer.Container_ID,
                 ContextID = dbContainer.Context_ID,
@@ -121,7 +121,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Container(EAV.Store.StoreContainer container)
+        public static explicit operator Container(EAVStoreLibrary.StoreContainer container)
         {
             if (container == null)
                 return(null);
@@ -169,12 +169,12 @@ namespace EAVStoreClient
 
     public partial class Attribute
     {
-        public static explicit operator EAV.Store.StoreAttribute(Attribute dbAttribute)
+        public static explicit operator EAVStoreLibrary.StoreAttribute(Attribute dbAttribute)
         {
             if (dbAttribute == null)
                 return (null);
 
-            return (new EAV.Store.StoreAttribute()
+            return (new EAVStoreLibrary.StoreAttribute()
             {
                 AttributeID = dbAttribute.Attribute_ID,
                 ContainerID = dbAttribute.Container_ID,
@@ -188,7 +188,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Attribute(EAV.Store.StoreAttribute attribute)
+        public static explicit operator Attribute(EAVStoreLibrary.StoreAttribute attribute)
         {
             if (attribute == null)
                 return (null);
@@ -221,12 +221,12 @@ namespace EAVStoreClient
 
     public partial class Unit
     {
-        public static explicit operator EAV.Store.StoreUnit(Unit dbUnit)
+        public static explicit operator EAVStoreLibrary.StoreUnit(Unit dbUnit)
         {
             if (dbUnit == null)
                 return (null);
 
-            return (new EAV.Store.StoreUnit()
+            return (new EAVStoreLibrary.StoreUnit()
             {
                 UnitID = dbUnit.Unit_ID,
                 SingularName = dbUnit.Singular_Name,
@@ -239,7 +239,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Unit(EAV.Store.StoreUnit aUnit)
+        public static explicit operator Unit(EAVStoreLibrary.StoreUnit aUnit)
         {
             if (aUnit == null)
                 return (null);
@@ -272,12 +272,12 @@ namespace EAVStoreClient
 
     public partial class Subject
     {
-        public static explicit operator EAV.Store.StoreSubject(Subject dbSubject)
+        public static explicit operator EAVStoreLibrary.StoreSubject(Subject dbSubject)
         {
             if (dbSubject == null)
                 return (null);
 
-            return (new EAV.Store.StoreSubject()
+            return (new EAVStoreLibrary.StoreSubject()
             {
                 ContextID = dbSubject.Context_ID,
                 Identifier = dbSubject.Identifier,
@@ -286,7 +286,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Subject(EAV.Store.StoreSubject aSubject)
+        public static explicit operator Subject(EAVStoreLibrary.StoreSubject aSubject)
         {
             if (aSubject == null)
                 return (null);
@@ -311,12 +311,12 @@ namespace EAVStoreClient
 
     public partial class Instance
     {
-        public static explicit operator EAV.Store.StoreInstance(Instance dbInstance)
+        public static explicit operator EAVStoreLibrary.StoreInstance(Instance dbInstance)
         {
             if (dbInstance == null)
                 return (null);
 
-            return (new EAV.Store.StoreInstance()
+            return (new EAVStoreLibrary.StoreInstance()
             {
                 ContainerID = dbInstance.Container_ID,
                 InstanceID = dbInstance.Instance_ID,
@@ -325,7 +325,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Instance(EAV.Store.StoreInstance anInstance)
+        public static explicit operator Instance(EAVStoreLibrary.StoreInstance anInstance)
         {
             if (anInstance == null)
                 return (null);
@@ -350,12 +350,12 @@ namespace EAVStoreClient
 
     public partial class Value
     {
-        public static explicit operator EAV.Store.StoreValue(Value dbValue)
+        public static explicit operator EAVStoreLibrary.StoreValue(Value dbValue)
         {
             if (dbValue == null)
                 return (null);
 
-            return (new EAV.Store.StoreValue()
+            return (new EAVStoreLibrary.StoreValue()
             {
                 AttributeID = dbValue.Attribute_ID,
                 InstanceID = dbValue.Instance_ID,
@@ -364,7 +364,7 @@ namespace EAVStoreClient
             });
         }
 
-        public static explicit operator Value(EAV.Store.StoreValue value)
+        public static explicit operator Value(EAVStoreLibrary.StoreValue value)
         {
             if (value == null)
                 return (null);

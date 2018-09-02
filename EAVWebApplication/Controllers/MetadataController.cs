@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Web.Mvc;
 
 using EAV.Model;
-
+using EAVModelLibrary;
 using EAVModelClient;
 
 using EAVWebApplication.Models.Metadata;

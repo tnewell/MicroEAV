@@ -30,11 +30,11 @@ namespace EAVStoreClient
             {
                 if (contextID != null)
                 {
-                    return (ctx.Containers.Where(it => it.Context_ID == contextID && it.Parent_Container_ID == null).AsEnumerable().Select(it => (EAV.Store.StoreContainer)it).ToList());
+                    return (ctx.Containers.Where(it => it.Context_ID == contextID && it.Parent_Container_ID == null).AsEnumerable().Select(it => (EAVStoreLibrary.StoreContainer)it).ToList());
                 }
                 else
                 {
-                    return (ctx.Containers.Where(it => it.Parent_Container_ID == null).AsEnumerable().Select(it => (EAV.Store.StoreContainer)it).ToList());
+                    return (ctx.Containers.Where(it => it.Parent_Container_ID == null).AsEnumerable().Select(it => (EAVStoreLibrary.StoreContainer)it).ToList());
                 }
             }
         }
@@ -45,11 +45,11 @@ namespace EAVStoreClient
             {
                 if (parentContainerID != null)
                 {
-                    return (ctx.Containers.Where(it => it.Parent_Container_ID == parentContainerID).AsEnumerable().Select(it => (EAV.Store.StoreContainer)it).ToList());
+                    return (ctx.Containers.Where(it => it.Parent_Container_ID == parentContainerID).AsEnumerable().Select(it => (EAVStoreLibrary.StoreContainer)it).ToList());
                 }
                 else
                 {
-                    return (ctx.Containers.Where(it => it.Parent_Container_ID != null).AsEnumerable().Select(it => (EAV.Store.StoreContainer)it).ToList());
+                    return (ctx.Containers.Where(it => it.Parent_Container_ID != null).AsEnumerable().Select(it => (EAVStoreLibrary.StoreContainer)it).ToList());
                 }
             }
         }
@@ -58,7 +58,7 @@ namespace EAVStoreClient
         {
             using (EAVStoreClient.MicroEAVContext ctx = new MicroEAVContext())
             {
-                return ((EAV.Store.StoreContainer)ctx.Containers.SingleOrDefault(it => it.Container_ID == containerID));
+                return ((EAVStoreLibrary.StoreContainer)ctx.Containers.SingleOrDefault(it => it.Container_ID == containerID));
             }
         }
 
@@ -77,7 +77,7 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Store.StoreContainer)dbContainer);
+                return ((EAVStoreLibrary.StoreContainer)dbContainer);
             }
         }
 
@@ -101,7 +101,7 @@ namespace EAVStoreClient
 
                 ctx.SaveChanges();
 
-                return ((EAV.Store.StoreContainer)dbContainer);
+                return ((EAVStoreLibrary.StoreContainer)dbContainer);
             }
         }
 
