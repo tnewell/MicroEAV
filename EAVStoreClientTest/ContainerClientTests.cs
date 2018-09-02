@@ -15,7 +15,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Container")]
         public void RetrieveAllContainers()
         {
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
 
             int nDbContainers = this.DbContext.Containers.Where(it => it.Parent_Container_ID == null).Count();
             int nClientContainers = client.RetrieveRootContainers(null).Count();
@@ -29,7 +29,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Container")]
         public void RetrieveNonExistentContainer()
         {
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
 
             var container = client.RetrieveContainer(-1);
 
@@ -46,7 +46,7 @@ namespace EAVStoreClientTestHarness
 
             if (dbContainer != null)
             {
-                EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+                EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
 
                 var container = client.RetrieveContainer(dbContainer.Container_ID);
 
@@ -65,7 +65,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Container")]
         public void CreateRootContainer()
         {
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
             string containerName = Guid.NewGuid().ToString();
 
@@ -101,7 +101,7 @@ namespace EAVStoreClientTestHarness
         [ExpectedException(typeof(System.Data.Entity.Infrastructure.DbUpdateException))]
         public void CreateDuplicateRootContainer_Name()
         {
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
             string containerName = Guid.NewGuid().ToString();
 
@@ -133,7 +133,7 @@ namespace EAVStoreClientTestHarness
         [ExpectedException(typeof(System.Data.Entity.Infrastructure.DbUpdateException))]
         public void CreateDuplicateRootContainer_Data_Name()
         {
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
             string containerName = Guid.NewGuid().ToString();
 
@@ -164,7 +164,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Container")]
         public void CreateChildContainer()
         {
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
             int parentContainerID = SelectRandomItem(this.DbContext.Containers.Where(it => it.Parent_Container_ID == null)).Container_ID;
             string containerName = Guid.NewGuid().ToString();
 
@@ -201,7 +201,7 @@ namespace EAVStoreClientTestHarness
         [ExpectedException(typeof(System.Data.Entity.Infrastructure.DbUpdateException))]
         public void CreateDuplicateChildContainer_Name()
         {
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
             int parentContainerID = SelectRandomItem(this.DbContext.Containers.Where(it => it.Parent_Container_ID == null)).Container_ID;
             string containerName = Guid.NewGuid().ToString();
 
@@ -235,7 +235,7 @@ namespace EAVStoreClientTestHarness
         [ExpectedException(typeof(System.Data.Entity.Infrastructure.DbUpdateException))]
         public void CreateDuplicateChildContainer_Data_Name()
         {
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
             int parentContainerID = SelectRandomItem(this.DbContext.Containers.Where(it => it.Parent_Container_ID == null)).Container_ID;
             string containerName = Guid.NewGuid().ToString();
 
@@ -275,7 +275,7 @@ namespace EAVStoreClientTestHarness
             bool oldIsRepeating = dbContainer.Is_Repeating;
             int oldSequence = dbContainer.Sequence;
 
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
 
             var container = (EAV.Store.StoreContainer)dbContainer;
 
@@ -309,7 +309,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Container")]
         public void DeleteRootContainer()
         {
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
             EAVStoreClient.Context dbContext = SelectRandomItem(this.DbContext.Contexts);
             EAVStoreClient.Container dbContainerIn = CreateContainer(dbContext.Context_ID, null, Guid.NewGuid().ToString(), rng.Next(), true);
 
@@ -326,7 +326,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Container")]
         public void DeleteChildContainer()
         {
-            EAVStoreClient.EAVContainerClient client = new EAVStoreClient.EAVContainerClient();
+            EAVStoreClient.ContainerStoreClient client = new EAVStoreClient.ContainerStoreClient();
             EAVStoreClient.Container dbParentContainer = SelectRandomItem<EAVStoreClient.Container>(this.DbContext.Containers);
             EAVStoreClient.Container dbContainerIn = CreateContainer(dbParentContainer.Context_ID, dbParentContainer.Container_ID, Guid.NewGuid().ToString(), rng.Next(), true);
 

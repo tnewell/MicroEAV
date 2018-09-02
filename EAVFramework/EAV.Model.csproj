@@ -7,8 +7,8 @@
     <ProjectGuid>{4445FABC-0E5C-4843-8CC8-CCA798982D95}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EAVFramework</RootNamespace>
-    <AssemblyName>EAVFramework</AssemblyName>
+    <RootNamespace>EAV.Model</RootNamespace>
+    <AssemblyName>EAV.Model</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clients\IModelClient.cs" />
     <Compile Include="ModelAttribute.cs" />
     <Compile Include="ModelContainer.cs" />
     <Compile Include="ModelContext.cs" />
@@ -51,7 +52,6 @@
     <Compile Include="ModelSubject.cs" />
     <Compile Include="ModelUnit.cs" />
     <Compile Include="ModelValue.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IModelAttribute.cs" />
     <Compile Include="IModelContainer.cs" />
     <Compile Include="IModelContext.cs" />
@@ -60,13 +60,13 @@
     <Compile Include="IModelSubject.cs" />
     <Compile Include="IModelUnit.cs" />
     <Compile Include="IModelValue.cs" />
-    <Compile Include="Model.cs" />
+    <Compile Include="EAV.Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EAV.Model\EAV.Model.csproj">
+    <ProjectReference Include="..\EAV.Model\EAV.csproj">
       <Project>{de98cd45-4020-44ed-a4a8-98d0be529c4f}</Project>
-      <Name>EAV.Model</Name>
+      <Name>EAV</Name>
     </ProjectReference>
     <ProjectReference Include="..\EAV.Store\EAV.Store.csproj">
       <Project>{a626330a-e997-4a38-8dce-e68a0cdec2c7}</Project>

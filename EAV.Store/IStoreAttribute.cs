@@ -25,7 +25,7 @@ namespace EAV.Store
         string Name { get; set; }
         string DataName { get; set; }
         string DisplayText { get; set; }
-        EAVDataType DataType { get; set; }
+        EAV.EAVDataType DataType { get; set; }
         int Sequence { get; set; }
         bool IsKey { get; set; }
         bool? VariableUnits { get; set; }

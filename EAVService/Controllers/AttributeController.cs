@@ -25,8 +25,8 @@ namespace EAVService.Controllers
     [RoutePrefix("api/meta/attributes")]
     public class AttributeController : BaseEAVController
     {
-        private EAV.Store.IStoreAttributeClient attributeClient = new EAVStoreClient.EAVAttributeClient();
-        private EAV.Store.IStoreUnitClient unitClient = new EAVStoreClient.EAVUnitClient();
+        private EAV.Store.Clients.IAttributeStoreClient attributeClient = new EAVStoreClient.AttributeStoreClient();
+        private EAV.Store.Clients.IUnitStoreClient unitClient = new EAVStoreClient.UnitStoreClient();
 
         [HttpGet]
         [Route("{id}", Name = "RetrieveAttribute")]
@@ -44,7 +44,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateAttribute")]
-        public IHttpActionResult UpdateAttribute(EAV.Store.StoreAttribute attribute)
+        public IHttpActionResult UpdateAttribute(EAV.Store.IStoreAttribute attribute)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("{id}/units", Name = "UpdateAttributeUnits")]
-        public IHttpActionResult UpdatettributeUnits(int id, IEnumerable<EAV.Store.StoreUnit> units)
+        public IHttpActionResult UpdatettributeUnits(int id, IEnumerable<EAV.Store.IStoreUnit> units)
         {
             try
             {

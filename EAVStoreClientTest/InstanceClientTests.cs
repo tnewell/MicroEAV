@@ -15,7 +15,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Instance")]
         public void RetrieveAllInstances()
         {
-            EAVStoreClient.EAVInstanceClient client = new EAVStoreClient.EAVInstanceClient();
+            EAVStoreClient.InstanceStoreClient client = new EAVStoreClient.InstanceStoreClient();
 
             int nDbInstances = this.DbContext.Instances.Where(it => it.Parent_Instance_ID == null).Count();
             int nClientInstances = client.RetrieveRootInstances(null, null).Count();
@@ -29,7 +29,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Instance")]
         public void RetrieveNonExistentInstance()
         {
-            EAVStoreClient.EAVInstanceClient client = new EAVStoreClient.EAVInstanceClient();
+            EAVStoreClient.InstanceStoreClient client = new EAVStoreClient.InstanceStoreClient();
 
             var instance = client.RetrieveInstance(-1);
 
@@ -42,7 +42,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Instance")]
         public void RetrieveRandomInstance()
         {
-            EAVStoreClient.EAVInstanceClient client = new EAVStoreClient.EAVInstanceClient();
+            EAVStoreClient.InstanceStoreClient client = new EAVStoreClient.InstanceStoreClient();
 
             var dbInstance = SelectRandomItem(this.DbContext.Instances);
 
@@ -65,7 +65,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Instance")]
         public void CreateRootInstance()
         {
-            EAVStoreClient.EAVInstanceClient client = new EAVStoreClient.EAVInstanceClient();
+            EAVStoreClient.InstanceStoreClient client = new EAVStoreClient.InstanceStoreClient();
             int subjectID = SelectRandomItem(this.DbContext.Subjects).Subject_ID;
             int containerID = SelectRandomItem(this.DbContext.Containers.Where(it => it.Parent_Container_ID == null)).Container_ID;
 
@@ -88,7 +88,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Instance")]
         public void CreateChildInstance()
         {
-            EAVStoreClient.EAVInstanceClient client = new EAVStoreClient.EAVInstanceClient();
+            EAVStoreClient.InstanceStoreClient client = new EAVStoreClient.InstanceStoreClient();
             var dbParentInstance = SelectRandomItem(this.DbContext.Instances);
 
             EAV.Store.IStoreInstance instance = client.CreateChildInstance(new EAV.Store.StoreInstance(), dbParentInstance.Container_ID, dbParentInstance.Instance_ID);
@@ -112,7 +112,7 @@ namespace EAVStoreClientTestHarness
         {
             var dbInstance = SelectRandomItem(this.DbContext.Instances);
 
-            EAVStoreClient.EAVInstanceClient client = new EAVStoreClient.EAVInstanceClient();
+            EAVStoreClient.InstanceStoreClient client = new EAVStoreClient.InstanceStoreClient();
 
             var instance = (EAV.Store.StoreInstance)dbInstance;
 
@@ -131,7 +131,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Instance")]
         public void DeleteRootInstance()
         {
-            EAVStoreClient.EAVInstanceClient client = new EAVStoreClient.EAVInstanceClient();
+            EAVStoreClient.InstanceStoreClient client = new EAVStoreClient.InstanceStoreClient();
             EAVStoreClient.Subject dbSubject = SelectRandomItem(this.DbContext.Subjects);
             EAVStoreClient.Container dbContainer = SelectRandomItem(this.DbContext.Containers);
             EAVStoreClient.Instance dbInstanceIn = CreateInstance(dbContainer.Container_ID, dbSubject.Subject_ID, null);
@@ -149,7 +149,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Instance")]
         public void DeleteChildInstance()
         {
-            EAVStoreClient.EAVInstanceClient client = new EAVStoreClient.EAVInstanceClient();
+            EAVStoreClient.InstanceStoreClient client = new EAVStoreClient.InstanceStoreClient();
             EAVStoreClient.Instance dbParentInstance = SelectRandomItem(this.DbContext.Instances);
             EAVStoreClient.Container dbContainer = SelectRandomItem(this.DbContext.Containers);
             EAVStoreClient.Instance dbInstanceIn = CreateInstance(dbContainer.Container_ID, dbParentInstance.Subject_ID, dbParentInstance.Instance_ID);

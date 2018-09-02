@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EAVServiceTest
 {
-    public partial class EAVServiceTestHarness
+    public partial class EAVWebServiceTestHarness
     {
         // TODO: RetrieveValue
 

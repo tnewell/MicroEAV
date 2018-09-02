@@ -25,8 +25,8 @@ namespace EAVService.Controllers
     [RoutePrefix("api/data/subjects")]
     public class SubjectController : BaseEAVController
     {
-        private EAV.Store.IStoreSubjectClient subjectClient = new EAVStoreClient.EAVSubjectClient();
-        private EAV.Store.IStoreInstanceClient instanceClient = new EAVStoreClient.EAVInstanceClient();
+        private EAV.Store.Clients.ISubjectStoreClient subjectClient = new EAVStoreClient.SubjectStoreClient();
+        private EAV.Store.Clients.IInstanceStoreClient instanceClient = new EAVStoreClient.InstanceStoreClient();
 
         public int? ContainerID
         {
@@ -52,7 +52,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateSubject")]
-        public IHttpActionResult UpdateSubject(EAV.Store.StoreSubject subject)
+        public IHttpActionResult UpdateSubject(EAV.Store.IStoreSubject subject)
         {
             try
             {

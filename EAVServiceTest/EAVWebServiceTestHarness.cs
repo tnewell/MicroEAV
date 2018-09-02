@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace EAVServiceTest
 {
     [TestClass]
-    public partial class EAVServiceTestHarness
+    public partial class EAVWebServiceTestHarness
     {
         private static TestContext myTestContext;
         private static Random rng = new Random((int) DateTime.Now.Ticks);

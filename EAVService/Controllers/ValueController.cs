@@ -24,7 +24,7 @@ namespace EAVService.Controllers
     [RoutePrefix("api/data/values")]
     public class ValueController : BaseEAVController
     {
-        private EAV.Store.IStoreValueClient valueClient = new EAVStoreClient.EAVValueClient();
+        private EAV.Store.Clients.IValueStoreClient valueClient = new EAVStoreClient.ValueStoreClient();
 
         [HttpGet]
         [Route("~/api/data/instances/{instance}/values/{attribute}", Name = "RetrieveValue")]
@@ -42,7 +42,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateValue")]
-        public IHttpActionResult UpdateValue(EAV.Store.StoreValue value)
+        public IHttpActionResult UpdateValue(EAV.Store.IStoreValue value)
         {
             try
             {

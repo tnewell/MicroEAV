@@ -15,7 +15,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Subject")]
         public void RetrieveAllSubjects()
         {
-            EAVStoreClient.EAVSubjectClient client = new EAVStoreClient.EAVSubjectClient();
+            EAVStoreClient.SubjectStoreClient client = new EAVStoreClient.SubjectStoreClient();
 
             int nDbSubjects = this.DbContext.Subjects.Count();
             int nClientSubjects = client.RetrieveSubjects(null, null).Count();
@@ -29,7 +29,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Subject")]
         public void RetrieveNonExistentSubject()
         {
-            EAVStoreClient.EAVSubjectClient client = new EAVStoreClient.EAVSubjectClient();
+            EAVStoreClient.SubjectStoreClient client = new EAVStoreClient.SubjectStoreClient();
 
             var subject = client.RetrieveSubject(-1);
 
@@ -46,7 +46,7 @@ namespace EAVStoreClientTestHarness
 
             if (dbSubject != null)
             {
-                EAVStoreClient.EAVSubjectClient client = new EAVStoreClient.EAVSubjectClient();
+                EAVStoreClient.SubjectStoreClient client = new EAVStoreClient.SubjectStoreClient();
 
                 var subject = client.RetrieveSubject(dbSubject.Subject_ID);
 
@@ -65,7 +65,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Subject")]
         public void CreateSubject()
         {
-            EAVStoreClient.EAVSubjectClient client = new EAVStoreClient.EAVSubjectClient();
+            EAVStoreClient.SubjectStoreClient client = new EAVStoreClient.SubjectStoreClient();
             int entityID = SelectRandomItem(this.DbContext.Entities).Entity_ID;
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
             string subjectIdentifier = Guid.NewGuid().ToString();
@@ -93,7 +93,7 @@ namespace EAVStoreClientTestHarness
         [ExpectedException(typeof(System.Data.Entity.Infrastructure.DbUpdateException))]
         public void CreateDuplicateSubject_Identifier()
         {
-            EAVStoreClient.EAVSubjectClient client = new EAVStoreClient.EAVSubjectClient();
+            EAVStoreClient.SubjectStoreClient client = new EAVStoreClient.SubjectStoreClient();
             int entityID = SelectRandomItem(this.DbContext.Entities).Entity_ID;
             int contextID = SelectRandomItem(this.DbContext.Contexts).Context_ID;
             string subjectIdentifier = Guid.NewGuid().ToString();
@@ -122,7 +122,7 @@ namespace EAVStoreClientTestHarness
             var dbSubject = SelectRandomItem(this.DbContext.Subjects);
             string oldIdentifier = dbSubject.Identifier;
 
-            EAVStoreClient.EAVSubjectClient client = new EAVStoreClient.EAVSubjectClient();
+            EAVStoreClient.SubjectStoreClient client = new EAVStoreClient.SubjectStoreClient();
 
             var subject = (EAV.Store.StoreSubject)dbSubject;
 
@@ -144,7 +144,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Subject")]
         public void DeleteSubject()
         {
-            EAVStoreClient.EAVSubjectClient client = new EAVStoreClient.EAVSubjectClient();
+            EAVStoreClient.SubjectStoreClient client = new EAVStoreClient.SubjectStoreClient();
 
             EAVStoreClient.Entity dbEntity = SelectRandomItem(this.DbContext.Entities);
             EAVStoreClient.Context dbContext = SelectRandomItem(this.DbContext.Contexts);

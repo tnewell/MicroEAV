@@ -15,7 +15,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Context")]
         public void RetrieveAllContexts()
         {
-            EAVStoreClient.EAVContextClient client = new EAVStoreClient.EAVContextClient();
+            EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
 
             int nDbContexts = this.DbContext.Contexts.Count();
             int nClientContexts = client.RetrieveContexts().Count();
@@ -29,7 +29,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Context")]
         public void RetrieveNonExistentContext()
         {
-            EAVStoreClient.EAVContextClient client = new EAVStoreClient.EAVContextClient();
+            EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
 
             var context = client.RetrieveContext(-1);
 
@@ -42,7 +42,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Context")]
         public void RetrieveNonExistentContextByName()
         {
-            EAVStoreClient.EAVContextClient client = new EAVStoreClient.EAVContextClient();
+            EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
 
             var context = client.RetrieveContext("No Such Context");
 
@@ -59,7 +59,7 @@ namespace EAVStoreClientTestHarness
 
             if (dbContext != null)
             {
-                EAVStoreClient.EAVContextClient client = new EAVStoreClient.EAVContextClient();
+                EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
 
                 var context = client.RetrieveContext(dbContext.Context_ID);
 
@@ -82,7 +82,7 @@ namespace EAVStoreClientTestHarness
 
             if (dbContext != null)
             {
-                EAVStoreClient.EAVContextClient client = new EAVStoreClient.EAVContextClient();
+                EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
 
                 var context = client.RetrieveContext(dbContext.Name);
 
@@ -101,7 +101,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Context")]
         public void CreateContext()
         {
-            EAVStoreClient.EAVContextClient client = new EAVStoreClient.EAVContextClient();
+            EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
             string contextName = Guid.NewGuid().ToString();
 
             EAV.Store.IStoreContext context = client.CreateContext(new EAV.Store.StoreContext()
@@ -131,7 +131,7 @@ namespace EAVStoreClientTestHarness
         [ExpectedException(typeof(System.Data.Entity.Infrastructure.DbUpdateException))]
         public void CreateDuplicateContext_Name()
         {
-            EAVStoreClient.EAVContextClient client = new EAVStoreClient.EAVContextClient();
+            EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
             string contextName = Guid.NewGuid().ToString();
 
             EAV.Store.IStoreContext context = client.CreateContext(new EAV.Store.StoreContext()
@@ -160,7 +160,7 @@ namespace EAVStoreClientTestHarness
         [ExpectedException(typeof(System.Data.Entity.Infrastructure.DbUpdateException))]
         public void CreateDuplicateContext_Data_Name()
         {
-            EAVStoreClient.EAVContextClient client = new EAVStoreClient.EAVContextClient();
+            EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
             string contextName = Guid.NewGuid().ToString();
 
             EAV.Store.IStoreContext context = client.CreateContext(new EAV.Store.StoreContext()
@@ -193,7 +193,7 @@ namespace EAVStoreClientTestHarness
             string oldDataName = dbContext.Data_Name;
             string oldDisplayText = dbContext.Display_Text;
 
-            EAVStoreClient.EAVContextClient client = new EAVStoreClient.EAVContextClient();
+            EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
 
             var context = (EAV.Store.StoreContext)dbContext;
 
@@ -221,7 +221,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Context")]
         public void DeleteContext()
         {
-            EAVStoreClient.EAVContextClient client = new EAVStoreClient.EAVContextClient();
+            EAVStoreClient.ContextStoreClient client = new EAVStoreClient.ContextStoreClient();
             EAVStoreClient.Context dbContextIn = CreateContext(Guid.NewGuid().ToString());
 
             client.DeleteContext(dbContextIn.Context_ID);

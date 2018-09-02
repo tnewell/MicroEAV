@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-using EAVFramework.Model;
+using EAV.Model;
 
 namespace EAVWebApplication.Models.Metadata
 {

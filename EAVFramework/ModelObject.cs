@@ -18,7 +18,7 @@
 using System.Runtime.Serialization;
 
 
-namespace EAVFramework.Model
+namespace EAV.Model
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(ModelUnit))]

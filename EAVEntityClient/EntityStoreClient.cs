@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVEntityClient : EAV.Store.IStoreEntityClient
+    public partial class EntityStoreClient : EAV.Store.Clients.IEntityStoreClient
     {
         public IEnumerable<EAV.Store.IStoreEntity> RetrieveEntities()
         {

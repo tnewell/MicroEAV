@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVUnitClient : EAV.Store.IStoreUnitClient
+    public partial class UnitStoreClient : EAV.Store.Clients.IUnitStoreClient
     {
         public IEnumerable<EAV.Store.IStoreUnit> RetrieveUnits()
         {

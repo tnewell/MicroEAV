@@ -17,11 +17,11 @@
 
 namespace EAV.Store
 {
-    public class StoreUnit : EAV.Unit, IStoreUnit
+    public class StoreUnit : EAV.Unit, EAV.Store.IStoreUnit
     {
         public StoreUnit() { }
 
-        public StoreUnit(IStoreUnit unit)
+        public StoreUnit(EAV.Store.IStoreUnit unit)
         {
             this.UnitID = unit.UnitID;
             this.SingularName = unit.SingularName;

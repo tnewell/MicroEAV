@@ -21,10 +21,10 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 
-namespace EAVFramework.Model
+namespace EAV.Model
 {
     [DataContract(IsReference = true)]
-    public class ModelEntity : ModelObject, EAVFramework.Model.IModelEntity
+    public class ModelEntity : ModelObject, EAV.Model.IModelEntity
     {
         public ModelEntity()
         {

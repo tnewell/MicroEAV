@@ -17,13 +17,13 @@
 
 namespace EAV.Store
 {
-    public class StoreSubject : EAV.Subject, IStoreSubject
+    public class StoreSubject : EAV.Subject, EAV.Store.IStoreSubject
     {
         public StoreSubject()
         {
         }
 
-        public StoreSubject(IStoreSubject subject)
+        public StoreSubject(EAV.Store.IStoreSubject subject)
         {
             this.SubjectID = subject.SubjectID;
             this.EntityID = subject.EntityID;

@@ -17,22 +17,18 @@
 
 using System.Collections.Generic;
 
-namespace EAV.Store
+namespace EAV.Store.Clients
 {
-    public interface IStoreInstanceClient
+    public interface IUnitStoreClient
     {
-        IEnumerable<EAV.Store.IStoreInstance> RetrieveRootInstances(int? containerID, int? subjectID);
+        IEnumerable<EAV.Store.IStoreUnit> RetrieveUnits();
 
-        IEnumerable<EAV.Store.IStoreInstance> RetrieveChildInstances(int? containerID, int? parentInstanceID);
+        EAV.Store.IStoreUnit RetrieveUnit(int UnitID);
 
-        EAV.Store.IStoreInstance RetrieveInstance(int instanceID);
+        EAV.Store.IStoreUnit CreateUnit(EAV.Store.IStoreUnit Unit);
 
-        EAV.Store.IStoreInstance CreateRootInstance(EAV.Store.IStoreInstance instance, int containerID, int subjectID);
+        void UpdateUnit(EAV.Store.IStoreUnit Unit);
 
-        EAV.Store.IStoreInstance CreateChildInstance(EAV.Store.IStoreInstance instance, int containerID, int parentInstanceID);
-
-        void UpdateInstance(EAV.Store.IStoreInstance instance);
-
-        void DeleteInstance(int instanceID);
+        void DeleteUnit(int UnitID);
     }
 }

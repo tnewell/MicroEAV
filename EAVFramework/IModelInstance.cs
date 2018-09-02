@@ -18,7 +18,7 @@
 using System.Collections.Generic;
 
 
-namespace EAVFramework.Model
+namespace EAV.Model
 {
     public interface IModelInstance : EAV.Store.IStoreInstance
     {
@@ -41,11 +41,11 @@ namespace EAVFramework.Model
         ICollection<IModelValue> Values { get; }
     }
 
-    public interface IModelRootInstance : EAVFramework.Model.IModelInstance
+    public interface IModelRootInstance : EAV.Model.IModelInstance
     {
     }
 
-    public interface IModelChildInstance : EAVFramework.Model.IModelInstance
+    public interface IModelChildInstance : EAV.Model.IModelInstance
     {
     }
 }

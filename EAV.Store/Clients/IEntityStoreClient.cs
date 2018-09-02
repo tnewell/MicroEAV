@@ -17,18 +17,18 @@
 
 using System.Collections.Generic;
 
-namespace EAV.Store
+namespace EAV.Store.Clients
 {
-    public interface IStoreSubjectClient
+    public interface IEntityStoreClient
     {
-        IEnumerable<EAV.Store.IStoreSubject> RetrieveSubjects(int? contextID, int? entityID);
+        IEnumerable<EAV.Store.IStoreEntity> RetrieveEntities();
 
-        EAV.Store.IStoreSubject RetrieveSubject(int subjectID);
+        EAV.Store.IStoreEntity RetrieveEntity(int entityID);
 
-        EAV.Store.IStoreSubject CreateSubject(EAV.Store.IStoreSubject subject, int contextID, int entityID);
+        EAV.Store.IStoreEntity CreateEntity(EAV.Store.IStoreEntity entity);
 
-        void UpdateSubject(EAV.Store.IStoreSubject subject);
+        void UpdateEntity(EAV.Store.IStoreEntity entity);
 
-        void DeleteSubject(int subjectID);
+        void DeleteEntity(int entityID);
     }
 }

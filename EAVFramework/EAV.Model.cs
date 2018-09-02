@@ -15,20 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.If not, see<http://www.gnu.org/licenses/>.
 
-using System.Collections.Generic;
+using System;
 
-namespace EAV.Store
+
+namespace EAV.Model
 {
-    public interface IStoreValueClient
-    {
-        IEnumerable<EAV.Store.IStoreValue> RetrieveValues(int? attributeID, int? instanceID);
-
-        EAV.Store.IStoreValue RetrieveValue(int attributeID, int instanceID);
-
-        EAV.Store.IStoreValue CreateValue(EAV.Store.IStoreValue value, int instanceID, int attributeID);
-
-        void UpdateValue(EAV.Store.IStoreValue value);
-
-        void DeleteValue(int attributeID, int instanceID);
-    }
+    public enum ObjectState { New, Unmodified, Modified, Deleted }
 }

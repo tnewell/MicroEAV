@@ -15,11 +15,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.If not, see<http://www.gnu.org/licenses/>.
 
-using System;
-using System.Runtime.Serialization;
+using System.Collections.Generic;
 
-
-namespace EAVFramework.Model
+namespace EAV.Store.Clients
 {
-    public enum ObjectState { New, Unmodified, Modified, Deleted }
+    public interface IContextStoreClient
+    {
+        IEnumerable<EAV.Store.IStoreContext> RetrieveContexts();
+
+        EAV.Store.IStoreContext RetrieveContext(int contextID);
+
+        EAV.Store.IStoreContext RetrieveContext(string name);
+
+        EAV.Store.IStoreContext CreateContext(EAV.Store.IStoreContext context);
+
+        void UpdateContext(EAV.Store.IStoreContext context);
+
+        void DeleteContext(int contextID);
+    }
 }

@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVInstanceClient : EAV.Store.IStoreInstanceClient
+    public partial class InstanceStoreClient : EAV.Store.Clients.IInstanceStoreClient
     {
         public IEnumerable<EAV.Store.IStoreInstance> RetrieveRootInstances(int? containerID, int? subjectID)
         {

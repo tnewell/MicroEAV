@@ -18,7 +18,7 @@
 using System.Collections.Generic;
 
 
-namespace EAVFramework.Model
+namespace EAV.Model
 {
     public interface IModelAttribute : EAV.Store.IStoreAttribute
     {

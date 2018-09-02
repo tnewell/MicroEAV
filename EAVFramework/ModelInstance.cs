@@ -21,12 +21,12 @@ using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 
 
-namespace EAVFramework.Model
+namespace EAV.Model
 {
     [DataContract(IsReference = true)]
     [KnownType(typeof(ModelRootInstance))]
     [KnownType(typeof(ModelChildInstance))]
-    public abstract class ModelInstance : ModelObject, EAVFramework.Model.IModelInstance
+    public abstract class ModelInstance : ModelObject, EAV.Model.IModelInstance
     {
         public ModelInstance()
         {
@@ -248,7 +248,7 @@ namespace EAVFramework.Model
         }
     }
 
-    public class ModelRootInstance : ModelInstance, EAVFramework.Model.IModelRootInstance
+    public class ModelRootInstance : ModelInstance, EAV.Model.IModelRootInstance
     {
         public static IModelRootInstance Create(IModelRootContainer container, IModelSubject subject)
         {
@@ -326,7 +326,7 @@ namespace EAVFramework.Model
         }
     }
 
-    public class ModelChildInstance : ModelInstance, EAVFramework.Model.IModelChildInstance
+    public class ModelChildInstance : ModelInstance, EAV.Model.IModelChildInstance
     {
         public static IModelChildInstance Create(IModelChildContainer container, IModelSubject subject, IModelInstance parentInstance)
         {

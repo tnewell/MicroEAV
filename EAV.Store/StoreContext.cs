@@ -17,13 +17,13 @@
 
 namespace EAV.Store
 {
-    public class StoreContext : EAV.Context, IStoreContext
+    public class StoreContext : EAV.Context, EAV.Store.IStoreContext
     {
         public StoreContext()
         {
         }
 
-        public StoreContext(IStoreContext context)
+        public StoreContext(EAV.Store.IStoreContext context)
         {
             this.ContextID = context.ContextID;
             this.Name = context.Name;

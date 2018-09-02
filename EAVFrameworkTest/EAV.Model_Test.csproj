@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\MSTest.TestAdapter.1.3.0\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.1.3.0\build\net45\MSTest.TestAdapter.props')" />
+  <Import Project="..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D22882F8-405C-42B6-9E70-4A822F300BA6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EAVFrameworkTest</RootNamespace>
-    <AssemblyName>EAVFrameworkTest</AssemblyName>
+    <RootNamespace>EAVModelTest</RootNamespace>
+    <AssemblyName>EAVModelTest</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -39,39 +39,39 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MSTest.TestFramework.1.3.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
+      <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\MSTest.TestFramework.1.3.0\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+      <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EAVChildContainerTests.cs" />
-    <Compile Include="EAVEntityTests.cs" />
-    <Compile Include="EAVChildInstanceTests.cs" />
-    <Compile Include="EAVValueTests.cs" />
-    <Compile Include="EAVRootInstanceTests.cs" />
-    <Compile Include="EAVSubjectTests.cs" />
-    <Compile Include="EAVRootContainerTests.cs" />
-    <Compile Include="EAVAttributeTests.cs" />
-    <Compile Include="EAVFrameworkTestHarness.cs" />
+    <Compile Include="ModelChildContainerTests.cs" />
+    <Compile Include="ModelEntityTests.cs" />
+    <Compile Include="ModelChildInstanceTests.cs" />
+    <Compile Include="ModelValueTests.cs" />
+    <Compile Include="ModelRootInstanceTests.cs" />
+    <Compile Include="ModelSubjectTests.cs" />
+    <Compile Include="ModelRootContainerTests.cs" />
+    <Compile Include="ModelAttributeTests.cs" />
+    <Compile Include="EAVModelTestHarness.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EAVContextTests.cs" />
+    <Compile Include="ModelContextTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EAV.Model\EAV.Model.csproj">
+    <ProjectReference Include="..\EAV.Model\EAV.csproj">
       <Project>{de98cd45-4020-44ed-a4a8-98d0be529c4f}</Project>
-      <Name>EAV.Model</Name>
+      <Name>EAV</Name>
     </ProjectReference>
     <ProjectReference Include="..\EAV.Store\EAV.Store.csproj">
       <Project>{a626330a-e997-4a38-8dce-e68a0cdec2c7}</Project>
       <Name>EAV.Store</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EAVFramework\EAVFramework.csproj">
+    <ProjectReference Include="..\EAVFramework\EAV.Model.csproj">
       <Project>{4445fabc-0e5c-4843-8cc8-cca798982d95}</Project>
-      <Name>EAVFramework</Name>
+      <Name>EAV.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -83,8 +83,8 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.3.0\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.3.0\build\net45\MSTest.TestAdapter.props'))" />
-    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.3.0\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.3.0\build\net45\MSTest.TestAdapter.targets'))" />
+    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.props'))" />
+    <Error Condition="!Exists('..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.targets'))" />
   </Target>
-  <Import Project="..\packages\MSTest.TestAdapter.1.3.0\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.3.0\build\net45\MSTest.TestAdapter.targets')" />
+  <Import Project="..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\packages\MSTest.TestAdapter.1.3.2\build\net45\MSTest.TestAdapter.targets')" />
 </Project>

@@ -17,13 +17,13 @@
 
 namespace EAV.Store
 {
-    public class StoreContainer : EAV.Container, IStoreContainer
+    public class StoreContainer : EAV.Container, EAV.Store.IStoreContainer
     {
         public StoreContainer()
         {
         }
 
-        public StoreContainer(IStoreContainer container)
+        public StoreContainer(EAV.Store.IStoreContainer container)
         {
             this.ContainerID = container.ContainerID;
             this.ParentContainerID = container.ParentContainerID;

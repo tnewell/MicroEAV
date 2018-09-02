@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVContextClient : EAV.Store.IStoreContextClient
+    public partial class ContextStoreClient : EAV.Store.Clients.IContextStoreClient
     {
         public IEnumerable<EAV.Store.IStoreContext> RetrieveContexts()
         {

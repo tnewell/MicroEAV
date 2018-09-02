@@ -25,8 +25,8 @@ namespace EAVService.Controllers
     [RoutePrefix("api/data/instances")]
     public class InstanceController : BaseEAVController
     {
-        private EAV.Store.IStoreInstanceClient instanceClient = new EAVStoreClient.EAVInstanceClient();
-        private EAV.Store.IStoreValueClient valueClient = new EAVStoreClient.EAVValueClient();
+        private EAV.Store.Clients.IInstanceStoreClient instanceClient = new EAVStoreClient.InstanceStoreClient();
+        private EAV.Store.Clients.IValueStoreClient valueClient = new EAVStoreClient.ValueStoreClient();
 
         public int? ContainerID
         {
@@ -61,7 +61,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateInstance")]
-        public IHttpActionResult UpdateInstance(EAV.Store.StoreInstance instance)
+        public IHttpActionResult UpdateInstance(EAV.Store.IStoreInstance instance)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/instances", Name = "CreateChildInstance")]
-        public IHttpActionResult CreateChildInstance(int id, EAV.Store.StoreInstance instance)
+        public IHttpActionResult CreateChildInstance(int id, EAV.Store.IStoreInstance instance)
         {
             try
             {
@@ -135,7 +135,7 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/values", Name = "CreateValue")]
-        public IHttpActionResult CreateValue(int id, EAV.Store.StoreValue value)
+        public IHttpActionResult CreateValue(int id, EAV.Store.IStoreValue value)
         {
             try
             {

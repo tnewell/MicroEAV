@@ -17,13 +17,13 @@
 
 namespace EAV.Store
 {
-    public class StoreInstance : EAV.Instance, IStoreInstance
+    public class StoreInstance : EAV.Instance, EAV.Store.IStoreInstance
     {
         public StoreInstance()
         {
         }
 
-        public StoreInstance(IStoreInstance instance)
+        public StoreInstance(EAV.Store.IStoreInstance instance)
         {
             this.InstanceID = instance.InstanceID;
             this.ParentInstanceID = instance.ParentInstanceID;

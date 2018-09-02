@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVValueClient : EAV.Store.IStoreValueClient
+    public partial class ValueStoreClient : EAV.Store.Clients.IValueStoreClient
     {
         public IEnumerable<EAV.Store.IStoreValue> RetrieveValues(int? attributeID, int? instanceID)
         {

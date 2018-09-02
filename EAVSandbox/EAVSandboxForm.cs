@@ -4,14 +4,14 @@ using System.Linq;
 using System.Net.Http;
 using System.Windows.Forms;
 
-using EAVFramework.Model;
+using EAV.Model;
 
 
 namespace EAVSandbox
 {
     public partial class EAVSandboxForm : Form
     {
-        private EAVServiceClient.EAVDataClient eavClient = new EAVServiceClient.EAVDataClient("http://localhost:10240");
+        private EAVModelClient.ModelClient eavClient = new EAVModelClient.ModelClient("http://localhost:10240");
 
         public EAVSandboxForm()
         {

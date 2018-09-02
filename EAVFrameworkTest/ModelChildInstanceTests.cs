@@ -3,12 +3,12 @@ using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using EAVFramework.Model;
+using EAV.Model;
 
 
-namespace EAVFrameworkTest
+namespace EAVModelTest
 {
-    public partial class EAVFrameworkTestHarness
+    public partial class EAVModelTestHarness
     {
         [TestMethod]
         public void ChildInstanceCreate()

@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVContainerClient : EAV.Store.IStoreContainerClient
+    public partial class ContainerStoreClient : EAV.Store.Clients.IContainerStoreClient
     {
         public IEnumerable<EAV.Store.IStoreContainer> RetrieveRootContainers(int? contextID)
         {

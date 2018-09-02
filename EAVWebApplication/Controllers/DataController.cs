@@ -6,9 +6,10 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using EAVFramework.Model;
 
-using EAVServiceClient;
+using EAV.Model;
+
+using EAVModelClient;
 
 using EAVWebApplication.Models.Data;
 
@@ -19,7 +20,7 @@ namespace EAVWebApplication.Controllers
     {
         private static readonly string TempDataModelKey = "DataModel";
 
-        private EAVDataClient eavClient = new EAVDataClient(ConfigurationManager.AppSettings["EAVServiceUrl"]);
+        private ModelClient eavClient = new ModelClient(ConfigurationManager.AppSettings["EAVServiceUrl"]);
 
         public ICollection<IModelContext> ContextMasterList
         {

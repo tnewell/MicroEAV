@@ -3,10 +3,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-namespace EAVFrameworkTest
+namespace EAVModelTest
 {
     [TestClass]
-    public partial class EAVFrameworkTestHarness
+    public partial class EAVModelTestHarness
     {
         private static TestContext myTestContext;
         private static Random rng = new Random((int)DateTime.Now.Ticks);

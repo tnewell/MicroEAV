@@ -17,22 +17,18 @@
 
 using System.Collections.Generic;
 
-namespace EAV.Store
+namespace EAV.Store.Clients
 {
-    public interface IStoreContainerClient
+    public interface IValueStoreClient
     {
-        IEnumerable<EAV.Store.IStoreContainer> RetrieveRootContainers(int? contextID);
+        IEnumerable<EAV.Store.IStoreValue> RetrieveValues(int? attributeID, int? instanceID);
 
-        IEnumerable<EAV.Store.IStoreContainer> RetrieveChildContainers(int? parentContainerID);
+        EAV.Store.IStoreValue RetrieveValue(int attributeID, int instanceID);
 
-        EAV.Store.IStoreContainer RetrieveContainer(int containerID);
+        EAV.Store.IStoreValue CreateValue(EAV.Store.IStoreValue value, int instanceID, int attributeID);
 
-        EAV.Store.IStoreContainer CreateRootContainer(EAV.Store.IStoreContainer container, int contextID);
+        void UpdateValue(EAV.Store.IStoreValue value);
 
-        EAV.Store.IStoreContainer CreateChildContainer(EAV.Store.IStoreContainer container, int parentContainerID);
-
-        void UpdateContainer(EAV.Store.IStoreContainer container);
-
-        void DeleteContainer(int containerID);
+        void DeleteValue(int attributeID, int instanceID);
     }
 }

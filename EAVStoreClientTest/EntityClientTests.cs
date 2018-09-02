@@ -15,7 +15,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Entity")]
         public void RetrieveAllEntities()
         {
-            EAVStoreClient.EAVEntityClient client = new EAVStoreClient.EAVEntityClient();
+            EAVStoreClient.EntityStoreClient client = new EAVStoreClient.EntityStoreClient();
 
             int nDbEntities = this.DbContext.Entities.Count();
             int nClientEntities = client.RetrieveEntities().Count();
@@ -29,7 +29,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Entity")]
         public void RetrieveNonExistentEntity()
         {
-            EAVStoreClient.EAVEntityClient client = new EAVStoreClient.EAVEntityClient();
+            EAVStoreClient.EntityStoreClient client = new EAVStoreClient.EntityStoreClient();
 
             var entity = client.RetrieveEntity(-1);
 
@@ -46,7 +46,7 @@ namespace EAVStoreClientTestHarness
 
             if (dbEntity != null)
             {
-                EAVStoreClient.EAVEntityClient client = new EAVStoreClient.EAVEntityClient();
+                EAVStoreClient.EntityStoreClient client = new EAVStoreClient.EntityStoreClient();
 
                 var entity = client.RetrieveEntity(dbEntity.Entity_ID);
 
@@ -65,7 +65,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Entity")]
         public void CreateEntity()
         {
-            EAVStoreClient.EAVEntityClient client = new EAVStoreClient.EAVEntityClient();
+            EAVStoreClient.EntityStoreClient client = new EAVStoreClient.EntityStoreClient();
             string entityDescriptor = Guid.NewGuid().ToString();
 
             EAV.Store.IStoreEntity entity = client.CreateEntity(new EAV.Store.StoreEntity() { Descriptor = entityDescriptor });
@@ -90,7 +90,7 @@ namespace EAVStoreClientTestHarness
             var dbEntity = SelectRandomItem(this.DbContext.Entities);
             string oldDescriptor = dbEntity.Descriptor;
 
-            EAVStoreClient.EAVEntityClient client = new EAVStoreClient.EAVEntityClient();
+            EAVStoreClient.EntityStoreClient client = new EAVStoreClient.EntityStoreClient();
 
             var entity = (EAV.Store.StoreEntity)dbEntity;
 
@@ -112,7 +112,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Entity")]
         public void DeleteEntity()
         {
-            EAVStoreClient.EAVEntityClient client = new EAVStoreClient.EAVEntityClient();
+            EAVStoreClient.EntityStoreClient client = new EAVStoreClient.EntityStoreClient();
             EAVStoreClient.Entity dbEntityIn = CreateEntity(Guid.NewGuid().ToString());
 
             client.DeleteEntity(dbEntityIn.Entity_ID);

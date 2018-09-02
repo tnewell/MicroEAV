@@ -25,7 +25,7 @@ namespace EAVService.Controllers
     [RoutePrefix("api/metadata/units")]
     public class UnitController : BaseEAVController
     {
-        private EAV.Store.IStoreUnitClient unitClient = new EAVStoreClient.EAVUnitClient();
+        private EAV.Store.Clients.IUnitStoreClient unitClient = new EAVStoreClient.UnitStoreClient();
 
         [HttpGet]
         [Route("", Name = "RetrieveUnits")]
@@ -57,7 +57,7 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("", Name = "CreateUnit")]
-        public IHttpActionResult CreateUnit(EAV.Store.StoreUnit unit)
+        public IHttpActionResult CreateUnit(EAV.Store.IStoreUnit unit)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateUnit")]
-        public IHttpActionResult UpdateUnit(EAV.Store.StoreUnit unit)
+        public IHttpActionResult UpdateUnit(EAV.Store.IStoreUnit unit)
         {
             try
             {

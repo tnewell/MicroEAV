@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EAVFramework")]
+[assembly: AssemblyTitle("EAV Model API Library")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("M. D. Anderson Cancer Center")]
-[assembly: AssemblyProduct("EAVFramework")]
-[assembly: AssemblyCopyright("Copyright © M. D. Anderson Cancer Center 2017")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("EAV Model API")]
+[assembly: AssemblyCopyright("Copyright © Tim Newell 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

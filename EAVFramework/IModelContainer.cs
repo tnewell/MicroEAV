@@ -18,7 +18,7 @@
 using System.Collections.Generic;
 
 
-namespace EAVFramework.Model
+namespace EAV.Model
 {
     public interface IModelContainer : EAV.Store.IStoreContainer
     {
@@ -41,11 +41,11 @@ namespace EAVFramework.Model
         ICollection<IModelInstance> Instances { get; }
     }
 
-    public interface IModelRootContainer : EAVFramework.Model.IModelContainer
+    public interface IModelRootContainer : EAV.Model.IModelContainer
     {
     }
 
-    public interface IModelChildContainer : EAVFramework.Model.IModelContainer
+    public interface IModelChildContainer : EAV.Model.IModelContainer
     {
     }
 }

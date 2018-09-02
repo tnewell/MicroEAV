@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EAV.Model\EAV.Model.csproj" />
+    <ProjectReference Include="..\EAV.Model\EAV.csproj" />
   </ItemGroup>
 
 </Project>

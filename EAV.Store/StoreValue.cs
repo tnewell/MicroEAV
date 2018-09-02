@@ -17,14 +17,11 @@
 
 namespace EAV.Store
 {
-    /// <summary>
-    /// A Value is a value. It represents that actual piece of data referred to by an Attribute.
-    /// </summary>
-    public class StoreValue : EAV.Value, IStoreValue
+    public class StoreValue : EAV.Value, EAV.Store.IStoreValue
     {
         public StoreValue() { }
 
-        public StoreValue(IStoreValue value)
+        public StoreValue(EAV.Store.IStoreValue value)
         {
             this.InstanceID = value.InstanceID;
             this.AttributeID = value.AttributeID;

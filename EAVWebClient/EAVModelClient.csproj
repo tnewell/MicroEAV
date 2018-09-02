@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EAVServiceClient</RootNamespace>
-    <AssemblyName>EAVServiceClient</AssemblyName>
+    <AssemblyName>EAVModelClient</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -47,22 +47,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="HttpClientExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Client.cs" />
+    <Compile Include="ModelClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EAV.Model\EAV.Model.csproj">
+    <ProjectReference Include="..\EAV.Model\EAV.csproj">
       <Project>{de98cd45-4020-44ed-a4a8-98d0be529c4f}</Project>
-      <Name>EAV.Model</Name>
+      <Name>EAV</Name>
     </ProjectReference>
     <ProjectReference Include="..\EAV.Store\EAV.Store.csproj">
       <Project>{a626330a-e997-4a38-8dce-e68a0cdec2c7}</Project>
       <Name>EAV.Store</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EAVFramework\EAVFramework.csproj">
+    <ProjectReference Include="..\EAVFramework\EAV.Model.csproj">
       <Project>{4445fabc-0e5c-4843-8cc8-cca798982d95}</Project>
-      <Name>EAVFramework</Name>
+      <Name>EAV.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

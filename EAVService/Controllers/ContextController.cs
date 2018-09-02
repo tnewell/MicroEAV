@@ -25,9 +25,9 @@ namespace EAVService.Controllers
     [RoutePrefix("api/meta/contexts")]
     public class ContextController : BaseEAVController
     {
-        private EAV.Store.IStoreContextClient contextClient = new EAVStoreClient.EAVContextClient();
-        private EAV.Store.IStoreContainerClient containerClient = new EAVStoreClient.EAVContainerClient();
-        private EAV.Store.IStoreSubjectClient subjectClient = new EAVStoreClient.EAVSubjectClient();
+        private EAV.Store.Clients.IContextStoreClient contextClient = new EAVStoreClient.ContextStoreClient();
+        private EAV.Store.Clients.IContainerStoreClient containerClient = new EAVStoreClient.ContainerStoreClient();
+        private EAV.Store.Clients.ISubjectStoreClient subjectClient = new EAVStoreClient.SubjectStoreClient();
 
         public int? EntityID
         {
@@ -81,7 +81,7 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("", Name = "CreateContext")]
-        public IHttpActionResult CreateContext(EAV.Store.StoreContext context)
+        public IHttpActionResult CreateContext(EAV.Store.IStoreContext context)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace EAVService.Controllers
 
         [HttpPatch]
         [Route("", Name = "UpdateContext")]
-        public IHttpActionResult UpdateContext(EAV.Store.StoreContext context)
+        public IHttpActionResult UpdateContext(EAV.Store.IStoreContext context)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/containers", Name = "CreateRootContainer")]
-        public IHttpActionResult CreateRootContainer(int id, EAV.Store.StoreContainer container)
+        public IHttpActionResult CreateRootContainer(int id, EAV.Store.IStoreContainer container)
         {
             try
             {
@@ -169,7 +169,7 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/subjects", Name = "CreateContextSubject")]
-        public IHttpActionResult CreateContextSubject(int id, EAV.Store.StoreSubject subject)
+        public IHttpActionResult CreateContextSubject(int id, EAV.Store.IStoreSubject subject)
         {
             try
             {

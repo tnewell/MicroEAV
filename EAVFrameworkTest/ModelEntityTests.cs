@@ -2,13 +2,13 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using EAVFramework.Model;
+using EAV.Model;
 using System.Linq;
 
 
-namespace EAVFrameworkTest
+namespace EAVModelTest
 {
-    public partial class EAVFrameworkTestHarness
+    public partial class EAVModelTestHarness
     {
         [TestMethod]
         public void EntityCreate()

@@ -17,11 +17,11 @@
 
 namespace EAV.Store
 {
-    public class StoreEntity : EAV.Entity, IStoreEntity
+    public class StoreEntity : EAV.Entity, EAV.Store.IStoreEntity
     {
         public StoreEntity() { }
 
-        public StoreEntity(IStoreEntity entity)
+        public StoreEntity(EAV.Store.IStoreEntity entity)
         {
             this.EntityID = entity.EntityID;
             this.Descriptor = entity.Descriptor;

@@ -22,7 +22,7 @@ using System.Linq;
 
 namespace EAVStoreClient
 {
-    public partial class EAVSubjectClient : EAV.Store.IStoreSubjectClient
+    public partial class SubjectStoreClient : EAV.Store.Clients.ISubjectStoreClient
     {
         public IEnumerable<EAV.Store.IStoreSubject> RetrieveSubjects(int? contextID, int? entityID)
         {

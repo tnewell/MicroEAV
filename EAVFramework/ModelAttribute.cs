@@ -22,10 +22,10 @@ using System.Linq;
 using System.Runtime.Serialization;
 
 
-namespace EAVFramework.Model
+namespace EAV.Model
 {
     [DataContract(IsReference = true)]
-    public class ModelAttribute : ModelObject, EAVFramework.Model.IModelAttribute
+    public class ModelAttribute : ModelObject, EAV.Model.IModelAttribute
     {
         public ModelAttribute()
         {

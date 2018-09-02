@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Web.Mvc;
 
-using EAVFramework.Model;
+using EAV.Model;
 
-using EAVServiceClient;
+using EAVModelClient;
 
 using EAVWebApplication.Models.Metadata;
 
@@ -16,7 +16,7 @@ namespace EAVWebApplication.Controllers
 {
     public class MetadataController : Controller
     {
-        private EAVDataClient eavClient = new EAVDataClient(ConfigurationManager.AppSettings["EAVServiceUrl"]);
+        private ModelClient eavClient = new ModelClient(ConfigurationManager.AppSettings["EAVServiceUrl"]);
 
         public MetadataController()
         {

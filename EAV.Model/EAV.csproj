@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
+    <RootNamespace>EAV</RootNamespace>
+    <AssemblyName>EAV</AssemblyName>
   </PropertyGroup>
 
 </Project>

@@ -25,8 +25,8 @@ namespace EAVService.Controllers
     [RoutePrefix("api/meta/containers")]
     public class ContainerController : BaseEAVController
     {
-        private EAV.Store.IStoreContainerClient containerClient = new EAVStoreClient.EAVContainerClient();
-        private EAV.Store.IStoreAttributeClient attributeClient = new EAVStoreClient.EAVAttributeClient();
+        private EAV.Store.Clients.IContainerStoreClient containerClient = new EAVStoreClient.ContainerStoreClient();
+        private EAV.Store.Clients.IAttributeStoreClient attributeClient = new EAVStoreClient.AttributeStoreClient();
 
         [HttpGet]
         [Route("{id}", Name = "RetrieveContainer")]
@@ -90,7 +90,7 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/containers", Name = "CreateChildContainer")]
-        public IHttpActionResult CreateChildContainer(int id, EAV.Store.StoreContainer container)
+        public IHttpActionResult CreateChildContainer(int id, EAV.Store.IStoreContainer container)
         {
             try
             {
@@ -118,7 +118,7 @@ namespace EAVService.Controllers
 
         [HttpPost]
         [Route("{id}/attributes", Name = "CreateAttribute")]
-        public IHttpActionResult CreateAttribute(int id, EAV.Store.StoreAttribute attribute)
+        public IHttpActionResult CreateAttribute(int id, EAV.Store.IStoreAttribute attribute)
         {
             try
             {

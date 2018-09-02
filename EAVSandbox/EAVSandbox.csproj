@@ -87,21 +87,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EAV.Model\EAV.Model.csproj">
+    <ProjectReference Include="..\EAV.Model\EAV.csproj">
       <Project>{de98cd45-4020-44ed-a4a8-98d0be529c4f}</Project>
-      <Name>EAV.Model</Name>
+      <Name>EAV</Name>
     </ProjectReference>
     <ProjectReference Include="..\EAV.Store\EAV.Store.csproj">
       <Project>{a626330a-e997-4a38-8dce-e68a0cdec2c7}</Project>
       <Name>EAV.Store</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EAVFramework\EAVFramework.csproj">
+    <ProjectReference Include="..\EAVFramework\EAV.Model.csproj">
       <Project>{4445fabc-0e5c-4843-8cc8-cca798982d95}</Project>
-      <Name>EAVFramework</Name>
+      <Name>EAV.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EAVWebClient\EAVServiceClient.csproj">
+    <ProjectReference Include="..\EAVWebClient\EAVModelClient.csproj">
       <Project>{e14a47c9-def4-4a96-9922-481939f880f8}</Project>
-      <Name>EAVServiceClient</Name>
+      <Name>EAVModelClient</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

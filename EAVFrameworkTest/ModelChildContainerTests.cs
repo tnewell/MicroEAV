@@ -3,564 +3,564 @@ using System.Linq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using EAVFramework.Model;
+using EAV.Model;
 
 
-namespace EAVFrameworkTest
+namespace EAVModelTest
 {
-    public partial class EAVFrameworkTestHarness
+    public partial class EAVModelTestHarness
     {
         [TestMethod]
-        public void RootContainerCreate()
+        public void ChildContainerCreate()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            Assert.IsNull(aRootContainer.ContainerID, "Property 'ContainerID' should be null on creation.");
+            Assert.IsNull(aChildContainer.ContainerID, "Property 'ContainerID' should be null on creation.");
 
-            Assert.IsNull(aRootContainer.Name, "Property 'Name' should be null on creation.");
-            Assert.IsNull(aRootContainer.DataName, "Property 'DataName' should be null on creation.");
-            Assert.IsNull(aRootContainer.DisplayText, "Property 'DisplayText' should be null on creation.");
-            Assert.AreEqual(0, aRootContainer.Sequence, "Property 'Sequence' should be zero on creation.");
-            Assert.IsFalse(aRootContainer.IsRepeating, "Property 'IsRepeating' should be false on creation.");
+            Assert.IsNull(aChildContainer.Name, "Property 'Name' should be null on creation.");
+            Assert.IsNull(aChildContainer.DataName, "Property 'DataName' should be null on creation.");
+            Assert.IsNull(aChildContainer.DisplayText, "Property 'DisplayText' should be null on creation.");
+            Assert.AreEqual(0, aChildContainer.Sequence, "Property 'Sequence' should be zero on creation.");
+            Assert.IsFalse(aChildContainer.IsRepeating, "Property 'IsRepeating' should be false on creation.");
 
-            Assert.IsNull(aRootContainer.Context, "Property 'Context' should be null on creation.");
-            Assert.IsNull(aRootContainer.ParentContainer, "Property 'ParentContainer' should be null on creation.");
+            Assert.IsNull(aChildContainer.Context, "Property 'Context' should be null on creation.");
+            Assert.IsNull(aChildContainer.ParentContainer, "Property 'ParentContainer' should be null on creation.");
 
-            Assert.IsNotNull(aRootContainer.ChildContainers, "Property 'ChildContainers' should not be null on creation.");
-            Assert.IsFalse(aRootContainer.ChildContainers.Any(), "Property 'ChildContainers' should be empty on creation.");
+            Assert.IsNotNull(aChildContainer.ChildContainers, "Property 'ChildContainers' should not be null on creation.");
+            Assert.IsFalse(aChildContainer.ChildContainers.Any(), "Property 'ChildContainers' should be empty on creation.");
 
-            Assert.IsNotNull(aRootContainer.Attributes, "Property 'Attributes' should not be null on creation.");
-            Assert.IsFalse(aRootContainer.Attributes.Any(), "Property 'Attributes' should be empty on creation.");
+            Assert.IsNotNull(aChildContainer.Attributes, "Property 'Attributes' should not be null on creation.");
+            Assert.IsFalse(aChildContainer.Attributes.Any(), "Property 'Attributes' should be empty on creation.");
 
-            Assert.IsNotNull(aRootContainer.Instances, "Property 'Instances' should not be null on creation.");
-            Assert.IsFalse(aRootContainer.Instances.Any(), "Property 'Instances' should be empty on creation.");
+            Assert.IsNotNull(aChildContainer.Instances, "Property 'Instances' should not be null on creation.");
+            Assert.IsFalse(aChildContainer.Instances.Any(), "Property 'Instances' should be empty on creation.");
         }
 
         #region State Transitions
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerStateTransitionNewToUnmodifiedWithNullID()
+        public void ChildContainerStateTransitionNewToUnmodifiedWithNullID()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
         }
 
         [TestMethod]
-        public void RootContainerStateTransitionNewToUnmodifiedWithValidID()
+        public void ChildContainerStateTransitionNewToUnmodifiedWithValidID()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerStateTransitionNewToDeleted()
-        {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
-
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
-
-            aRootContainer.MarkDeleted();
-        }
-
-        [TestMethod]
-        public void RootContainerStateTransitionUnmodifiedToDeleted()
-        {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
-
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
-
-            aRootContainer.MarkUnmodified();
-
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
-
-            aRootContainer.MarkDeleted();
-
-            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerStateTransitionDeletedToUnmodified()
+        public void ChildContainerStateTransitionNewToDeleted()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkDeleted();
+        }
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+        [TestMethod]
+        public void ChildContainerStateTransitionUnmodifiedToDeleted()
+        {
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            aRootContainer.MarkDeleted();
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+            aChildContainer.MarkUnmodified();
 
-            aRootContainer.MarkUnmodified();
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aChildContainer.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aChildContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ChildContainerStateTransitionDeletedToUnmodified()
+        {
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aChildContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            aChildContainer.MarkDeleted();
+
+            Assert.AreEqual(ObjectState.Deleted, aChildContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+
+            aChildContainer.MarkUnmodified();
         }
         #endregion
 
         #region ID Property
         [TestMethod]
-        public void RootContainerSetIDWhenNew()
+        public void ChildContainerSetIDWhenNew()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
             int id = rng.Next();
-            aRootContainer.ContainerID = id;
+            aChildContainer.ContainerID = id;
 
-            Assert.AreEqual(id, aRootContainer.ContainerID, "Property 'ContainerID' not properly set.");
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state after setting property 'ContainerID' should be 'New'.");
+            Assert.AreEqual(id, aChildContainer.ContainerID, "Property 'ContainerID' not properly set.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state after setting property 'ContainerID' should be 'New'.");
         }
 
         [TestMethod]
-        public void RootContainerSetIDBeforeUnmodified()
+        public void ChildContainerSetIDBeforeUnmodified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
             int id = rng.Next();
-            aRootContainer.ContainerID = id;
+            aChildContainer.ContainerID = id;
 
-            Assert.AreEqual(id, aRootContainer.ContainerID, "Property 'ContainerID' not properly set.");
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state after setting property 'ContainerID' should be 'New'.");
+            Assert.AreEqual(id, aChildContainer.ContainerID, "Property 'ContainerID' not properly set.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state after setting property 'ContainerID' should be 'New'.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetIDAfterUnmodified()
-        {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
-
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
-
-            aRootContainer.MarkUnmodified();
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetIDWhenDeleted()
+        public void ChildContainerSetIDAfterUnmodified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aChildContainer.MarkUnmodified();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ChildContainerSetIDWhenDeleted()
+        {
+            ModelChildContainer aChildContainer = new ModelChildContainer();
+
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
             int id = rng.Next();
-            aRootContainer.ContainerID = id;
+            aChildContainer.ContainerID = id;
 
-            Assert.AreEqual(id, aRootContainer.ContainerID, "Property 'ContainerID' not properly set.");
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state after setting property 'ContainerID' should be 'New'.");
+            Assert.AreEqual(id, aChildContainer.ContainerID, "Property 'ContainerID' not properly set.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state after setting property 'ContainerID' should be 'New'.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootContainer.MarkDeleted();
+            aChildContainer.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Deleted, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             id = rng.Next();
-            aRootContainer.ContainerID = id;
+            aChildContainer.ContainerID = id;
         }
         #endregion
 
         #region Primitive Properties
         #region Name
         [TestMethod]
-        public void RootContainerSetNameWhenNew()
+        public void ChildContainerSetNameWhenNew()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
             string value = Guid.NewGuid().ToString();
-            aRootContainer.Name = value;
+            aChildContainer.Name = value;
 
-            Assert.AreEqual(value, aRootContainer.Name, "Property 'Name' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(value, aChildContainer.Name, "Property 'Name' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
-        public void RootContainerSetNameWhenUnmodified()
+        public void ChildContainerSetNameWhenUnmodified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
-            aRootContainer.Name = value;
+            aChildContainer.Name = value;
 
-            Assert.AreEqual(value, aRootContainer.Name, "Property 'Name' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(value, aChildContainer.Name, "Property 'Name' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
-        public void RootContainerSetNameWhenModified()
+        public void ChildContainerSetNameWhenModified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
-            aRootContainer.Name = value;
+            aChildContainer.Name = value;
 
-            Assert.AreEqual(value, aRootContainer.Name, "Property 'Name' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(value, aChildContainer.Name, "Property 'Name' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
 
             value = Guid.NewGuid().ToString();
-            aRootContainer.Name = value;
+            aChildContainer.Name = value;
 
-            Assert.AreEqual(value, aRootContainer.Name, "Property 'Name' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(value, aChildContainer.Name, "Property 'Name' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetNameWhenDeleted()
+        public void ChildContainerSetNameWhenDeleted()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootContainer.MarkDeleted();
+            aChildContainer.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, aChildContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aRootContainer.Name = Guid.NewGuid().ToString();
+            aChildContainer.Name = Guid.NewGuid().ToString();
         }
         #endregion
 
         #region DataName
         [TestMethod]
-        public void RootContainerSetDataNameWhenNew()
+        public void ChildContainerSetDataNameWhenNew()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
             string value = Guid.NewGuid().ToString();
-            aRootContainer.DataName = value;
+            aChildContainer.DataName = value;
 
-            Assert.AreEqual(value, aRootContainer.DataName, "Property 'DataName' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(value, aChildContainer.DataName, "Property 'DataName' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
-        public void RootContainerSetDataNameWhenUnmodified()
+        public void ChildContainerSetDataNameWhenUnmodified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
-            aRootContainer.DataName = value;
+            aChildContainer.DataName = value;
 
-            Assert.AreEqual(value, aRootContainer.DataName, "Property 'DataName' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(value, aChildContainer.DataName, "Property 'DataName' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
-        public void RootContainerSetDataNameWhenModified()
+        public void ChildContainerSetDataNameWhenModified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
-            aRootContainer.DataName = value;
+            aChildContainer.DataName = value;
 
-            Assert.AreEqual(value, aRootContainer.DataName, "Property 'DataName' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(value, aChildContainer.DataName, "Property 'DataName' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
 
             value = Guid.NewGuid().ToString();
-            aRootContainer.DataName = value;
+            aChildContainer.DataName = value;
 
-            Assert.AreEqual(value, aRootContainer.DataName, "Property 'DataName' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(value, aChildContainer.DataName, "Property 'DataName' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetDataNameWhenDeleted()
+        public void ChildContainerSetDataNameWhenDeleted()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootContainer.MarkDeleted();
+            aChildContainer.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, aChildContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aRootContainer.DataName = Guid.NewGuid().ToString();
+            aChildContainer.DataName = Guid.NewGuid().ToString();
         }
         #endregion
 
         #region DisplayText
         [TestMethod]
-        public void RootContainerSetDisplayTextWhenNew()
+        public void ChildContainerSetDisplayTextWhenNew()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
             string value = Guid.NewGuid().ToString();
-            aRootContainer.DisplayText = value;
+            aChildContainer.DisplayText = value;
 
-            Assert.AreEqual(value, aRootContainer.DisplayText, "Property 'DisplayText' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(value, aChildContainer.DisplayText, "Property 'DisplayText' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
-        public void RootContainerSetDisplayTextWhenUnmodified()
+        public void ChildContainerSetDisplayTextWhenUnmodified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
-            aRootContainer.DisplayText = value;
+            aChildContainer.DisplayText = value;
 
-            Assert.AreEqual(value, aRootContainer.DisplayText, "Property 'DisplayText' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(value, aChildContainer.DisplayText, "Property 'DisplayText' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
-        public void RootContainerSetDisplayTextWhenModified()
+        public void ChildContainerSetDisplayTextWhenModified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             string value = Guid.NewGuid().ToString();
-            aRootContainer.DisplayText = value;
+            aChildContainer.DisplayText = value;
 
-            Assert.AreEqual(value, aRootContainer.DisplayText, "Property 'DisplayText' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(value, aChildContainer.DisplayText, "Property 'DisplayText' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
 
             value = Guid.NewGuid().ToString();
-            aRootContainer.DisplayText = value;
+            aChildContainer.DisplayText = value;
 
-            Assert.AreEqual(value, aRootContainer.DisplayText, "Property 'DisplayText' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(value, aChildContainer.DisplayText, "Property 'DisplayText' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetDisplayTextWhenDeleted()
+        public void ChildContainerSetDisplayTextWhenDeleted()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootContainer.MarkDeleted();
+            aChildContainer.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, aChildContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aRootContainer.DisplayText = Guid.NewGuid().ToString();
+            aChildContainer.DisplayText = Guid.NewGuid().ToString();
         }
         #endregion
 
         #region Sequence
         [TestMethod]
-        public void RootContainerSetSequenceWhenNew()
+        public void ChildContainerSetSequenceWhenNew()
         {
-            ModelRootContainer anRootContainer = new ModelRootContainer();
+            ModelChildContainer anChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, anRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, anChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
             int value = rng.Next();
-            anRootContainer.Sequence = value;
+            anChildContainer.Sequence = value;
 
-            Assert.AreEqual(value, anRootContainer.Sequence, "Property 'Sequence' was not set properly.");
-            Assert.AreEqual(ObjectState.New, anRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(value, anChildContainer.Sequence, "Property 'Sequence' was not set properly.");
+            Assert.AreEqual(ObjectState.New, anChildContainer.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
-        public void RootContainerSetSequenceWhenUnmodified()
+        public void ChildContainerSetSequenceWhenUnmodified()
         {
-            ModelRootContainer anRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer anChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, anRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, anChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            anRootContainer.MarkUnmodified();
+            anChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, anRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, anChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             int value = rng.Next();
-            anRootContainer.Sequence = value;
+            anChildContainer.Sequence = value;
 
-            Assert.AreEqual(value, anRootContainer.Sequence, "Property 'Sequence' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, anRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(value, anChildContainer.Sequence, "Property 'Sequence' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
-        public void RootContainerSetSequenceWhenModified()
+        public void ChildContainerSetSequenceWhenModified()
         {
-            ModelRootContainer anRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer anChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, anRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, anChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            anRootContainer.MarkUnmodified();
+            anChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, anRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, anChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
             int value = rng.Next();
-            anRootContainer.Sequence = value;
+            anChildContainer.Sequence = value;
 
-            Assert.AreEqual(value, anRootContainer.Sequence, "Property 'Sequence' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, anRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(value, anChildContainer.Sequence, "Property 'Sequence' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
 
             value = rng.Next();
-            anRootContainer.Sequence = value;
+            anChildContainer.Sequence = value;
 
-            Assert.AreEqual(value, anRootContainer.Sequence, "Property 'Sequence' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, anRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(value, anChildContainer.Sequence, "Property 'Sequence' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, anChildContainer.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetSequenceWhenDeleted()
+        public void ChildContainerSetSequenceWhenDeleted()
         {
-            ModelRootContainer anRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer anChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, anRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, anChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            anRootContainer.MarkUnmodified();
+            anChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, anRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, anChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            anRootContainer.MarkDeleted();
+            anChildContainer.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, anRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, anChildContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            anRootContainer.Sequence = rng.Next();
+            anChildContainer.Sequence = rng.Next();
         }
         #endregion
 
         #region IsRepeating
         [TestMethod]
-        public void RootContainerSetIsRepeatingWhenNew()
+        public void ChildContainerSetIsRepeatingWhenNew()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.IsRepeating = true;
+            aChildContainer.IsRepeating = true;
 
-            Assert.AreEqual(true, aRootContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
+            Assert.AreEqual(true, aChildContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should remain 'New' when property set.");
         }
 
         [TestMethod]
-        public void RootContainerSetIsRepeatingWhenUnmodified()
+        public void ChildContainerSetIsRepeatingWhenUnmodified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootContainer.IsRepeating = true;
+            aChildContainer.IsRepeating = true;
 
-            Assert.AreEqual(true, aRootContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(true, aChildContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
         }
 
         [TestMethod]
-        public void RootContainerSetIsRepeatingWhenModified()
+        public void ChildContainerSetIsRepeatingWhenModified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootContainer.IsRepeating = true;
+            aChildContainer.IsRepeating = true;
 
-            Assert.AreEqual(true, aRootContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+            Assert.AreEqual(true, aChildContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            aRootContainer.IsRepeating = false;
+            aChildContainer.IsRepeating = false;
 
-            Assert.AreEqual(false, aRootContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+            Assert.AreEqual(false, aChildContainer.IsRepeating, "Property 'IsRepeating' was not set properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetIsRepeatingWhenDeleted()
+        public void ChildContainerSetIsRepeatingWhenDeleted()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootContainer.MarkDeleted();
+            aChildContainer.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, aChildContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aRootContainer.IsRepeating = true;
+            aChildContainer.IsRepeating = true;
         }
         #endregion
         #endregion
@@ -568,186 +568,135 @@ namespace EAVFrameworkTest
         #region Object Properties
         #region Context
         [TestMethod]
-        public void RootContainerSetContextWhenNew()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void ChildContainerSetContextWhenNew()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
+            ModelChildContainer aChildContainer = new ModelChildContainer();
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelContext value = new ModelContext() { ContextID = rng.Next() };
-            aRootContainer.Context = value;
-
-            Assert.AreEqual(value, aRootContainer.Context, "Property 'Context' was not set properly.");
-            Assert.AreEqual(value.ContextID, aRootContainer.ContextID, "Property 'ContextID' was not reported properly.");
-            Assert.IsTrue(value.Containers.Contains(aRootContainer), "Property 'Containers' was not updated properly.");
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
-        }
-
-        [TestMethod]
-        public void RootContainerSetContextWhenUnmodified()
-        {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
-
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
-
-            aRootContainer.MarkUnmodified();
-
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
-
-            ModelContext value = new ModelContext() { ContextID = rng.Next() };
-            aRootContainer.Context = value;
-
-            Assert.AreEqual(value, aRootContainer.Context, "Property 'Context' was not set properly.");
-            Assert.AreEqual(value.ContextID, aRootContainer.ContextID, "Property 'ContextID' was not reported properly.");
-            Assert.IsTrue(value.Containers.Contains(aRootContainer), "Property 'Containers' was not updated properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
-        }
-
-        [TestMethod]
-        public void RootContainerSetContextWhenModified()
-        {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
-
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
-
-            aRootContainer.MarkUnmodified();
-
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
-
-            ModelContext value = new ModelContext() { ContextID = rng.Next() };
-            aRootContainer.Context = value;
-
-            Assert.AreEqual(value, aRootContainer.Context, "Property 'Context' was not set properly.");
-            Assert.AreEqual(value.ContextID, aRootContainer.ContextID, "Property 'ContextID' was not reported properly.");
-            Assert.IsTrue(value.Containers.Contains(aRootContainer), "Property 'Containers' was not updated properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state failed to transition to 'Modified'.");
-
-            value = new ModelContext() { ContextID = rng.Next() };
-            aRootContainer.Context = value;
-
-            Assert.AreEqual(value, aRootContainer.Context, "Property 'Context' was not set properly.");
-            Assert.AreEqual(value.ContextID, aRootContainer.ContextID, "Property 'ContextID' was not reported properly.");
-            Assert.IsTrue(value.Containers.Contains(aRootContainer), "Property 'Containers' was not updated properly.");
-            Assert.AreEqual(ObjectState.Modified, aRootContainer.ObjectState, "Object state should remain 'Modified' when property set.");
+            aChildContainer.Context = new ModelContext() { ContextID = rng.Next() };
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetContextWhenDeleted()
+        public void ChildContainerSetContextWhenUnmodified()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootContainer.MarkDeleted();
-
-            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
-
-            aRootContainer.Context = new ModelContext() { ContextID = rng.Next() };
-        }
-        #endregion
-
-        #region ParentContainer
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetParentContainerWithObjectWhenNew()
-        {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
-
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
-
-            aRootContainer.ParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
-        }
-
-        [TestMethod]
-        public void RootContainerSetParentContainerWithNullWhenNew()
-        {
-            ModelRootContainer aRootContainer = new ModelRootContainer();
-
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
-
-            aRootContainer.ParentContainer = null;
-
-            Assert.IsNull(aRootContainer.ParentContainer, "Property 'ParentContainer' was not set properly.");
-            Assert.IsNull(aRootContainer.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should remain 'New' when property set.");
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetParentContainerWithObjectWhenUnmodified()
-        {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
-
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
-
-            aRootContainer.MarkUnmodified();
-
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
-
-            aRootContainer.ParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
-        }
-
-        [TestMethod]
-        public void RootContainerSetParentContainerWithNullWhenUnmodified()
-        {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
-
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
-
-            aRootContainer.MarkUnmodified();
-
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
-
-            aRootContainer.ParentContainer = null;
-
-            Assert.IsNull(aRootContainer.ParentContainer, "Property 'ParentContainer' was not set properly.");
-            Assert.IsNull(aRootContainer.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state should remain 'Unmodified' when property set.");
+            aChildContainer.Context = new ModelContext() { ContextID = rng.Next() };
         }
 
         // Set When Modified - N/A
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetParentContainerWithObjectWhenDeleted()
+        public void ChildContainerSetContextWhenDeleted()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootContainer.MarkDeleted();
+            aChildContainer.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, aChildContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aRootContainer.ParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            aChildContainer.Context = new ModelContext() { ContextID = rng.Next() };
+        }
+        #endregion
+
+        #region ParentContainer
+        [TestMethod]
+        public void ChildContainerSetParentContainerWithObjectWhenNew()
+        {
+            ModelChildContainer aChildContainer = new ModelChildContainer();
+
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            aChildContainer.ParentContainer = aContainer;
+
+            Assert.AreEqual(aContainer, aChildContainer.ParentContainer, "Property 'ParentContainer' was not set properly.");
+            Assert.AreEqual(aContainer.ContainerID, aChildContainer.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
+            Assert.IsTrue(aContainer.ChildContainers.Contains(aChildContainer), "Property 'ChildContainers' was not updated properly.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should remain 'New' when property set.");
+        }
+
+        [TestMethod]
+        public void ChildContainerSetParentContainerWithObjectWhenUnmodified()
+        {
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aChildContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            aChildContainer.ParentContainer = aContainer;
+
+            Assert.AreEqual(aContainer, aChildContainer.ParentContainer, "Property 'ParentContainer' was not set properly.");
+            Assert.AreEqual(aContainer.ContainerID, aChildContainer.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
+            Assert.IsTrue(aContainer.ChildContainers.Contains(aChildContainer), "Property 'ChildContainers' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+        }
+
+        [TestMethod]
+        public void ChildContainerSetParentContainerWithObjectWhenModified()
+        {
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
+
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
+
+            aChildContainer.MarkUnmodified();
+
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+
+            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            aChildContainer.ParentContainer = aContainer;
+
+            Assert.AreEqual(aContainer, aChildContainer.ParentContainer, "Property 'ParentContainer' was not set properly.");
+            Assert.AreEqual(aContainer.ContainerID, aChildContainer.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
+            Assert.IsTrue(aContainer.ChildContainers.Contains(aChildContainer), "Property 'ChildContainers' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state failed to transition to 'Modified'.");
+
+            aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            aChildContainer.ParentContainer = aContainer;
+
+            Assert.AreEqual(aContainer, aChildContainer.ParentContainer, "Property 'ParentContainer' was not set properly.");
+            Assert.AreEqual(aContainer.ContainerID, aChildContainer.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
+            Assert.IsTrue(aContainer.ChildContainers.Contains(aChildContainer), "Property 'ChildContainers' was not updated properly.");
+            Assert.AreEqual(ObjectState.Modified, aChildContainer.ObjectState, "Object state should remain 'Modified' when property set.");
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void RootContainerSetParentContainerWithNullWhenDeleted()
+        public void ChildContainerSetParentContainerWithObjectWhenDeleted()
         {
-            ModelRootContainer aRootContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aChildContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
-            Assert.AreEqual(ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
+            Assert.AreEqual(ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            aRootContainer.MarkUnmodified();
+            aChildContainer.MarkUnmodified();
 
-            Assert.AreEqual(ObjectState.Unmodified, aRootContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
+            Assert.AreEqual(ObjectState.Unmodified, aChildContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aRootContainer.MarkDeleted();
+            aChildContainer.MarkDeleted();
 
-            Assert.AreEqual(ObjectState.Deleted, aRootContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
+            Assert.AreEqual(ObjectState.Deleted, aChildContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aRootContainer.ParentContainer = null;
+            aChildContainer.ParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
         }
         #endregion
         #endregion
@@ -755,9 +704,9 @@ namespace EAVFrameworkTest
         #region Collection Properties
         #region ChildContainers
         [TestMethod]
-        public void RootContainerAddToChildContainersWhenNew()
+        public void ChildContainerAddToChildContainersWhenNew()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -771,9 +720,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerAddToChildContainersWhenUnmodified()
+        public void ChildContainerAddToChildContainersWhenUnmodified()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -791,9 +740,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerAddToChildContainersWhenModified()
+        public void ChildContainerAddToChildContainersWhenModified()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -820,9 +769,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void RootContainerAddToChildContainersWhenDeleted()
+        public void ChildContainerAddToChildContainersWhenDeleted()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -838,9 +787,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerRemoveFromChildContainersWhenNew()
+        public void ChildContainerRemoveFromChildContainersWhenNew()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -863,9 +812,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerRemoveFromChildContainersWhenUnmodified()
+        public void ChildContainerRemoveFromChildContainersWhenUnmodified()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -892,9 +841,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerRemoveFromChildContainersWhenModified()
+        public void ChildContainerRemoveFromChildContainersWhenModified()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -922,9 +871,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void RootContainerRemoveFromChildContainersWhenDeleted()
+        public void ChildContainerRemoveFromChildContainersWhenDeleted()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -946,9 +895,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerClearChildContainersWhenNew()
+        public void ChildContainerClearChildContainersWhenNew()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -972,9 +921,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerClearChildContainersWhenUnmodified()
+        public void ChildContainerClearChildContainersWhenUnmodified()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1002,9 +951,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerClearChildContainersWhenModified()
+        public void ChildContainerClearChildContainersWhenModified()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1033,9 +982,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void RootContainerClearChildContainersWhenDeleted()
+        public void ChildContainerClearChildContainersWhenDeleted()
         {
-            ModelRootContainer aParentContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aParentContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aParentContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1059,9 +1008,9 @@ namespace EAVFrameworkTest
 
         #region Attributes
         [TestMethod]
-        public void RootContainerAddToAttributesWhenNew()
+        public void ChildContainerAddToAttributesWhenNew()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1075,9 +1024,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerAddToAttributesWhenUnmodified()
+        public void ChildContainerAddToAttributesWhenUnmodified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1095,9 +1044,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerAddToAttributesWhenModified()
+        public void ChildContainerAddToAttributesWhenModified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1124,9 +1073,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void RootContainerAddToAttributesWhenDeleted()
+        public void ChildContainerAddToAttributesWhenDeleted()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1142,9 +1091,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerRemoveFromAttributesWhenNew()
+        public void ChildContainerRemoveFromAttributesWhenNew()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1167,9 +1116,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerRemoveFromAttributesWhenUnmodified()
+        public void ChildContainerRemoveFromAttributesWhenUnmodified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1196,9 +1145,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerRemoveFromAttributesWhenModified()
+        public void ChildContainerRemoveFromAttributesWhenModified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1226,9 +1175,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void RootContainerRemoveFromAttributesWhenDeleted()
+        public void ChildContainerRemoveFromAttributesWhenDeleted()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1255,9 +1204,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerClearAttributesWhenNew()
+        public void ChildContainerClearAttributesWhenNew()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1281,9 +1230,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerClearAttributesWhenUnmodified()
+        public void ChildContainerClearAttributesWhenUnmodified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1311,9 +1260,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerClearAttributesWhenModified()
+        public void ChildContainerClearAttributesWhenModified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1342,9 +1291,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void RootContainerClearAttributesWhenDeleted()
+        public void ChildContainerClearAttributesWhenDeleted()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1373,13 +1322,13 @@ namespace EAVFrameworkTest
 
         #region Instances
         [TestMethod]
-        public void RootContainerAddToInstancesWhenNew()
+        public void ChildContainerAddToInstancesWhenNew()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1389,9 +1338,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerAddToInstancesWhenUnmodified()
+        public void ChildContainerAddToInstancesWhenUnmodified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1399,7 +1348,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1409,9 +1358,9 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerAddToInstancesWhenModified()
+        public void ChildContainerAddToInstancesWhenModified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1419,7 +1368,7 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Unmodified, aContainer.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1427,7 +1376,7 @@ namespace EAVFrameworkTest
             Assert.AreEqual(aContainer.ContainerID, value.ContainerID, "Property 'ContainerID' was not set properly.");
             Assert.AreEqual(ObjectState.Modified, aContainer.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            value = new ModelRootInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1438,9 +1387,9 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void RootContainerAddToInstancesWhenDeleted()
+        public void ChildContainerAddToInstancesWhenDeleted()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -1452,19 +1401,19 @@ namespace EAVFrameworkTest
 
             Assert.AreEqual(ObjectState.Deleted, aContainer.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aContainer.Instances.Add(new ModelRootInstance() { InstanceID = rng.Next() });
+            aContainer.Instances.Add(new ModelChildInstance() { InstanceID = rng.Next() });
         }
 
         [TestMethod]
-        public void RootContainerRemoveFromInstancesWhenNew()
+        public void ChildContainerRemoveFromInstancesWhenNew()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
-            value = new ModelRootInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1481,15 +1430,15 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerRemoveFromInstancesWhenUnmodified()
+        public void ChildContainerRemoveFromInstancesWhenUnmodified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
-            value = new ModelRootInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1510,15 +1459,15 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerRemoveFromInstancesWhenModified()
+        public void ChildContainerRemoveFromInstancesWhenModified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
-            value = new ModelRootInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1540,13 +1489,13 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void RootContainerRemoveFromInstancesWhenDeleted()
+        public void ChildContainerRemoveFromInstancesWhenDeleted()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1569,15 +1518,15 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerClearInstancesWhenNew()
+        public void ChildContainerClearInstancesWhenNew()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
-            value = new ModelRootInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1595,15 +1544,15 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerClearInstancesWhenUnmodified()
+        public void ChildContainerClearInstancesWhenUnmodified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
-            value = new ModelRootInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1625,15 +1574,15 @@ namespace EAVFrameworkTest
         }
 
         [TestMethod]
-        public void RootContainerClearInstancesWhenModified()
+        public void ChildContainerClearInstancesWhenModified()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
-            value = new ModelRootInstance() { InstanceID = rng.Next() };
+            value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
@@ -1656,13 +1605,13 @@ namespace EAVFrameworkTest
 
         [TestMethod]
         [ExpectedException(typeof(NotSupportedException))]
-        public void RootContainerClearInstancesWhenDeleted()
+        public void ChildContainerClearInstancesWhenDeleted()
         {
-            ModelRootContainer aContainer = new ModelRootContainer() { ContainerID = rng.Next() };
+            ModelChildContainer aContainer = new ModelChildContainer() { ContainerID = rng.Next() };
 
             Assert.AreEqual(ObjectState.New, aContainer.ObjectState, "Object state should be 'New' on creation.");
 
-            ModelRootInstance value = new ModelRootInstance() { InstanceID = rng.Next() };
+            ModelChildInstance value = new ModelChildInstance() { InstanceID = rng.Next() };
             aContainer.Instances.Add(value);
 
             Assert.IsTrue(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");

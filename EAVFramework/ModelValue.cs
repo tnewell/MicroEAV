@@ -19,10 +19,10 @@ using System;
 using System.Runtime.Serialization;
 
 
-namespace EAVFramework.Model
+namespace EAV.Model
 {
     [DataContract(IsReference = true)]
-    public class ModelValue : ModelObject, EAVFramework.Model.IModelValue
+    public class ModelValue : ModelObject, EAV.Model.IModelValue
     {
         public static IModelValue Create(IModelAttribute attribute, IModelInstance instance)
         {

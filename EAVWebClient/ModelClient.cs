@@ -17,87 +17,27 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Threading.Tasks;
 
-using EAVFramework.Model;
+using EAV.Model;
 
 
-namespace EAVServiceClient
+namespace EAVModelClient
 {
-    public static class HttpClientExtensions
-    {
-        public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, string requestUri, T value, MediaTypeFormatter formatter)
-        {
-            // ConfigureAwait is used here to avoid deadlocks.
-            // https://blog.stephencleary.com/2012/07/dont-block-on-async-code.html
-            return (await client.SendAsync(new HttpRequestMessage(new HttpMethod("PATCH"), requestUri) { Content = new ObjectContent<T>(value, formatter) }).ConfigureAwait(false));
-        }
-
-        public static async Task<HttpResponseMessage> PatchAsJsonAsync<T>(this HttpClient client, string requestUri, T value)
-        {
-            // ConfigureAwait is used here to avoid deadlocks.
-            // https://blog.stephencleary.com/2012/07/dont-block-on-async-code.html
-            return (await PatchAsync<T>(client, requestUri, value, new JsonMediaTypeFormatter()).ConfigureAwait(false));
-        }
-
-        public static async Task<HttpResponseMessage> PatchAsXmlAsync<T>(this HttpClient client, string requestUri, T value)
-        {
-            // ConfigureAwait is used here to avoid deadlocks.
-            // https://blog.stephencleary.com/2012/07/dont-block-on-async-code.html
-            return (await PatchAsync<T>(client, requestUri, value, new XmlMediaTypeFormatter()).ConfigureAwait(false));
-        }
-    }
-
-    public interface IEAVDataClient
-    {
-        IEnumerable<IModelUnit> LoadUnits();
-
-        void SaveUnit(IModelUnit unit);
-
-        IEnumerable<IModelEntity> LoadEntities();
-
-        void SaveEntity(IModelEntity entity);
-
-        IEnumerable<IModelContext> LoadContexts();
-
-        void SaveContext(IModelContext context);
-
-        void LoadSubjects(IModelContext context);
-
-        void LoadSubjects(IModelEntity entity);
-
-        void SaveSubject(IModelSubject subject);
-
-        void LoadRootContainers(IModelContext context);
-
-        void LoadMetadata(IModelRootContainer container);
-
-        void SaveMetadata(IModelRootContainer container);
-
-        void LoadRootInstances(IModelSubject subject, IModelRootContainer container);
-
-        void LoadData(IModelRootInstance instance);
-
-        void SaveData(IModelRootInstance instance);
-    }
-
-    public class EAVDataClient : IEAVDataClient, IDisposable
+    public class ModelClient : EAV.Model.Clients.IModelClient, IDisposable
     {
         private HttpClient client;
 
-        public EAVDataClient()
+        public ModelClient()
         {
         }
 
-        public EAVDataClient(Uri uri)
+        public ModelClient(Uri uri)
         {
             client = new HttpClient() { BaseAddress = uri };
         }
 
-        public EAVDataClient(string address)
+        public ModelClient(string address)
         {
             client = new HttpClient() { BaseAddress = new Uri(address) };
         }
@@ -1006,4 +946,3 @@ namespace EAVServiceClient
         }
     }
 }
-

@@ -17,11 +17,11 @@
 
 namespace EAV.Store
 {
-    public class StoreAttribute : EAV.Attribute, IStoreAttribute
+    public class StoreAttribute : EAV.Attribute, EAV.Store.IStoreAttribute
     {
         public StoreAttribute() { }
 
-        public StoreAttribute(IStoreAttribute attribute)
+        public StoreAttribute(EAV.Store.IStoreAttribute attribute)
         {
             this.AttributeID = attribute.AttributeID;
             this.ContainerID = attribute.ContainerID;
