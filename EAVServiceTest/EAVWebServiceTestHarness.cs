@@ -6,6 +6,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
@@ -17,10 +18,10 @@ namespace EAVServiceTest
         private static TestContext myTestContext;
         private static Random rng = new Random((int) DateTime.Now.Ticks);
 
+        private HttpServer testHttpServer;
+
         private EAVStoreClient.MicroEAVContext dbContext;
         public EAVStoreClient.MicroEAVContext DbContext { get { return (dbContext); } }
-
-        private HttpServer testHttpServer;
 
         private HttpClient client;
         public HttpClient WebClient { get { return (client); } }
@@ -383,26 +384,29 @@ namespace EAVServiceTest
         }
     }
 
-    public static class TestExtensions
+    public static class StringExtensions
     {
         public static string Flip(this String value)
         {
             return (new String(value.Reverse().ToArray()));
         }
+    }
 
+    public static class HttpClientExtensions
+    {
         public static async Task<HttpResponseMessage> PatchAsync<T>(this HttpClient client, string requestUri, T value, MediaTypeFormatter formatter)
         {
-            return(await client.SendAsync(new HttpRequestMessage(new HttpMethod("PATCH"), requestUri) { Content = new ObjectContent<T>(value, formatter) }));
+            return (await client.SendAsync(new HttpRequestMessage(new HttpMethod("PATCH"), requestUri) { Content = new ObjectContent<T>(value, formatter) }).ConfigureAwait(false));
         }
 
         public static async Task<HttpResponseMessage> PatchAsJsonAsync<T>(this HttpClient client, string requestUri, T value)
         {
-            return (await PatchAsync<T>(client, requestUri, value, new JsonMediaTypeFormatter()));
+            return (await PatchAsync<T>(client, requestUri, value, new JsonMediaTypeFormatter()).ConfigureAwait(false));
         }
 
         public static async Task<HttpResponseMessage> PatchAsXmlAsync<T>(this HttpClient client, string requestUri, T value)
         {
-            return (await PatchAsync<T>(client, requestUri, value, new XmlMediaTypeFormatter()));
+            return (await PatchAsync<T>(client, requestUri, value, new XmlMediaTypeFormatter()).ConfigureAwait(false));
         }
     }
 }
