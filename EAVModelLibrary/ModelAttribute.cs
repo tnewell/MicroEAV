@@ -128,7 +128,10 @@ namespace EAVModelLibrary
             }
         }
 
-        public int? ContainerID { get { return (Container != null ? Container.ContainerID : null); } }
+        [DataMember(Name = "ContainerID")]
+        protected int? containerID;
+        [IgnoreDataMember]
+        public int? ContainerID { get { return (Container != null ? Container.ContainerID : containerID); } }
 
         [DataMember(Name = "Container")]
         protected EAV.Model.IModelContainer container;
@@ -140,6 +143,7 @@ namespace EAVModelLibrary
                 if (container != null && !container.Attributes.Contains(this))
                 {
                     container = null;
+                    containerID = null;
                 }
 
                 return (container);
@@ -150,6 +154,8 @@ namespace EAVModelLibrary
                 {
                     if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Container' may not be modified when object in 'Deleted' state."));
+                    else if (value != null && value.ObjectState == EAV.Model.ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Container' may not be assigned object in 'Deleted' state."));
 
                     if (container != null && container.Attributes.Contains(this))
                     {
@@ -157,6 +163,8 @@ namespace EAVModelLibrary
                     }
 
                     container = value;
+                    containerID = container != null ? container.ContainerID : null;
+
                     if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (container != null && !container.Attributes.Contains(this))

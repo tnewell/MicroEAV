@@ -51,7 +51,7 @@ namespace EAVModelClient
         #region Load Helpers
         private void LoadAttributeUnits(EAV.Model.IModelAttribute attribute)
         {
-            HttpResponseMessage response = client.GetAsync(String.Format("api/metadata/attribute/{0}/units", attribute.AttributeID)).Result;
+            HttpResponseMessage response = client.GetAsync(String.Format("api/metadata/attributes/{0}/units", attribute.AttributeID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var units = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelUnit>>().Result;
@@ -67,7 +67,7 @@ namespace EAVModelClient
             }
             else
             {
-                throw (new ApplicationException("Attempt to get units failed."));
+                throw (new ApplicationException("Attempt to get attribute units failed."));
             }
         }
 

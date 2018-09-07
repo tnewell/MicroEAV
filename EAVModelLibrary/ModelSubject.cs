@@ -92,9 +92,15 @@ namespace EAVModelLibrary
             }
         }
 
-        public int? EntityID { get { return (Entity != null ? Entity.EntityID : null); } }
+        [DataMember(Name = "EntityID")]
+        protected int? entityID;
+        [IgnoreDataMember]
+        public int? EntityID { get { return (Entity != null ? Entity.EntityID : entityID); } }
 
-        public int? ContextID { get { return (Context != null ? Context.ContextID : null); } }
+        [DataMember(Name = "ContextID")]
+        protected int? contextID;
+        [IgnoreDataMember]
+        public int? ContextID { get { return (Context != null ? Context.ContextID : (contextID != null ? contextID : null)); } }
 
         [DataMember(Name = "Entity")]
         protected EAV.Model.IModelEntity entity;
@@ -106,6 +112,7 @@ namespace EAVModelLibrary
                 if (entity != null && !entity.Subjects.Contains(this))
                 {
                     entity = null;
+                    entityID = null;
                 }
 
                 return (entity);
@@ -116,6 +123,8 @@ namespace EAVModelLibrary
                 {
                     if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Entity' may not be modified when object in 'Deleted' state."));
+                    else if (value != null && value.ObjectState == EAV.Model.ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Entity' may not be assigned object in 'Deleted' state."));
 
                     if (entity != null && entity.Subjects.Contains(this))
                     {
@@ -123,11 +132,14 @@ namespace EAVModelLibrary
                     }
 
                     entity = value;
+                    entityID = entity != null ? entity.EntityID : null;
+
                     if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (entity != null && !entity.Subjects.Contains(this))
                     {
                         entity.Subjects.Add(this);
+                        entityID = entity.EntityID;
                     }
                 }
             }
@@ -143,6 +155,7 @@ namespace EAVModelLibrary
                 if (context != null && !context.Subjects.Contains(this))
                 {
                     context = null;
+                    contextID = null;
                 }
 
                 return (context);
@@ -153,6 +166,8 @@ namespace EAVModelLibrary
                 {
                     if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Context' may not be modified when object in 'Deleted' state."));
+                    else if (value != null && value.ObjectState == EAV.Model.ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Context' may not be assigned object in 'Deleted' state."));
 
                     if (context != null && context.Subjects.Contains(this))
                     {
@@ -160,11 +175,18 @@ namespace EAVModelLibrary
                     }
 
                     context = value;
+                    contextID = context != null ? context.ContextID : null;
+
                     if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (context != null && !context.Subjects.Contains(this))
                     {
                         context.Subjects.Add(this);
+                        contextID = context.ContextID;
+                    }
+                    else if (context == null)
+                    {
+                        contextID = null;
                     }
                 }
             }

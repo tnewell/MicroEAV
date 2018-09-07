@@ -1186,8 +1186,6 @@ namespace EAVModelTest
             anAttribute.Values.Clear();
 
             Assert.IsFalse(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
-            Assert.IsNull(value.Attribute, "Property 'Attribute' was not set properly.");
-            Assert.IsNull(value.AttributeID, "Property 'AttributeID' was not reported properly.");
             Assert.IsFalse(anAttribute.Values.Any(), "Property 'Values' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.New, anAttribute.ObjectState, "Object state should remain 'New' when property set.");
         }
@@ -1216,8 +1214,6 @@ namespace EAVModelTest
             anAttribute.Values.Clear();
 
             Assert.IsFalse(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
-            Assert.IsNull(value.Attribute, "Property 'Attribute' was not set properly.");
-            Assert.IsNull(value.AttributeID, "Property 'AttributeID' was not reported properly.");
             Assert.IsFalse(anAttribute.Values.Any(), "Property 'Values' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
         }
@@ -1246,8 +1242,6 @@ namespace EAVModelTest
             anAttribute.Values.Clear();
 
             Assert.IsFalse(anAttribute.Values.Contains(value), "Property 'Values' was not updated properly.");
-            Assert.IsNull(value.Attribute, "Property 'Attribute' was not set properly.");
-            Assert.IsNull(value.AttributeID, "Property 'AttributeID' was not reported properly.");
             Assert.IsFalse(anAttribute.Values.Any(), "Property 'Values' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.Modified, anAttribute.ObjectState, "Object state failed to transition to 'Modified'.");
         }

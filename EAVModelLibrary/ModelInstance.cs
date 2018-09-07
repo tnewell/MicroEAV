@@ -135,11 +135,20 @@ namespace EAVModelLibrary
             }
         }
 
-        public int? ParentInstanceID { get { return (ParentInstance != null ? ParentInstance.InstanceID : null); } }
+        [DataMember(Name = "ParentInstanceID")]
+        protected int? parentInstanceID;
+        [IgnoreDataMember]
+        public int? ParentInstanceID { get { return (ParentInstance != null ? ParentInstance.InstanceID : parentInstanceID); } }
 
-        public int? SubjectID { get { return (Subject != null ? Subject.SubjectID : null); } }
+        [DataMember(Name = "SubjectID")]
+        protected int? subjectID;
+        [IgnoreDataMember]
+        public int? SubjectID { get { return (Subject != null ? Subject.SubjectID : subjectID); } }
 
-        public int? ContainerID { get { return (Container != null ? Container.ContainerID : null); } }
+        [DataMember(Name = "ContainerID")]
+        protected int? containerID;
+        [IgnoreDataMember]
+        public int? ContainerID { get { return (Container != null ? Container.ContainerID : containerID); } }
 
         [DataMember(Name = "ParentInstance")]
         protected EAV.Model.IModelInstance parentInstance;
@@ -169,6 +178,7 @@ namespace EAVModelLibrary
                 if (container != null && !container.Instances.Contains(this))
                 {
                     container = null;
+                    containerID = null;
                 }
 
                 return (container);
@@ -178,7 +188,9 @@ namespace EAVModelLibrary
                 if (container != value)
                 {
                     if (ObjectState == EAV.Model.ObjectState.Deleted)
-                        throw (new InvalidOperationException("Operation failed. Property 'RawValue' may not be modified when object in 'Deleted' state."));
+                        throw (new InvalidOperationException("Operation failed. Property 'Container' may not be modified when object in 'Deleted' state."));
+                    else if (value != null && value.ObjectState == EAV.Model.ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Container' may not be assigned object in 'Deleted' state."));
 
                     if (container != null && container.Instances.Contains(this))
                     {
@@ -186,6 +198,8 @@ namespace EAVModelLibrary
                     }
 
                     container = value;
+                    containerID = container != null ? container.ContainerID : null;
+
                     if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (container != null && !container.Instances.Contains(this))
@@ -283,6 +297,7 @@ namespace EAVModelLibrary
                 if (subject != null && !subject.Instances.Contains(this))
                 {
                     subject = null;
+                    subjectID = null;
                 }
 
                 return (subject);
@@ -293,6 +308,8 @@ namespace EAVModelLibrary
                 {
                     if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Subject' may not be modified when object in 'Deleted' state."));
+                    else if (value != null && value.ObjectState == EAV.Model.ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Subject' may not be assigned object in 'Deleted' state."));
 
                     if (subject != null && subject.Instances.Contains(this))
                     {
@@ -300,6 +317,8 @@ namespace EAVModelLibrary
                     }
 
                     subject = value;
+                    subjectID = subject != null ? subject.SubjectID : null;
+
                     SetStateRecursive(ObjectState != EAV.Model.ObjectState.New ? EAV.Model.ObjectState.Modified : ObjectState);
 
                     if (subject != null && !subject.Instances.Contains(this))
@@ -356,6 +375,8 @@ namespace EAVModelLibrary
             get
             {
                 subject = parentInstance != null ? parentInstance.Subject : null;
+                subjectID = subject != null ? subject.SubjectID : null;
+
                 return (subject);
             }
             set
@@ -374,6 +395,7 @@ namespace EAVModelLibrary
                 if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))
                 {
                     parentInstance = null;
+                    parentInstanceID = null;
                 }
 
                 return (parentInstance);
@@ -384,6 +406,8 @@ namespace EAVModelLibrary
                 {
                     if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'ParentInstance' may not be modified when object in 'Deleted' state."));
+                    else if (value != null && value.ObjectState == EAV.Model.ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'ParentInstance' may not be assigned object in 'Deleted' state."));
 
                     if (parentInstance != null && parentInstance.ChildInstances.Contains(this))
                     {
@@ -391,6 +415,8 @@ namespace EAVModelLibrary
                     }
 
                     parentInstance = value;
+                    parentInstanceID = parentInstance != null ? parentInstance.InstanceID : null;
+
                     if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (parentInstance != null && !parentInstance.ChildInstances.Contains(this))

@@ -176,9 +176,15 @@ namespace EAVModelLibrary
             }
         }
 
-        public int? ContextID { get { return (Context != null ? Context.ContextID : null); } }
+        [DataMember(Name = "ContextID")]
+        protected int? contextID;
+        [IgnoreDataMember]
+        public int? ContextID { get { return (Context != null ? Context.ContextID : contextID); } }
 
-        public int? ParentContainerID { get { return (ParentContainer != null ? ParentContainer.ContainerID : null); } }
+        [DataMember(Name = "ParentContainerID")]
+        protected int? parentContainerID;
+        [IgnoreDataMember]
+        public int? ParentContainerID { get { return (ParentContainer != null ? ParentContainer.ContainerID : parentContainerID); } }
 
         [DataMember(Name = "Context")]
         protected EAV.Model.IModelContext context;
@@ -391,6 +397,7 @@ namespace EAVModelLibrary
                 if (context != null && !context.Containers.Contains(this))
                 {
                     context = null;
+                    contextID = null;
                 }
 
                 return (context);
@@ -401,6 +408,8 @@ namespace EAVModelLibrary
                 {
                     if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'Context' may not be modified when object in 'Deleted' state."));
+                    else if (value != null && value.ObjectState == EAV.Model.ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'Context' may not be assigned object in 'Deleted' state."));
 
                     if (context != null && context.Containers.Contains(this))
                     {
@@ -408,6 +417,8 @@ namespace EAVModelLibrary
                     }
 
                     context = value;
+                    contextID = context.ContextID != null ? context.ContextID : null;
+
                     SetStateRecursive(ObjectState != EAV.Model.ObjectState.New ? EAV.Model.ObjectState.Modified : ObjectState);
 
                     if (context != null && !context.Containers.Contains(this))
@@ -446,6 +457,8 @@ namespace EAVModelLibrary
             get
             {
                 context = parentContainer != null ? parentContainer.Context : null;
+                contextID = context != null ? context.ContextID : null;
+
                 return (context);
             }
             set
@@ -464,6 +477,7 @@ namespace EAVModelLibrary
                 if (parentContainer != null && !parentContainer.ChildContainers.Contains(this))
                 {
                     parentContainer = null;
+                    parentContainerID = null;
                 }
 
                 return (parentContainer);
@@ -474,6 +488,8 @@ namespace EAVModelLibrary
                 {
                     if (ObjectState == EAV.Model.ObjectState.Deleted)
                         throw (new InvalidOperationException("Operation failed. Property 'ParentContainer' may not be modified when object in 'Deleted' state."));
+                    else if (value != null && value.ObjectState == EAV.Model.ObjectState.Deleted)
+                        throw (new InvalidOperationException("Operation failed. Property 'ParentContainer' may not be assigned object in 'Deleted' state."));
 
                     if (parentContainer != null && parentContainer.ChildContainers.Contains(this))
                     {
@@ -481,6 +497,8 @@ namespace EAVModelLibrary
                     }
 
                     parentContainer = value;
+                    parentContainerID = parentContainer != null ? parentContainer.ContainerID : null;
+
                     if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (parentContainer != null && !parentContainer.ChildContainers.Contains(this))

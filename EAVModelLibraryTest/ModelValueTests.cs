@@ -589,139 +589,139 @@ namespace EAVModelTest
             aValue.Unit = new EAVModelLibrary.ModelUnit() { UnitID = rng.Next() };
         }
 
-        [TestMethod]
-        public void ValueSetUnitIDWhenNew()
-        {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+        //[TestMethod]
+        //public void ValueSetUnitIDWhenNew()
+        //{
+        //    EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
 
-            Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
-            int unitID = rng.Next();
-            aValue.UnitID = unitID;
+        //    int unitID = rng.Next();
+        //    aValue.UnitID = unitID;
 
-            Assert.IsNull(aValue.Unit, "Property 'Unit' was not reported properly.");
-            Assert.AreEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
-            Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
-        }
+        //    Assert.IsNull(aValue.Unit, "Property 'Unit' was not reported properly.");
+        //    Assert.AreEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
+        //}
 
-        [TestMethod]
-        public void ValueSetUnitIDWhenUnmodified()
-        {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue() { Instance = new EAVModelLibrary.ModelRootInstance() { InstanceID = rng.Next() }, Attribute = new EAVModelLibrary.ModelAttribute() { AttributeID = rng.Next(), VariableUnits = true } };
+        //[TestMethod]
+        //public void ValueSetUnitIDWhenUnmodified()
+        //{
+        //    EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue() { Instance = new EAVModelLibrary.ModelRootInstance() { InstanceID = rng.Next() }, Attribute = new EAVModelLibrary.ModelAttribute() { AttributeID = rng.Next(), VariableUnits = true } };
 
-            Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
-            aValue.Instance.MarkUnmodified();
-            aValue.Attribute.MarkUnmodified();
+        //    aValue.Instance.MarkUnmodified();
+        //    aValue.Attribute.MarkUnmodified();
 
-            aValue.MarkUnmodified();
+        //    aValue.MarkUnmodified();
 
-            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            int unitID = rng.Next();
-            aValue.UnitID = unitID;
+        //    int unitID = rng.Next();
+        //    aValue.UnitID = unitID;
 
-            Assert.IsNull(aValue.Unit, "Property 'Unit' was not reported properly.");
-            Assert.AreEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
-            Assert.AreEqual(EAV.Model.ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
-        }
+        //    Assert.IsNull(aValue.Unit, "Property 'Unit' was not reported properly.");
+        //    Assert.AreEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
+        //}
 
-        [TestMethod]
-        public void ValueSetUnitIDWhenModified()
-        {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue() { Instance = new EAVModelLibrary.ModelRootInstance() { InstanceID = rng.Next() }, Attribute = new EAVModelLibrary.ModelAttribute() { AttributeID = rng.Next(), VariableUnits = true } };
+        //[TestMethod]
+        //public void ValueSetUnitIDWhenModified()
+        //{
+        //    EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue() { Instance = new EAVModelLibrary.ModelRootInstance() { InstanceID = rng.Next() }, Attribute = new EAVModelLibrary.ModelAttribute() { AttributeID = rng.Next(), VariableUnits = true } };
 
-            Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
-            aValue.Instance.MarkUnmodified();
-            aValue.Attribute.MarkUnmodified();
+        //    aValue.Instance.MarkUnmodified();
+        //    aValue.Attribute.MarkUnmodified();
 
-            aValue.MarkUnmodified();
+        //    aValue.MarkUnmodified();
 
-            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            int unitID = rng.Next();
-            aValue.UnitID = unitID;
+        //    int unitID = rng.Next();
+        //    aValue.UnitID = unitID;
 
-            Assert.IsNull(aValue.Unit, "Property 'Unit' was not reported properly.");
-            Assert.AreEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
-            Assert.AreEqual(EAV.Model.ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
+        //    Assert.IsNull(aValue.Unit, "Property 'Unit' was not reported properly.");
+        //    Assert.AreEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.Modified, aValue.ObjectState, "Object state failed to transition to 'Modified'.");
 
-            unitID = rng.Next();
-            aValue.UnitID = unitID;
+        //    unitID = rng.Next();
+        //    aValue.UnitID = unitID;
 
-            Assert.IsNull(aValue.Unit, "Property 'Unit' was not reported properly.");
-            Assert.AreEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
-            Assert.AreEqual(EAV.Model.ObjectState.Modified, aValue.ObjectState, "Object state should remain 'Modified' when property set.");
-        }
+        //    Assert.IsNull(aValue.Unit, "Property 'Unit' was not reported properly.");
+        //    Assert.AreEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.Modified, aValue.ObjectState, "Object state should remain 'Modified' when property set.");
+        //}
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ValueSetUnitIDWhenDeleted()
-        {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue() { Instance = new EAVModelLibrary.ModelRootInstance() { InstanceID = rng.Next() }, Attribute = new EAVModelLibrary.ModelAttribute() { AttributeID = rng.Next() } };
+        //[TestMethod]
+        //[ExpectedException(typeof(InvalidOperationException))]
+        //public void ValueSetUnitIDWhenDeleted()
+        //{
+        //    EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue() { Instance = new EAVModelLibrary.ModelRootInstance() { InstanceID = rng.Next() }, Attribute = new EAVModelLibrary.ModelAttribute() { AttributeID = rng.Next() } };
 
-            Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
-            aValue.Instance.MarkUnmodified();
-            aValue.Attribute.MarkUnmodified();
+        //    aValue.Instance.MarkUnmodified();
+        //    aValue.Attribute.MarkUnmodified();
 
-            aValue.MarkUnmodified();
+        //    aValue.MarkUnmodified();
 
-            Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.Unmodified, aValue.ObjectState, "Object state failed to transition to 'Unmodified'.");
 
-            aValue.MarkDeleted();
+        //    aValue.MarkDeleted();
 
-            Assert.AreEqual(EAV.Model.ObjectState.Deleted, aValue.ObjectState, "Object state failed to transition to 'Deleted'.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.Deleted, aValue.ObjectState, "Object state failed to transition to 'Deleted'.");
 
-            aValue.UnitID = rng.Next();
-        }
+        //    aValue.UnitID = rng.Next();
+        //}
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void ValueSetUnitWhenNewWithNewUnitThenUnitID()
-        {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+        //[TestMethod]
+        //[ExpectedException(typeof(InvalidOperationException))]
+        //public void ValueSetUnitWhenNewWithNewUnitThenUnitID()
+        //{
+        //    EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
 
-            Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
-            EAVModelLibrary.ModelUnit aUnit = new EAVModelLibrary.ModelUnit() { UnitID = rng.Next() };
-            aValue.Unit = aUnit;
+        //    EAVModelLibrary.ModelUnit aUnit = new EAVModelLibrary.ModelUnit() { UnitID = rng.Next() };
+        //    aValue.Unit = aUnit;
 
-            Assert.AreEqual(aUnit, aValue.Unit, "Property 'Units' was not set properly.");
-            Assert.AreEqual(aUnit.UnitID, aValue.UnitID, "Property 'UnitID' was not reported properly.");
-            Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
-            Assert.AreEqual(EAV.Model.ObjectState.New, aUnit.ObjectState, String.Format("Object state for Unit object incorrectly transitioned to '{0}' when 'Unit' property set.", aUnit.ObjectState));
+        //    Assert.AreEqual(aUnit, aValue.Unit, "Property 'Units' was not set properly.");
+        //    Assert.AreEqual(aUnit.UnitID, aValue.UnitID, "Property 'UnitID' was not reported properly.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aUnit.ObjectState, String.Format("Object state for Unit object incorrectly transitioned to '{0}' when 'Unit' property set.", aUnit.ObjectState));
 
-            aValue.UnitID = rng.Next();
-        }
+        //    aValue.UnitID = rng.Next();
+        //}
 
-        [TestMethod]
-        public void ValueSetUnitIDWhenNewWithNewUnit()
-        {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+        //[TestMethod]
+        //public void ValueSetUnitIDWhenNewWithNewUnit()
+        //{
+        //    EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
 
-            Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
-            int unitID = rng.Next();
-            aValue.UnitID = unitID;
+        //    int unitID = rng.Next();
+        //    aValue.UnitID = unitID;
 
-            Assert.IsNull(aValue.Unit, "Property 'Unit' was not reported properly.");
-            Assert.AreEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
-            Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
+        //    Assert.IsNull(aValue.Unit, "Property 'Unit' was not reported properly.");
+        //    Assert.AreEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
 
-            EAVModelLibrary.ModelUnit aUnit = new EAVModelLibrary.ModelUnit() { UnitID = rng.Next() };
-            aValue.Unit = aUnit;
+        //    EAVModelLibrary.ModelUnit aUnit = new EAVModelLibrary.ModelUnit() { UnitID = rng.Next() };
+        //    aValue.Unit = aUnit;
 
-            if (aUnit.UnitID == unitID)
-                Assert.Inconclusive("The same value was selected for unit ID.");
+        //    if (aUnit.UnitID == unitID)
+        //        Assert.Inconclusive("The same value was selected for unit ID.");
 
-            Assert.AreEqual(aUnit, aValue.Unit, "Property 'Units' was not set properly.");
-            Assert.AreEqual(aUnit.UnitID, aValue.UnitID, "Property 'UnitID' was not reported properly.");
-            Assert.AreNotEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
-            Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
-            Assert.AreEqual(EAV.Model.ObjectState.New, aUnit.ObjectState, String.Format("Object state for Unit object incorrectly transitioned to '{0}' when 'Unit' property set.", aUnit.ObjectState));
-        }
+        //    Assert.AreEqual(aUnit, aValue.Unit, "Property 'Units' was not set properly.");
+        //    Assert.AreEqual(aUnit.UnitID, aValue.UnitID, "Property 'UnitID' was not reported properly.");
+        //    Assert.AreNotEqual(unitID, aValue.UnitID, "Property 'UnitID' was not set properly.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should remain 'New' when property set.");
+        //    Assert.AreEqual(EAV.Model.ObjectState.New, aUnit.ObjectState, String.Format("Object state for Unit object incorrectly transitioned to '{0}' when 'Unit' property set.", aUnit.ObjectState));
+        //}
         #endregion
         #endregion
 

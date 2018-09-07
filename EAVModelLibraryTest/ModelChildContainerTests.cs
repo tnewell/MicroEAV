@@ -912,8 +912,6 @@ namespace EAVModelTest
             aParentContainer.ChildContainers.Clear();
 
             Assert.IsFalse(aParentContainer.ChildContainers.Contains(value), "Property 'ChildContainers' was not updated properly.");
-            Assert.IsNull(value.ParentContainer, "Property 'ParentContainer' was not set properly.");
-            Assert.IsNull(value.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
             Assert.IsFalse(aParentContainer.ChildContainers.Any(), "Property 'ChildContainers' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.New, aParentContainer.ObjectState, "Object state should remain 'New' when property set.");
         }
@@ -942,8 +940,6 @@ namespace EAVModelTest
             aParentContainer.ChildContainers.Clear();
 
             Assert.IsFalse(aParentContainer.ChildContainers.Contains(value), "Property 'ChildContainers' was not updated properly.");
-            Assert.IsNull(value.ParentContainer, "Property 'ParentContainer' was not set properly.");
-            Assert.IsNull(value.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
             Assert.IsFalse(aParentContainer.ChildContainers.Any(), "Property 'ChildContainers' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.Modified, aParentContainer.ObjectState, "Object state failed to transition to 'Modified'.");
         }
@@ -972,8 +968,6 @@ namespace EAVModelTest
             aParentContainer.ChildContainers.Clear();
 
             Assert.IsFalse(aParentContainer.ChildContainers.Contains(value), "Property 'ChildContainers' was not updated properly.");
-            Assert.IsNull(value.ParentContainer, "Property 'ParentContainer' was not set properly.");
-            Assert.IsNull(value.ParentContainerID, "Property 'ParentContainerID' was not reported properly.");
             Assert.IsFalse(aParentContainer.ChildContainers.Any(), "Property 'ChildContainers' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.Modified, aParentContainer.ObjectState, "Object state should remain 'Modified' when property set.");
         }
@@ -1221,8 +1215,6 @@ namespace EAVModelTest
             aContainer.Attributes.Clear();
 
             Assert.IsFalse(aContainer.Attributes.Contains(value), "Property 'Attributes' was not updated properly.");
-            Assert.IsNull(value.Container, "Property 'Container' was not set properly.");
-            Assert.IsNull(value.ContainerID, "Property 'ContainerID' was not reported properly.");
             Assert.IsFalse(aContainer.Attributes.Any(), "Property 'Attributes' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.New, aContainer.ObjectState, "Object state should remain 'New' when property set.");
         }
@@ -1251,8 +1243,6 @@ namespace EAVModelTest
             aContainer.Attributes.Clear();
 
             Assert.IsFalse(aContainer.Attributes.Contains(value), "Property 'Attributes' was not updated properly.");
-            Assert.IsNull(value.Container, "Property 'Container' was not set properly.");
-            Assert.IsNull(value.ContainerID, "Property 'ContainerID' was not reported properly.");
             Assert.IsFalse(aContainer.Attributes.Any(), "Property 'Attributes' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.Modified, aContainer.ObjectState, "Object state failed to transition to 'Modified'.");
         }
@@ -1281,8 +1271,6 @@ namespace EAVModelTest
             aContainer.Attributes.Clear();
 
             Assert.IsFalse(aContainer.Attributes.Contains(value), "Property 'Attributes' was not updated properly.");
-            Assert.IsNull(value.Container, "Property 'Container' was not set properly.");
-            Assert.IsNull(value.ContainerID, "Property 'ContainerID' was not reported properly.");
             Assert.IsFalse(aContainer.Attributes.Any(), "Property 'Attributes' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.Modified, aContainer.ObjectState, "Object state should remain 'Modified' when property set.");
         }
@@ -1535,8 +1523,6 @@ namespace EAVModelTest
             aContainer.Instances.Clear();
 
             Assert.IsFalse(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
-            Assert.IsNull(value.Container, "Property 'Container' was not set properly.");
-            Assert.IsNull(value.ContainerID, "Property 'ContainerID' was not reported properly.");
             Assert.IsFalse(aContainer.Instances.Any(), "Property 'Instances' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.New, aContainer.ObjectState, "Object state should remain 'New' when property set.");
         }
@@ -1565,8 +1551,6 @@ namespace EAVModelTest
             aContainer.Instances.Clear();
 
             Assert.IsFalse(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
-            Assert.IsNull(value.Container, "Property 'Container' was not set properly.");
-            Assert.IsNull(value.ContainerID, "Property 'ContainerID' was not reported properly.");
             Assert.IsFalse(aContainer.Instances.Any(), "Property 'Instances' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.Modified, aContainer.ObjectState, "Object state failed to transition to 'Modified'.");
         }
@@ -1595,8 +1579,6 @@ namespace EAVModelTest
             aContainer.Instances.Clear();
 
             Assert.IsFalse(aContainer.Instances.Contains(value), "Property 'Instances' was not updated properly.");
-            Assert.IsNull(value.Container, "Property 'Container' was not set properly.");
-            Assert.IsNull(value.ContainerID, "Property 'ContainerID' was not reported properly.");
             Assert.IsFalse(aContainer.Instances.Any(), "Property 'Instances' was not updated properly.");
             Assert.AreEqual(EAV.Model.ObjectState.Modified, aContainer.ObjectState, "Object state failed to transition to 'Modified'.");
         }

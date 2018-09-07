@@ -20,14 +20,14 @@ namespace EAVWebService
             config.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Serialize;
             config.Formatters.JsonFormatter.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.Objects;
 
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreContextJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreContainerJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreAttributeJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreUnitJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreEntityJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreSubjectJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreInstanceJsonConverter());
-            config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreValueJsonConverter());
+            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreContextJsonConverter());
+            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreContainerJsonConverter());
+            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreAttributeJsonConverter());
+            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreUnitJsonConverter());
+            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreEntityJsonConverter());
+            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreSubjectJsonConverter());
+            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreInstanceJsonConverter());
+            //config.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new IStoreValueJsonConverter());
 
             //config.Formatters.XmlFormatter.SetSerializer<EAV.Model.StoreContext>(new EAVContextXmlSerializer(typeof(StoreContext)));
 
@@ -46,12 +46,14 @@ namespace EAVWebService
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IStoreContext));
+            //return (objectType == typeof(IStoreContext));
+            return (typeof(IStoreContext).IsAssignableFrom(objectType));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IStoreContext))
+            //if (objectType == typeof(IStoreContext))
+            if (typeof(IStoreContext).IsAssignableFrom(objectType))
                 return (serializer.Deserialize<StoreContext>(reader));
             else
                 return (null);
@@ -70,12 +72,14 @@ namespace EAVWebService
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IStoreContainer));
+            //return (objectType == typeof(IStoreContainer));
+            return (typeof(IStoreContainer).IsAssignableFrom(objectType));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IStoreContainer))
+            //if (objectType == typeof(IStoreContainer))
+            if (typeof(IStoreContainer).IsAssignableFrom(objectType))
                 return (serializer.Deserialize<StoreContainer>(reader));
             else
                 return (null);
@@ -94,12 +98,14 @@ namespace EAVWebService
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IStoreAttribute));
+            //return (objectType == typeof(IStoreAttribute));
+            return (typeof(IStoreAttribute).IsAssignableFrom(objectType));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IStoreAttribute))
+            //if (objectType == typeof(IStoreAttribute))
+            if (typeof(IStoreAttribute).IsAssignableFrom(objectType))
                 return (serializer.Deserialize<StoreAttribute>(reader));
             else
                 return (null);
@@ -118,12 +124,14 @@ namespace EAVWebService
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IStoreUnit));
+            //return (objectType == typeof(IStoreUnit));
+            return (typeof(IStoreUnit).IsAssignableFrom(objectType));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IStoreUnit))
+            //if (objectType == typeof(IStoreUnit))
+            if (typeof(IStoreUnit).IsAssignableFrom(objectType))
                 return (serializer.Deserialize<StoreUnit>(reader));
             else
                 return (null);
@@ -142,12 +150,14 @@ namespace EAVWebService
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IStoreEntity));
+            //return (objectType == typeof(IStoreEntity));
+            return (typeof(IStoreEntity).IsAssignableFrom(objectType));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IStoreEntity))
+            //if (objectType == typeof(IStoreEntity))
+            if (typeof(IStoreEntity).IsAssignableFrom(objectType))
                 return (serializer.Deserialize<StoreEntity>(reader));
             else
                 return (null);
@@ -166,12 +176,14 @@ namespace EAVWebService
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IStoreSubject));
+            //return (objectType == typeof(IStoreSubject));
+            return (typeof(IStoreSubject).IsAssignableFrom(objectType));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IStoreSubject))
+            //if (objectType == typeof(IStoreSubject))
+            if (typeof(IStoreSubject).IsAssignableFrom(objectType))
                 return (serializer.Deserialize<StoreSubject>(reader));
             else
                 return (null);
@@ -190,12 +202,14 @@ namespace EAVWebService
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IStoreInstance));
+            //return (objectType == typeof(IStoreInstance));
+            return (typeof(IStoreInstance).IsAssignableFrom(objectType));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IStoreInstance))
+            //if (objectType == typeof(IStoreInstance))
+            if (typeof(IStoreInstance).IsAssignableFrom(objectType))
                 return (serializer.Deserialize<StoreInstance>(reader));
             else
                 return (null);
@@ -214,12 +228,14 @@ namespace EAVWebService
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(IStoreValue));
+            //return (objectType == typeof(IStoreValue));
+            return (typeof(IStoreValue).IsAssignableFrom(objectType));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (objectType == typeof(IStoreValue))
+            //if (objectType == typeof(IStoreValue))
+            if (typeof(IStoreValue).IsAssignableFrom(objectType))
                 return (serializer.Deserialize<StoreValue>(reader));
             else
                 return (null);
