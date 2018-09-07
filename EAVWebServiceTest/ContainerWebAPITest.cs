@@ -16,7 +16,7 @@ namespace EAVServiceTest
         [TestCategory("Container")]
         public void RetrieveNonExistentContainer()
         {
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/containers/{0}", -1)).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/containers/{0}", -1)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var container = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContainer>().Result;
@@ -39,7 +39,7 @@ namespace EAVServiceTest
 
             if (dbContainer != null)
             {
-                HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/containers/{0}", dbContainer.Container_ID)).Result;
+                HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/containers/{0}", dbContainer.Container_ID)).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var container = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContainer>().Result;
@@ -77,9 +77,9 @@ namespace EAVServiceTest
             container.DataName = oldDataName.Flip();
             container.DisplayText = oldDisplayText.Flip();
             container.IsRepeating = !oldIsRepeating;
-            container.Sequence = -oldSequence;
+            container.Sequence = oldSequence != 0 ? -oldSequence : -1;
 
-            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAVStoreLibrary.StoreContainer>("api/meta/containers", container).Result;
+            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAVStoreLibrary.StoreContainer>("api/metadata/containers", container).Result;
             if (response.IsSuccessStatusCode)
             {
                 ResetDatabaseContext();
@@ -112,7 +112,7 @@ namespace EAVServiceTest
             var dbContext = SelectRandomItem(this.DbContext.Contexts);
             EAVStoreClient.Container dbContainerIn = CreateContainer(dbContext.Context_ID, null, Guid.NewGuid().ToString(), rng.Next(), true);
 
-            HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/meta/containers/{0}", dbContainerIn.Container_ID)).Result;
+            HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/metadata/containers/{0}", dbContainerIn.Container_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 ResetDatabaseContext();
@@ -136,7 +136,7 @@ namespace EAVServiceTest
             var dbParentContainer = SelectRandomItem(this.DbContext.Containers.Where(it => it.Parent_Container_ID == null));
             int nDbChildContainers = this.DbContext.Containers.Where(it => it.Parent_Container_ID == dbParentContainer.Container_ID).Count();
 
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/containers/{0}/containers", dbParentContainer.Container_ID)).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/containers/{0}/containers", dbParentContainer.Container_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var containers = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreContainer>>().Result;
@@ -159,7 +159,7 @@ namespace EAVServiceTest
             var dbParentContainer = SelectRandomItem(this.DbContext.Containers);
             string childContainerName = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreContainer>(String.Format("api/meta/containers/{0}/containers", dbParentContainer.Container_ID), new EAVStoreLibrary.StoreContainer() { Name = childContainerName, DataName = childContainerName.ToUpper(), DisplayText = childContainerName + ":", IsRepeating = true }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreContainer>(String.Format("api/metadata/containers/{0}/containers", dbParentContainer.Container_ID), new EAVStoreLibrary.StoreContainer() { Name = childContainerName, DataName = childContainerName.ToUpper(), DisplayText = childContainerName + ":", IsRepeating = true }).Result;
             if (response.IsSuccessStatusCode)
             {
                 var container = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContainer>().Result;
@@ -191,7 +191,7 @@ namespace EAVServiceTest
             var dbContainer = SelectRandomItem(this.DbContext.Containers);
             int nDbAttributes = this.DbContext.Attributes.Where(it => it.Container_ID == dbContainer.Container_ID).Count();
 
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/containers/{0}/attributes", dbContainer.Container_ID)).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/containers/{0}/attributes", dbContainer.Container_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var attributes = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreAttribute>>().Result;
@@ -214,7 +214,7 @@ namespace EAVServiceTest
             var dbContainer = SelectRandomItem(this.DbContext.Containers);
             string attributeName = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreAttribute>(String.Format("api/meta/containers/{0}/attributes", dbContainer.Container_ID), new EAVStoreLibrary.StoreAttribute() { Name = attributeName, DataName = attributeName.ToUpper(), DisplayText = attributeName + ":", IsKey = true }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreAttribute>(String.Format("api/metadata/containers/{0}/attributes", dbContainer.Container_ID), new EAVStoreLibrary.StoreAttribute() { Name = attributeName, DataName = attributeName.ToUpper(), DisplayText = attributeName + ":", IsKey = true }).Result;
             if (response.IsSuccessStatusCode)
             {
                 var attribute = response.Content.ReadAsAsync<EAVStoreLibrary.StoreAttribute>().Result;

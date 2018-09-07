@@ -261,9 +261,9 @@
     <Content Include="Views\Metadata\Index.cshtml" />
     <Content Include="Views\Metadata\ContextEditorDialog.cshtml" />
     <Content Include="Views\Metadata\ContainerEditorDialog.cshtml" />
-    <Content Include="Views\Metadata\EditorTemplates\ContainerModel.cshtml" />
+    <Content Include="Views\Metadata\EditorTemplates\ContainerViewModel.cshtml" />
     <Content Include="Views\Metadata\AttributeEditorDialog.cshtml" />
-    <Content Include="Views\Metadata\EditorTemplates\AttributeModel.cshtml" />
+    <Content Include="Views\Metadata\EditorTemplates\AttributeViewModel.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />

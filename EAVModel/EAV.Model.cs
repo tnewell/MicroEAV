@@ -19,4 +19,9 @@
 namespace EAV.Model
 {
     public enum ObjectState { New, Unmodified, Modified, Deleted }
+
+    public interface IModelObjectFactory
+    {
+        TInterface Create<TInterface>() where TInterface : class;
+    }
 }

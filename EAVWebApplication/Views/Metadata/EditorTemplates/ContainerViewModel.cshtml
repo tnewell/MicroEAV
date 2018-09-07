@@ -1,4 +1,4 @@
-﻿@model ContainerModel
+﻿@model EAVWebApplication.Models.Metadata.ContainerViewModel
 
 @{ 
     var editActionUrl = (Model.ParentID != 0 ? "~/Metadata/EditChildContainer" : "~/Metadata/EditRootContainer") + "?id=" + Model.ID.ToString();

@@ -16,7 +16,7 @@ namespace EAVServiceTest
         [TestCategory("Attribute")]
         public void RetrieveNonExistentAttribute()
         {
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/attributes/{0}", -1)).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/attributes/{0}", -1)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var attribute = response.Content.ReadAsAsync<EAVStoreLibrary.StoreAttribute>().Result;
@@ -39,7 +39,7 @@ namespace EAVServiceTest
 
             if (dbAttribute != null)
             {
-                HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/attributes/{0}", dbAttribute.Attribute_ID)).Result;
+                HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/attributes/{0}", dbAttribute.Attribute_ID)).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var attribute = response.Content.ReadAsAsync<EAVStoreLibrary.StoreAttribute>().Result;
@@ -67,7 +67,7 @@ namespace EAVServiceTest
             var dbContainer = SelectRandomItem(this.DbContext.Containers);
             EAVStoreClient.Attribute dbAttributeIn = CreateAttribute(dbContainer.Container_ID, Guid.NewGuid().ToString(), EAV.EAVDataType.String, rng.Next(), true);
 
-            HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/meta/attributes/{0}", dbAttributeIn.Attribute_ID)).Result;
+            HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/metadata/attributes/{0}", dbAttributeIn.Attribute_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 ResetDatabaseContext();

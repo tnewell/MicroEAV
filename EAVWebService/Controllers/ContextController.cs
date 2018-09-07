@@ -22,7 +22,7 @@ using System.Web.Http;
 
 namespace EAVWebService.Controllers
 {
-    [RoutePrefix("api/meta/contexts")]
+    [RoutePrefix("api/metadata/contexts")]
     public class ContextController : BaseEAVController
     {
         private EAV.Store.Clients.IContextStoreClient contextClient = new EAVStoreClient.ContextStoreClient();

@@ -22,7 +22,7 @@ using System.Web.Http;
 
 namespace EAVWebService.Controllers
 {
-    [RoutePrefix("api/data/entities")]
+    [RoutePrefix("api/entities")]
     public class EntityController : BaseEAVController
     {
         private EAV.Store.Clients.IEntityStoreClient entityClient = new EAVStoreClient.EntityStoreClient();

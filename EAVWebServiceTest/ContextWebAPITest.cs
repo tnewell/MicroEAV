@@ -18,7 +18,7 @@ namespace EAVServiceTest
         {
             int nDbContexts = this.DbContext.Contexts.Count();
 
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/contexts")).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/contexts")).Result;
             if (response.IsSuccessStatusCode)
             {
                 var contexts = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreContext>>().Result;
@@ -38,7 +38,7 @@ namespace EAVServiceTest
         [TestCategory("Context")]
         public void RetrieveNonExistentContext()
         {
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/contexts/{0}", -1)).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/contexts/{0}", -1)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var context = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContext>().Result;
@@ -57,7 +57,7 @@ namespace EAVServiceTest
         [TestCategory("Context")]
         public void RetrieveNonExistentContextByName()
         {
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/contexts/{0}", "No Such Context")).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/contexts/{0}", "No Such Context")).Result;
             if (response.IsSuccessStatusCode)
             {
                 var context = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContext>().Result;
@@ -80,7 +80,7 @@ namespace EAVServiceTest
 
             if (dbContext != null)
             {
-                HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/contexts/{0}", dbContext.Context_ID)).Result;
+                HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/contexts/{0}", dbContext.Context_ID)).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var context = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContext>().Result;
@@ -109,7 +109,7 @@ namespace EAVServiceTest
 
             if (dbContext != null)
             {
-                HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/contexts/{0}", dbContext.Name)).Result;
+                HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/contexts/{0}", dbContext.Name)).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var context = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContext>().Result;
@@ -136,7 +136,7 @@ namespace EAVServiceTest
         {
             string contextName = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreContext>("api/meta/contexts", new EAVStoreLibrary.StoreContext() { Name = contextName, DataName = contextName.ToUpper(), DisplayText = contextName + ":" }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreContext>("api/metadata/contexts", new EAVStoreLibrary.StoreContext() { Name = contextName, DataName = contextName.ToUpper(), DisplayText = contextName + ":" }).Result;
             if (response.IsSuccessStatusCode)
             {
                 var context = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContext>().Result;
@@ -174,7 +174,7 @@ namespace EAVServiceTest
             context.DataName = oldDataName.Flip();
             context.DisplayText = oldDisplayText.Flip();
 
-            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAVStoreLibrary.StoreContext>("api/meta/contexts", context).Result;
+            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAVStoreLibrary.StoreContext>("api/metadata/contexts", context).Result;
             if (response.IsSuccessStatusCode)
             {
                 ResetDatabaseContext();
@@ -202,7 +202,7 @@ namespace EAVServiceTest
         {
             EAVStoreClient.Context dbContextIn = CreateContext(Guid.NewGuid().ToString());
 
-            HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/meta/contexts/{0}", dbContextIn.Context_ID)).Result;
+            HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/metadata/contexts/{0}", dbContextIn.Context_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 ResetDatabaseContext();
@@ -226,7 +226,7 @@ namespace EAVServiceTest
             var dbContext = SelectRandomItem(this.DbContext.Contexts);
             int nDbRootContainers = this.DbContext.Containers.Where(it => it.Context_ID == dbContext.Context_ID && it.Parent_Container_ID == null).Count();
 
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/contexts/{0}/containers", dbContext.Context_ID)).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/contexts/{0}/containers", dbContext.Context_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var containers = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreContainer>>().Result;
@@ -249,7 +249,7 @@ namespace EAVServiceTest
             var dbContext = SelectRandomItem(this.DbContext.Contexts);
             string containerName = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreContainer>(String.Format("api/meta/contexts/{0}/containers", dbContext.Context_ID), new EAVStoreLibrary.StoreContainer() { Name = containerName, DataName = containerName.ToUpper(), DisplayText = containerName + ":", IsRepeating = true }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreContainer>(String.Format("api/metadata/contexts/{0}/containers", dbContext.Context_ID), new EAVStoreLibrary.StoreContainer() { Name = containerName, DataName = containerName.ToUpper(), DisplayText = containerName + ":", IsRepeating = true }).Result;
             if (response.IsSuccessStatusCode)
             {
                 var container = response.Content.ReadAsAsync<EAVStoreLibrary.StoreContainer>().Result;
@@ -281,7 +281,7 @@ namespace EAVServiceTest
             var dbContext = SelectRandomItem(this.DbContext.Contexts);
             int nDbSubjects = this.DbContext.Subjects.Where(it => it.Context_ID == dbContext.Context_ID).Count();
 
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/meta/contexts/{0}/subjects", dbContext.Context_ID)).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/metadata/contexts/{0}/subjects", dbContext.Context_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var subjects = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreSubject>>().Result;
@@ -305,7 +305,7 @@ namespace EAVServiceTest
             var dbEntity = SelectRandomItem(this.DbContext.Entities);
             string subjectIdentifier = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreSubject>(String.Format("api/meta/contexts/{0}/subjects?entity={1}", dbContext.Context_ID, dbEntity.Entity_ID), new EAVStoreLibrary.StoreSubject() { Identifier = subjectIdentifier }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreSubject>(String.Format("api/metadata/contexts/{0}/subjects?entity={1}", dbContext.Context_ID, dbEntity.Entity_ID), new EAVStoreLibrary.StoreSubject() { Identifier = subjectIdentifier }).Result;
             if (response.IsSuccessStatusCode)
             {
                 var subject = response.Content.ReadAsAsync<EAVStoreLibrary.StoreSubject>().Result;

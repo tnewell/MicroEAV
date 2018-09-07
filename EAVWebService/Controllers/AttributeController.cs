@@ -22,7 +22,7 @@ using System.Web.Http;
 
 namespace EAVWebService.Controllers
 {
-    [RoutePrefix("api/meta/attributes")]
+    [RoutePrefix("api/metadata/attributes")]
     public class AttributeController : BaseEAVController
     {
         private EAV.Store.Clients.IAttributeStoreClient attributeClient = new EAVStoreClient.AttributeStoreClient();

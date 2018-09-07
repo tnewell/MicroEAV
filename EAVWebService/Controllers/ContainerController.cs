@@ -22,7 +22,7 @@ using System.Web.Http;
 
 namespace EAVWebService.Controllers
 {
-    [RoutePrefix("api/meta/containers")]
+    [RoutePrefix("api/metadata/containers")]
     public class ContainerController : BaseEAVController
     {
         private EAV.Store.Clients.IContainerStoreClient containerClient = new EAVStoreClient.ContainerStoreClient();

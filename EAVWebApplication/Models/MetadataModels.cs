@@ -55,26 +55,21 @@ namespace EAVWebApplication.Models.Metadata
         public IModelContext CurrentContext { get { return (Contexts.SingleOrDefault(it => it.ContextID.GetValueOrDefault() == SelectedContextID)); } }
     }
 
-    public class ContextModel
+    public class ContextViewModel
     {
-        public static explicit operator ContextModel(ModelContext context)
+        public ContextViewModel()
         {
-            return (new ContextModel(context));
+            containers = new List<ContainerViewModel>();
         }
 
-        public ContextModel()
-        {
-            containers = new List<ContainerModel>();
-        }
-
-        public ContextModel(IModelContext context)
+        public ContextViewModel(IModelContext context)
         {
             ID = context.ContextID.GetValueOrDefault();
             Name = context.Name;
             DataName = context.DataName;
             DisplayText = context.DisplayText;
 
-            containers = new List<ContainerModel>();
+            containers = new List<ContainerViewModel>();
             InitializeContainers(context.Containers);
         }
 
@@ -92,49 +87,34 @@ namespace EAVWebApplication.Models.Metadata
         [Display(Name = "Display Text")]
         public string DisplayText { get; set; }
 
-        private List<ContainerModel> containers;
-        public ICollection<ContainerModel> Containers { get { return (containers); } }
+        private List<ContainerViewModel> containers;
+        public ICollection<ContainerViewModel> Containers { get { return (containers); } }
 
         public bool Existing { get; set; }
-
+        
         public bool IsValid { get { return (!String.IsNullOrWhiteSpace(Name) && !String.IsNullOrWhiteSpace(DataName)); } }
 
         protected void InitializeContainers(IEnumerable<IModelContainer> containers)
         {
             this.containers.Clear();
-            this.containers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel) it).OrderBy(it => it.Sequence));
+            this.containers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => new ContainerViewModel(it)).OrderBy(it => it.Sequence));
         }
 
         public void FixupContainerOrder()
         {
-            containers.Sort((ContainerModel c1, ContainerModel c2) => { return (c1.Sequence == c2.Sequence ? 0 : (c1.Sequence > c2.Sequence ? 1 : -1)); });
+            containers.Sort((ContainerViewModel c1, ContainerViewModel c2) => { return (c1.Sequence == c2.Sequence ? 0 : (c1.Sequence > c2.Sequence ? 1 : -1)); });
         }
     }
 
-    public class ContainerModel
+    public class ContainerViewModel
     {
-        public static explicit operator ContainerModel(ModelContainer container)
+        public ContainerViewModel()
         {
-            return (new ContainerModel(container));
+            childContainers = new List<ContainerViewModel>();
+            attributes = new List<AttributeViewModel>();
         }
 
-        public static explicit operator ContainerModel(ModelRootContainer container)
-        {
-            return (new ContainerModel(container));
-        }
-
-        public static explicit operator ContainerModel(ModelChildContainer container)
-        {
-            return (new ContainerModel(container));
-        }
-
-        public ContainerModel()
-        {
-            childContainers = new List<ContainerModel>();
-            attributes = new List<AttributeModel>();
-        }
-
-        public ContainerModel(IModelContainer container)
+        public ContainerViewModel(IModelContainer container)
         {
             ID = container.ContainerID.GetValueOrDefault();
             ParentID = container.ParentContainerID.GetValueOrDefault();
@@ -144,10 +124,10 @@ namespace EAVWebApplication.Models.Metadata
             IsRepeating = container.IsRepeating;
             Sequence = container.Sequence;
 
-            childContainers = new List<ContainerModel>();
+            childContainers = new List<ContainerViewModel>();
             InitializeContainers(container.ChildContainers);
 
-            attributes = new List<AttributeModel>();
+            attributes = new List<AttributeViewModel>();
             InitializeAttributes(container.Attributes);
         }
 
@@ -174,11 +154,11 @@ namespace EAVWebApplication.Models.Metadata
 
         public int Sequence { get; set; }
 
-        private List<ContainerModel> childContainers;
-        public ICollection<ContainerModel> ChildContainers { get { return (childContainers); } }
+        private List<ContainerViewModel> childContainers;
+        public ICollection<ContainerViewModel> ChildContainers { get { return (childContainers); } }
 
-        private List<AttributeModel> attributes;
-        public ICollection<AttributeModel> Attributes { get { return (attributes); } }
+        private List<AttributeViewModel> attributes;
+        public ICollection<AttributeViewModel> Attributes { get { return (attributes); } }
 
         public bool Existing { get; set; }
 
@@ -187,38 +167,33 @@ namespace EAVWebApplication.Models.Metadata
         protected void InitializeContainers(IEnumerable<IModelContainer> containers)
         {
             this.childContainers.Clear();
-            this.childContainers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (ContainerModel) it).OrderBy(it => it.Sequence));
+            this.childContainers.AddRange(containers.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => new ContainerViewModel(it)).OrderBy(it => it.Sequence));
         }
 
         public void FixupContainerOrder()
         {
-            childContainers.Sort((ContainerModel c1, ContainerModel c2) => { return (c1.Sequence == c2.Sequence ? 0 : (c1.Sequence > c2.Sequence ? 1 : -1)); });
+            childContainers.Sort((ContainerViewModel c1, ContainerViewModel c2) => { return (c1.Sequence == c2.Sequence ? 0 : (c1.Sequence > c2.Sequence ? 1 : -1)); });
         }
 
         protected void InitializeAttributes(IEnumerable<IModelAttribute> attributes)
         {
             this.attributes.Clear();
-            this.attributes.AddRange(attributes.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => (AttributeModel) it).OrderBy(it => it.Sequence));
+            this.attributes.AddRange(attributes.Where(it => it.ObjectState != ObjectState.Deleted).Select(it => new AttributeViewModel(it)).OrderBy(it => it.Sequence));
         }
 
         public void FixupAttributeOrder()
         {
-            attributes.Sort((AttributeModel a1, AttributeModel a2) => { return (a1.Sequence == a2.Sequence ? 0 : (a1.Sequence > a2.Sequence ? 1 : -1)); });
+            attributes.Sort((AttributeViewModel a1, AttributeViewModel a2) => { return (a1.Sequence == a2.Sequence ? 0 : (a1.Sequence > a2.Sequence ? 1 : -1)); });
         }
     }
 
-    public class AttributeModel
+    public class AttributeViewModel
     {
-        public static explicit operator AttributeModel(ModelAttribute attribute)
-        {
-            return (new AttributeModel(attribute));
-        }
-
-        public AttributeModel()
+        public AttributeViewModel()
         {
         }
 
-        public AttributeModel(IModelAttribute attribute)
+        public AttributeViewModel(IModelAttribute attribute)
         {
             ID = attribute.AttributeID.GetValueOrDefault();
             ContainerID = attribute.ContainerID.GetValueOrDefault();

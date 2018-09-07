@@ -51,6 +51,7 @@
     <Compile Include="ModelChildContainerTests.cs" />
     <Compile Include="ModelEntityTests.cs" />
     <Compile Include="ModelChildInstanceTests.cs" />
+    <Compile Include="ModelObjectFactoryTests.cs" />
     <Compile Include="ModelValueTests.cs" />
     <Compile Include="ModelRootInstanceTests.cs" />
     <Compile Include="ModelSubjectTests.cs" />

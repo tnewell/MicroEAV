@@ -17,4 +17,8 @@
 
 namespace EAV.Store
 {
+    public interface IStoreObjectFactory
+    {
+        TInterface Create<TInterface>() where TInterface : class;
+    }
 }

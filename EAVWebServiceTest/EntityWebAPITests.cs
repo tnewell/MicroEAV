@@ -18,7 +18,7 @@ namespace EAVServiceTest
         {
             int nDbEntities = this.DbContext.Entities.Count();
 
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/entities")).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/entities")).Result;
             if (response.IsSuccessStatusCode)
             {
                 var entities = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreEntity>>().Result;
@@ -38,7 +38,7 @@ namespace EAVServiceTest
         [TestCategory("Entity")]
         public void RetrieveNonExistentEntity()
         {
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/entities/{0}", -1)).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/entities/{0}", -1)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var entity = response.Content.ReadAsAsync<EAVStoreLibrary.StoreEntity>().Result;
@@ -61,7 +61,7 @@ namespace EAVServiceTest
 
             if (dbEntity != null)
             {
-                HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/entities/{0}", dbEntity.Entity_ID)).Result;
+                HttpResponseMessage response = WebClient.GetAsync(String.Format("api/entities/{0}", dbEntity.Entity_ID)).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     var entity = response.Content.ReadAsAsync<EAVStoreLibrary.StoreEntity>().Result;
@@ -88,7 +88,7 @@ namespace EAVServiceTest
         {
             string entityDescriptor = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreEntity>("api/data/entities", new EAVStoreLibrary.StoreEntity() { Descriptor = entityDescriptor }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreEntity>("api/entities", new EAVStoreLibrary.StoreEntity() { Descriptor = entityDescriptor }).Result;
             if (response.IsSuccessStatusCode)
             {
                 var entity = response.Content.ReadAsAsync<EAVStoreLibrary.StoreEntity>().Result;
@@ -120,7 +120,7 @@ namespace EAVServiceTest
 
             entity.Descriptor = oldDescriptor.Flip();
 
-            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAVStoreLibrary.StoreEntity>("api/data/entities", entity).Result;
+            HttpResponseMessage response = WebClient.PatchAsJsonAsync<EAVStoreLibrary.StoreEntity>("api/entities", entity).Result;
             if (response.IsSuccessStatusCode)
             {
                 ResetDatabaseContext();
@@ -144,7 +144,7 @@ namespace EAVServiceTest
         {
             EAVStoreClient.Entity dbEntityIn = CreateEntity(Guid.NewGuid().ToString());
 
-            HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/data/entities/{0}", dbEntityIn.Entity_ID)).Result;
+            HttpResponseMessage response = WebClient.DeleteAsync(String.Format("api/entities/{0}", dbEntityIn.Entity_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 ResetDatabaseContext();
@@ -169,7 +169,7 @@ namespace EAVServiceTest
             var dbEntity = SelectRandomItem(this.DbContext.Entities);
             int nDbSubjects = this.DbContext.Subjects.Where(it => it.Entity_ID == dbEntity.Entity_ID).Count();
 
-            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/data/entities/{0}/subjects", dbEntity.Entity_ID)).Result;
+            HttpResponseMessage response = WebClient.GetAsync(String.Format("api/entities/{0}/subjects", dbEntity.Entity_ID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var subjects = response.Content.ReadAsAsync<IEnumerable<EAVStoreLibrary.StoreSubject>>().Result;
@@ -193,7 +193,7 @@ namespace EAVServiceTest
             var dbEntity = SelectRandomItem(this.DbContext.Entities);
             string subjectIdentifier = Guid.NewGuid().ToString();
 
-            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreSubject>(String.Format("api/data/entities/{0}/subjects?context={1}", dbEntity.Entity_ID, dbContext.Context_ID), new EAVStoreLibrary.StoreSubject() { Identifier = subjectIdentifier }).Result;
+            HttpResponseMessage response = WebClient.PostAsJsonAsync<EAVStoreLibrary.StoreSubject>(String.Format("api/entities/{0}/subjects?context={1}", dbEntity.Entity_ID, dbContext.Context_ID), new EAVStoreLibrary.StoreSubject() { Identifier = subjectIdentifier }).Result;
             if (response.IsSuccessStatusCode)
             {
                 var subject = response.Content.ReadAsAsync<EAVStoreLibrary.StoreSubject>().Result;

@@ -1,4 +1,4 @@
-﻿@model ContextModel
+﻿@model EAVWebApplication.Models.Metadata.ContextViewModel
 
 <script>
 
@@ -16,7 +16,7 @@
                     sequences.push($(this).children('input').first().val());
                 });
 
-                sequences = sequences.sort(function (a, b) { return (a-b);});
+                sequences = sequences.sort(function (a, b) { return (a-b); });
 
                 $.each(this.children, function (ix, it)
                 {
