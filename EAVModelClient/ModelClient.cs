@@ -182,6 +182,37 @@ namespace EAVModelClient
                 throw (new ApplicationException("Attempt to get child instances failed."));
             }
         }
+
+        private void LoadSubjectEntity(EAV.Model.IModelSubject subject)
+        {
+            HttpResponseMessage response = client.GetAsync(String.Format("api/entities/{0}", subject.EntityID)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var entity = response.Content.ReadAsAsync<EAVModelLibrary.ModelEntity>().Result;
+
+                subject.Entity = entity;
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to get subject entity failed."));
+            }
+        }
+
+        private void LoadSubjectContext(EAV.Model.IModelSubject subject)
+        {
+            HttpResponseMessage response = client.GetAsync(String.Format("api/metadata/contexts/{0}", subject.ContextID)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var context = response.Content.ReadAsAsync<EAVModelLibrary.ModelContext>().Result;
+
+                subject.Context = context;
+            }
+            else
+            {
+                throw (new ApplicationException("Attempt to get subject context failed."));
+            }
+        }
+
         #endregion
 
         #region Save Helpers
@@ -564,7 +595,7 @@ namespace EAVModelClient
             }
             else if (entity.ObjectState == EAV.Model.ObjectState.Modified)
             {
-                response = client.PatchAsJsonAsync<EAV.Store.IStoreEntity>("api/data/entities", entity).Result;
+                response = client.PatchAsJsonAsync<EAV.Store.IStoreEntity>("api/entities", entity).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     entity.MarkUnmodified();
@@ -577,7 +608,7 @@ namespace EAVModelClient
 
             if (entity.ObjectState == EAV.Model.ObjectState.Deleted)
             {
-                response = client.DeleteAsync(String.Format("api/data/entities/{0}", entity.EntityID.GetValueOrDefault())).Result;
+                response = client.DeleteAsync(String.Format("api/entities/{0}", entity.EntityID.GetValueOrDefault())).Result;
                 if (response.IsSuccessStatusCode)
                 {
                 }
@@ -663,7 +694,7 @@ namespace EAVModelClient
 
                 foreach (EAVModelLibrary.ModelSubject subject in subjects)
                 {
-                    //LoadEntity(client, subject);
+                    LoadSubjectEntity(subject);
 
                     subject.MarkUnmodified();
 
@@ -678,7 +709,7 @@ namespace EAVModelClient
 
         public void LoadSubjects(EAV.Model.IModelEntity entity)
         {
-            HttpResponseMessage response = client.GetAsync(String.Format("api/data/entities/{0}/subjects", entity.EntityID)).Result;
+            HttpResponseMessage response = client.GetAsync(String.Format("api/entities/{0}/subjects", entity.EntityID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var subjects = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelSubject>>().Result;
@@ -687,7 +718,7 @@ namespace EAVModelClient
 
                 foreach (EAVModelLibrary.ModelSubject subject in subjects)
                 {
-                    //LoadContext(client, subject);
+                    LoadSubjectContext(subject);
 
                     subject.MarkUnmodified();
 
