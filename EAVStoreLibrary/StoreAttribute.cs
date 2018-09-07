@@ -29,7 +29,9 @@ namespace EAVStoreLibrary
             this.DataName = attribute.DataName;
             this.DisplayText = attribute.DisplayText;
             this.DataType = attribute.DataType;
+            this.Sequence = attribute.Sequence;
             this.IsKey = attribute.IsKey;
+            this.VariableUnits = attribute.VariableUnits;
         }
 
         public int? AttributeID { get; set; }

@@ -84,11 +84,14 @@ namespace EAVStoreClient
                     if (dbAttribute.Display_Text != attribute.DisplayText)
                         dbAttribute.Display_Text = attribute.DisplayText;
 
-                    if (dbAttribute.Is_Key != attribute.IsKey)
-                        dbAttribute.Is_Key = attribute.IsKey;
+                    if (dbAttribute.Data_Type.Name != attribute.DataType.ToString())
+                        dbAttribute.Data_Type = ctx.Data_Type.Single(it => it.Name == attribute.DataType.ToString());
 
                     if (dbAttribute.Sequence != attribute.Sequence)
                         dbAttribute.Sequence = attribute.Sequence;
+
+                    if (dbAttribute.Is_Key != attribute.IsKey)
+                        dbAttribute.Is_Key = attribute.IsKey;
 
                     if (dbAttribute.Variable_Units != attribute.VariableUnits)
                         dbAttribute.Variable_Units = attribute.VariableUnits;

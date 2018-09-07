@@ -194,7 +194,7 @@ namespace EAVStoreClientTestHarness
             attribute.DataName = oldDataName.Flip();
             attribute.DisplayText = oldDisplayText.Flip();
             attribute.IsKey = !oldIsKey;
-            attribute.Sequence = -oldSequence;
+            attribute.Sequence = oldSequence != 0 ? -oldSequence : -1;
             attribute.VariableUnits = !oldVariableUnits;
 
             client.UpdateAttribute(attribute);
