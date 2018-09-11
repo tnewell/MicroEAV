@@ -292,6 +292,10 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EAV.Model.U\EAV.Model.csproj">
+      <Project>{d4644b20-9739-472f-8fa0-1761597b6314}</Project>
+      <Name>EAV.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EAV\EAV.csproj">
       <Project>{de98cd45-4020-44ed-a4a8-98d0be529c4f}</Project>
       <Name>EAV</Name>
@@ -299,10 +303,6 @@
     <ProjectReference Include="..\EAVStore\EAV.Store.csproj">
       <Project>{a626330a-e997-4a38-8dce-e68a0cdec2c7}</Project>
       <Name>EAV.Store</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EAVModel\EAV.Model.csproj">
-      <Project>{4445fabc-0e5c-4843-8cc8-cca798982d95}</Project>
-      <Name>EAV.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\EAVModelLibrary\EAVModelLibrary.csproj">
       <Project>{f4dbd4b1-d24e-4ccb-b62c-be8031593557}</Project>
