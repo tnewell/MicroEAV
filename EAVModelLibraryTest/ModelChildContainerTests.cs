@@ -11,7 +11,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ChildContainerCreate()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -41,7 +41,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ChildContainerStateTransitionNewToUnmodifiedWithNullID()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -66,7 +66,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ChildContainerStateTransitionNewToDeleted()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -113,7 +113,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ChildContainerSetIDWhenNew()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -127,7 +127,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ChildContainerSetIDBeforeUnmodified()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -146,7 +146,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ChildContainerSetIDAfterUnmodified()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -157,7 +157,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ChildContainerSetIDWhenDeleted()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -185,7 +185,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ChildContainerSetNameWhenNew()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -262,7 +262,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ChildContainerSetDataNameWhenNew()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -339,7 +339,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ChildContainerSetDisplayTextWhenNew()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -493,7 +493,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ChildContainerSetIsRepeatingWhenNew()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -569,7 +569,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ChildContainerSetContextWhenNew()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -617,7 +617,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ChildContainerSetParentContainerWithObjectWhenNew()
         {
-            EAVModelLibrary.ModelChildContainer aChildContainer = new EAVModelLibrary.ModelChildContainer();
+            EAV.Model.IModelChildContainer aChildContainer = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aChildContainer.ObjectState, "Object state should be 'New' on creation.");
 

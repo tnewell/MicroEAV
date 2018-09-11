@@ -11,7 +11,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootContainerCreate()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -41,7 +41,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootContainerStateTransitionNewToUnmodifiedWithNullID()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -66,7 +66,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootContainerStateTransitionNewToDeleted()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -113,7 +113,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootContainerSetIDWhenNew()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -127,7 +127,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootContainerSetIDBeforeUnmodified()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -146,7 +146,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootContainerSetIDAfterUnmodified()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -157,7 +157,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootContainerSetIDWhenDeleted()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -185,7 +185,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootContainerSetNameWhenNew()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -262,7 +262,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootContainerSetDataNameWhenNew()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -339,7 +339,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootContainerSetDisplayTextWhenNew()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -493,7 +493,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootContainerSetIsRepeatingWhenNew()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -568,7 +568,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootContainerSetContextWhenNew()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -654,7 +654,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootContainerSetParentContainerWithObjectWhenNew()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 
@@ -664,7 +664,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootContainerSetParentContainerWithNullWhenNew()
         {
-            EAVModelLibrary.ModelRootContainer aRootContainer = new EAVModelLibrary.ModelRootContainer();
+            EAV.Model.IModelRootContainer aRootContainer = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootContainer.ObjectState, "Object state should be 'New' on creation.");
 

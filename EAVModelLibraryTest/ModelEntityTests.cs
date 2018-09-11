@@ -11,7 +11,7 @@ namespace EAVModelTest
         [TestMethod]
         public void EntityCreate()
         {
-            EAVModelLibrary.ModelEntity anEntity = new EAVModelLibrary.ModelEntity();
+            EAV.Model.IModelEntity anEntity = factory.Create<EAV.Model.IModelEntity>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, anEntity.ObjectState, "Object state should be 'New' on creation.");
 
@@ -28,7 +28,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void EntityStateTransitionNewToUnmodifiedWithNullID()
         {
-            EAVModelLibrary.ModelEntity anEntity = new EAVModelLibrary.ModelEntity();
+            EAV.Model.IModelEntity anEntity = factory.Create<EAV.Model.IModelEntity>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, anEntity.ObjectState, "Object state should be 'New' on creation.");
 
@@ -53,7 +53,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void EntityStateTransitionNewToDeleted()
         {
-            EAVModelLibrary.ModelEntity anEntity = new EAVModelLibrary.ModelEntity();
+            EAV.Model.IModelEntity anEntity = factory.Create<EAV.Model.IModelEntity>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, anEntity.ObjectState, "Object state should be 'New' on creation.");
 
@@ -100,7 +100,7 @@ namespace EAVModelTest
         [TestMethod]
         public void EntitySetIDWhenNew()
         {
-            EAVModelLibrary.ModelEntity anEntity = new EAVModelLibrary.ModelEntity();
+            EAV.Model.IModelEntity anEntity = factory.Create<EAV.Model.IModelEntity>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, anEntity.ObjectState, "Object state should be 'New' on creation.");
 
@@ -114,7 +114,7 @@ namespace EAVModelTest
         [TestMethod]
         public void EntitySetIDBeforeUnmodified()
         {
-            EAVModelLibrary.ModelEntity anEntity = new EAVModelLibrary.ModelEntity();
+            EAV.Model.IModelEntity anEntity = factory.Create<EAV.Model.IModelEntity>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, anEntity.ObjectState, "Object state should be 'New' on creation.");
 
@@ -133,7 +133,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void EntitySetIDAfterUnmodified()
         {
-            EAVModelLibrary.ModelEntity anEntity = new EAVModelLibrary.ModelEntity();
+            EAV.Model.IModelEntity anEntity = factory.Create<EAV.Model.IModelEntity>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, anEntity.ObjectState, "Object state should be 'New' on creation.");
 
@@ -144,7 +144,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void EntitySetIDWhenDeleted()
         {
-            EAVModelLibrary.ModelEntity anEntity = new EAVModelLibrary.ModelEntity();
+            EAV.Model.IModelEntity anEntity = factory.Create<EAV.Model.IModelEntity>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, anEntity.ObjectState, "Object state should be 'New' on creation.");
 
@@ -172,7 +172,7 @@ namespace EAVModelTest
         [TestMethod]
         public void EntitySetDescriptorWhenNew()
         {
-            EAVModelLibrary.ModelEntity anEntity = new EAVModelLibrary.ModelEntity();
+            EAV.Model.IModelEntity anEntity = factory.Create<EAV.Model.IModelEntity>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, anEntity.ObjectState, "Object state should be 'New' on creation.");
 

@@ -3,15 +3,15 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-namespace EAVModelTest
+namespace EAVStoreTest
 {
     [TestClass]
-    public partial class EAVModelTestHarness
+    public partial class EAVStoreTestHarness
     {
         private static TestContext myTestContext;
         private static Random rng = new Random((int)DateTime.Now.Ticks);
 
-        EAV.Model.IModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
+        EAV.Store.IStoreObjectFactory factory = new EAVStoreLibrary.StoreObjectFactory();
 
         [ClassInitialize]
         public static void SetupTestHarness(TestContext testContext)

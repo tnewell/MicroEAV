@@ -25,8 +25,8 @@ namespace EAVWebService.Controllers
     [RoutePrefix("api/data/subjects")]
     public class SubjectController : BaseEAVController
     {
-        private EAV.Store.Clients.ISubjectStoreClient subjectClient = clientFactory.Create<EAV.Store.Clients.ISubjectStoreClient>();
-        private EAV.Store.Clients.IInstanceStoreClient instanceClient = clientFactory.Create<EAV.Store.Clients.IInstanceStoreClient>();
+        private EAV.Store.Clients.ISubjectStoreClient subjectClient = factory.Create<EAV.Store.Clients.ISubjectStoreClient>();
+        private EAV.Store.Clients.IInstanceStoreClient instanceClient = factory.Create<EAV.Store.Clients.IInstanceStoreClient>();
 
         public int? ContainerID
         {

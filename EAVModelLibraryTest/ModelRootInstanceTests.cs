@@ -11,7 +11,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootInstanceCreate()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -33,7 +33,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceStateTransitionNewToUnmodifiedWithNullID()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -58,7 +58,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceStateTransitionNewToDeleted()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -105,7 +105,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootInstanceSetIDWhenNew()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -119,7 +119,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootInstanceSetIDBeforeUnmodified()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -138,7 +138,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetIDAfterUnmodified()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -149,7 +149,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetIDWhenDeleted()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -181,7 +181,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootInstanceSetContainerWhenNew()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -266,7 +266,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootInstanceSetSubjectWhenNew()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -352,7 +352,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void RootInstanceSetParentInstanceWithObjectWhenNew()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 
@@ -362,7 +362,7 @@ namespace EAVModelTest
         [TestMethod]
         public void RootInstanceSetParentInstanceWithNullWhenNew()
         {
-            EAVModelLibrary.ModelRootInstance aRootInstance = new EAVModelLibrary.ModelRootInstance();
+            EAV.Model.IModelRootInstance aRootInstance = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aRootInstance.ObjectState, "Object state should be 'New' on creation.");
 

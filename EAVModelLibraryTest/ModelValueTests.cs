@@ -12,7 +12,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ValueCreate()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -28,7 +28,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ValueStateTransitionNewToUnmodifiedWithNullID()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -69,7 +69,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ValueStateTransitionNewToDeleted()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -124,7 +124,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ValueSetRawValueWhenNew()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -213,7 +213,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ValueSetInstanceWhenNew()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -296,7 +296,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ValueSetInstanceWhenDeleted()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -316,7 +316,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ValueSetAttributeWhenNew()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -400,7 +400,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ValueSetAttributeWhenDeleted()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -420,7 +420,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ValueSetUnitWhenNewWithNewUnit()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -436,7 +436,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ValueSetUnitWhenNewWithUnmodifiedUnit()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -457,7 +457,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ValueSetUnitWhenNewWithDeletedUnit()
         {
-            EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+            EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -592,7 +592,7 @@ namespace EAVModelTest
         //[TestMethod]
         //public void ValueSetUnitIDWhenNew()
         //{
-        //    EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+        //    EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
         //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -681,7 +681,7 @@ namespace EAVModelTest
         //[ExpectedException(typeof(InvalidOperationException))]
         //public void ValueSetUnitWhenNewWithNewUnitThenUnitID()
         //{
-        //    EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+        //    EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
         //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 
@@ -699,7 +699,7 @@ namespace EAVModelTest
         //[TestMethod]
         //public void ValueSetUnitIDWhenNewWithNewUnit()
         //{
-        //    EAVModelLibrary.ModelValue aValue = new EAVModelLibrary.ModelValue();
+        //    EAV.Model.IModelValue aValue = factory.Create<EAV.Model.IModelValue>();
 
         //    Assert.AreEqual(EAV.Model.ObjectState.New, aValue.ObjectState, "Object state should be 'New' on creation.");
 

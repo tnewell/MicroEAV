@@ -13,7 +13,7 @@ namespace EAVModelTest
         [TestMethod]
         public void SubjectCreate()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -33,7 +33,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void SubjectStateTransitionNewToUnmodifiedWithNullID()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -58,7 +58,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void SubjectStateTransitionNewToDeleted()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -105,7 +105,7 @@ namespace EAVModelTest
         [TestMethod]
         public void SubjectSetIDWhenNew()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -119,7 +119,7 @@ namespace EAVModelTest
         [TestMethod]
         public void SubjectSetIDBeforeUnmodified()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -138,7 +138,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void SubjectSetIDAfterUnmodified()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -149,7 +149,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void SubjectSetIDWhenDeleted()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -177,7 +177,7 @@ namespace EAVModelTest
         [TestMethod]
         public void SubjectSetIdentifierWhenNew()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -256,7 +256,7 @@ namespace EAVModelTest
         [TestMethod]
         public void SubjectSetEntityWhenNew()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -321,7 +321,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void SubjectSetEntityWhenDeleted()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -341,7 +341,7 @@ namespace EAVModelTest
         [TestMethod]
         public void SubjectSetContextWhenNew()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 
@@ -406,7 +406,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void SubjectSetContextWhenDeleted()
         {
-            ModelSubject aSubject = new EAVModelLibrary.ModelSubject();
+            EAV.Model.IModelSubject aSubject = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aSubject.ObjectState, "Object state should be 'New' on creation.");
 

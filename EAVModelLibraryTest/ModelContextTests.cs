@@ -11,7 +11,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextCreate()
         {
-            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
+            EAV.Model.IModelContext aContext = factory.Create<EAV.Model.IModelContext>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -33,7 +33,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextStateTransitionNewToUnmodifiedWithNullID()
         {
-            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
+            EAV.Model.IModelContext aContext = factory.Create<EAV.Model.IModelContext>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -58,7 +58,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextStateTransitionNewToDeleted()
         {
-            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
+            EAV.Model.IModelContext aContext = factory.Create<EAV.Model.IModelContext>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -105,7 +105,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextSetIDWhenNew()
         {
-            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
+            EAV.Model.IModelContext aContext = factory.Create<EAV.Model.IModelContext>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -119,7 +119,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextSetIDBeforeUnmodified()
         {
-            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
+            EAV.Model.IModelContext aContext = factory.Create<EAV.Model.IModelContext>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -138,7 +138,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetIDAfterUnmodified()
         {
-            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
+            EAV.Model.IModelContext aContext = factory.Create<EAV.Model.IModelContext>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -149,7 +149,7 @@ namespace EAVModelTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void ContextSetIDWhenDeleted()
         {
-            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
+            EAV.Model.IModelContext aContext = factory.Create<EAV.Model.IModelContext>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -177,7 +177,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextSetNameWhenNew()
         {
-            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
+            EAV.Model.IModelContext aContext = factory.Create<EAV.Model.IModelContext>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -254,7 +254,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextSetDataNameWhenNew()
         {
-            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
+            EAV.Model.IModelContext aContext = factory.Create<EAV.Model.IModelContext>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 
@@ -331,7 +331,7 @@ namespace EAVModelTest
         [TestMethod]
         public void ContextSetDisplayTextWhenNew()
         {
-            EAVModelLibrary.ModelContext aContext = new EAVModelLibrary.ModelContext();
+            EAV.Model.IModelContext aContext = factory.Create<EAV.Model.IModelContext>();
 
             Assert.AreEqual(EAV.Model.ObjectState.New, aContext.ObjectState, "Object state should be 'New' on creation.");
 

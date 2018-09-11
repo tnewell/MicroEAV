@@ -25,8 +25,8 @@ namespace EAVWebService.Controllers
     [RoutePrefix("api/metadata/attributes")]
     public class AttributeController : BaseEAVController
     {
-        private EAV.Store.Clients.IAttributeStoreClient attributeClient = clientFactory.Create<EAV.Store.Clients.IAttributeStoreClient>();
-        private EAV.Store.Clients.IUnitStoreClient unitClient = clientFactory.Create<EAV.Store.Clients.IUnitStoreClient>();
+        private EAV.Store.Clients.IAttributeStoreClient attributeClient = factory.Create<EAV.Store.Clients.IAttributeStoreClient>();
+        private EAV.Store.Clients.IUnitStoreClient unitClient = factory.Create<EAV.Store.Clients.IUnitStoreClient>();
 
         [HttpGet]
         [Route("{id}", Name = "RetrieveAttribute")]

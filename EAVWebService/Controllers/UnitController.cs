@@ -25,7 +25,7 @@ namespace EAVWebService.Controllers
     [RoutePrefix("api/metadata/units")]
     public class UnitController : BaseEAVController
     {
-        private EAV.Store.Clients.IUnitStoreClient unitClient = clientFactory.Create<EAV.Store.Clients.IUnitStoreClient>();
+        private EAV.Store.Clients.IUnitStoreClient unitClient = factory.Create<EAV.Store.Clients.IUnitStoreClient>();
 
         [HttpGet]
         [Route("", Name = "RetrieveUnits")]

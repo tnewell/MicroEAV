@@ -25,7 +25,7 @@ namespace EAVWebService.Controllers
 {
     public class BaseEAVController : ApiController
     {
-        protected static readonly EAVStoreClient.StoreClientFactory clientFactory = new EAVStoreClient.StoreClientFactory();
+        protected static readonly EAV.Store.Clients.IStoreClientFactory factory = new EAVStoreClient.StoreClientFactory();
 
         protected string QueryItem(string name)
         {
