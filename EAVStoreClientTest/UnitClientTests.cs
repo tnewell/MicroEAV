@@ -14,7 +14,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Unit")]
         public void RetrieveAllUnits()
         {
-            EAVStoreClient.UnitStoreClient client = new EAVStoreClient.UnitStoreClient();
+            EAV.Store.Clients.IUnitStoreClient client = factory.Create<EAV.Store.Clients.IUnitStoreClient>();
 
             int nDbUnits = this.DbContext.Units.Count();
             int nClientUnits = client.RetrieveUnits().Count();
@@ -28,7 +28,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Unit")]
         public void RetrieveNonExistentUnit()
         {
-            EAVStoreClient.UnitStoreClient client = new EAVStoreClient.UnitStoreClient();
+            EAV.Store.Clients.IUnitStoreClient client = factory.Create<EAV.Store.Clients.IUnitStoreClient>();
 
             var Unit = client.RetrieveUnit(-1);
 
@@ -45,7 +45,7 @@ namespace EAVStoreClientTestHarness
 
             if (dbUnit != null)
             {
-                EAVStoreClient.UnitStoreClient client = new EAVStoreClient.UnitStoreClient();
+                EAV.Store.Clients.IUnitStoreClient client = factory.Create<EAV.Store.Clients.IUnitStoreClient>();
 
                 var Unit = client.RetrieveUnit(dbUnit.Unit_ID);
 
@@ -64,7 +64,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Unit")]
         public void CreateUnit()
         {
-            EAVStoreClient.UnitStoreClient client = new EAVStoreClient.UnitStoreClient();
+            EAV.Store.Clients.IUnitStoreClient client = factory.Create<EAV.Store.Clients.IUnitStoreClient>();
             string UnitDisplayText = Guid.NewGuid().ToString();
 
             EAV.Store.IStoreUnit Unit = client.CreateUnit(new EAVStoreLibrary.StoreUnit()
@@ -110,7 +110,7 @@ namespace EAVStoreClientTestHarness
             string oldDisplayText = dbUnit.Display_Text;
             bool oldCurated = dbUnit.Curated;
 
-            EAVStoreClient.UnitStoreClient client = new EAVStoreClient.UnitStoreClient();
+            EAV.Store.Clients.IUnitStoreClient client = factory.Create<EAV.Store.Clients.IUnitStoreClient>();
 
             var Unit = (EAVStoreLibrary.StoreUnit)dbUnit;
 
@@ -150,7 +150,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Unit")]
         public void DeleteUnit()
         {
-            EAVStoreClient.UnitStoreClient client = new EAVStoreClient.UnitStoreClient();
+            EAV.Store.Clients.IUnitStoreClient client = factory.Create<EAV.Store.Clients.IUnitStoreClient>();
             EAVStoreClient.Unit dbUnitIn = CreateUnit("SYM", Guid.NewGuid().ToString());
 
             client.DeleteUnit(dbUnitIn.Unit_ID);

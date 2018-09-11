@@ -10,8 +10,6 @@ namespace EAVModelTest
         [TestMethod]
         public void CreateEntityFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<EAV.Model.IModelEntity>();
 
             Assert.IsNotNull(obj, "Attempt to create object with interface 'EAV.Model.IModelEntity' failed (result is null).");
@@ -21,8 +19,6 @@ namespace EAVModelTest
         [TestMethod]
         public void CreateContextFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<EAV.Model.IModelContext>();
 
             Assert.IsNotNull(obj, "Attempt to create object with interface 'EAV.Model.IModelContext' failed (result is null).");
@@ -32,8 +28,6 @@ namespace EAVModelTest
         [TestMethod]
         public void CreateRootContainerFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<EAV.Model.IModelRootContainer>();
 
             Assert.IsNotNull(obj, "Attempt to create object with interface 'EAV.Model.IModelRootContainer' failed (result is null).");
@@ -43,8 +37,6 @@ namespace EAVModelTest
         [TestMethod]
         public void CreateChildContainerFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<EAV.Model.IModelChildContainer>();
 
             Assert.IsNotNull(obj, "Attempt to create object with interface 'EAV.Model.IModelChildContainer' failed (result is null).");
@@ -54,8 +46,6 @@ namespace EAVModelTest
         [TestMethod]
         public void CreateAttributeFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<EAV.Model.IModelAttribute>();
 
             Assert.IsNotNull(obj, "Attempt to create object with interface 'EAV.Model.IModelAttribute' failed (result is null).");
@@ -65,8 +55,6 @@ namespace EAVModelTest
         [TestMethod]
         public void CreateUnitFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<EAV.Model.IModelUnit>();
 
             Assert.IsNotNull(obj, "Attempt to create object with interface 'EAV.Model.IModelUnit' failed (result is null).");
@@ -76,8 +64,6 @@ namespace EAVModelTest
         [TestMethod]
         public void CreateSubjectFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<EAV.Model.IModelSubject>();
 
             Assert.IsNotNull(obj, "Attempt to create object with interface 'EAV.Model.IModelSubject' failed (result is null).");
@@ -87,8 +73,6 @@ namespace EAVModelTest
         [TestMethod]
         public void CreateRootInstanceFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<EAV.Model.IModelRootInstance>();
 
             Assert.IsNotNull(obj, "Attempt to create object with interface 'EAV.Model.IModelRootInstance' failed (result is null).");
@@ -98,8 +82,6 @@ namespace EAVModelTest
         [TestMethod]
         public void CreateChildInstanceFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<EAV.Model.IModelChildInstance>();
 
             Assert.IsNotNull(obj, "Attempt to create object with interface 'EAV.Model.IModelChildInstance' failed (result is null).");
@@ -109,8 +91,6 @@ namespace EAVModelTest
         [TestMethod]
         public void CreateValueFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<EAV.Model.IModelValue>();
 
             Assert.IsNotNull(obj, "Attempt to create object with interface 'EAV.Model.IModelValue' failed (result is null).");
@@ -121,8 +101,6 @@ namespace EAVModelTest
         [ExpectedException(typeof(NotImplementedException))]
         public void CreateUnknownFromFactory()
         {
-            EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
-
             var obj = factory.Create<IComparable>();
         }
     }

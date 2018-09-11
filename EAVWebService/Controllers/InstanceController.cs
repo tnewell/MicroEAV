@@ -25,8 +25,8 @@ namespace EAVWebService.Controllers
     [RoutePrefix("api/data/instances")]
     public class InstanceController : BaseEAVController
     {
-        private EAV.Store.Clients.IInstanceStoreClient instanceClient = new EAVStoreClient.InstanceStoreClient();
-        private EAV.Store.Clients.IValueStoreClient valueClient = new EAVStoreClient.ValueStoreClient();
+        private EAV.Store.Clients.IInstanceStoreClient instanceClient = clientFactory.Create<EAV.Store.Clients.IInstanceStoreClient>();
+        private EAV.Store.Clients.IValueStoreClient valueClient = clientFactory.Create<EAV.Store.Clients.IValueStoreClient>();
 
         public int? ContainerID
         {

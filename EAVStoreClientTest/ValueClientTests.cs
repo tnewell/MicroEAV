@@ -32,7 +32,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Value")]
         public void RetrieveAllValues()
         {
-            EAVStoreClient.ValueStoreClient client = new EAVStoreClient.ValueStoreClient();
+            EAV.Store.Clients.IValueStoreClient client = factory.Create<EAV.Store.Clients.IValueStoreClient>();
 
             int nDbValues = this.DbContext.Values.Count();
             int nClientValues = client.RetrieveValues(null, null).Count();
@@ -46,7 +46,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Value")]
         public void RetrieveNonExistentValue()
         {
-            EAVStoreClient.ValueStoreClient client = new EAVStoreClient.ValueStoreClient();
+            EAV.Store.Clients.IValueStoreClient client = factory.Create<EAV.Store.Clients.IValueStoreClient>();
 
             var value = client.RetrieveValue(-1, -1);
 
@@ -63,7 +63,7 @@ namespace EAVStoreClientTestHarness
 
             if (dbValue != null)
             {
-                EAVStoreClient.ValueStoreClient client = new EAVStoreClient.ValueStoreClient();
+                EAV.Store.Clients.IValueStoreClient client = factory.Create<EAV.Store.Clients.IValueStoreClient>();
 
                 var value = client.RetrieveValue(dbValue.Attribute_ID, dbValue.Instance_ID);
 
@@ -83,7 +83,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Value")]
         public void CreateValue()
         {
-            EAVStoreClient.ValueStoreClient client = new EAVStoreClient.ValueStoreClient();
+            EAV.Store.Clients.IValueStoreClient client = factory.Create<EAV.Store.Clients.IValueStoreClient>();
             var valueKey = SelectRandomItem(RetrieveAvailableValueKeys());
             string rawValue = Guid.NewGuid().ToString();
 
@@ -112,7 +112,7 @@ namespace EAVStoreClientTestHarness
             var dbValue = SelectRandomItem(this.DbContext.Values.AsEnumerable().Where(it => it.Unit != null));
             string oldValue = dbValue.Raw_Value;
 
-            EAVStoreClient.ValueStoreClient client = new EAVStoreClient.ValueStoreClient();
+            EAV.Store.Clients.IValueStoreClient client = factory.Create<EAV.Store.Clients.IValueStoreClient>();
 
             var value = (EAVStoreLibrary.StoreValue)dbValue;
 
@@ -135,7 +135,7 @@ namespace EAVStoreClientTestHarness
         public void DeleteValue()
         {
 
-            EAVStoreClient.ValueStoreClient client = new EAVStoreClient.ValueStoreClient();
+            EAV.Store.Clients.IValueStoreClient client = factory.Create<EAV.Store.Clients.IValueStoreClient>();
             var valueKey = SelectRandomItem(RetrieveAvailableValueKeys());
             EAVStoreClient.Value dbValueIn = CreateValue(valueKey.AttributeID, valueKey.InstanceID, Guid.NewGuid().ToString());
 

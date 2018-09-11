@@ -25,8 +25,8 @@ namespace EAVWebService.Controllers
     [RoutePrefix("api/metadata/containers")]
     public class ContainerController : BaseEAVController
     {
-        private EAV.Store.Clients.IContainerStoreClient containerClient = new EAVStoreClient.ContainerStoreClient();
-        private EAV.Store.Clients.IAttributeStoreClient attributeClient = new EAVStoreClient.AttributeStoreClient();
+        private EAV.Store.Clients.IContainerStoreClient containerClient = clientFactory.Create<EAV.Store.Clients.IContainerStoreClient>();
+        private EAV.Store.Clients.IAttributeStoreClient attributeClient = clientFactory.Create<EAV.Store.Clients.IAttributeStoreClient>();
 
         [HttpGet]
         [Route("{id}", Name = "RetrieveContainer")]

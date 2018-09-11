@@ -11,6 +11,7 @@ namespace EAVModelTest
         private static TestContext myTestContext;
         private static Random rng = new Random((int)DateTime.Now.Ticks);
 
+        EAVModelLibrary.ModelObjectFactory factory = new EAVModelLibrary.ModelObjectFactory();
 
         [ClassInitialize]
         public static void SetupTestHarness(TestContext testContext)

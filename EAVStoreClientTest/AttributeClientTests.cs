@@ -14,7 +14,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Attribute")]
         public void RetrieveAllAttributes()
         {
-            EAVStoreClient.AttributeStoreClient client = new EAVStoreClient.AttributeStoreClient();
+            EAV.Store.Clients.IAttributeStoreClient client = factory.Create<EAV.Store.Clients.IAttributeStoreClient>();
 
             int nDbAttributes = this.DbContext.Attributes.Count();
             int nClientAttributes = client.RetrieveAttributes(null).Count();
@@ -28,7 +28,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Attribute")]
         public void RetrieveNonExistentAttribute()
         {
-            EAVStoreClient.AttributeStoreClient client = new EAVStoreClient.AttributeStoreClient();
+            EAV.Store.Clients.IAttributeStoreClient client = factory.Create<EAV.Store.Clients.IAttributeStoreClient>();
 
             var attribute = client.RetrieveAttribute(-1);
 
@@ -45,7 +45,7 @@ namespace EAVStoreClientTestHarness
 
             if (dbAttribute != null)
             {
-                EAVStoreClient.AttributeStoreClient client = new EAVStoreClient.AttributeStoreClient();
+                EAV.Store.Clients.IAttributeStoreClient client = factory.Create<EAV.Store.Clients.IAttributeStoreClient>();
 
                 var attribute = client.RetrieveAttribute(dbAttribute.Attribute_ID);
 
@@ -64,7 +64,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Attribute")]
         public void CreateAttribute()
         {
-            EAVStoreClient.AttributeStoreClient client = new EAVStoreClient.AttributeStoreClient();
+            EAV.Store.Clients.IAttributeStoreClient client = factory.Create<EAV.Store.Clients.IAttributeStoreClient>();
             int containerID = SelectRandomItem(this.DbContext.Containers).Context_ID;
             string attributeName = Guid.NewGuid().ToString();
 
@@ -103,7 +103,7 @@ namespace EAVStoreClientTestHarness
         [ExpectedException(typeof(System.Data.Entity.Infrastructure.DbUpdateException))]
         public void CreateDuplicateAttribute_Name()
         {
-            EAVStoreClient.AttributeStoreClient client = new EAVStoreClient.AttributeStoreClient();
+            EAV.Store.Clients.IAttributeStoreClient client = factory.Create<EAV.Store.Clients.IAttributeStoreClient>();
             int containerID = SelectRandomItem(this.DbContext.Containers).Context_ID;
             string attributeName = Guid.NewGuid().ToString();
 
@@ -141,7 +141,7 @@ namespace EAVStoreClientTestHarness
         [ExpectedException(typeof(System.Data.Entity.Infrastructure.DbUpdateException))]
         public void CreateDuplicateAttribute_Data_Name()
         {
-            EAVStoreClient.AttributeStoreClient client = new EAVStoreClient.AttributeStoreClient();
+            EAV.Store.Clients.IAttributeStoreClient client = factory.Create<EAV.Store.Clients.IAttributeStoreClient>();
             int containerID = SelectRandomItem(this.DbContext.Containers).Context_ID;
             string attributeName = Guid.NewGuid().ToString();
 
@@ -186,7 +186,7 @@ namespace EAVStoreClientTestHarness
             int oldSequence = dbAttribute.Sequence;
             bool oldVariableUnits = dbAttribute.Variable_Units.GetValueOrDefault();
 
-            EAVStoreClient.AttributeStoreClient client = new EAVStoreClient.AttributeStoreClient();
+            EAV.Store.Clients.IAttributeStoreClient client = factory.Create<EAV.Store.Clients.IAttributeStoreClient>();
 
             var attribute = (EAVStoreLibrary.StoreAttribute)dbAttribute;
 
@@ -223,7 +223,7 @@ namespace EAVStoreClientTestHarness
         [TestCategory("Attribute")]
         public void DeleteAttribute()
         {
-            EAVStoreClient.AttributeStoreClient client = new EAVStoreClient.AttributeStoreClient();
+            EAV.Store.Clients.IAttributeStoreClient client = factory.Create<EAV.Store.Clients.IAttributeStoreClient>();
             EAVStoreClient.Container dbContainer = SelectRandomItem(this.DbContext.Containers);
             EAVStoreClient.Attribute dbAttributeIn = CreateAttribute(dbContainer.Container_ID, Guid.NewGuid().ToString(), EAV.EAVDataType.String, rng.Next(), true);
 

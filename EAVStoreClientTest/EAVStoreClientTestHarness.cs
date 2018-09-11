@@ -13,6 +13,8 @@ namespace EAVStoreClientTestHarness
         private static TestContext myTestContext;
         private static Random rng = new Random((int) DateTime.Now.Ticks);
 
+        private EAVStoreClient.StoreClientFactory factory = new EAVStoreClient.StoreClientFactory();
+
         private EAVStoreClient.MicroEAVContext dbContext;
         public EAVStoreClient.MicroEAVContext DbContext { get { return (dbContext); } }
 

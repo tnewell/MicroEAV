@@ -64,6 +64,7 @@
     <Compile Include="Entity.cs">
       <DependentUpon>EAVEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="StoreClientFactory.cs" />
     <Compile Include="UnitStoreClient.cs" />
     <Compile Include="EntityStoreClient.cs" />
     <Compile Include="ContextStoreClient.cs" />

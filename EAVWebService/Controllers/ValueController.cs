@@ -24,7 +24,7 @@ namespace EAVWebService.Controllers
     [RoutePrefix("api/data/values")]
     public class ValueController : BaseEAVController
     {
-        private EAV.Store.Clients.IValueStoreClient valueClient = new EAVStoreClient.ValueStoreClient();
+        private EAV.Store.Clients.IValueStoreClient valueClient = clientFactory.Create<EAV.Store.Clients.IValueStoreClient>();
 
         [HttpGet]
         [Route("~/api/data/instances/{instance}/values/{attribute}", Name = "RetrieveValue")]

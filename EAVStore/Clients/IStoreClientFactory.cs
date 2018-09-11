@@ -15,26 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.If not, see<http://www.gnu.org/licenses/>.
 
-using System;
-using System.Linq;
-using System.Net.Http;
-using System.Web.Http;
-
-
-namespace EAVWebService.Controllers
+namespace EAV.Store.Clients
 {
-    public class BaseEAVController : ApiController
+    public interface IStoreClientFactory
     {
-        protected static readonly EAVStoreClient.StoreClientFactory clientFactory = new EAVStoreClient.StoreClientFactory();
-
-        protected string QueryItem(string name)
-        {
-            var queryItems = this.Request.GetQueryNameValuePairs();
-
-            if (queryItems == null || !queryItems.Any())
-                return (null);
-
-            return(queryItems.Where(it => String.Equals(it.Key, name, StringComparison.InvariantCultureIgnoreCase)).Select(it => it.Value).LastOrDefault());
-        }
+        TInterface Create<TInterface>() where TInterface : class;
     }
 }

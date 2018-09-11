@@ -25,9 +25,9 @@ namespace EAVWebService.Controllers
     [RoutePrefix("api/metadata/contexts")]
     public class ContextController : BaseEAVController
     {
-        private EAV.Store.Clients.IContextStoreClient contextClient = new EAVStoreClient.ContextStoreClient();
-        private EAV.Store.Clients.IContainerStoreClient containerClient = new EAVStoreClient.ContainerStoreClient();
-        private EAV.Store.Clients.ISubjectStoreClient subjectClient = new EAVStoreClient.SubjectStoreClient();
+        private EAV.Store.Clients.IContextStoreClient contextClient = clientFactory.Create<EAV.Store.Clients.IContextStoreClient>();
+        private EAV.Store.Clients.IContainerStoreClient containerClient = clientFactory.Create<EAV.Store.Clients.IContainerStoreClient>();
+        private EAV.Store.Clients.ISubjectStoreClient subjectClient = clientFactory.Create<EAV.Store.Clients.ISubjectStoreClient>();
 
         public int? EntityID
         {
