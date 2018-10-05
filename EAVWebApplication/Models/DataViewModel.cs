@@ -69,10 +69,9 @@ namespace EAVWebApplication.Models.Data
             return (viewAttributeValue);
         }
 
-        private ViewModelInstance BindToViewInstance(IModelContainer container, IModelInstance instance, ViewModelInstance parentInstance)
+        private ViewModelInstance BindToViewInstance(IModelContainer container, IModelSubject subject, IModelInstance instance, ViewModelInstance parentInstance)
         {
-            // TODO: Set Subject ID?
-            ViewModelInstance viewContainerInstance = new ViewModelInstance() { ObjectState = instance != null ? instance.ObjectState : ObjectState.New, ContainerID = container.ContainerID, SubjectID = null, InstanceID = instance != null ? instance.InstanceID : NextInstanceID(CurrentViewContainer), ParentInstanceID = parentInstance != null ? parentInstance.InstanceID : null };
+            ViewModelInstance viewContainerInstance = new ViewModelInstance() { ObjectState = instance != null ? instance.ObjectState : ObjectState.New, ContainerID = container.ContainerID, SubjectID = subject.SubjectID, InstanceID = instance != null ? instance.InstanceID : NextInstanceID(CurrentViewContainer), ParentInstanceID = parentInstance != null ? parentInstance.InstanceID : null };
 
             foreach (EAV.Model.IModelAttribute attribute in container.Attributes)
             {
@@ -82,31 +81,31 @@ namespace EAVWebApplication.Models.Data
             return (viewContainerInstance);
         }
 
-        private ViewModelContainer BindToViewContainer(EAV.Model.IModelContainer container, ViewModelInstance parentInstance)
+        private ViewModelContainer BindToViewContainer(EAV.Model.IModelContainer container, IModelSubject subject, ViewModelInstance parentInstance)
         {
             ViewModelContainer viewContainer = new ViewModelContainer() { ContainerID = container.ContainerID, ParentContainerID = container.ParentContainerID, DisplayText = container.DisplayText, IsRepeating = container.IsRepeating };
 
             foreach (IModelInstance instance in container.Instances.Where(it => parentInstance == null || it.ParentInstanceID == parentInstance.InstanceID))
             {
-                ViewModelInstance viewInstance = BindToViewInstance(container, instance, parentInstance);
+                ViewModelInstance viewInstance = BindToViewInstance(container, subject, instance, parentInstance);
 
                 viewContainer.Instances.Add(viewInstance);
 
                 foreach (IModelContainer childContainer in container.ChildContainers)
                 {
-                    viewContainer.ChildContainers.Add(BindToViewContainer(childContainer, viewInstance));
+                    viewContainer.ChildContainers.Add(BindToViewContainer(childContainer, subject, viewInstance));
                 }
             }
 
             if (container.IsRepeating || !viewContainer.Instances.Any())
             {
-                ViewModelInstance viewInstance = BindToViewInstance(container, null, parentInstance);
+                ViewModelInstance viewInstance = BindToViewInstance(container, subject, null, parentInstance);
 
                 viewContainer.Instances.Add(viewInstance);
 
                 foreach (IModelContainer childContainer in container.ChildContainers)
                 {
-                    viewContainer.ChildContainers.Add(BindToViewContainer(childContainer, viewInstance));
+                    viewContainer.ChildContainers.Add(BindToViewContainer(childContainer, subject, viewInstance));
                 }
             }
 
@@ -115,7 +114,7 @@ namespace EAVWebApplication.Models.Data
 
         public void Refresh()
         {
-            CurrentViewContainer = BindToViewContainer(CurrentContainer, null);
+            CurrentViewContainer = BindToViewContainer(CurrentContainer, CurrentSubject, null);
         }
     }
 

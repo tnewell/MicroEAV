@@ -240,6 +240,11 @@ namespace EAVWebApplication.Controllers
             {
                 eavClient.LoadMetadata(currentViewModel.CurrentContainer);
 
+                if (currentViewModel.CurrentSubject != null)
+                {
+                    eavClient.LoadRootInstances(currentViewModel.CurrentSubject, currentViewModel.CurrentContainer);
+                }
+
                 if (currentViewModel.CurrentContainer.Instances.Any() && !currentViewModel.CurrentContainer.IsRepeating)
                     currentViewModel.SelectedInstanceID = currentViewModel.CurrentContainer.Instances.First().InstanceID.GetValueOrDefault();
 
@@ -264,11 +269,15 @@ namespace EAVWebApplication.Controllers
 
             postedViewModel.Contexts = currentViewModel.Contexts;
 
-            //TrimViewModel(postedModel.CurrentViewContainer);
-
-            //BindToModelInstance(currentViewModel.CurrentContainer, currentViewModel.CurrentSubject, null, postedModel.CurrentViewContainer, currentViewModel.CurrentInstance, postedModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.SelectedInstanceID));
-
             BindToModel(currentViewModel, postedViewModel);
+
+            if (currentViewModel.CurrentInstance != null)
+            {
+                IModelRootInstance instance = currentViewModel.CurrentInstance;
+
+                eavClient.SaveData(instance);
+                currentViewModel.SelectedInstanceID = instance.InstanceID.Value;
+            }
 
             currentViewModel.Refresh();
 

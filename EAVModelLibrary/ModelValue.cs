@@ -186,6 +186,12 @@ namespace EAVModelLibrary
 
                     if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
+                else if (value != null && value.UnitID != unitID)
+                {
+                    unitID = value.UnitID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                }
             }
         }
 

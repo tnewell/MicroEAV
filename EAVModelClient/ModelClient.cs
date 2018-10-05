@@ -53,6 +53,8 @@ namespace EAVModelClient
         #region Load Helpers
         private void LoadAttributeUnits(EAV.Model.IModelAttribute attribute)
         {
+            bool attributeWasUnmodified = attribute.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/metadata/attributes/{0}/units", attribute.AttributeID)).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -65,10 +67,11 @@ namespace EAVModelClient
 
                     attribute.Units.Add(unit);
 
-                    Debug.Assert(unit.ObjectState == EAV.Model.ObjectState.Unmodified);
+                    unit.MarkUnmodified();
                 }
 
-                attribute.MarkUnmodified();
+                if (attributeWasUnmodified)
+                    attribute.MarkUnmodified();
             }
             else
             {
@@ -78,6 +81,8 @@ namespace EAVModelClient
 
         private void LoadAttributes(EAV.Model.IModelContainer container)
         {
+            bool containerWasUnmodified = container.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/metadata/containers/{0}/attributes", container.ContainerID.GetValueOrDefault())).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -86,6 +91,8 @@ namespace EAVModelClient
                 var attributes = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelAttribute>>().Result;
                 foreach (EAVModelLibrary.ModelAttribute attribute in attributes)
                 {
+                    attribute.MarkUnmodified();
+
                     LoadAttributeUnits(attribute);
 
                     container.Attributes.Add(attribute);
@@ -93,7 +100,8 @@ namespace EAVModelClient
                     attribute.MarkUnmodified();
                 }
 
-                container.MarkUnmodified();
+                if (containerWasUnmodified)
+                    container.MarkUnmodified();
             }
             else
             {
@@ -103,6 +111,8 @@ namespace EAVModelClient
 
         private void LoadChildContainers(EAV.Model.IModelContainer parentContainer)
         {
+            bool parentContainerWasUnmodified = parentContainer.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/metadata/containers/{0}/containers", parentContainer.ContainerID.GetValueOrDefault())).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -111,6 +121,8 @@ namespace EAVModelClient
                 var childContainers = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelChildContainer>>().Result;
                 foreach (EAVModelLibrary.ModelChildContainer childContainer in childContainers)
                 {
+                    childContainer.MarkUnmodified();
+
                     LoadAttributes(childContainer);
                     LoadChildContainers(childContainer);
 
@@ -119,7 +131,8 @@ namespace EAVModelClient
                     childContainer.MarkUnmodified();
                 }
 
-                parentContainer.MarkUnmodified();
+                if (parentContainerWasUnmodified)
+                    parentContainer.MarkUnmodified();
             }
             else
             {
@@ -129,12 +142,21 @@ namespace EAVModelClient
 
         private void LoadValueUnit(EAV.Model.IModelValue value)
         {
+            bool valueWasUnmodified = value.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/metadata/units/{0}", value.UnitID)).Result;
             if (response.IsSuccessStatusCode)
             {
-                value.Unit = response.Content.ReadAsAsync<EAVModelLibrary.ModelUnit>().Result;
+                var unit = response.Content.ReadAsAsync<EAVModelLibrary.ModelUnit>().Result;
 
-                value.MarkUnmodified();
+                unit.MarkUnmodified();
+
+                value.Unit = unit;
+
+                unit.MarkUnmodified();
+
+                if (valueWasUnmodified)
+                    value.MarkUnmodified();
             }
             else
             {
@@ -144,6 +166,9 @@ namespace EAVModelClient
 
         private void LoadValues(EAV.Model.IModelInstance instance, IEnumerable<EAV.Model.IModelAttribute> attributes)
         {
+            bool instanceWasUnmodified = instance.ObjectState == EAV.Model.ObjectState.Unmodified;
+            Dictionary<int?, bool> attributeWasUnmodified = attributes.ToDictionary(key => key.AttributeID, val => val.ObjectState == EAV.Model.ObjectState.Unmodified);
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/data/instances/{0}/values", instance.InstanceID.GetValueOrDefault())).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -152,6 +177,8 @@ namespace EAVModelClient
                 var values = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelValue>>().Result;
                 foreach (EAVModelLibrary.ModelValue value in values)
                 {
+                    //value.MarkUnmodified();
+
                     value.Attribute = attributes.Single(it => it.AttributeID == value.AttributeID);
 
                     if (value.UnitID != null)
@@ -162,7 +189,14 @@ namespace EAVModelClient
                     value.MarkUnmodified();
                 }
 
-                instance.MarkUnmodified();
+                if (instanceWasUnmodified)
+                    instance.MarkUnmodified();
+
+                foreach (var attribute in attributes)
+                {
+                    if (attributeWasUnmodified[attribute.AttributeID])
+                        attribute.MarkUnmodified();
+                }
             }
             else
             {
@@ -170,8 +204,11 @@ namespace EAVModelClient
             }
         }
 
-        private void LoadChildInstances(EAV.Model.IModelSubject subject, IEnumerable<EAV.Model.IModelContainer> containers, EAV.Model.IModelInstance parentInstance)
+        private void LoadChildInstances(EAV.Model.IModelInstance parentInstance, IEnumerable<EAV.Model.IModelContainer> containers)
         {
+            bool ifParentInstanceWasUnmodified = parentInstance.ObjectState == EAV.Model.ObjectState.Unmodified;
+            Dictionary<int?, bool> containerWasUnmodified = containers.ToDictionary(key => key.ContainerID, val => val.ObjectState == EAV.Model.ObjectState.Unmodified);
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/data/instances/{0}/instances", parentInstance.InstanceID.GetValueOrDefault())).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -180,25 +217,31 @@ namespace EAVModelClient
                 var childInstances = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelChildInstance>>().Result;
                 foreach (EAVModelLibrary.ModelChildInstance childInstance in childInstances)
                 {
+                    childInstance.MarkUnmodified();
+
                     EAV.Model.IModelContainer container = containers.Single(it => it.ContainerID == childInstance.ContainerID);
 
-                    childInstance.Subject = subject;
                     childInstance.Container = container;
 
-                    LoadValues(childInstance, container.Attributes);
-                    LoadChildInstances(subject, container.ChildContainers, childInstance);
+                    if (container.Attributes.Any())
+                        LoadValues(childInstance, container.Attributes);
+
+                    if (container.ChildContainers.Any())
+                        LoadChildInstances(childInstance, container.ChildContainers);
 
                     parentInstance.ChildInstances.Add(childInstance);
 
                     childInstance.MarkUnmodified();
                 }
 
-                parentInstance.MarkUnmodified();
+                if (ifParentInstanceWasUnmodified)
+                    parentInstance.MarkUnmodified();
 
                 foreach (var container in containers)
-                    container.MarkUnmodified();
-
-                subject.MarkUnmodified();
+                {
+                    if (containerWasUnmodified[container.ContainerID])
+                        container.MarkUnmodified();
+                }
             }
             else
             {
@@ -208,15 +251,21 @@ namespace EAVModelClient
 
         private void LoadSubjectEntity(EAV.Model.IModelSubject subject)
         {
+            bool subjectWasUnmodified = subject.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/entities/{0}", subject.EntityID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var entity = response.Content.ReadAsAsync<EAVModelLibrary.ModelEntity>().Result;
 
+                entity.MarkUnmodified();
+
                 subject.Entity = entity;
 
                 entity.MarkUnmodified();
-                subject.MarkUnmodified();
+
+                if (subjectWasUnmodified)
+                    subject.MarkUnmodified();
             }
             else
             {
@@ -226,15 +275,21 @@ namespace EAVModelClient
 
         private void LoadSubjectContext(EAV.Model.IModelSubject subject)
         {
+            bool subjectWasUnmodified = subject.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/metadata/contexts/{0}", subject.ContextID)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var context = response.Content.ReadAsAsync<EAVModelLibrary.ModelContext>().Result;
 
+                context.MarkUnmodified();
+
                 subject.Context = context;
 
                 context.MarkUnmodified();
-                subject.MarkUnmodified();
+
+                if (subjectWasUnmodified)
+                    subject.MarkUnmodified();
             }
             else
             {
@@ -419,7 +474,10 @@ namespace EAVModelClient
             HttpResponseMessage response;
 
             if (value.Unit != null)
+            {
                 SaveValueUnit(value.Unit);
+                value.Unit = value.Unit;
+            }
 
             if (value.ObjectState == EAV.Model.ObjectState.New)
             {
@@ -712,6 +770,8 @@ namespace EAVModelClient
 
         public void LoadSubjects(EAV.Model.IModelContext context)
         {
+            bool contextWasUnmodified = context.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/metadata/contexts/{0}/subjects", context.ContextID.GetValueOrDefault())).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -720,6 +780,8 @@ namespace EAVModelClient
                 var subjects = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelSubject>>().Result;
                 foreach (EAVModelLibrary.ModelSubject subject in subjects)
                 {
+                    subject.MarkUnmodified();
+
                     LoadSubjectEntity(subject);
 
                     context.Subjects.Add(subject);
@@ -727,7 +789,8 @@ namespace EAVModelClient
                     subject.MarkUnmodified();
                 }
 
-                context.MarkUnmodified();
+                if (contextWasUnmodified)
+                    context.MarkUnmodified();
             }
             else
             {
@@ -737,6 +800,8 @@ namespace EAVModelClient
 
         public void LoadSubjects(EAV.Model.IModelEntity entity)
         {
+            bool entityWasUnmodified = entity.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/entities/{0}/subjects", entity.EntityID)).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -745,6 +810,8 @@ namespace EAVModelClient
                 var subjects = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelSubject>>().Result;
                 foreach (EAVModelLibrary.ModelSubject subject in subjects)
                 {
+                    subject.MarkUnmodified();
+
                     LoadSubjectContext(subject);
 
                     entity.Subjects.Add(subject);
@@ -752,7 +819,8 @@ namespace EAVModelClient
                     subject.MarkUnmodified();
                 }
 
-                entity.MarkUnmodified();
+                if (entityWasUnmodified)
+                    entity.MarkUnmodified();
             }
             else
             {
@@ -808,6 +876,8 @@ namespace EAVModelClient
 
         public void LoadRootContainers(EAV.Model.IModelContext context)
         {
+            bool contextWasUnmodified = context.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/metadata/contexts/{0}/containers", context.ContextID.GetValueOrDefault())).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -816,12 +886,15 @@ namespace EAVModelClient
                 var rootContainers = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelRootContainer>>().Result;
                 foreach (EAVModelLibrary.ModelRootContainer rootContainer in rootContainers)
                 {
+                    rootContainer.MarkUnmodified();
+
                     context.Containers.Add(rootContainer);
 
                     rootContainer.MarkUnmodified();
                 }
 
-                context.MarkUnmodified();
+                if (contextWasUnmodified)
+                    context.MarkUnmodified();
             }
             else
             {
@@ -833,10 +906,13 @@ namespace EAVModelClient
         {
             try
             {
+                bool containerWasUnmodified = container.ObjectState == EAV.Model.ObjectState.Unmodified;
+
                 LoadAttributes(container);
                 LoadChildContainers(container);
 
-                container.MarkUnmodified();
+                if (containerWasUnmodified)
+                    container.MarkUnmodified();
             }
             catch (Exception ex)
             {
@@ -905,6 +981,9 @@ namespace EAVModelClient
 
         public void LoadRootInstances(EAV.Model.IModelSubject subject, EAV.Model.IModelRootContainer container)
         {
+            bool subjectWasUnmodified = subject.ObjectState == EAV.Model.ObjectState.Unmodified;
+            bool containerWasUnmodified = container.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/data/subjects/{0}/instances?container={1}", subject.SubjectID.GetValueOrDefault(), container != null ? container.ContainerID : null)).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -913,17 +992,23 @@ namespace EAVModelClient
                 var rootInstances = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelRootInstance>>().Result;
                 foreach (EAVModelLibrary.ModelRootInstance rootInstance in rootInstances)
                 {
+                    rootInstance.MarkUnmodified();
+
                     rootInstance.Container = container;
 
-                    LoadValues(rootInstance, container.Attributes);
-                    LoadChildInstances(subject, container.ChildContainers, rootInstance);
+                    if (container.Attributes.Any())
+                        LoadValues(rootInstance, container.Attributes);
 
                     subject.Instances.Add(rootInstance);
 
                     rootInstance.MarkUnmodified();
                 }
 
-                subject.MarkUnmodified();
+                if (containerWasUnmodified)
+                    container.MarkUnmodified();
+
+                if (subjectWasUnmodified)
+                    subject.MarkUnmodified();
             }
             else
             {
@@ -933,6 +1018,8 @@ namespace EAVModelClient
 
         public void LoadData(EAV.Model.IModelRootInstance instance)
         {
+            bool instanceWasUnmodified = instance.ObjectState == EAV.Model.ObjectState.Unmodified;
+
             HttpResponseMessage response = client.GetAsync(String.Format("api/data/instances/{0}/instances", instance.InstanceID.GetValueOrDefault())).Result;
             if (response.IsSuccessStatusCode)
             {
@@ -941,15 +1028,25 @@ namespace EAVModelClient
                 var childInstances = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelChildInstance>>().Result;
                 foreach (EAVModelLibrary.ModelChildInstance childInstance in childInstances)
                 {
-                    LoadValues(childInstance, instance.Container.Attributes);
-                    LoadChildInstances(instance.Subject, instance.Container.ChildContainers, childInstance);
+                    childInstance.MarkUnmodified();
+
+                    EAV.Model.IModelContainer container = instance.Container.ChildContainers.Single(it => it.ContainerID == childInstance.ContainerID);
+
+                    childInstance.Container = container;
+
+                    if (container.Attributes.Any())
+                        LoadValues(childInstance, container.Attributes);
+
+                    if (container.ChildContainers.Any())
+                        LoadChildInstances(childInstance, container.ChildContainers);
 
                     instance.ChildInstances.Add(childInstance);
 
                     childInstance.MarkUnmodified();
                 }
 
-                instance.MarkUnmodified();
+                if (instanceWasUnmodified)
+                    instance.MarkUnmodified();
             }
             else
             {
