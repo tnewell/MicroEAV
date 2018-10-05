@@ -1,0 +1,23 @@
+﻿@model EAVWebApplication.Models.Data.DataViewModel
+
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Sandbox</h1>
+</div>
+
+@using (Html.BeginForm("SubmitValues", "Sandbox", FormMethod.Post))
+{
+
+<div>
+
+</div>
+
+<div>
+    <input type="submit" value="Submit" />
+</div>
+
+}

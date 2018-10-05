@@ -1,4 +1,4 @@
-﻿@model EAVWebApplication.Models.Data.DataModel
+﻿@model EAVWebApplication.Models.Data.DataViewModel
 
 <style type="text/css">
     .field-validation-error
@@ -61,12 +61,17 @@
             cache: false,
         });
 
-        function getRootContainers()
+        function setContext()
         {
             var ctlContainerList = $('#ctlContainerList');
 
             ctlContainerList.empty();
             ctlContainerList.prop('disabled', true);
+
+            var ctlSubjectList = $('#ctlSubjectList');
+
+            ctlSubjectList.empty();
+            ctlSubjectList.prop('disabled', true);
 
             var contextID = $('#ctlContextList').val();
 
@@ -74,7 +79,7 @@
             {
                 $.ajax(
                 {
-                    url: '@Url.Action("GetRootContainers")',
+                    url: '@Url.Action("SelectContext")',
                     type: 'GET',
                     data: { contextID: contextID },
                     cache: false,
@@ -83,14 +88,23 @@
                     {
                         console.log('Connection to server made. Status: \'' + status + '\'.');
 
-                        ctlContainerList.append($('<option></option>').attr('value', 0).text(response.length > 0 ? '<Select Container>' : ''));
+                        ctlContainerList.append($('<option></option>').attr('value', 0).text(response.Containers.length > 0 ? '<Select Container>' : ''));
 
-                        $.each(response, function (ix, it)
+                        $.each(response.Containers, function (ix, it)
                         {
                             ctlContainerList.append($('<option></option>').attr('value', it.Value).text(it.Text));
                         });
 
                         ctlContainerList.prop('disabled', ctlContainerList[0].children.length < 2);
+
+                        ctlSubjectList.append($('<option></option>').attr('value', 0).text(response.Subjects.length > 0 ? '<Select Subject>' : ''));
+
+                        $.each(response.Subjects, function (ix, it)
+                        {
+                            ctlSubjectList.append($('<option></option>').attr('value', it.Value).text(it.Text));
+                        });
+
+                        ctlSubjectList.prop('disabled', ctlSubjectList[0].children.length < 2);
                     },
                     error: function (request, status, err)
                     {
@@ -117,14 +131,18 @@
 
 @using (Html.BeginForm("EditForm", "Data", FormMethod.Post, new { id = "ctlSelectorForm" }))
 {
-    <div class="row" style="margin-top: 25px; margin-bottom: 20px; padding: 10px 3px 10px 3px; border: solid 1px #000033; border-radius: 3px; background-color: #d0e9eb; ">
+    <div class="row" style="margin-top: 25px; margin-bottom: 20px; padding: 10px 3px 10px 3px; border: solid 1px #A0A0A0; border-radius: 3px; background-color: #9DBCCE; ">
 
         <div class="col-md-2 col-lg-2">
-            @Html.DropDownListFor(m => m.SelectedContextID, Model.Contexts.OrderBy(it => it.Name).Select(it => new SelectListItem() { Text = it.Name, Value = it.ContextID.GetValueOrDefault().ToString() }), "<Select Context>", new { id = "ctlContextList", @class = "form-control", onchange = "getRootContainers();" })
+            @Html.DropDownListFor(m => m.SelectedContextID, Model.Contexts.OrderBy(it => it.Name).Select(it => new SelectListItem() { Text = it.Name, Value = it.ContextID.GetValueOrDefault().ToString() }), "<Select Context>", new { id = "ctlContextList", @class = "form-control", onchange = "setContext();" })
         </div>
 
         <div class="col-md-2 col-lg-2">
             @Html.DropDownListFor(m => m.SelectedContainerID, Enumerable.Empty<SelectListItem>(), new { id = "ctlContainerList", @class = "form-control", disabled = "disabled" })
+        </div>
+
+        <div class="col-md-2 col-lg-2">
+            @Html.DropDownListFor(m => m.SelectedSubjectID, Enumerable.Empty<SelectListItem>(), new { id = "ctlSubjectList", @class = "form-control", disabled = "disabled" })
         </div>
 
     </div>

@@ -1,0 +1,32 @@
+﻿@model EAVWebApplication.Models.Data.ViewModelAttributeValue
+
+
+<div class="eav-value-container">
+
+    @Html.HiddenFor(m => m.AttributeID)
+    @Html.HiddenFor(m => m.DataType)
+    @Html.HiddenFor(m => m.Sequence)
+    @Html.HiddenFor(m => m.IsKey)
+    @Html.HiddenFor(m => m.VariableUnits)
+
+    <label class="eav-value-caption">@Model.DisplayText</label>
+
+    @switch (Model.DataType)
+    {
+        case EAV.EAVDataType.Boolean:
+        case EAV.EAVDataType.DateTime:
+        case EAV.EAVDataType.Float:
+        case EAV.EAVDataType.Integer:
+        case EAV.EAVDataType.String:
+        default:
+            @Html.TextBoxFor(m => m.Value, new { disabled = "disabled", @class = "eav-value-control" })
+            break;
+    }
+
+    @if (Model.VariableUnits.HasValue)
+    {
+        @Html.HiddenFor(m => m.UnitID)
+        <label class="eav-units-text">@Model.UnitText</label>
+    }
+</div>
+

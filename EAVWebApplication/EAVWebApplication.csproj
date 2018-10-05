@@ -136,10 +136,11 @@
     <Compile Include="Controllers\DataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MetadataController.cs" />
+    <Compile Include="Controllers\SandboxController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\DataViewModel.cs" />
     <Compile Include="Models\MetadataModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -275,16 +276,18 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Data\Index.cshtml" />
     <Content Include="Views\Data\DisplayContainer.cshtml" />
-    <Content Include="Views\Data\DisplayTemplates\EAVRootInstance.cshtml" />
-    <Content Include="Views\Data\DisplayTemplates\EAVChildInstance.cshtml" />
-    <Content Include="Views\Data\DisplayTemplates\EAVValue.cshtml" />
-    <Content Include="Views\Data\EditorTemplates\EAVChildInstance.cshtml" />
-    <Content Include="Views\Data\EditorTemplates\EAVRootInstance.cshtml" />
-    <Content Include="Views\Data\EditorTemplates\EAVValue.cshtml" />
+    <Content Include="Views\Sandbox\Index.cshtml" />
+    <Content Include="Views\Data\EditorTemplates\ViewModelInstance.cshtml" />
+    <Content Include="Views\Data\EditorTemplates\ViewModelAttributeValue.cshtml" />
+    <Content Include="Views\Data\EditorTemplates\ViewModelContainer.cshtml" />
+    <Content Include="Views\Data\DisplayTemplates\ViewModelAttributeValue.cshtml" />
+    <Content Include="Views\Data\DisplayTemplates\ViewModelContainer.cshtml" />
+    <Content Include="Views\Data\DisplayTemplates\ViewModelInstance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Metadata\DisplayTemplates\" />
+    <Folder Include="Views\Sandbox\EditorTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

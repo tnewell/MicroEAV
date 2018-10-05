@@ -1,0 +1,13 @@
+﻿@model EAVWebApplication.Models.Data.ViewModelInstance
+
+@Html.HiddenFor(m => m.ContainerID)
+@Html.HiddenFor(m => m.SubjectID)
+@Html.HiddenFor(m => m.InstanceID)
+@Html.HiddenFor(m => m.ParentInstanceID)
+
+@if (Model.Values.Any())
+{
+    <div class="eav-instance-container">
+        @Html.DisplayFor(m => m.Values)
+    </div>
+}

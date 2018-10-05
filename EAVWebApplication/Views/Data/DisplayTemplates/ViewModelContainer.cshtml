@@ -1,0 +1,21 @@
+﻿@model EAVWebApplication.Models.Data.ViewModelContainer
+
+
+@Html.HiddenFor(m => m.ContainerID)
+@Html.HiddenFor(m => m.ParentContainerID)
+@Html.HiddenFor(m => m.Sequence)
+@Html.HiddenFor(m => m.IsRepeating)
+
+<div class="eav-container-container">
+
+    <div class="eav-container-header">@Model.DisplayText</div>
+
+    @Html.DisplayFor(m => m.Instances)
+
+    @if (Model.ChildContainers.Any())
+    {
+        <div>
+            @Html.DisplayFor(m => m.ChildContainers)
+        </div>
+    }
+</div>
