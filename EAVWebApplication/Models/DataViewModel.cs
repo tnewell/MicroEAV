@@ -122,7 +122,6 @@ namespace EAVWebApplication.Models.Data
     {
         public ViewModelContainer()
         {
-            ChildContainers = new List<ViewModelContainer>();
             Instances = new List<ViewModelInstance>();
         }
 
@@ -131,41 +130,9 @@ namespace EAVWebApplication.Models.Data
         public int Sequence { get; set; }
         public string DisplayText { get; set; }
         public bool IsRepeating { get; set; }
-        //public IList<ViewModelContainer> ChildContainers { get; set; }
         public IList<ViewModelInstance> Instances { get; set; }
 
         public int SelectedInstanceID { get; set; }
-
-        public void Dump(string message)
-        {
-            Debug.WriteLine("--------------------------------------------------------------------------------------------");
-            Debug.WriteLine($"-- {message}");
-            Debug.WriteLine("--------------------------------------------------------------------------------------------");
-
-            Debug.WriteLine($"View Container [{ContainerID}] '{DisplayText}'");
-
-            Debug.Indent();
-            foreach (ViewModelInstance instance in Instances)
-            {
-                Debug.WriteLine($"View Instance [{instance.InstanceID}]");
-
-                Debug.Indent();
-                foreach (ViewModelAttributeValue value in instance.Values)
-                {
-                    Debug.WriteLine($"View Value [{value.AttributeID}] '{value.DisplayText}' = '{value.Value}'");
-                }
-                Debug.Unindent();
-            }
-            Debug.Unindent();
-
-            Debug.Indent();
-            foreach (ViewModelContainer child in ChildContainers)
-            {
-                child.Dump("View Model - Recursing...");
-            }
-            Debug.Unindent();
-            Debug.WriteLine("--------------------------------------------------------------------------------------------");
-        }
     }
 
     public partial class ViewModelInstance
@@ -231,38 +198,5 @@ namespace EAVWebApplication.Models.Data
     {
         public int UnitID { get; set; }
         public string DisplayText { get; set; }
-    }
-
-    public static class DataModelExtensions
-    {
-        public static void Dump(this IModelContainer container, string message)
-        {
-            Debug.WriteLine("--------------------------------------------------------------------------------------------");
-            Debug.WriteLine($"-- {message}");
-            Debug.WriteLine("--------------------------------------------------------------------------------------------");
-            Debug.WriteLine($"Data Container [{container.ContainerID}] '{container.DisplayText}' ({container.ObjectState})");
-
-            Debug.Indent();
-            foreach (IModelInstance instance in container.Instances)
-            {
-                Debug.WriteLine($"Data Instance [{instance.InstanceID}] ({instance.ObjectState})");
-
-                Debug.Indent();
-                foreach (IModelValue value in instance.Values)
-                {
-                    Debug.WriteLine($"Data Value [{value.AttributeID}] '{value.Attribute.DisplayText}' = '{value.RawValue}' ({value.ObjectState})");
-                }
-                Debug.Unindent();
-            }
-            Debug.Unindent();
-
-            Debug.Indent();
-            foreach (IModelContainer child in container.ChildContainers)
-            {
-                child.Dump("Data Model - Recursing...");
-            }
-            Debug.Unindent();
-            Debug.WriteLine("--------------------------------------------------------------------------------------------");
-        }
     }
 }

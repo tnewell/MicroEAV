@@ -138,11 +138,11 @@
         </div>
 
         <div class="col-md-2 col-lg-2">
-            @Html.DropDownListFor(m => m.SelectedContainerID, Enumerable.Empty<SelectListItem>(), new { id = "ctlContainerList", @class = "form-control", disabled = "disabled" })
+            @Html.DropDownListFor(m => m.SelectedContainerID, Model.CurrentContext != null ? Model.CurrentContext.Containers.Select(it => new SelectListItem() { Text = it.Name, Value = it.ContainerID.GetValueOrDefault().ToString() }) : Enumerable.Empty<SelectListItem>(), "<Select Container>", new { id = "ctlContainerList", @class = "form-control", disabled = "disabled" })
         </div>
 
         <div class="col-md-2 col-lg-2">
-            @Html.DropDownListFor(m => m.SelectedSubjectID, Enumerable.Empty<SelectListItem>(), new { id = "ctlSubjectList", @class = "form-control", disabled = "disabled" })
+            @Html.DropDownListFor(m => m.SelectedSubjectID, Model.CurrentContext != null ? Model.CurrentContext.Subjects.Select(it => new SelectListItem() { Text = it.Identifier, Value = it.SubjectID.GetValueOrDefault().ToString() }) : Enumerable.Empty<SelectListItem>(), "<Select Subject>", new { id = "ctlSubjectList", @class = "form-control", disabled = "disabled" })
         </div>
 
     </div>

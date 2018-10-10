@@ -128,7 +128,7 @@ namespace EAVWebApplication.Controllers
 
             foreach (ModelContainer childContainer in container.ChildContainers)
             {
-                ViewModelContainer childViewContainer = viewContainer.ChildContainers.Single(it => it.ContainerID == childContainer.ContainerID);
+                ViewModelContainer childViewContainer = viewInstance.ChildContainers.Single(it => it.ContainerID == childContainer.ContainerID);
                 var set1 = childContainer.Instances.GroupJoin(childViewContainer.Instances, left => left.InstanceID, right => right.InstanceID, (left, right) => new { ModelInstance = left, ViewInstance = right.FirstOrDefault() }).ToArray();
                 var set2 = childViewContainer.Instances.GroupJoin(childContainer.Instances, left => left.InstanceID, right => right.InstanceID, (left, right) => new { ModelInstance = right.FirstOrDefault(), ViewInstance = left }).ToArray();
 
@@ -141,11 +141,6 @@ namespace EAVWebApplication.Controllers
 
         private void TrimViewModel(ViewModelContainer container)
         {
-            //foreach (ViewModelContainer childContainer in container.ChildContainers)
-            //{
-            //    TrimViewModel(childContainer);
-            //}
-
             foreach (ViewModelInstance instance in container.Instances)
             {
                 var emptyValues = instance.Values.Where(it => it.IsEmpty).ToList();
@@ -162,8 +157,7 @@ namespace EAVWebApplication.Controllers
                 }
             }
 
-            var emptyInstancesNew = container.Instances.GroupJoin(container.SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.IsEmpty).ToList();
-            var emptyInstances = container.Instances.GroupJoin(container.ChildContainers.SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.IsEmpty).ToList();
+            var emptyInstances = container.Instances.GroupJoin(container.Instances.SelectMany(it => it.ChildContainers).SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.IsEmpty).ToList();
 
             while (emptyInstances.Any())
             {
