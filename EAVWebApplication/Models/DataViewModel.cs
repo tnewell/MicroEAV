@@ -132,7 +132,10 @@ namespace EAVWebApplication.Models.Data
         public bool IsRepeating { get; set; }
         public IList<ViewModelInstance> Instances { get; set; }
 
-        public int SelectedInstanceID { get; set; }
+        private int selectedInstanceID;
+        public int SelectedInstanceID { get { return (selectedInstanceID); } set { selectedInstanceID = value; SelectedInstance = Instances.SingleOrDefault(it => it.InstanceID == value); } }
+
+        public ViewModelInstance SelectedInstance { get; set; }
     }
 
     public partial class ViewModelInstance

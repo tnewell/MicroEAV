@@ -293,7 +293,7 @@ namespace EAVWebApplication.Controllers
 
             TempData[TempDataModelKey] = currentViewModel;
 
-            return (RedirectToAction("PostRedirectGetTarget", new { view = "DisplayRunningContainer" }));
+            return (RedirectToAction("PostRedirectGetTarget", new { view = "DisplayRecurringContainer" }));
         }
 
         [HttpPost]
@@ -317,6 +317,20 @@ namespace EAVWebApplication.Controllers
             TempData[TempDataModelKey] = currentViewModel;
 
             return (RedirectToAction("PostRedirectGetTarget", new { view = "DisplayRunningContainer" }));
+        }
+
+        [HttpPost]
+        public ActionResult RetrieveInstance(ViewModelContainer postedViewContainer)
+        {
+            DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
+
+            // TODO: Bind current instance here
+
+            currentViewModel.CurrentViewContainer.SelectedInstanceID = postedViewContainer.SelectedInstanceID;
+
+            TempData[TempDataModelKey] = currentViewModel;
+
+            return (PartialView("SingletonInstance", currentViewModel.CurrentViewContainer));
         }
     }
 }

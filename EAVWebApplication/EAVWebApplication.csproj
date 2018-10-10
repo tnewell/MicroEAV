@@ -285,6 +285,7 @@
     <Content Include="Views\Data\DisplayTemplates\ViewModelInstance.cshtml" />
     <Content Include="Views\Data\DisplayRunningContainer.cshtml" />
     <Content Include="Views\Data\DisplayRecurringContainer.cshtml" />
+    <Content Include="Views\Data\SingletonInstance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

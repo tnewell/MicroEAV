@@ -56,6 +56,39 @@
     }
 </style>
 
+<script type="text/javascript">
+
+    function RetrieveInstance()
+    {
+        $('#ctlInstancePlaceholder').empty();
+
+        $.ajax(
+        {
+            url: '@Url.Content("~/Data/RetrieveInstance/")' + $('#ctlInstanceList').children(':selected').val(),
+            type: 'POST',
+            data: FormData(document.getElementById('ctlDataForm')),
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data, status, request)
+            {
+                console.log('Connection to server made.\r\n')
+
+                $('#ctlInstancePlaceholder').html(data);
+            },
+            error: function (request, status, err)
+            {
+                console.log('Connection to server not made. Status: \'' + status + '\'\r\nReported error: \'' + err + '\'\r\n')
+            },
+            complete: function (request, status)
+            {
+                console.log('Call to method \'RetrieveInstance\' complete.\r\n')
+            },
+        });
+    }
+
+</script>
+
 <h2>Context Display Text Here</h2>
 
 <hr />
@@ -67,7 +100,7 @@
     @Html.HiddenFor(m => m.Sequence)
     @Html.HiddenFor(m => m.IsRepeating)
 
-    @Html.DropDownListFor(m => m.SelectedInstanceID, Model.Instances.Select(it => new SelectListItem() { Text = it.InstanceID.ToString(), Value = it.InstanceID.ToString() }))
+    @Html.DropDownListFor(m => m.SelectedInstanceID, Model.Instances.Select(it => new SelectListItem() { Text = it.InstanceID.ToString(), Value = it.InstanceID.ToString() }), "<Select Instance>", new { id = "ctlInstanceList", onchange = "RetrieveInstance();" })
 
     <hr />
 
@@ -75,7 +108,12 @@
 
         <div class="eav-container-header">@Model.DisplayText</div>
 
-        @Html.EditorFor(m => m.Instances)
+        <div id="ctlInstancePlaceholder">
+            @if (Model.SelectedInstance != null)
+            {
+                @Html.EditorFor(m => m.SelectedInstance)
+            }
+        </div>
 
     </div>
 
