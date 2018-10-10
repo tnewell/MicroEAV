@@ -32,12 +32,16 @@ namespace EAVWebApplication.Models.Data
 
         public ViewModelContainer CurrentViewContainer { get; set; }
 
+        private int nextInstanceID = -1;
         private int NextInstanceID(ViewModelContainer container)
         {
             if (container == null)
                 return (-1);
 
-            return (Math.Min(container.Instances.Any() ? container.Instances.Min(it => it.InstanceID.GetValueOrDefault()) : 0, container.ChildContainers.Any() ? container.ChildContainers.Min(it => NextInstanceID(it)) : 0) - 1);
+            var instances = container.Instances;
+            var childContainers = instances.SelectMany(it => it.ChildContainers);
+
+            return (Math.Min(instances.Any() ? instances.Min(it => it.InstanceID.GetValueOrDefault()) : 0, childContainers.Any() ? childContainers.Min(it => NextInstanceID(it)) : 0) - 1);
         }
 
         private ViewModelAttributeValue CreateViewAttributeValue(EAV.Model.IModelAttribute attribute, EAV.Model.IModelValue value)
@@ -70,14 +74,19 @@ namespace EAVWebApplication.Models.Data
 
         private ViewModelInstance CreateViewInstance(IModelContainer container, IModelSubject subject, IModelInstance instance, ViewModelInstance parentInstance)
         {
-            ViewModelInstance viewContainerInstance = new ViewModelInstance() { ObjectState = instance != null ? instance.ObjectState : ObjectState.New, ContainerID = container.ContainerID, SubjectID = subject.SubjectID, InstanceID = instance != null ? instance.InstanceID : NextInstanceID(CurrentViewContainer), ParentInstanceID = parentInstance != null ? parentInstance.InstanceID : null };
+            ViewModelInstance viewInstance = new ViewModelInstance() { ObjectState = instance != null ? instance.ObjectState : ObjectState.New, ContainerID = container.ContainerID, SubjectID = subject.SubjectID, InstanceID = instance != null ? instance.InstanceID : nextInstanceID--, ParentInstanceID = parentInstance != null ? parentInstance.InstanceID : null };
 
-            foreach (EAV.Model.IModelAttribute attribute in container.Attributes)
+            foreach (EAV.Model.IModelAttribute attribute in container.Attributes.OrderBy(it => it.Sequence))
             {
-                viewContainerInstance.Values.Add(CreateViewAttributeValue(attribute, instance != null ? instance.Values.SingleOrDefault(it => it.AttributeID == attribute.AttributeID) : null));
+                viewInstance.Values.Add(CreateViewAttributeValue(attribute, instance != null ? instance.Values.SingleOrDefault(it => it.AttributeID == attribute.AttributeID) : null));
             }
 
-            return (viewContainerInstance);
+            foreach (IModelContainer childContainer in container.ChildContainers.OrderBy(it => it.Sequence))
+            {
+                viewInstance.ChildContainers.Add(CreateViewContainer(childContainer, subject, viewInstance));
+            }
+
+            return (viewInstance);
         }
 
         private ViewModelContainer CreateViewContainer(EAV.Model.IModelContainer container, IModelSubject subject, ViewModelInstance parentInstance)
@@ -89,11 +98,6 @@ namespace EAVWebApplication.Models.Data
                 ViewModelInstance viewInstance = CreateViewInstance(container, subject, instance, parentInstance);
 
                 viewContainer.Instances.Add(viewInstance);
-
-                foreach (IModelContainer childContainer in container.ChildContainers)
-                {
-                    viewContainer.ChildContainers.Add(CreateViewContainer(childContainer, subject, viewInstance));
-                }
             }
 
             if (container.IsRepeating || !viewContainer.Instances.Any())
@@ -101,11 +105,6 @@ namespace EAVWebApplication.Models.Data
                 ViewModelInstance viewInstance = CreateViewInstance(container, subject, null, parentInstance);
 
                 viewContainer.Instances.Add(viewInstance);
-
-                foreach (IModelContainer childContainer in container.ChildContainers)
-                {
-                    viewContainer.ChildContainers.Add(CreateViewContainer(childContainer, subject, viewInstance));
-                }
             }
 
             return (viewContainer);
@@ -113,6 +112,8 @@ namespace EAVWebApplication.Models.Data
 
         public void RegenerateViewContainer()
         {
+            nextInstanceID = NextInstanceID(CurrentViewContainer);
+
             CurrentViewContainer = CreateViewContainer(CurrentContainer, CurrentSubject, null);
         }
     }
@@ -130,7 +131,7 @@ namespace EAVWebApplication.Models.Data
         public int Sequence { get; set; }
         public string DisplayText { get; set; }
         public bool IsRepeating { get; set; }
-        public IList<ViewModelContainer> ChildContainers { get; set; }
+        //public IList<ViewModelContainer> ChildContainers { get; set; }
         public IList<ViewModelInstance> Instances { get; set; }
 
         public int SelectedInstanceID { get; set; }
@@ -171,6 +172,7 @@ namespace EAVWebApplication.Models.Data
     {
         public ViewModelInstance()
         {
+            ChildContainers = new List<ViewModelContainer>();
             Values = new List<ViewModelAttributeValue>();
         }
 
@@ -179,6 +181,7 @@ namespace EAVWebApplication.Models.Data
         public int? SubjectID { get; set; }
         public int? InstanceID { get; set; }
         public int? ParentInstanceID { get; set; }
+        public IList<ViewModelContainer> ChildContainers { get; set; }
         public IList<ViewModelAttributeValue> Values { get; set; }
 
         public bool IsEmpty { get { return (Values.All(it => it.IsEmpty)); } }

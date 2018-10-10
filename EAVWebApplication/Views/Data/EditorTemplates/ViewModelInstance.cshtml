@@ -8,14 +8,24 @@
 
 @if (Model.Values.Any())
 {
-    <div class="eav-instance-container">
-        @if (Model.ObjectState != EAV.Model.ObjectState.Deleted)
+<div class="eav-instance-container">
+    @if (Model.ObjectState != EAV.Model.ObjectState.Deleted)
+    {
+        @Html.EditorFor(m => m.Values)
+
+        if (Model.ChildContainers.Any())
         {
-            @Html.EditorFor(m => m.Values)
+            @Html.EditorFor(m => m.ChildContainers)
         }
-        else
+    }
+    else
+    {
+        @Html.DisplayFor(m => m.Values)
+
+        if (Model.ChildContainers.Any())
         {
-            @Html.DisplayFor(m => m.Values)
+            @Html.DisplayFor(m => m.ChildContainers)
         }
-    </div>
+    }
+</div>
 }

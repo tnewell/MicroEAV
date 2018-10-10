@@ -141,10 +141,10 @@ namespace EAVWebApplication.Controllers
 
         private void TrimViewModel(ViewModelContainer container)
         {
-            foreach (ViewModelContainer childContainer in container.ChildContainers)
-            {
-                TrimViewModel(childContainer);
-            }
+            //foreach (ViewModelContainer childContainer in container.ChildContainers)
+            //{
+            //    TrimViewModel(childContainer);
+            //}
 
             foreach (ViewModelInstance instance in container.Instances)
             {
@@ -155,8 +155,14 @@ namespace EAVWebApplication.Controllers
                     instance.Values.Remove(emptyValues.First());
                     emptyValues.Remove(emptyValues.First());
                 }
+
+                foreach (ViewModelContainer childContainer in instance.ChildContainers)
+                {
+                    TrimViewModel(childContainer);
+                }
             }
 
+            var emptyInstancesNew = container.Instances.GroupJoin(container.SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.IsEmpty).ToList();
             var emptyInstances = container.Instances.GroupJoin(container.ChildContainers.SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.IsEmpty).ToList();
 
             while (emptyInstances.Any())
