@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-
+using System.Text;
 using EAV.Model;
 using EAVModelLibrary;
-
+using Newtonsoft.Json;
 
 namespace EAVWebApplication.Models.Data
 {
@@ -28,9 +30,6 @@ namespace EAVWebApplication.Models.Data
         public int SelectedSubjectID { get; set; }
         public IModelSubject CurrentSubject { get { return (CurrentContext != null ? CurrentContext.Subjects.SingleOrDefault(it => it.SubjectID == SelectedSubjectID) : null); } }
 
-        public int SelectedInstanceID { get; set; }
-        public IModelRootInstance CurrentInstance { get { return (CurrentSubject != null ? CurrentSubject.Instances.SingleOrDefault(it => it.InstanceID == SelectedInstanceID) : null); } }
-
         public ViewModelContainer CurrentViewContainer { get; set; }
 
         private int NextInstanceID(ViewModelContainer container)
@@ -41,7 +40,7 @@ namespace EAVWebApplication.Models.Data
             return (Math.Min(container.Instances.Any() ? container.Instances.Min(it => it.InstanceID.GetValueOrDefault()) : 0, container.ChildContainers.Any() ? container.ChildContainers.Min(it => NextInstanceID(it)) : 0) - 1);
         }
 
-        private ViewModelAttributeValue BindToViewAttributeValue(EAV.Model.IModelAttribute attribute, EAV.Model.IModelValue value)
+        private ViewModelAttributeValue CreateViewAttributeValue(EAV.Model.IModelAttribute attribute, EAV.Model.IModelValue value)
         {
             ViewModelAttributeValue viewAttributeValue = new ViewModelAttributeValue() { ObjectState = value != null ? value.ObjectState : ObjectState.New, AttributeID = attribute.AttributeID, DataType = attribute.DataType, DisplayText = attribute.DisplayText, IsKey = attribute.IsKey, VariableUnits = attribute.VariableUnits };
 
@@ -69,52 +68,52 @@ namespace EAVWebApplication.Models.Data
             return (viewAttributeValue);
         }
 
-        private ViewModelInstance BindToViewInstance(IModelContainer container, IModelSubject subject, IModelInstance instance, ViewModelInstance parentInstance)
+        private ViewModelInstance CreateViewInstance(IModelContainer container, IModelSubject subject, IModelInstance instance, ViewModelInstance parentInstance)
         {
             ViewModelInstance viewContainerInstance = new ViewModelInstance() { ObjectState = instance != null ? instance.ObjectState : ObjectState.New, ContainerID = container.ContainerID, SubjectID = subject.SubjectID, InstanceID = instance != null ? instance.InstanceID : NextInstanceID(CurrentViewContainer), ParentInstanceID = parentInstance != null ? parentInstance.InstanceID : null };
 
             foreach (EAV.Model.IModelAttribute attribute in container.Attributes)
             {
-                viewContainerInstance.Values.Add(BindToViewAttributeValue(attribute, instance != null ? instance.Values.SingleOrDefault(it => it.AttributeID == attribute.AttributeID) : null));
+                viewContainerInstance.Values.Add(CreateViewAttributeValue(attribute, instance != null ? instance.Values.SingleOrDefault(it => it.AttributeID == attribute.AttributeID) : null));
             }
 
             return (viewContainerInstance);
         }
 
-        private ViewModelContainer BindToViewContainer(EAV.Model.IModelContainer container, IModelSubject subject, ViewModelInstance parentInstance)
+        private ViewModelContainer CreateViewContainer(EAV.Model.IModelContainer container, IModelSubject subject, ViewModelInstance parentInstance)
         {
             ViewModelContainer viewContainer = new ViewModelContainer() { ContainerID = container.ContainerID, ParentContainerID = container.ParentContainerID, DisplayText = container.DisplayText, IsRepeating = container.IsRepeating };
 
             foreach (IModelInstance instance in container.Instances.Where(it => parentInstance == null || it.ParentInstanceID == parentInstance.InstanceID))
             {
-                ViewModelInstance viewInstance = BindToViewInstance(container, subject, instance, parentInstance);
+                ViewModelInstance viewInstance = CreateViewInstance(container, subject, instance, parentInstance);
 
                 viewContainer.Instances.Add(viewInstance);
 
                 foreach (IModelContainer childContainer in container.ChildContainers)
                 {
-                    viewContainer.ChildContainers.Add(BindToViewContainer(childContainer, subject, viewInstance));
+                    viewContainer.ChildContainers.Add(CreateViewContainer(childContainer, subject, viewInstance));
                 }
             }
 
             if (container.IsRepeating || !viewContainer.Instances.Any())
             {
-                ViewModelInstance viewInstance = BindToViewInstance(container, subject, null, parentInstance);
+                ViewModelInstance viewInstance = CreateViewInstance(container, subject, null, parentInstance);
 
                 viewContainer.Instances.Add(viewInstance);
 
                 foreach (IModelContainer childContainer in container.ChildContainers)
                 {
-                    viewContainer.ChildContainers.Add(BindToViewContainer(childContainer, subject, viewInstance));
+                    viewContainer.ChildContainers.Add(CreateViewContainer(childContainer, subject, viewInstance));
                 }
             }
 
             return (viewContainer);
         }
 
-        public void Refresh()
+        public void RegenerateViewContainer()
         {
-            CurrentViewContainer = BindToViewContainer(CurrentContainer, CurrentSubject, null);
+            CurrentViewContainer = CreateViewContainer(CurrentContainer, CurrentSubject, null);
         }
     }
 
@@ -131,8 +130,41 @@ namespace EAVWebApplication.Models.Data
         public int Sequence { get; set; }
         public string DisplayText { get; set; }
         public bool IsRepeating { get; set; }
-        public ICollection<ViewModelContainer> ChildContainers { get; set; }
-        public ICollection<ViewModelInstance> Instances { get; set; }
+        public IList<ViewModelContainer> ChildContainers { get; set; }
+        public IList<ViewModelInstance> Instances { get; set; }
+
+        public int SelectedInstanceID { get; set; }
+
+        public void Dump(string message)
+        {
+            Debug.WriteLine("--------------------------------------------------------------------------------------------");
+            Debug.WriteLine($"-- {message}");
+            Debug.WriteLine("--------------------------------------------------------------------------------------------");
+
+            Debug.WriteLine($"View Container [{ContainerID}] '{DisplayText}'");
+
+            Debug.Indent();
+            foreach (ViewModelInstance instance in Instances)
+            {
+                Debug.WriteLine($"View Instance [{instance.InstanceID}]");
+
+                Debug.Indent();
+                foreach (ViewModelAttributeValue value in instance.Values)
+                {
+                    Debug.WriteLine($"View Value [{value.AttributeID}] '{value.DisplayText}' = '{value.Value}'");
+                }
+                Debug.Unindent();
+            }
+            Debug.Unindent();
+
+            Debug.Indent();
+            foreach (ViewModelContainer child in ChildContainers)
+            {
+                child.Dump("View Model - Recursing...");
+            }
+            Debug.Unindent();
+            Debug.WriteLine("--------------------------------------------------------------------------------------------");
+        }
     }
 
     public partial class ViewModelInstance
@@ -147,7 +179,7 @@ namespace EAVWebApplication.Models.Data
         public int? SubjectID { get; set; }
         public int? InstanceID { get; set; }
         public int? ParentInstanceID { get; set; }
-        public ICollection<ViewModelAttributeValue> Values { get; set; }
+        public IList<ViewModelAttributeValue> Values { get; set; }
 
         public bool IsEmpty { get { return (Values.All(it => it.IsEmpty)); } }
     }
@@ -183,7 +215,7 @@ namespace EAVWebApplication.Models.Data
         public string DisplayText { get; set; }
         public bool IsKey { get; set; }
         public bool? VariableUnits { get; set; }
-        public ICollection<ViewModelUnit> Units { get; set; }
+        public IList<ViewModelUnit> Units { get; set; }
 
         public string Value { get; set; }
         public int? UnitID { get; set; }
@@ -196,5 +228,38 @@ namespace EAVWebApplication.Models.Data
     {
         public int UnitID { get; set; }
         public string DisplayText { get; set; }
+    }
+
+    public static class DataModelExtensions
+    {
+        public static void Dump(this IModelContainer container, string message)
+        {
+            Debug.WriteLine("--------------------------------------------------------------------------------------------");
+            Debug.WriteLine($"-- {message}");
+            Debug.WriteLine("--------------------------------------------------------------------------------------------");
+            Debug.WriteLine($"Data Container [{container.ContainerID}] '{container.DisplayText}' ({container.ObjectState})");
+
+            Debug.Indent();
+            foreach (IModelInstance instance in container.Instances)
+            {
+                Debug.WriteLine($"Data Instance [{instance.InstanceID}] ({instance.ObjectState})");
+
+                Debug.Indent();
+                foreach (IModelValue value in instance.Values)
+                {
+                    Debug.WriteLine($"Data Value [{value.AttributeID}] '{value.Attribute.DisplayText}' = '{value.RawValue}' ({value.ObjectState})");
+                }
+                Debug.Unindent();
+            }
+            Debug.Unindent();
+
+            Debug.Indent();
+            foreach (IModelContainer child in container.ChildContainers)
+            {
+                child.Dump("Data Model - Recursing...");
+            }
+            Debug.Unindent();
+            Debug.WriteLine("--------------------------------------------------------------------------------------------");
+        }
     }
 }

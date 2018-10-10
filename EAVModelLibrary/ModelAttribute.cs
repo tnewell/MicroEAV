@@ -57,11 +57,11 @@ namespace EAVModelLibrary
                         }
                     }
 
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
                     break;
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
                     break;
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Move:
                     break;
@@ -76,7 +76,7 @@ namespace EAVModelLibrary
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -171,6 +171,12 @@ namespace EAVModelLibrary
                     {
                         container.Attributes.Add(this);
                     }
+                }
+                else if (value != null && value.ContainerID != containerID)
+                {
+                    containerID = value.ContainerID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }
@@ -343,7 +349,7 @@ namespace EAVModelLibrary
         [IgnoreDataMember]
         public ICollection<EAV.Model.IModelUnit> Units
         {
-            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (units); else return (new ReadOnlyObservableCollection<EAV.Model.IModelUnit>(units)); }
+            get { return (units); }
         }
 
         [DataMember(Name = "Values")]
@@ -351,7 +357,7 @@ namespace EAVModelLibrary
         [IgnoreDataMember]
         public ICollection<EAV.Model.IModelValue> Values
         {
-            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<EAV.Model.IModelValue>(values)); }
+            get { return (values); }
         }
 
         public override void MarkUnmodified()

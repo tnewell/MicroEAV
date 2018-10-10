@@ -40,7 +40,7 @@ namespace EAVModelLibrary
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -142,6 +142,12 @@ namespace EAVModelLibrary
                         entityID = entity.EntityID;
                     }
                 }
+                else if (value != null && value.EntityID != entityID)
+                {
+                    entityID = value.EntityID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                }
             }
         }
 
@@ -189,6 +195,12 @@ namespace EAVModelLibrary
                         contextID = null;
                     }
                 }
+                else if (value != null && value.ContextID != contextID)
+                {
+                    contextID = value.ContextID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                }
             }
         }
 
@@ -220,7 +232,7 @@ namespace EAVModelLibrary
         [IgnoreDataMember]
         public ICollection<EAV.Model.IModelRootInstance> Instances
         {
-            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAV.Model.IModelRootInstance>(instances)); }
+            get { return (instances); }
         }
 
         public override void MarkUnmodified()

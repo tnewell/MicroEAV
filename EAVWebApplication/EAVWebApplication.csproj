@@ -275,7 +275,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Data\Index.cshtml" />
-    <Content Include="Views\Data\DisplayContainer.cshtml" />
+    <Content Include="Views\Data\DisplaySingletonContainer.cshtml" />
     <Content Include="Views\Sandbox\Index.cshtml" />
     <Content Include="Views\Data\EditorTemplates\ViewModelInstance.cshtml" />
     <Content Include="Views\Data\EditorTemplates\ViewModelAttributeValue.cshtml" />
@@ -283,6 +283,8 @@
     <Content Include="Views\Data\DisplayTemplates\ViewModelAttributeValue.cshtml" />
     <Content Include="Views\Data\DisplayTemplates\ViewModelContainer.cshtml" />
     <Content Include="Views\Data\DisplayTemplates\ViewModelInstance.cshtml" />
+    <Content Include="Views\Data\DisplayRunningContainer.cshtml" />
+    <Content Include="Views\Data\DisplayRecurringContainer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

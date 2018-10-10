@@ -48,7 +48,7 @@ namespace EAVModelLibrary
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -86,7 +86,7 @@ namespace EAVModelLibrary
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -124,7 +124,7 @@ namespace EAVModelLibrary
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -324,7 +324,7 @@ namespace EAVModelLibrary
         [IgnoreDataMember]
         public ICollection<EAV.Model.IModelChildContainer> ChildContainers
         {
-            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (childContainers); else return (new ReadOnlyObservableCollection<EAV.Model.IModelChildContainer>(childContainers)); }
+            get { return (childContainers); }
         }
 
         [DataMember(Name = "Attributes")]
@@ -332,7 +332,7 @@ namespace EAVModelLibrary
         [IgnoreDataMember]
         public ICollection<EAV.Model.IModelAttribute> Attributes
         {
-            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (attributes); else return (new ReadOnlyObservableCollection<EAV.Model.IModelAttribute>(attributes)); }
+            get { return (attributes); }
         }
 
         [DataMember(Name = "Instances")]
@@ -340,7 +340,7 @@ namespace EAVModelLibrary
         [IgnoreDataMember]
         public ICollection<EAV.Model.IModelInstance> Instances
         {
-            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (instances); else return (new ReadOnlyObservableCollection<EAV.Model.IModelInstance>(instances)); }
+            get { return (instances); }
         }
 
         protected void SetStateRecursive(EAV.Model.ObjectState state)
@@ -426,6 +426,12 @@ namespace EAVModelLibrary
                         context.Containers.Add(this);
                     }
                 }
+                else if (value != null && value.ContextID != contextID)
+                {
+                    contextID = value.ContextID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                }
             }
         }
 
@@ -505,6 +511,12 @@ namespace EAVModelLibrary
                     {
                         parentContainer.ChildContainers.Add(this);
                     }
+                }
+                else if (value != null && value.ParentContainerID != parentContainerID)
+                {
+                    parentContainerID = value.ParentContainerID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }

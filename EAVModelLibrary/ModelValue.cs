@@ -91,6 +91,12 @@ namespace EAVModelLibrary
                         instance.Values.Add(this);
                     }
                 }
+                else if (value != null && value.InstanceID != instanceID)
+                {
+                    instanceID = value.InstanceID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                }
             }
         }
 
@@ -134,6 +140,12 @@ namespace EAVModelLibrary
                     {
                         attribute.Values.Add(this);
                     }
+                }
+                else if (value != null && value.AttributeID != attributeID)
+                {
+                    attributeID = value.AttributeID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }

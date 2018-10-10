@@ -45,7 +45,7 @@ namespace EAVModelLibrary
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -83,7 +83,7 @@ namespace EAVModelLibrary
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -207,6 +207,12 @@ namespace EAVModelLibrary
                         container.Instances.Add(this);
                     }
                 }
+                else if (value != null && value.ContainerID != containerID)
+                {
+                    containerID = value.ContainerID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                }
             }
         }
 
@@ -215,7 +221,7 @@ namespace EAVModelLibrary
         [IgnoreDataMember]
         public ICollection<EAV.Model.IModelChildInstance> ChildInstances
         {
-            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (childInstances); else return (new ReadOnlyObservableCollection<EAV.Model.IModelChildInstance>(childInstances)); }
+            get { return (childInstances); }
         }
 
         [DataMember(Name = "Values")]
@@ -223,7 +229,7 @@ namespace EAVModelLibrary
         [IgnoreDataMember]
         public ICollection<EAV.Model.IModelValue> Values
         {
-            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (values); else return (new ReadOnlyObservableCollection<EAV.Model.IModelValue>(values)); }
+            get { return (values); }
         }
 
         protected void SetStateRecursive(EAV.Model.ObjectState state)
@@ -326,6 +332,12 @@ namespace EAVModelLibrary
                         subject.Instances.Add(this);
                     }
                 }
+                else if (value != null && value.SubjectID != subjectID)
+                {
+                    subjectID = value.SubjectID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                }
             }
         }
 
@@ -423,6 +435,12 @@ namespace EAVModelLibrary
                     {
                         parentInstance.ChildInstances.Add(this);
                     }
+                }
+                else if (value != null && value.ParentInstanceID != parentInstanceID)
+                {
+                    parentInstanceID = value.ParentInstanceID;
+
+                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
                 }
             }
         }

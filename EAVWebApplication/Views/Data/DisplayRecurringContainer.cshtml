@@ -1,0 +1,91 @@
+﻿@model EAVWebApplication.Models.Data.ViewModelContainer
+
+@{
+    ViewBag.Title = "Data Entry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    .eav-container-header
+    {
+        margin-left: 3px;
+        font-weight: bold;
+        border: 1px solid #A0A0A0;
+        background-color: #9DBCCE;
+        border-radius: 3px;
+        padding: 10px;
+        padding-left: 5px;
+        margin: 3px;
+    }
+
+    .eav-container-container
+    {
+        border: 1px solid #AAAAAA;
+        background-color: #000000;
+        border-radius: 3px;
+        margin: 3px;
+    }
+
+    .eav-instance-container
+    {
+        border: 1px solid #808080;
+        background-color: #DCE0E4;
+        border-radius: 3px;
+        margin: 3px;
+        padding: 10px;
+    }
+
+    .eav-value-container
+    {
+        margin-left: 5px;
+    }
+
+    .eav-value-caption
+    {
+        font-weight: bold;
+        font-size: medium;
+    }
+
+    .eav-value-control
+    {
+    }
+
+    .eav-units-text
+    {
+    }
+</style>
+
+<h2>Context Display Text Here</h2>
+
+<hr />
+
+@using (Html.BeginForm("SaveForm", "Data", FormMethod.Post, new { id = "ctlDataForm" }))
+{
+    @Html.HiddenFor(m => m.ContainerID)
+    @Html.HiddenFor(m => m.ParentContainerID)
+    @Html.HiddenFor(m => m.Sequence)
+    @Html.HiddenFor(m => m.IsRepeating)
+
+    @Html.DropDownListFor(m => m.SelectedInstanceID, Model.Instances.Select(it => new SelectListItem() { Text = it.InstanceID.ToString(), Value = it.InstanceID.ToString() }))
+
+    <hr />
+
+    <div class="eav-container-container">
+
+        <div class="eav-container-header">@Model.DisplayText</div>
+
+        @Html.EditorFor(m => m.Instances)
+
+        @if (Model.ChildContainers.Any())
+        {
+            @Html.EditorFor(m => m.ChildContainers)
+        }
+    </div>
+
+    <hr />
+
+    @Html.ActionLink("Back", "Index")
+
+    <input type="submit" class="btn" value="Save" />
+}

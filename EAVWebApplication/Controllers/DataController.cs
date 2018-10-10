@@ -166,11 +166,46 @@ namespace EAVWebApplication.Controllers
             }
         }
 
-        private void BindToModel(DataViewModel currentDataViewModel, DataViewModel postedDataViewModel)
+        private void BindToDataModel(DataViewModel currentDataViewModel, ViewModelContainer postedViewContainer)
         {
-            TrimViewModel(postedDataViewModel.CurrentViewContainer);
+            TrimViewModel(postedViewContainer);
 
-            BindToModelInstance(currentDataViewModel.CurrentContainer, currentDataViewModel.CurrentSubject, null, postedDataViewModel.CurrentViewContainer, currentDataViewModel.CurrentInstance, postedDataViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentDataViewModel.SelectedInstanceID));
+            foreach (IModelInstance instance in currentDataViewModel.CurrentSubject.Instances)
+            {
+                BindToModelInstance(currentDataViewModel.CurrentContainer, currentDataViewModel.CurrentSubject, null, postedViewContainer, instance, postedViewContainer.Instances.SingleOrDefault(it => it.InstanceID == instance.InstanceID));
+            }
+        }
+
+        private void TrimDataModel(IModelContainer container)
+        {
+            foreach (IModelContainer childContainer in container.ChildContainers)
+            {
+                TrimDataModel(childContainer);
+            }
+
+            foreach (IModelInstance instance in container.Instances)
+            {
+                var deletedValues = instance.Values.Where(it => it.ObjectState == ObjectState.Deleted).ToList();
+
+                while (deletedValues.Any())
+                {
+                    instance.Values.Remove(deletedValues.First());
+                    deletedValues.Remove(deletedValues.First());
+                }
+
+                if (instance.ObjectState != ObjectState.Deleted)
+                    instance.MarkUnmodified();
+            }
+
+            var deletedInstances = !container.ChildContainers.Any() ? container.Instances.Where(it => it.ObjectState == ObjectState.Deleted).ToList() : container.Instances.GroupJoin(container.ChildContainers.SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.ObjectState == ObjectState.Deleted).ToList();
+
+            while (deletedInstances.Any())
+            {
+                container.Instances.Remove(deletedInstances.First());
+                deletedInstances.Remove(deletedInstances.First());
+            }
+
+            container.MarkUnmodified();
         }
 
         [HttpGet]
@@ -198,7 +233,7 @@ namespace EAVWebApplication.Controllers
 
             TempData[TempDataModelKey] = currentViewModel;
 
-            return (View(view, currentViewModel));
+            return (View(view, currentViewModel.CurrentViewContainer));
         }
 
         [HttpGet]
@@ -231,8 +266,10 @@ namespace EAVWebApplication.Controllers
         {
             DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
 
+            // Re-hydrate
             postedModel.Contexts = currentViewModel.Contexts;
 
+            // User's current choices
             currentViewModel.SelectedContainerID = postedModel.SelectedContainerID;
             currentViewModel.SelectedSubjectID = postedModel.SelectedSubjectID;
 
@@ -243,47 +280,43 @@ namespace EAVWebApplication.Controllers
                 if (currentViewModel.CurrentSubject != null)
                 {
                     eavClient.LoadRootInstances(currentViewModel.CurrentSubject, currentViewModel.CurrentContainer);
+
+                    foreach (IModelRootInstance instance in currentViewModel.CurrentSubject.Instances)
+                    {
+                        eavClient.LoadData(instance);
+                    }
                 }
 
-                if (currentViewModel.CurrentContainer.Instances.Any() && !currentViewModel.CurrentContainer.IsRepeating)
-                    currentViewModel.SelectedInstanceID = currentViewModel.CurrentContainer.Instances.First().InstanceID.GetValueOrDefault();
-
-                if (currentViewModel.CurrentInstance != null)
-                    eavClient.LoadData(currentViewModel.CurrentInstance);
-
-                currentViewModel.Refresh();
-
-                if (currentViewModel.CurrentInstance == null)
-                    currentViewModel.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.First().InstanceID.GetValueOrDefault();
+                // Refresh the view object
+                currentViewModel.RegenerateViewContainer();
             }
 
             TempData[TempDataModelKey] = currentViewModel;
 
-            return (RedirectToAction("PostRedirectGetTarget", new { view = "DisplayContainer" }));
+            return (RedirectToAction("PostRedirectGetTarget", new { view = "DisplayRunningContainer" }));
         }
 
         [HttpPost]
-        public ActionResult SaveForm(DataViewModel postedViewModel)
+        public ActionResult SaveForm(ViewModelContainer postedViewContainer)
         {
             DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
 
-            postedViewModel.Contexts = currentViewModel.Contexts;
+            // Reconcile any changes
+            BindToDataModel(currentViewModel, postedViewContainer);
 
-            BindToModel(currentViewModel, postedViewModel);
-
-            if (currentViewModel.CurrentInstance != null)
+            foreach (IModelRootInstance instance in currentViewModel.CurrentSubject.Instances)
             {
-                IModelRootInstance instance = currentViewModel.CurrentInstance;
-
                 eavClient.SaveData(instance);
-                currentViewModel.SelectedInstanceID = instance.InstanceID.Value;
             }
 
-            currentViewModel.Refresh();
+            TrimDataModel(currentViewModel.CurrentContainer);
+
+            // Refresh the view object
+            currentViewModel.RegenerateViewContainer();
 
             TempData[TempDataModelKey] = currentViewModel;
 
-            return (RedirectToAction("PostRedirectGetTarget", new { view = "DisplayContainer" }));
+            return (RedirectToAction("PostRedirectGetTarget", new { view = "DisplayRunningContainer" }));
         }
     }
 }

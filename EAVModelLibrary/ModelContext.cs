@@ -43,7 +43,7 @@ namespace EAVModelLibrary
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -81,7 +81,7 @@ namespace EAVModelLibrary
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Replace:
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
-                    if (ObjectState != EAV.Model.ObjectState.New) ObjectState = EAV.Model.ObjectState.Modified;
+                    if (ObjectState == EAV.Model.ObjectState.Unmodified) ObjectState = EAV.Model.ObjectState.Modified;
 
                     if (e.OldItems != null)
                     {
@@ -207,7 +207,7 @@ namespace EAVModelLibrary
         [IgnoreDataMember]
         public ICollection<EAV.Model.IModelRootContainer> Containers
         {
-            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (containers); else return (new ReadOnlyObservableCollection<EAV.Model.IModelRootContainer>(containers)); }
+            get { return (containers); }
         }
 
         [DataMember(Name = "Subjects")]
@@ -215,7 +215,7 @@ namespace EAVModelLibrary
         [IgnoreDataMember]
         public ICollection<EAV.Model.IModelSubject> Subjects
         {
-            get { if (ObjectState != EAV.Model.ObjectState.Deleted) return (subjects); else return (new ReadOnlyObservableCollection<EAV.Model.IModelSubject>(subjects)); }
+            get { return (subjects); }
         }
 
         public override void MarkUnmodified()
