@@ -74,7 +74,7 @@ namespace EAVWebApplication.Models.Data
 
         private ViewModelInstance CreateViewInstance(IModelContainer container, IModelSubject subject, IModelInstance instance, ViewModelInstance parentInstance)
         {
-            ViewModelInstance viewInstance = new ViewModelInstance() { ObjectState = instance != null ? instance.ObjectState : ObjectState.New, ContainerID = container.ContainerID, SubjectID = subject.SubjectID, InstanceID = instance != null ? instance.InstanceID : nextInstanceID--, ParentInstanceID = parentInstance != null ? parentInstance.InstanceID : null };
+            ViewModelInstance viewInstance = new ViewModelInstance() { ObjectState = instance != null ? instance.ObjectState : ObjectState.New, ContainerID = container.ContainerID, SubjectID = subject != null ? subject.SubjectID : 0, InstanceID = instance != null ? instance.InstanceID : nextInstanceID--, ParentInstanceID = parentInstance != null ? parentInstance.InstanceID : null };
 
             foreach (EAV.Model.IModelAttribute attribute in container.Attributes.OrderBy(it => it.Sequence))
             {
@@ -134,8 +134,9 @@ namespace EAVWebApplication.Models.Data
         public string DisplayText { get; set; }
         public bool IsRepeating { get; set; }
         public DisplayMode DisplayMode { get; set; }
-        public IList<ViewModelInstance> Instances { get; set; }
+        public bool Enabled { get; set; }
 
+        public IList<ViewModelInstance> Instances { get; set; }
         public int SelectedInstanceID { get; set; }
         public ViewModelInstance SelectedInstance { get; set; }
     }

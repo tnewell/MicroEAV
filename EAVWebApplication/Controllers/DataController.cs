@@ -84,7 +84,7 @@ namespace EAVWebApplication.Controllers
             }
         }
 
-        private void BindToModelInstance(EAV.Model.IModelContainer container, EAV.Model.IModelSubject subject, EAV.Model.IModelInstance parentInstance, ViewModelContainer viewContainer, EAV.Model.IModelInstance instance, ViewModelInstance viewInstance)
+        private void BindToModelInstance(EAV.Model.IModelContainer container, EAV.Model.IModelSubject subject, EAV.Model.IModelInstance parentInstance, EAV.Model.IModelInstance instance, ViewModelInstance viewInstance)
         {
             if (instance == null && viewInstance == null)
                 return;
@@ -129,21 +129,19 @@ namespace EAVWebApplication.Controllers
             foreach (ModelContainer childContainer in container.ChildContainers)
             {
                 ViewModelContainer childViewContainer = viewInstance.ChildContainers.Single(it => it.ContainerID == childContainer.ContainerID);
-                var set1 = childContainer.Instances.GroupJoin(childViewContainer.Instances, left => left.InstanceID, right => right.InstanceID, (left, right) => new { ModelInstance = left, ViewInstance = right.FirstOrDefault() }).ToArray();
-                var set2 = childViewContainer.Instances.GroupJoin(childContainer.Instances, left => left.InstanceID, right => right.InstanceID, (left, right) => new { ModelInstance = right.FirstOrDefault(), ViewInstance = left }).ToArray();
+                var dataInstances = childContainer.Instances.GroupJoin(childViewContainer.Instances, left => left.InstanceID, right => right.InstanceID, (left, right) => new { ModelInstance = left, ViewInstance = right.FirstOrDefault() }).ToArray();
+                var viewInstances = childViewContainer.Instances.GroupJoin(childContainer.Instances, left => left.InstanceID, right => right.InstanceID, (left, right) => new { ModelInstance = right.FirstOrDefault(), ViewInstance = left }).ToArray();
 
-                foreach (var pair in set1.Union(set2))
+                foreach (var item in dataInstances.Union(viewInstances))
                 {
-                    BindToModelInstance(childContainer, subject, instance, childViewContainer, pair.ModelInstance, pair.ViewInstance);
+                    BindToModelInstance(childContainer, subject, instance, item.ModelInstance, item.ViewInstance);
                 }
             }
         }
 
         private void TrimViewModel(ViewModelContainer container)
         {
-            var instances = container.Instances.Where(it => container.SelectedInstance == null || container.SelectedInstance.InstanceID == it.InstanceID);
-
-            foreach (ViewModelInstance instance in instances)
+            foreach (ViewModelInstance instance in container.Instances)
             {
                 var emptyValues = instance.Values.Where(it => it.IsEmpty).ToList();
 
@@ -159,7 +157,7 @@ namespace EAVWebApplication.Controllers
                 }
             }
 
-            var emptyInstances = instances.GroupJoin(instances.SelectMany(it => it.ChildContainers).SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.IsEmpty).ToList();
+            var emptyInstances = container.Instances.GroupJoin(container.Instances.SelectMany(it => it.ChildContainers).SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.IsEmpty).ToList();
 
             while (emptyInstances.Any())
             {
@@ -170,11 +168,19 @@ namespace EAVWebApplication.Controllers
 
         private void BindToDataModel(DataViewModel currentDataViewModel, ViewModelContainer postedViewContainer)
         {
+            if (postedViewContainer.DisplayMode != DisplayMode.Running)
+            {
+                postedViewContainer.Instances.Add(postedViewContainer.SelectedInstance);
+            }
+
             TrimViewModel(postedViewContainer);
 
-            foreach (IModelInstance instance in currentDataViewModel.CurrentSubject.Instances.Where(it => postedViewContainer.SelectedInstance == null || postedViewContainer.SelectedInstance.InstanceID == it.InstanceID))
+            var dataInstances = currentDataViewModel.CurrentSubject.Instances.GroupJoin(postedViewContainer.Instances, left => left.InstanceID, right => right.InstanceID, (left, right) => new { ModelInstance = left, ViewInstance = right.FirstOrDefault() });
+            var viewInstances = postedViewContainer.Instances.GroupJoin(currentDataViewModel.CurrentSubject.Instances, left => left.InstanceID, right => right.InstanceID, (left, right) => new { ModelInstance = right.FirstOrDefault(), ViewInstance = left });
+
+            foreach (var item in dataInstances.Union(viewInstances))
             {
-                BindToModelInstance(currentDataViewModel.CurrentContainer, currentDataViewModel.CurrentSubject, null, postedViewContainer, instance, postedViewContainer.Instances.SingleOrDefault(it => it.InstanceID == instance.InstanceID));
+                BindToModelInstance(currentDataViewModel.CurrentContainer, currentDataViewModel.CurrentSubject, null, item.ModelInstance, item.ViewInstance);
             }
         }
 
@@ -294,8 +300,9 @@ namespace EAVWebApplication.Controllers
             }
 
             currentViewModel.CurrentViewContainer.DisplayMode = DisplayMode.Recurring;
+            currentViewModel.CurrentViewContainer.Enabled = currentViewModel.CurrentSubject != null;
 
-            //if (currentViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running && currentViewModel.CurrentViewContainer.Instances.Count == 1)
+            if (currentViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running && currentViewModel.CurrentViewContainer.Instances.Count == 1)
             {
                 currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Min(it => it.InstanceID.GetValueOrDefault());
                 currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
@@ -311,22 +318,28 @@ namespace EAVWebApplication.Controllers
         {
             DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
 
-            // Reconcile any changes
+            // Reconcile changes
             BindToDataModel(currentViewModel, postedViewContainer);
 
-            //foreach (IModelRootInstance instance in currentViewModel.CurrentSubject.Instances)
-            //{
-            //    eavClient.SaveData(instance);
-            //}
+            // Save changes
+            foreach (IModelRootInstance instance in currentViewModel.CurrentSubject.Instances)
+            {
+                eavClient.SaveData(instance);
+            }
 
+            // Get rid of deleted items
             TrimDataModel(currentViewModel.CurrentContainer);
+
+            // TODO: Preserve display mode and enabled
 
             // Refresh the view object
             currentViewModel.RegenerateViewContainer();
 
-            // TEMP
-            currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Min(it => it.InstanceID.GetValueOrDefault());
-            currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
+            if (currentViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running && currentViewModel.CurrentViewContainer.Instances.Count == 1)
+            {
+                currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Min(it => it.InstanceID.GetValueOrDefault());
+                currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
+            }
 
             TempData[TempDataModelKey] = currentViewModel;
 
@@ -338,10 +351,8 @@ namespace EAVWebApplication.Controllers
         {
             DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
 
-            //if (postedViewContainer.SelectedInstance != null)
-            //{
-            //    BindToDataModel(currentViewModel, postedViewContainer);
-            //}
+            currentViewModel.CurrentViewContainer.Instances.Remove(currentViewModel.CurrentViewContainer.Instances.Single(it => it.InstanceID == postedViewContainer.SelectedInstance.InstanceID));
+            currentViewModel.CurrentViewContainer.Instances.Add(postedViewContainer.SelectedInstance);
 
             currentViewModel.CurrentViewContainer.SelectedInstanceID = postedViewContainer.SelectedInstanceID;
             currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);

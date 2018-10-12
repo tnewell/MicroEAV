@@ -1,4 +1,11 @@
 ﻿@model EAVWebApplication.Models.Data.ViewModelContainer
 
+@if (Model.Enabled)
+{
+    @Html.EditorFor(m => m.SelectedInstance)
+}
+else
+{
+    @Html.DisplayFor(m => m.SelectedInstance)
+}
 
-@Html.EditorFor(m => m.SelectedInstance)

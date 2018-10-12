@@ -5,6 +5,17 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@{
+    Dictionary<string, object> instanceListAttributes = new Dictionary<string, object>()
+    {
+        { "id", "ctlInstanceList" },
+        { "onchange", "RetrieveInstance();" }
+    };
+
+    if (Model.Instances.Count == 1) { instanceListAttributes["disabled"] = "disabled"; }
+}
+
+
 <style>
 
     .eav-container-header
@@ -98,7 +109,7 @@
     @Html.HiddenFor(m => m.IsRepeating)
     @Html.HiddenFor(m => m.DisplayMode)
 
-    @Html.DropDownListFor(m => m.SelectedInstanceID, Model.Instances.Select(it => new SelectListItem() { Text = it.InstanceID.ToString(), Value = it.InstanceID.ToString() }), "<Select Instance>", new { id = "ctlInstanceList", onchange = "RetrieveInstance();" })
+    @Html.DropDownListFor(m => m.SelectedInstanceID, Model.Instances.OrderBy(it => it.InstanceID).Select(it => new SelectListItem() { Text = it.InstanceID.ToString(), Value = it.InstanceID.ToString() }), instanceListAttributes)
 
     <hr />
 
