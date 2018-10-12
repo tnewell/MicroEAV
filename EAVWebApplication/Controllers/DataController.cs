@@ -311,18 +311,22 @@ namespace EAVWebApplication.Controllers
         {
             DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
 
-            //// Reconcile any changes
-            //BindToDataModel(currentViewModel, postedViewContainer);
+            // Reconcile any changes
+            BindToDataModel(currentViewModel, postedViewContainer);
 
             //foreach (IModelRootInstance instance in currentViewModel.CurrentSubject.Instances)
             //{
             //    eavClient.SaveData(instance);
             //}
 
-            //TrimDataModel(currentViewModel.CurrentContainer);
+            TrimDataModel(currentViewModel.CurrentContainer);
 
-            //// Refresh the view object
-            //currentViewModel.RegenerateViewContainer();
+            // Refresh the view object
+            currentViewModel.RegenerateViewContainer();
+
+            // TEMP
+            currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Min(it => it.InstanceID.GetValueOrDefault());
+            currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
 
             TempData[TempDataModelKey] = currentViewModel;
 
@@ -334,17 +338,17 @@ namespace EAVWebApplication.Controllers
         {
             DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
 
-            if (postedViewContainer.SelectedInstance != null)
-            {
-                BindToDataModel(currentViewModel, postedViewContainer);
-            }
+            //if (postedViewContainer.SelectedInstance != null)
+            //{
+            //    BindToDataModel(currentViewModel, postedViewContainer);
+            //}
 
             currentViewModel.CurrentViewContainer.SelectedInstanceID = postedViewContainer.SelectedInstanceID;
             currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
 
             TempData[TempDataModelKey] = currentViewModel;
 
-            return (PartialView("SingletonInstance", currentViewModel.CurrentViewContainer.SelectedInstance));
+            return (PartialView("SingletonInstance", currentViewModel.CurrentViewContainer));
         }
     }
  }
