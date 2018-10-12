@@ -60,11 +60,9 @@
 
     function RetrieveInstance()
     {
-        $('#ctlInstancePlaceholder').empty();
-
         $.ajax(
         {
-            url: '@Url.Content("~/Data/RetrieveInstance/")' + $('#ctlInstanceList').children(':selected').val(),
+            url: '@Url.Content("~/Data/RetrieveInstance/")',
             type: 'POST',
             data: FormData(document.getElementById('ctlDataForm')),
             processData: false,
@@ -72,12 +70,11 @@
             cache: false,
             success: function (data, status, request)
             {
-                console.log('Connection to server made.\r\n')
-
-                $('#ctlInstancePlaceholder').html(data);
+                $('#ctlInstancePlaceholder').empty().html(data);
             },
             error: function (request, status, err)
             {
+                alert('No Joy!');
                 console.log('Connection to server not made. Status: \'' + status + '\'\r\nReported error: \'' + err + '\'\r\n')
             },
             complete: function (request, status)
@@ -99,6 +96,7 @@
     @Html.HiddenFor(m => m.ParentContainerID)
     @Html.HiddenFor(m => m.Sequence)
     @Html.HiddenFor(m => m.IsRepeating)
+    @Html.HiddenFor(m => m.DisplayMode)
 
     @Html.DropDownListFor(m => m.SelectedInstanceID, Model.Instances.Select(it => new SelectListItem() { Text = it.InstanceID.ToString(), Value = it.InstanceID.ToString() }), "<Select Instance>", new { id = "ctlInstanceList", onchange = "RetrieveInstance();" })
 
@@ -109,10 +107,7 @@
         <div class="eav-container-header">@Model.DisplayText</div>
 
         <div id="ctlInstancePlaceholder">
-            @if (Model.SelectedInstance != null)
-            {
-                @Html.EditorFor(m => m.SelectedInstance)
-            }
+            @Html.EditorFor(m => m.SelectedInstance)
         </div>
 
     </div>

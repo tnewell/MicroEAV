@@ -141,7 +141,9 @@ namespace EAVWebApplication.Controllers
 
         private void TrimViewModel(ViewModelContainer container)
         {
-            foreach (ViewModelInstance instance in container.Instances)
+            var instances = container.Instances.Where(it => container.SelectedInstance == null || container.SelectedInstance.InstanceID == it.InstanceID);
+
+            foreach (ViewModelInstance instance in instances)
             {
                 var emptyValues = instance.Values.Where(it => it.IsEmpty).ToList();
 
@@ -157,7 +159,7 @@ namespace EAVWebApplication.Controllers
                 }
             }
 
-            var emptyInstances = container.Instances.GroupJoin(container.Instances.SelectMany(it => it.ChildContainers).SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.IsEmpty).ToList();
+            var emptyInstances = instances.GroupJoin(instances.SelectMany(it => it.ChildContainers).SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.IsEmpty).ToList();
 
             while (emptyInstances.Any())
             {
@@ -170,7 +172,7 @@ namespace EAVWebApplication.Controllers
         {
             TrimViewModel(postedViewContainer);
 
-            foreach (IModelInstance instance in currentDataViewModel.CurrentSubject.Instances)
+            foreach (IModelInstance instance in currentDataViewModel.CurrentSubject.Instances.Where(it => postedViewContainer.SelectedInstance == null || postedViewContainer.SelectedInstance.InstanceID == it.InstanceID))
             {
                 BindToModelInstance(currentDataViewModel.CurrentContainer, currentDataViewModel.CurrentSubject, null, postedViewContainer, instance, postedViewContainer.Instances.SingleOrDefault(it => it.InstanceID == instance.InstanceID));
             }
@@ -291,9 +293,17 @@ namespace EAVWebApplication.Controllers
                 currentViewModel.RegenerateViewContainer();
             }
 
+            currentViewModel.CurrentViewContainer.DisplayMode = DisplayMode.Recurring;
+
+            //if (currentViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running && currentViewModel.CurrentViewContainer.Instances.Count == 1)
+            {
+                currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Min(it => it.InstanceID.GetValueOrDefault());
+                currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
+            }
+
             TempData[TempDataModelKey] = currentViewModel;
 
-            return (RedirectToAction("PostRedirectGetTarget", new { view = "DisplayRecurringContainer" }));
+            return (RedirectToAction("PostRedirectGetTarget", new { view = currentViewModel.CurrentViewContainer.DisplayMode == DisplayMode.Singleton ? "DisplaySingletonContainer" : (currentViewModel.CurrentViewContainer.DisplayMode == DisplayMode.Recurring ? "DisplayRecurringContainer" : "DisplayRunningContainer") }));
         }
 
         [HttpPost]
@@ -301,22 +311,22 @@ namespace EAVWebApplication.Controllers
         {
             DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
 
-            // Reconcile any changes
-            BindToDataModel(currentViewModel, postedViewContainer);
+            //// Reconcile any changes
+            //BindToDataModel(currentViewModel, postedViewContainer);
 
-            foreach (IModelRootInstance instance in currentViewModel.CurrentSubject.Instances)
-            {
-                eavClient.SaveData(instance);
-            }
+            //foreach (IModelRootInstance instance in currentViewModel.CurrentSubject.Instances)
+            //{
+            //    eavClient.SaveData(instance);
+            //}
 
-            TrimDataModel(currentViewModel.CurrentContainer);
+            //TrimDataModel(currentViewModel.CurrentContainer);
 
-            // Refresh the view object
-            currentViewModel.RegenerateViewContainer();
+            //// Refresh the view object
+            //currentViewModel.RegenerateViewContainer();
 
             TempData[TempDataModelKey] = currentViewModel;
 
-            return (RedirectToAction("PostRedirectGetTarget", new { view = "DisplayRunningContainer" }));
+            return (RedirectToAction("PostRedirectGetTarget", new { view = currentViewModel.CurrentViewContainer.DisplayMode == DisplayMode.Singleton ? "DisplaySingletonContainer" : (currentViewModel.CurrentViewContainer.DisplayMode == DisplayMode.Recurring ? "DisplayRecurringContainer" : "DisplayRunningContainer") }));
         }
 
         [HttpPost]
@@ -324,13 +334,17 @@ namespace EAVWebApplication.Controllers
         {
             DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
 
-            // TODO: Bind current instance here
+            if (postedViewContainer.SelectedInstance != null)
+            {
+                BindToDataModel(currentViewModel, postedViewContainer);
+            }
 
             currentViewModel.CurrentViewContainer.SelectedInstanceID = postedViewContainer.SelectedInstanceID;
+            currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
 
             TempData[TempDataModelKey] = currentViewModel;
 
-            return (PartialView("SingletonInstance", currentViewModel.CurrentViewContainer));
+            return (PartialView("SingletonInstance", currentViewModel.CurrentViewContainer.SelectedInstance));
         }
     }
-}
+ }

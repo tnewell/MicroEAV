@@ -91,6 +91,9 @@ namespace EAVWebApplication.Models.Data
 
         private ViewModelContainer CreateViewContainer(EAV.Model.IModelContainer container, IModelSubject subject, ViewModelInstance parentInstance)
         {
+            if (parentInstance == null)
+                nextInstanceID = NextInstanceID(CurrentViewContainer);
+
             ViewModelContainer viewContainer = new ViewModelContainer() { ContainerID = container.ContainerID, ParentContainerID = container.ParentContainerID, DisplayText = container.DisplayText, IsRepeating = container.IsRepeating };
 
             foreach (IModelInstance instance in container.Instances.Where(it => parentInstance == null || it.ParentInstanceID == parentInstance.InstanceID))
@@ -112,11 +115,11 @@ namespace EAVWebApplication.Models.Data
 
         public void RegenerateViewContainer()
         {
-            nextInstanceID = NextInstanceID(CurrentViewContainer);
-
             CurrentViewContainer = CreateViewContainer(CurrentContainer, CurrentSubject, null);
         }
     }
+
+    public enum DisplayMode { Running, Recurring, Singleton }
 
     public partial class ViewModelContainer
     {
@@ -130,11 +133,10 @@ namespace EAVWebApplication.Models.Data
         public int Sequence { get; set; }
         public string DisplayText { get; set; }
         public bool IsRepeating { get; set; }
+        public DisplayMode DisplayMode { get; set; }
         public IList<ViewModelInstance> Instances { get; set; }
 
-        private int selectedInstanceID;
-        public int SelectedInstanceID { get { return (selectedInstanceID); } set { selectedInstanceID = value; SelectedInstance = Instances.SingleOrDefault(it => it.InstanceID == value); } }
-
+        public int SelectedInstanceID { get; set; }
         public ViewModelInstance SelectedInstance { get; set; }
     }
 
