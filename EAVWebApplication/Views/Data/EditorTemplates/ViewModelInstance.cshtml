@@ -5,6 +5,8 @@
 @Html.HiddenFor(m => m.SubjectID)
 @Html.HiddenFor(m => m.InstanceID)
 @Html.HiddenFor(m => m.ParentInstanceID)
+@Html.HiddenFor(m => m.ObjectState)
+
 
 @if (Model.Values.Any() || Model.ChildContainers.Any())
 {

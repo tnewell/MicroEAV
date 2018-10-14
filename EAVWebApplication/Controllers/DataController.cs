@@ -274,9 +274,6 @@ namespace EAVWebApplication.Controllers
         {
             DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
 
-            // Re-hydrate
-            postedModel.Contexts = currentViewModel.Contexts;
-
             // User's current choices
             currentViewModel.SelectedContainerID = postedModel.SelectedContainerID;
             currentViewModel.SelectedSubjectID = postedModel.SelectedSubjectID;
@@ -302,9 +299,9 @@ namespace EAVWebApplication.Controllers
             currentViewModel.CurrentViewContainer.DisplayMode = DisplayMode.Recurring;
             currentViewModel.CurrentViewContainer.Enabled = currentViewModel.CurrentSubject != null;
 
-            if (currentViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running && currentViewModel.CurrentViewContainer.Instances.Count == 1)
+            if (currentViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running)
             {
-                currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Min(it => it.InstanceID.GetValueOrDefault());
+                currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Max(it => it.InstanceID.GetValueOrDefault());
                 currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
             }
 
@@ -330,14 +327,15 @@ namespace EAVWebApplication.Controllers
             // Get rid of deleted items
             TrimDataModel(currentViewModel.CurrentContainer);
 
-            // TODO: Preserve display mode and enabled
-
             // Refresh the view object
             currentViewModel.RegenerateViewContainer();
 
-            if (currentViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running && currentViewModel.CurrentViewContainer.Instances.Count == 1)
+            currentViewModel.CurrentViewContainer.DisplayMode = postedViewContainer.DisplayMode;
+            currentViewModel.CurrentViewContainer.Enabled = postedViewContainer.Enabled;
+
+            if (currentViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running)
             {
-                currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Min(it => it.InstanceID.GetValueOrDefault());
+                currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Max(it => it.InstanceID.GetValueOrDefault());
                 currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
             }
 
@@ -351,9 +349,15 @@ namespace EAVWebApplication.Controllers
         {
             DataViewModel currentViewModel = TempData[TempDataModelKey] as DataViewModel;
 
+            // This will keep ASP from holding on to any values when we run the new
+            // instance through our partial view.
+            ModelState.Clear();
+
+            // Make sure we keep the posted version to capture any changes
             currentViewModel.CurrentViewContainer.Instances.Remove(currentViewModel.CurrentViewContainer.Instances.Single(it => it.InstanceID == postedViewContainer.SelectedInstance.InstanceID));
             currentViewModel.CurrentViewContainer.Instances.Add(postedViewContainer.SelectedInstance);
 
+            // Now switch instances
             currentViewModel.CurrentViewContainer.SelectedInstanceID = postedViewContainer.SelectedInstanceID;
             currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
 

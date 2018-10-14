@@ -4,13 +4,15 @@
 <div class="eav-value-container">
 
     @Html.HiddenFor(m => m.AttributeID)
-    @Html.HiddenFor(m => m.DataType)
     @Html.HiddenFor(m => m.Sequence)
     @Html.HiddenFor(m => m.IsKey)
     @Html.HiddenFor(m => m.VariableUnits)
+    @Html.HiddenFor(m => m.ObjectState)
 
+    @Html.HiddenFor(m => m.DisplayText)
     <label class="eav-value-caption">@Model.DisplayText</label>
 
+    @Html.HiddenFor(m => m.DataType)
     @switch (Model.DataType)
     {
         case EAV.EAVDataType.Boolean:
@@ -25,6 +27,7 @@
             break;
     }
 
+    @Html.HiddenFor(m => m.VariableUnits)
     @if (Model.VariableUnits.HasValue)
     {
         if (Model.VariableUnits.Value)
@@ -37,18 +40,26 @@
             }
             else
             {
+                @Html.HiddenFor(m => m.UnitText)
                 <label class="eav-units-text">@Model.UnitText</label>
             }
         }
         else if (Model.Units.Count > 1)
         {
+            @Html.HiddenFor(m => m.UnitText)
             @Html.DropDownListFor(m => m.UnitID, Model.Units.Select(it => new SelectListItem() { Text = it.DisplayText, Value = it.UnitID.ToString() }), "", new { @class = "eav-value-control" })
         }
         else
         {
+            @Html.HiddenFor(m => m.UnitText)
             @Html.HiddenFor(m => m.UnitID)
             <label class="eav-units-text">@Model.UnitText</label>
         }
+    }
+    else
+    {
+        @Html.HiddenFor(m => m.UnitText)
+        @Html.HiddenFor(m => m.UnitID)
     }
 </div>
 
