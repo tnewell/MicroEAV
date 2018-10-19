@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
+
 using EAV.Model;
-using EAVModelLibrary;
-using Newtonsoft.Json;
+
 
 namespace EAVWebApplication.Models.Data
 {

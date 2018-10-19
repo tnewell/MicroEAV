@@ -7,10 +7,10 @@
 
 @{
     Dictionary<string, object> instanceListAttributes = new Dictionary<string, object>()
-    {
-        { "id", "ctlInstanceList" },
-        { "onchange", "RetrieveInstance();" }
-    };
+{
+{ "id", "ctlInstanceList" },
+{ "onchange", "RetrieveInstance();" }
+};
 
     if (Model.Instances.Count == 1) { instanceListAttributes["disabled"] = "disabled"; }
 }
@@ -108,6 +108,7 @@
     @Html.HiddenFor(m => m.Sequence)
     @Html.HiddenFor(m => m.IsRepeating)
     @Html.HiddenFor(m => m.DisplayMode)
+    @Html.HiddenFor(m => m.Enabled)
 
     @Html.DropDownListFor(m => m.SelectedInstanceID, Model.Instances.OrderBy(it => it.InstanceID).Select(it => new SelectListItem() { Text = it.InstanceID.ToString(), Value = it.InstanceID.ToString() }), instanceListAttributes)
 
@@ -115,6 +116,7 @@
 
     <div class="eav-container-container">
 
+        @Html.HiddenFor(m => m.DisplayText)
         <div class="eav-container-header">@Model.DisplayText</div>
 
         <div id="ctlInstancePlaceholder">

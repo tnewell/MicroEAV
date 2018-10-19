@@ -67,9 +67,12 @@
     @Html.HiddenFor(m => m.Sequence)
     @Html.HiddenFor(m => m.IsRepeating)
     @Html.HiddenFor(m => m.DisplayMode)
+    @Html.HiddenFor(m => m.Enabled)
+    @Html.HiddenFor(m => m.SelectedInstanceID)
 
     <div class="eav-container-container">
 
+        @Html.HiddenFor(m => m.DisplayText)
         <div class="eav-container-header">@Model.DisplayText</div>
 
         @Html.Partial("SingletonInstance", Model.SelectedInstance)
