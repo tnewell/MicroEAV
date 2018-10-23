@@ -27,12 +27,19 @@
         margin: 3px;
     }
 
+    .eav-instances-container
+    {
+        overflow-y: auto;
+        max-height: 480px;
+    }
+
     .eav-instance-container
     {
         border: 1px solid #808080;
         background-color: #DCE0E4;
         border-radius: 3px;
         margin: 3px;
+        margin-top: 15px;
         padding: 10px;
     }
 
@@ -74,7 +81,9 @@
         @Html.HiddenFor(m => m.DisplayText)
         <div class="eav-container-header">@Model.DisplayText</div>
 
-        @Html.EditorFor(m => m.Instances)
+        <div class="eav-instances-container">
+            @Html.EditorFor(m => m.Instances)
+        </div>
 
     </div>
 

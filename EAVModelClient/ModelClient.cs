@@ -89,7 +89,7 @@ namespace EAVModelClient
                 container.Attributes.Clear();
 
                 var attributes = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelAttribute>>().Result;
-                foreach (EAVModelLibrary.ModelAttribute attribute in attributes)
+                foreach (EAVModelLibrary.ModelAttribute attribute in attributes.OrderBy(it => it.Sequence))
                 {
                     attribute.MarkUnmodified();
 
@@ -119,7 +119,7 @@ namespace EAVModelClient
                 parentContainer.ChildContainers.Clear();
 
                 var childContainers = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelChildContainer>>().Result;
-                foreach (EAVModelLibrary.ModelChildContainer childContainer in childContainers)
+                foreach (EAVModelLibrary.ModelChildContainer childContainer in childContainers.OrderBy(it => it.Sequence))
                 {
                     childContainer.MarkUnmodified();
 
@@ -884,7 +884,7 @@ namespace EAVModelClient
                 context.Containers.Clear();
 
                 var rootContainers = response.Content.ReadAsAsync<IEnumerable<EAVModelLibrary.ModelRootContainer>>().Result;
-                foreach (EAVModelLibrary.ModelRootContainer rootContainer in rootContainers)
+                foreach (EAVModelLibrary.ModelRootContainer rootContainer in rootContainers.OrderBy(it => it.Sequence))
                 {
                     rootContainer.MarkUnmodified();
 

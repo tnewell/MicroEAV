@@ -7,9 +7,9 @@ using EAV.Model;
 
 namespace EAVWebApplication.Models.Data
 {
-    public class DataViewModel
+    public class DataSelectionViewModel
     {
-        public DataViewModel()
+        public DataSelectionViewModel()
         {
             contexts = new List<IModelContext>();
         }
@@ -111,7 +111,11 @@ namespace EAVWebApplication.Models.Data
 
         public void RegenerateViewContainer()
         {
-            CurrentViewContainer = CreateViewContainer(CurrentContainer, CurrentSubject, null);
+            if (CurrentContainer != null)
+            {
+                CurrentViewContainer = CreateViewContainer(CurrentContainer, CurrentSubject, null);
+                CurrentViewContainer.Enabled = CurrentSubject != null;
+            }
         }
     }
 
@@ -135,6 +139,27 @@ namespace EAVWebApplication.Models.Data
         public IList<ViewModelInstance> Instances { get; set; }
         public int SelectedInstanceID { get; set; }
         public ViewModelInstance SelectedInstance { get; set; }
+
+        public void Trim()
+        {
+            foreach (ViewModelInstance instance in Instances)
+            {
+                instance.Trim();
+
+                foreach (ViewModelContainer childContainer in instance.ChildContainers)
+                {
+                    childContainer.Trim();
+                }
+            }
+
+            var emptyInstances = Instances.GroupJoin(Instances.SelectMany(it => it.ChildContainers).SelectMany(it => it.Instances), left => left.InstanceID, right => right.ParentInstanceID, (left, right) => new { Parent = left, Children = right }).Where(it => !it.Children.Any()).Select(it => it.Parent).Where(it => it.IsEmpty).ToList();
+
+            while (emptyInstances.Any())
+            {
+                Instances.Remove(emptyInstances.First());
+                emptyInstances.Remove(emptyInstances.First());
+            }
+        }
     }
 
     public partial class ViewModelInstance
@@ -152,6 +177,17 @@ namespace EAVWebApplication.Models.Data
         public int? ParentInstanceID { get; set; }
         public IList<ViewModelContainer> ChildContainers { get; set; }
         public IList<ViewModelAttributeValue> Values { get; set; }
+
+        public void Trim()
+        {
+            var emptyValues = Values.Where(it => it.IsEmpty).ToList();
+
+            while (emptyValues.Any())
+            {
+                Values.Remove(emptyValues.First());
+                emptyValues.Remove(emptyValues.First());
+            }
+        }
 
         public bool IsEmpty { get { return (Values.All(it => it.IsEmpty)); } }
     }

@@ -75,7 +75,9 @@
         @Html.HiddenFor(m => m.DisplayText)
         <div class="eav-container-header">@Model.DisplayText</div>
 
-        @Html.Partial("SingletonInstance", Model.SelectedInstance)
+        <div class="eav-instances-container">
+            @Html.Partial("SingletonInstance")
+        </div>
 
     </div>
 

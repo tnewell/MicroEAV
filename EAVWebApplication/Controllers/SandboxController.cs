@@ -19,7 +19,7 @@ namespace EAVWebApplication.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            DataViewModel model = TempData["ValueData"] as DataViewModel ?? new Models.Data.DataViewModel();
+            DataSelectionViewModel model = TempData["ValueData"] as DataSelectionViewModel ?? new Models.Data.DataSelectionViewModel();
 
             TempData["ValueData"] = model;
 
@@ -27,9 +27,9 @@ namespace EAVWebApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult SubmitValues(DataViewModel postedModel)
+        public ActionResult SubmitValues(DataSelectionViewModel postedModel)
         {
-            DataViewModel model = TempData["ValueData"] as DataViewModel;
+            DataSelectionViewModel model = TempData["ValueData"] as DataSelectionViewModel;
 
             TempData["ValueData"] = model;
 
