@@ -1,4 +1,4 @@
-﻿@model EAVWebApplication.Models.Data.ViewModelContainer
+﻿@model EAVWebApplication.Models.Data.ViewModelRootContainer
 
 @{
     ViewBag.Title = "Data Entry";
@@ -85,7 +85,7 @@
             },
             error: function (request, status, err)
             {
-                alert('No Joy!');
+                alert('Attempt to retrieve instance failed!');
                 console.log('Connection to server not made. Status: \'' + status + '\'\r\nReported error: \'' + err + '\'\r\n')
             },
             complete: function (request, status)

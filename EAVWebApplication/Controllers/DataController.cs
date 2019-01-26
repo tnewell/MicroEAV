@@ -140,12 +140,12 @@ namespace EAVWebApplication.Controllers
             }
         }
 
-        private void BindToDataModel(DataSelectionViewModel currentDataSelectionViewModel, ViewModelContainer postedViewContainer)
+        private void BindToDataModel(DataSelectionViewModel currentDataSelectionViewModel, ViewModelRootContainer postedViewContainer)
         {
             if (currentDataSelectionViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running)
             {
-                currentDataSelectionViewModel.CurrentViewContainer.Instances.Remove(currentDataSelectionViewModel.CurrentViewContainer.Instances.Single(it => it.InstanceID == postedViewContainer.SelectedInstance.InstanceID));
-                currentDataSelectionViewModel.CurrentViewContainer.Instances.Add(postedViewContainer.SelectedInstance);
+                currentDataSelectionViewModel.CurrentViewContainer.Instances.Remove(currentDataSelectionViewModel.CurrentViewContainer.Instances.Single(it => it.InstanceID == postedViewContainer.CurrentInstance.InstanceID));
+                currentDataSelectionViewModel.CurrentViewContainer.Instances.Add(postedViewContainer.CurrentInstance);
             }
             else
             {
@@ -195,7 +195,7 @@ namespace EAVWebApplication.Controllers
             container.MarkUnmodified();
         }
 
-        private void LoadDataSelection(DataSelectionViewModel currentViewModel)
+        private void LoadSelection(DataSelectionViewModel currentViewModel)
         {
             // TODO: Consider caching here
 
@@ -277,7 +277,7 @@ namespace EAVWebApplication.Controllers
             currentViewModel.SelectedContainerID = postedModel.SelectedContainerID;
             currentViewModel.SelectedSubjectID = postedModel.SelectedSubjectID;
 
-            LoadDataSelection(currentViewModel);
+            LoadSelection(currentViewModel);
 
             // Refresh the view object
             currentViewModel.RegenerateViewContainer();
@@ -287,7 +287,7 @@ namespace EAVWebApplication.Controllers
             if (currentViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running)
             {
                 currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Min(it => it.InstanceID.GetValueOrDefault());
-                currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
+                currentViewModel.CurrentViewContainer.CurrentInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
             }
 
             TempData[TempDataModelKey] = currentViewModel;
@@ -296,7 +296,7 @@ namespace EAVWebApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveForm(ViewModelContainer postedViewContainer)
+        public ActionResult SaveForm(ViewModelRootContainer postedViewContainer)
         {
             DataSelectionViewModel currentViewModel = TempData[TempDataModelKey] as DataSelectionViewModel;
 
@@ -321,7 +321,7 @@ namespace EAVWebApplication.Controllers
             if (currentViewModel.CurrentViewContainer.DisplayMode != DisplayMode.Running)
             {
                 currentViewModel.CurrentViewContainer.SelectedInstanceID = currentViewModel.CurrentViewContainer.Instances.Min(it => it.InstanceID.GetValueOrDefault());
-                currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
+                currentViewModel.CurrentViewContainer.CurrentInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
             }
 
             TempData[TempDataModelKey] = currentViewModel;
@@ -330,7 +330,7 @@ namespace EAVWebApplication.Controllers
         }
 
         [HttpPost]
-        public ActionResult RetrieveInstance(ViewModelContainer postedViewContainer)
+        public ActionResult RetrieveInstance(ViewModelRootContainer postedViewContainer)
         {
             DataSelectionViewModel currentViewModel = TempData[TempDataModelKey] as DataSelectionViewModel;
 
@@ -339,12 +339,12 @@ namespace EAVWebApplication.Controllers
             ModelState.Clear();
 
             // Make sure we keep the posted version to capture any changes
-            currentViewModel.CurrentViewContainer.Instances.Remove(currentViewModel.CurrentViewContainer.Instances.Single(it => it.InstanceID == postedViewContainer.SelectedInstance.InstanceID));
-            currentViewModel.CurrentViewContainer.Instances.Add(postedViewContainer.SelectedInstance);
+            currentViewModel.CurrentViewContainer.Instances.Remove(currentViewModel.CurrentViewContainer.Instances.Single(it => it.InstanceID == postedViewContainer.CurrentInstance.InstanceID));
+            currentViewModel.CurrentViewContainer.Instances.Add(postedViewContainer.CurrentInstance);
 
             // Now switch instances
             currentViewModel.CurrentViewContainer.SelectedInstanceID = postedViewContainer.SelectedInstanceID;
-            currentViewModel.CurrentViewContainer.SelectedInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
+            currentViewModel.CurrentViewContainer.CurrentInstance = currentViewModel.CurrentViewContainer.Instances.SingleOrDefault(it => it.InstanceID == currentViewModel.CurrentViewContainer.SelectedInstanceID);
 
             TempData[TempDataModelKey] = currentViewModel;
 

@@ -5,9 +5,11 @@
 @Html.HiddenFor(m => m.ParentContainerID)
 @Html.HiddenFor(m => m.Sequence)
 @Html.HiddenFor(m => m.IsRepeating)
+@Html.HiddenFor(m => m.Enabled)
 
 <div class="eav-container-container">
 
+    @Html.HiddenFor(m => m.DisplayText)
     <div class="eav-container-header">@Model.DisplayText</div>
 
     @Html.DisplayFor(m => m.Instances)

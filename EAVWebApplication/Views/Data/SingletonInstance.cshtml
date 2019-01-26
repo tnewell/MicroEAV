@@ -1,12 +1,12 @@
-﻿@model EAVWebApplication.Models.Data.ViewModelContainer
+﻿@model EAVWebApplication.Models.Data.ViewModelRootContainer
 
 
 @if (Model.Enabled)
 {
-    @Html.EditorFor(m => m.SelectedInstance)
+    @Html.EditorFor(m => m.CurrentInstance)
 }
 else
 {
-    @Html.DisplayFor(m => m.SelectedInstance)
+    @Html.DisplayFor(m => m.CurrentInstance)
 }
 

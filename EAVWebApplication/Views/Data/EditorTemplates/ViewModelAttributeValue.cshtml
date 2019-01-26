@@ -6,7 +6,6 @@
     @Html.HiddenFor(m => m.AttributeID)
     @Html.HiddenFor(m => m.Sequence)
     @Html.HiddenFor(m => m.IsKey)
-    @Html.HiddenFor(m => m.VariableUnits)
     @Html.HiddenFor(m => m.ObjectState)
 
     @Html.HiddenFor(m => m.DisplayText)
@@ -51,8 +50,8 @@
         }
         else
         {
-            @Html.HiddenFor(m => m.UnitText)
             @Html.HiddenFor(m => m.UnitID)
+            @Html.HiddenFor(m => m.UnitText)
             <label class="eav-units-text">@Model.UnitText</label>
         }
     }

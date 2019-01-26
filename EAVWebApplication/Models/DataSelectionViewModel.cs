@@ -26,94 +26,13 @@ namespace EAVWebApplication.Models.Data
         public int SelectedSubjectID { get; set; }
         public IModelSubject CurrentSubject { get { return (CurrentContext != null ? CurrentContext.Subjects.SingleOrDefault(it => it.SubjectID == SelectedSubjectID) : null); } }
 
-        public ViewModelContainer CurrentViewContainer { get; set; }
-
-        private int nextInstanceID = -1;
-        private int NextInstanceID(ViewModelContainer container)
-        {
-            if (container == null)
-                return (-1);
-
-            var instances = container.Instances;
-            var childContainers = instances.SelectMany(it => it.ChildContainers);
-
-            return (Math.Min(instances.Any() ? instances.Min(it => it.InstanceID.GetValueOrDefault()) : 0, childContainers.Any() ? childContainers.Min(it => NextInstanceID(it)) : 0) - 1);
-        }
-
-        private ViewModelAttributeValue CreateViewAttributeValue(EAV.Model.IModelAttribute attribute, EAV.Model.IModelValue value)
-        {
-            ViewModelAttributeValue viewAttributeValue = new ViewModelAttributeValue() { ObjectState = value != null ? value.ObjectState : ObjectState.New, AttributeID = attribute.AttributeID, DataType = attribute.DataType, DisplayText = attribute.DisplayText, IsKey = attribute.IsKey, VariableUnits = attribute.VariableUnits };
-
-            foreach (EAV.Model.IModelUnit unit in attribute.Units)
-            {
-                viewAttributeValue.Units.Add(new ViewModelUnit() { UnitID = unit.UnitID.Value, DisplayText = unit.DisplayText });
-            }
-
-            if (value != null)
-            {
-                viewAttributeValue.Value = value.RawValue;
-
-                if (value.Unit != null)
-                {
-                    viewAttributeValue.UnitID = value.Unit.UnitID;
-                    viewAttributeValue.UnitText = value.Unit.DisplayText;
-                }
-            }
-            else if (!attribute.VariableUnits.GetValueOrDefault(true) && attribute.Units.Count == 1)
-            {
-                viewAttributeValue.UnitID = attribute.Units.First().UnitID;
-                viewAttributeValue.UnitText = attribute.Units.First().DisplayText;
-            }
-
-            return (viewAttributeValue);
-        }
-
-        private ViewModelInstance CreateViewInstance(IModelContainer container, IModelSubject subject, IModelInstance instance, ViewModelInstance parentInstance)
-        {
-            ViewModelInstance viewInstance = new ViewModelInstance() { ObjectState = instance != null ? instance.ObjectState : ObjectState.New, ContainerID = container.ContainerID, SubjectID = subject != null ? subject.SubjectID : 0, InstanceID = instance != null ? instance.InstanceID : nextInstanceID--, ParentInstanceID = parentInstance != null ? parentInstance.InstanceID : null };
-
-            foreach (EAV.Model.IModelAttribute attribute in container.Attributes.OrderBy(it => it.Sequence))
-            {
-                viewInstance.Values.Add(CreateViewAttributeValue(attribute, instance != null ? instance.Values.SingleOrDefault(it => it.AttributeID == attribute.AttributeID) : null));
-            }
-
-            foreach (IModelContainer childContainer in container.ChildContainers.OrderBy(it => it.Sequence))
-            {
-                viewInstance.ChildContainers.Add(CreateViewContainer(childContainer, subject, viewInstance));
-            }
-
-            return (viewInstance);
-        }
-
-        private ViewModelContainer CreateViewContainer(EAV.Model.IModelContainer container, IModelSubject subject, ViewModelInstance parentInstance)
-        {
-            if (parentInstance == null)
-                nextInstanceID = NextInstanceID(CurrentViewContainer);
-
-            ViewModelContainer viewContainer = new ViewModelContainer() { ContainerID = container.ContainerID, ParentContainerID = container.ParentContainerID, DisplayText = container.DisplayText, IsRepeating = container.IsRepeating };
-
-            foreach (IModelInstance instance in container.Instances.Where(it => parentInstance == null || it.ParentInstanceID == parentInstance.InstanceID))
-            {
-                ViewModelInstance viewInstance = CreateViewInstance(container, subject, instance, parentInstance);
-
-                viewContainer.Instances.Add(viewInstance);
-            }
-
-            if (container.IsRepeating || !viewContainer.Instances.Any())
-            {
-                ViewModelInstance viewInstance = CreateViewInstance(container, subject, null, parentInstance);
-
-                viewContainer.Instances.Add(viewInstance);
-            }
-
-            return (viewContainer);
-        }
+        public ViewModelRootContainer CurrentViewContainer { get; set; }
 
         public void RegenerateViewContainer()
         {
             if (CurrentContainer != null)
             {
-                CurrentViewContainer = CreateViewContainer(CurrentContainer, CurrentSubject, null);
+                CurrentViewContainer = ViewModelRootContainer.Create(CurrentContainer, CurrentSubject);
                 CurrentViewContainer.Enabled = CurrentSubject != null;
             }
         }
@@ -121,8 +40,66 @@ namespace EAVWebApplication.Models.Data
 
     public enum DisplayMode { Running, Recurring, Singleton }
 
+    public partial class ViewModelRootContainer : ViewModelContainer
+    {
+        public static ViewModelRootContainer Create(IModelRootContainer container, IModelSubject subject)
+        {
+            ViewModelRootContainer viewContainer = new ViewModelRootContainer() { ContainerID = container.ContainerID, DisplayText = container.DisplayText, IsRepeating = container.IsRepeating };
+            int nextInstanceID = -1;
+
+            foreach (IModelInstance instance in container.Instances)
+            {
+                ViewModelInstance viewInstance = ViewModelInstance.Create(container, subject, instance, null, ref nextInstanceID);
+
+                viewContainer.Instances.Add(viewInstance);
+            }
+
+            if (container.IsRepeating || !viewContainer.Instances.Any())
+            {
+                ViewModelInstance viewInstance = ViewModelInstance.Create(container, subject, null, null, ref nextInstanceID);
+
+                viewContainer.Instances.Add(viewInstance);
+            }
+
+            return (viewContainer);
+        }
+
+        public int SelectedInstanceID { get; set; }
+        public ViewModelInstance CurrentInstance { get; set; }
+
+        public DisplayMode DisplayMode { get; set; }
+
+        public new int NextInstanceID()
+        {
+            var childContainers = Instances.SelectMany(it => it.ChildContainers);
+
+            return (Math.Min(Instances.Any() ? Instances.Min(it => it.InstanceID.GetValueOrDefault()) : 0, childContainers.Any() ? childContainers.Min(it => it.NextInstanceID()) : 0) - 1);
+        }
+    }
+
     public partial class ViewModelContainer
     {
+        public static ViewModelContainer Create(IModelChildContainer container, IModelSubject subject, ViewModelInstance parentInstance, ref int nextInstanceID)
+        {
+            ViewModelContainer viewContainer = new ViewModelContainer() { ContainerID = container.ContainerID, ParentContainerID = container.ParentContainerID, DisplayText = container.DisplayText, IsRepeating = container.IsRepeating };
+
+            foreach (IModelInstance instance in container.Instances.Where(it => it.ParentInstanceID == parentInstance.InstanceID))
+            {
+                ViewModelInstance viewInstance = ViewModelInstance.Create(container, subject, instance, parentInstance, ref nextInstanceID);
+
+                viewContainer.Instances.Add(viewInstance);
+            }
+
+            if (container.IsRepeating || !viewContainer.Instances.Any())
+            {
+                ViewModelInstance viewInstance = ViewModelInstance.Create(container, subject, null, parentInstance, ref nextInstanceID);
+
+                viewContainer.Instances.Add(viewInstance);
+            }
+
+            return (viewContainer);
+        }
+
         public ViewModelContainer()
         {
             Instances = new List<ViewModelInstance>();
@@ -133,12 +110,16 @@ namespace EAVWebApplication.Models.Data
         public int Sequence { get; set; }
         public string DisplayText { get; set; }
         public bool IsRepeating { get; set; }
-        public DisplayMode DisplayMode { get; set; }
         public bool Enabled { get; set; }
 
         public IList<ViewModelInstance> Instances { get; set; }
-        public int SelectedInstanceID { get; set; }
-        public ViewModelInstance SelectedInstance { get; set; }
+
+        protected internal int NextInstanceID()
+        {
+            var childContainers = Instances.SelectMany(it => it.ChildContainers);
+
+            return (Math.Min(Instances.Any() ? Instances.Min(it => it.InstanceID.GetValueOrDefault()) : 0, childContainers.Any() ? childContainers.Min(it => it.NextInstanceID()) : 0) - 1);
+        }
 
         public void Trim()
         {
@@ -164,6 +145,23 @@ namespace EAVWebApplication.Models.Data
 
     public partial class ViewModelInstance
     {
+        public static ViewModelInstance Create(IModelContainer container, IModelSubject subject, IModelInstance instance, ViewModelInstance parentInstance, ref int nextInstanceID)
+        {
+            ViewModelInstance viewInstance = new ViewModelInstance() { ObjectState = instance != null ? instance.ObjectState : ObjectState.New, ContainerID = container.ContainerID, SubjectID = subject != null ? subject.SubjectID : 0, InstanceID = instance != null ? instance.InstanceID : nextInstanceID--, ParentInstanceID = parentInstance != null ? parentInstance.InstanceID : null };
+
+            foreach (EAV.Model.IModelAttribute attribute in container.Attributes.OrderBy(it => it.Sequence))
+            {
+                viewInstance.Values.Add(ViewModelAttributeValue.Create(attribute, instance != null ? instance.Values.SingleOrDefault(it => it.AttributeID == attribute.AttributeID) : null));
+            }
+
+            foreach (IModelChildContainer childContainer in container.ChildContainers.OrderBy(it => it.Sequence))
+            {
+                viewInstance.ChildContainers.Add(ViewModelContainer.Create(childContainer, subject, viewInstance, ref nextInstanceID));
+            }
+
+            return (viewInstance);
+        }
+
         public ViewModelInstance()
         {
             ChildContainers = new List<ViewModelContainer>();
@@ -194,6 +192,34 @@ namespace EAVWebApplication.Models.Data
 
     public partial class ViewModelAttributeValue
     {
+        public static ViewModelAttributeValue Create(IModelAttribute attribute, IModelValue value)
+        {
+            ViewModelAttributeValue viewAttributeValue = new ViewModelAttributeValue() { ObjectState = value != null ? value.ObjectState : ObjectState.New, AttributeID = attribute.AttributeID, DataType = attribute.DataType, DisplayText = attribute.DisplayText, IsKey = attribute.IsKey, VariableUnits = attribute.VariableUnits };
+
+            foreach (EAV.Model.IModelUnit unit in attribute.Units)
+            {
+                viewAttributeValue.Units.Add(ViewModelUnit.Create(unit));
+            }
+
+            if (value != null)
+            {
+                viewAttributeValue.Value = value.RawValue;
+
+                if (value.Unit != null)
+                {
+                    viewAttributeValue.UnitID = value.Unit.UnitID;
+                    viewAttributeValue.UnitText = value.Unit.DisplayText;
+                }
+            }
+            else if (!attribute.VariableUnits.GetValueOrDefault(true) && attribute.Units.Count == 1)
+            {
+                viewAttributeValue.UnitID = attribute.Units.First().UnitID;
+                viewAttributeValue.UnitText = attribute.Units.First().DisplayText;
+            }
+
+            return (viewAttributeValue);
+        }
+
         public sealed class BooleanListItem
         {
             public BooleanListItem(string text, bool value) { Text = text; Value = value; }
@@ -234,6 +260,11 @@ namespace EAVWebApplication.Models.Data
 
     public partial class ViewModelUnit
     {
+        public static ViewModelUnit Create(IModelUnit unit)
+        {
+            return(new ViewModelUnit() { UnitID = unit.UnitID.Value, DisplayText = unit.DisplayText });
+        }
+
         public int UnitID { get; set; }
         public string DisplayText { get; set; }
     }
